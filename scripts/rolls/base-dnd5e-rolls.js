@@ -7,7 +7,8 @@ export function rollSkillMacro(event, actorId, checkId) {
 }
 
 export function rollItemMacro(event, actorId, itemId) {
-    let item = game.actors.find(a => a._id === actorId).items.find(i => i._id == itemId);
+    let actor = game.actors.find(a => a._id === actorId);
+    let item = actor.items.find(i => i._id == itemId);
 
     if (item == null)
         ui.notification.warning("No item found");

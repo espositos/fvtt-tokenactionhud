@@ -182,6 +182,8 @@ export class TokenActionHUD extends Application {
         if (this.debug)
             log(`${this.tokens.controlled.length} tokens selected.`);
 
+        let controlled = this.tokens.controlled;
+
         return controlled.length === 1 && controlled[0] != null && controlled[0] != undefined;
     }
 
