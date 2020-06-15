@@ -1,0 +1,134 @@
+#tokenActionHud {
+    z-index: 99;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    top: 80px;
+    left: 150px; 
+    position: fixed;
+    height: auto;
+    width: auto;
+    margin: 5px;
+    background: none;
+    font-size: 14px;
+    font-family: "Signika", sans-serif;
+}
+
+[class*="icon-"] {
+    display: inline-block;
+    width: 100%;
+}
+
+#tokenActionHud:hover > #tokenActionHud-reposition, #tokenActionHud:hover > #tokenActionHud-close {
+    display: block;
+    position: absolute;
+}
+
+#tokenActionHud-reposition, #tokenActionHud-close {
+    display: none;
+}
+
+#tokenActionHud-reposition {
+    left: -20px;
+}
+
+#tokenActionHud-close {
+    right: -20px;
+}
+
+#tokenActionHud-reposition > .fa, #tokenActionHud-reposition > .fas, #tokenActionHud-close > .fa, #tokenActionHud-close > .fas {
+    color: #fff;
+    font-size: small;
+    padding: 3px;
+    margin: 3px;
+    text-shadow: 0px 0px 2px rgba(52, 52, 52, 0.95);
+    text-align: center;
+    pointer-events: none;
+}
+
+#tokenActionHud-reposition:hover > i, #tokenActionHud-close:hover > i {
+    text-shadow: 0 0 10px #ff6400;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.tokenActionHud-category {
+    position: relative;
+    display: block;
+}
+
+.tokenActionHud-title-button {
+    width: auto;
+    height: auto;
+    color: #fff;
+    background: rgba(52, 52, 52, 0.95);
+    padding: 3px;
+    margin: 3px;
+    border: none;
+    cursor: pointer;
+}
+
+.tokenActionHud-title-button:hover {
+    border-bottom: 1px solid #ff6400;
+    box-shadow: 0 0 10px #ff6400;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.tokenActionHud-content {
+    display: none;
+}
+
+/* Show the dropdown menu on hover */
+.tokenActionHud-category:hover .tokenActionHud-content {
+    display: block;
+    padding: 2px;
+    position: absolute;
+    left: -85px;
+    background: rgba(0, 0, 0, 0);
+}
+
+.tokenActionHud-subcategory {
+    display: grid;
+    grid-template-columns: 80px auto;
+    grid-auto-rows: auto;
+}
+
+.tokenActionHud-subtitle {
+    grid-column: 1;
+    padding-top: 12px;
+    min-width: 80px;    
+    color: #fff;
+    font-size: smaller;
+    text-align: right;
+}
+
+.tokenActionHud-actions {
+    grid-column: 2;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    width:400px;
+}
+
+/* Links inside the dropdown */
+.tokenActionHud-action {
+    flex-grow: 0;
+    flex-basis: auto;
+    padding: 3px;
+    margin: 3px;
+    background: none;
+}
+
+ 
+.tokenActionHud-action button {
+    width: 100%;
+    font-size: small;
+    text-decoration: none;
+    color: #fff;
+    background: rgba(52, 52, 52, 0.95);
+}
+
+/* Change color of dropdown links on hover */
+.tokenActionHud-action button:hover {
+    border-bottom: 1px solid #ff6400;
+    box-shadow: 0 0 10px #ff6400;
+}

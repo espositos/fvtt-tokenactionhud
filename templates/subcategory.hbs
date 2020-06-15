@@ -1,0 +1,15 @@
+
+{{#if this.hasSubcategories}}
+{{#each subcategories}}
+{{>"modules/tokenActionHud/templates/subcategory.hbs"}}
+{{/each}}
+{{else}}
+<div class="tokenActionHud-subcategory">
+<div class="tokenActionHud-subtitle">{{cap @key}}</div>
+<div class="tokenActionHud-actions">
+{{#each actions}}
+{{>"modules/tokenActionHud/templates/action.hbs"}}
+{{/each}}
+</div>
+</div>
+{{/if}}

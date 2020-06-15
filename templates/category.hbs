@@ -1,0 +1,9 @@
+
+<div class="tokenActionHud-category">
+    <button value="{{idAction}}" class="tokenActionHud-title-button">{{cap @key}}</button>
+    <div id="{{idAction}}" class="tokenActionHud-content">
+        {{#each subcategories}}
+        {{>"modules/tokenActionHud/templates/subcategory.hbs"}}
+        {{/each}}
+    </div>
+</div>
