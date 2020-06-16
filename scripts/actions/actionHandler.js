@@ -3,8 +3,6 @@ export class ActionHandler {
         this.rollHandler = rollHandler;
     }
 
-    handleActionEvent(event, value) {}
-
-    buildActionList(actor) {};
+    buildActionList(token) {};
 }
 

@@ -4,6 +4,36 @@ export class RollHandlerBase5e extends RollHandler {
     constructor() {
         super();
     }
+
+    /** @override */
+    handleActionEvent(event, value) {
+        console.log(value);
+        let payload = value.split('.');
+        
+        if (payload.length != 3) {
+            throw new Error("Token Action HUD | invalid button value received.")
+        }
+        
+        let macroType = payload[0];
+        let tokenId = payload[1];
+        let actionId = payload[2];
+        
+        switch (macroType) {
+            case "ability":
+                this.rollAbilityMacro(event, tokenId, actionId);
+                break;
+            case "skill":
+                this.rollSkillMacro(event, tokenId, actionId);
+                break;
+            case "item":
+            case "spell":
+            case "feat":
+                this.rollItemMacro(event, tokenId, actionId);
+                break;
+            default:
+                break;
+        }
+    }
     
     rollAbilityMacro(event, tokenId, checkId) {
         super.getActor(tokenId).rollAbility(checkId, {event: event});
