@@ -1,6 +1,10 @@
 import { RollHandler } from "./rollHandler.js"
 
 export class RollHandlerBase5e extends RollHandler {
+    constructor() {
+        super();
+    }
+    
     rollAbilityMacro(event, tokenId, checkId) {
         super.getActor(tokenId).rollAbility(checkId, {event: event});
     }

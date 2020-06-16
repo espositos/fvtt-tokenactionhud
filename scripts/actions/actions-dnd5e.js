@@ -3,6 +3,7 @@ import {ActionHandler} from './actionHandler.js';
 
 export class ActionHandler5e extends ActionHandler {
     constructor (rollHandler5e, resources5e) {
+        super();
         this.rollHandler = rollHandler5e;
         this.resources = resources5e;
     }
@@ -58,8 +59,9 @@ export class ActionHandler5e extends ActionHandler {
         let items = this._getItemList(actor, tokenId);
         let spells = this._getSpellsList(actor, tokenId);
         let feats = this._getFeatsList(actor, tokenId);
-        let checks = checkLists.buildChecksList(actor, tokenId);
         let resourceList = this.resources.buildResourceList(actor, tokenId);
+        
+        let checks = checkLists.buildChecksList(tokenId);
     
         if (Object.keys(items.subcategories).length > 0)
             result.categories["items"] = items;
