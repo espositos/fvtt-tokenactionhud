@@ -1,9 +1,9 @@
 export class ActionHandler {
-    constructor(macros) {
-        this.macros = macros;
+    constructor(rollHandler) {
+        this.rollHandler = rollHandler;
     }
 
-    handleButtonClick(event, value) {}
+    handleActionEvent(event, value) {}
 
     buildActionList(actor) {};
 }
