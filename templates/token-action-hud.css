@@ -122,6 +122,34 @@
     background: none;
 }
 
+.tokenActionHud-action-charges, .tokenActionHud-action-quantity {
+    font-size: smaller;
+    display: inline;
+}
+
+.tokenActionHud-action-charges {
+    text-shadow:  0 0 1px rgba(240, 2, 248, 0.95);
+}
+
+.tokenActionHud-action-quantity {
+    text-shadow: 0 0 1px rgba(2, 248, 14, 0.95);
+}
+
+.tokenActionHud-action-charges:before {
+    content: " [chg ";
+}
+
+.tokenActionHud-action-charges:after {
+    content: "]";
+}
+
+.tokenActionHud-action-quantity:before {
+    content: " (qty ";
+}
+
+.tokenActionHud-action-quantity:after {
+    content: ")";
+}
  
 .tokenActionHud-action button {
     width: 100%;

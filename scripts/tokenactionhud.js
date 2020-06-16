@@ -6,20 +6,43 @@ export class TokenActionHUD extends Application {
     alwaysRegenerateBar = true;
     globalListenersAdded = false;
     moduleDir = "modules/tokenActionHud/";
+    defaultX = 150;
+    defaultY = 80;
 
     constructor(actions) {
         super();
         this.refresh_timeout = null;
         this.tokens = null;
         this.actions = actions;
-        this.rollItemMacro = (event, actorId, itemId) => macros.rollItemMacro(event, actorId, itemId);
-        this.rollAbilityMacro = (event, actorId, checkId) => macros.rollAbilityMacro(event, actorId, checkId);
-        this.rollSkillMacro = (event, actorId, checkId) => macros.rollSkillMacro(event, actorId, checkId);
     }
 
     setTokensReference(tokens) {
         this.tokens = tokens;
         return this;
+    }
+
+    trySetUserPos() {
+        if(!(game.user.data.flags.tokenActionHud && game.user.data.flags.tokenActionHud.hudPos))
+            return;
+
+        let pos = game.user.data.flags.tokenActionHud.hudPos;
+        
+        return new Promise(resolve => {
+            function check() {
+                let elmnt = document.getElementById("tokenActionHud")
+                if (elmnt) {
+                elmnt.style.bottom = null;
+                elmnt.style.top = (pos.top) + "px";
+                elmnt.style.left = (pos.left) + "px";
+                elmnt.style.position = 'fixed';
+                elmnt.style.zIndex = 100;
+                resolve();
+                } else {
+                setTimeout(check, 30);
+                }
+            }
+            check();
+        });
     }
 
     static path(filepath) {
@@ -68,33 +91,30 @@ export class TokenActionHUD extends Application {
             this.actions.handleButtonClick(e, value);
         });
 
-        html.find(repositionIcon).mousedown(e => {
-            e.preventDefault();
-            e.stopPropagation();
+        html.find(repositionIcon).mousedown(ev => {
+            ev.preventDefault();
+            ev = ev || window.event;
 
-            e = e || window.event;
-            console.log($(document.body).find(tokenActionHud));
+            let hud = $(document.body).find(tokenActionHud);
+            let marginLeft = parseInt(hud.css('marginLeft').replace('px', ''));
+            let marginTop = parseInt(hud.css('marginTop').replace('px', ''));
 
-            dragElement($(document.body).find(tokenActionHud));
+            dragElement(document.getElementById('tokenActionHud'));
             let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-
+  
             function dragElement(elmnt) {
-                console.log(elmnt);
                 elmnt.onmousedown = dragMouseDown;
 
                 function dragMouseDown(e) {
-                    console.log("dragging element");
                     e = e || window.event;
                     e.preventDefault();
                     pos3 = e.clientX;
                     pos4 = e.clientY;
-
+                    
                     document.onmouseup = closeDragElement;
                     document.onmousemove = elementDrag;
-
-                    
                 }
-
+            
                 function elementDrag(e) {
                     e = e || window.event;
                     e.preventDefault();
@@ -104,51 +124,30 @@ export class TokenActionHUD extends Application {
                     pos3 = e.clientX;
                     pos4 = e.clientY;
                     // set the element's new position:
-                    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-                    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+                    elmnt.style.top = (elmnt.offsetTop - pos2) - marginTop + "px";
+                    elmnt.style.left = (elmnt.offsetLeft - pos1) - marginLeft + "px";
                     elmnt.style.position = 'fixed';
                     elmnt.style.zIndex = 100;
                 }
-
+            
                 function closeDragElement() {
-                    console.log("closing drag element");
-
                     // stop moving when mouse button is released:
                     elmnt.onmousedown = null;
                     document.onmouseup = null;
                     document.onmousemove = null;
                     let xPos = (elmnt.offsetLeft - pos1) > window.innerWidth ? window.innerWidth : (elmnt.offsetLeft - pos1);
-                    let yPos = (elmnt.offsetTop - pos2) > window.innerHeight - 20 ? window.innerHeight - 100 : (elmnt.offsetTop - pos2)
+                    let yPos = (elmnt.offsetTop - pos2) > window.innerHeight-20 ? window.innerHeight-100 : (elmnt.offsetTop - pos2)
                     xPos = xPos < 0 ? 0 : xPos
                     yPos = yPos < 0 ? 0 : yPos
-                    if (xPos != (elmnt.offsetLeft - pos1) || yPos != (elmnt.offsetTop - pos2)) {
+                    if(xPos != (elmnt.offsetLeft - pos1) || yPos != (elmnt.offsetTop - pos2)){
                         elmnt.style.top = (yPos) + "px";
                         elmnt.style.left = (xPos) + "px";
                     }
-                    log(`setting position x: ${xPos}px, y: ${yPos}px`)
-                    game.user.update({ flags: { 'tokenActionHud': { 'hudPos': { top: yPos, left: xPos } } } })
+                    log(`Setting position to x: ${xPos}px, y: ${yPos}px`)
+                    game.user.update({flags: {'tokenActionHud':{ 'hudPos': {top: yPos, left: xPos}}}})
                 }
             }
         });
-
-        if (this.globalListenersAdded)
-            return;
-
-        $(document.body).on('click.tokenActionHud', e => {
-            if (this.debug) {
-                log("caught click");       
-                console.log(e);
-            }
-
-            let target = e.target.id;
-            console.log(e);
-
-            if (this.alwaysRegenerateBar) {
-                 this.update();
-            }
-        });
-
-        this.globalListenersAdded = true;
     }
 
     /** @private */
@@ -171,9 +170,9 @@ export class TokenActionHUD extends Application {
         if (this.debug)
             log("Updating HUD")
 
-        let targetActor = this._getTargetActor(this.tokens.controlled);
+        let token = this._getTargetToken(this.tokens.controlled);
         
-        this.targetActions = this.actions.buildActionList(targetActor);
+        this.targetActions = this.actions.buildActionList(token);
 
         this.render(true);
     }
@@ -187,18 +186,26 @@ export class TokenActionHUD extends Application {
         return controlled.length === 1 && controlled[0] != null && controlled[0] != undefined;
     }
 
-    shouldUpdateOnActorUpdate(actor) {
-        if (this.debug)
+    shouldUpdateOnActorOrItemUpdate(actor) {
+        if (this.debug) {
             log(`updateActor detected, comparing actors`);
+            log(actor._id, this.targetActions.actorId);
+        }
+
+        if (!actor)
             
-        if (this.targetActions !== null && actor._id === this.targetActions.actorId)
+        log (!!this.targetActions)
+        log(actor._id === this.targetActions.actorId);
+        if (this.targetActions && actor._id === this.targetActions.actorId) {
+            log("should update")
             return true;
+        }
 
         return false;
     }
 
     /** @private */
-    _getTargetActor(controlled) {
+    _getTargetToken(controlled) {
         if (controlled.length != 1)
             return null;
 
@@ -208,7 +215,7 @@ export class TokenActionHUD extends Application {
             return null;
 
         if(this._userHasPermission(ct))
-            return ct.actor;
+            return ct;
             
         return null;
     }

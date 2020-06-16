@@ -16,20 +16,20 @@ export class ActionHandler5e extends ActionHandler {
             return;
 
         let macroType = payload[0];
-        let actorId = payload[1];
+        let tokenId = payload[1];
         let actionId = payload[2];
 
         switch (macroType) {
             case "ability":
-                this.macros.rollAbilityMacro(event, actorId, actionId);
+                this.macros.rollAbilityMacro(event, tokenId, actionId);
                 break;
             case "skill":
-                this.macros.rollSkillMacro(event, actorId, actionId);
+                this.macros.rollSkillMacro(event, tokenId, actionId);
                 break;
             case "item":
             case "spell":
             case "feat":
-                this.macros.rollItemMacro(event, actorId, actionId);
+                this.macros.rollItemMacro(event, tokenId, actionId);
                 break;
             default:
                 break;
@@ -37,20 +37,30 @@ export class ActionHandler5e extends ActionHandler {
     }
 
     /** @override */
-    buildActionList(actor) {
-        let result = { "actorId": "", "categories": {}};
+    buildActionList(token) {
+        let result = { "tokenId": "", "actorId": "", "categories": {}};
 
-        if (actor === null || actor === undefined) {
+        if (!token) {
+            return result;
+        }
+
+        let tokenId = token.data._id;
+
+        result.tokenId = tokenId;
+
+        let actor = token.actor;
+
+        if (!actor) {
             return result;
         }
 
         result.actorId = actor._id;
         
-        let items = this._getItemList(actor);
-        let spells = this._getSpellsList(actor);
-        let feats = this._getFeatsList(actor);
-        let checks = checkLists.buildChecksList(actor);
-        let resourceList = this.resources.buildResourceList(actor);
+        let items = this._getItemList(actor, tokenId);
+        let spells = this._getSpellsList(actor, tokenId);
+        let feats = this._getFeatsList(actor, tokenId);
+        let checks = checkLists.buildChecksList(actor, tokenId);
+        let resourceList = this.resources.buildResourceList(actor, tokenId);
     
         if (Object.keys(items.subcategories).length > 0)
             result.categories["items"] = items;
@@ -69,36 +79,29 @@ export class ActionHandler5e extends ActionHandler {
         if (Object.keys(resourceList).length > 0) {
             result["resources"] = resourceList;
         }
-       
+
         return result;
     }
     
     /** ITEMS **/
     
     /** @private */
-    _getItemList(actor) {
+    _getItemList(actor, tokenId) {
         let items = actor.data.items;
-        let equipped = items.filter(i => i.type !="consumable" && i.data.equipped);
+        let equipped = items.filter(i => i.type !="consumable" && i.data.equipped && i.data.quantity > 0);
         let activeEquipped = this._getActiveEquipment(equipped);
-        const macroType = "item";
-
-        let weaponActions = activeEquipped.filter(i => i.type == "weapon")
-            .map(w => { return { "name": w.name, "id": w._id, "encodedValue": `${macroType}.${actor._id}.${w._id}`}; });
-    
-        let equipmentActions = activeEquipped.filter(i => i.type == "equipment")
-            .map(e => { return { "name": e.name, "id": e._id, "encodedValue": `${macroType}.${actor._id}.${e._id}` }; });
         
-        let otherActions = activeEquipped.filter(i => i.type != "weapon" && i.type != "equipment")
-            .map(o => { return { "name": o.name, "id": o._id, "encodedValue": `${macroType}.${actor._id}.${o._id}`}; });
+        let weaponActions = this._mapToItemAction(tokenId, activeEquipped.filter(i => i.type == "weapon"));
     
-        let consumables = items.filter(i => i.type == "consumable");
+        let equipmentActions = this._mapToItemAction(tokenId, activeEquipped.filter(i => i.type == "equipment"));
         
-        let consumablesChargedActions = consumables
-            .filter(c => c.data.uses.value && c.data.uses.value > 0)
-            .map(c => { return { "name": c.name, "id": c._id, "encodedValue": `${macroType}.${actor._id}.${c._id}` }; });
+        let otherActions = this._mapToItemAction(tokenId, activeEquipped.filter(i => i.type != "weapon" && i.type != "equipment"));
+    
+        let consumables = items.filter(i => i.type == "consumable" && i.data.quantity > 0);
+        
+        let consumablesChargedActions = this._mapToItemAction(tokenId, consumables.filter(c => c.data.uses.value && c.data.uses.value > 0));
             
-        let consumablesNoChargeActions = consumables.filter(c => !c.data.uses.max && !c.data.uses.value)
-            .map(c => { return { "name": c.name, "id": c._id, "encodedValue": `${macroType}.${actor._id}.${c._id}` }; });
+        let consumablesNoChargeActions = this._mapToItemAction(tokenId, consumables.filter(c => !c.data.uses.max && !c.data.uses.value));
         
         let itemsResult = {
             "idAction": "tokenBarShowItems",
@@ -124,6 +127,26 @@ export class ActionHandler5e extends ActionHandler {
     }
 
     /** @private */
+    _mapToItemAction(tokenId, items) {
+        const macroType = "item";
+        return items.map(i => {
+            let result = { "name": i.name, "id": i._id, "encodedValue": `${macroType}.${tokenId}.${i._id}`}
+            if (i.data.uses.value) {
+                result["charges"] = i.data.uses.value;
+                
+                if (i.data.uses.max) {
+                    result["charges"] += `/${i.data.uses.max}`
+                }
+            }
+
+            if (i.data.quantity > 1) {
+                result["quantity"] = i.data.quantity;
+            }
+
+            return result; });
+    }
+
+    /** @private */
     _getActiveEquipment(equipment) {
         const activationTypes = Object.entries(game.dnd5e.config.abilityActivationTypes);
     
@@ -143,37 +166,37 @@ export class ActionHandler5e extends ActionHandler {
     }
     
     /** @private */
-    _getSpellsList(actor) {
+    _getSpellsList(actor, tokenId) {
         let preparedSpells = actor.data.items.filter(i => i.type == "spell" && i.data.preparation.prepared);
-        let spells = this._categoriseSpells(actor, preparedSpells);
+        let spells = this._categoriseSpells(actor, tokenId, preparedSpells);
     
         return spells;
     }
     
     /** SPELLS **/
     /** @private */
-    _categoriseSpells(actor, spells) {
-        const powers = { "hasSubcategories": true, "subcategories": {} };
-        const book = { "hasSubcategories": true, "subcategories": {} };
+    _categoriseSpells(actor, tokenId, spells) {
+        const powers = { "subcategories": {} };
+        const book = { "subcategories": {} };
         const macroType = "spell";
-        const spellLevels = actor.data.data.spells;
+        const spellSlots = actor.data.data.spells;
 
-        let dispose = spells.reduce(function (dispose, spell) {
-            var level = spell.data.level;
-            let prep = spell.data.preparation.mode;
-    
-            const prepTypes = game.dnd5e.config.spellPreparationModes;
-            let prepType = prepTypes[prep];
+        let dispose = spells.reduce(function (dispose, s) {
+            let spell = { "name": s.name, "id": s._id, "encodedValue": `${macroType}.${tokenId}.${s._id}` };
+
+            var level = s.data.level;
+            let prep = s.data.preparation.mode;
+            const prepType = game.dnd5e.config.spellPreparationModes[prep];
     
             if (prep == "pact" || prep == "atwill" || prep == "innate") {
                 if (!powers.subcategories.hasOwnProperty(prepType)) {
                     powers.subcategories[prepType] = { "actions": []};
 
-                    if (spellLevels[prep] && spellLevels[prep].max > 0)
-                        powers.subcategories[prepType]["slots"] = `(${spellLevels[prep].value} / ${spellLevels[prep].max})`;
+                    if (spellSlots[prep] && spellSlots[prep].max > 0)
+                        powers.subcategories[prepType]["slots"] = `(${spellSlots[prep].value} / ${spellSlots[prep].max})`;
                 }
 
-                powers.subcategories[prepType].actions.push({ "name": spell.name, "id": spell._id, "encodedValue": `${macroType}.${actor._id}.${spell._id}` });
+                powers.subcategories[prepType].actions.push(spell);
 
             } else {
                 let levelText = "Level " + level;
@@ -186,10 +209,10 @@ export class ActionHandler5e extends ActionHandler {
                 }
 
                 let spellLevelKey = 'spell' + level;
-                if (spellLevels[spellLevelKey] && spellLevels[spellLevelKey].max > 0)
-                    book.subcategories[levelText]["slots"] = `(${spellLevels[spellLevelKey].value} / ${spellLevels[spellLevelKey].max})`;
+                if (spellSlots[spellLevelKey] && spellSlots[spellLevelKey].max > 0)
+                    book.subcategories[levelText]["slots"] = `(${spellSlots[spellLevelKey].value} / ${spellSlots[spellLevelKey].max})`;
     
-                book.subcategories[levelText].actions.push({ "name": spell.name, "id": spell._id, "encodedValue": `${macroType}.${actor._id}.${spell._id}` });
+                book.subcategories[levelText].actions.push(spell);
             }
     
             return dispose;
@@ -205,8 +228,6 @@ export class ActionHandler5e extends ActionHandler {
     
         if (Object.keys(book.subcategories).length > 0)
             result.subcategories["books"] = book;
-            
-        console.log(result);
 
         return result;
     }
@@ -214,15 +235,15 @@ export class ActionHandler5e extends ActionHandler {
     /** FEATS **/
 
     /** @private */
-    _getFeatsList(actor) {
+    _getFeatsList(actor, tokenId) {
         let allFeats = actor.data.items.filter(i => i.type == "feat");
-        let feats = this._categoriseFeats(actor, allFeats);
+        let feats = this._categoriseFeats(tokenId, allFeats);
     
         return feats;
     }
     
     /** @private */
-    _categoriseFeats(actor, feats) {
+    _categoriseFeats(tokenId, feats) {
         let active = { "actions": []};
         let passive = { "actions": []};
         let lair = { "actions": []};
@@ -232,23 +253,39 @@ export class ActionHandler5e extends ActionHandler {
             const activationTypes = game.dnd5e.config.abilityActivationTypes;
             const activationType = f.data.activation.type;
             const macroType = "feat";
+
+            let feat = { "name": f.name, "id": f._id, "encodedValue": `${macroType}.${tokenId}.${f._id}` }
+
+            if (f.data.uses.value) {
+                feat["charges"] = f.data.uses.value;
+
+                if (f.data.uses.max) {
+                    feat["charges"] += `/${f.data.uses.max}`
+                }
+            }
             
-            if (activationType == null)
-                passive.actions.push({ "name": f.name, "id": f._id, "encodedValue": `${macroType}.${actor._id}.${f._id}` });
+            if (f.data.recharge && !f.data.recharge.charged && f.data.recharge.value) {
+                feat["name"] += " (Recharge)";
+            }
+            
+            if (!activationType || activationType === "") {
+                passive.actions.push(feat);
+                return;
+            } 
             
             if (activationType == "lair") {
-                lair.actions.push({ "name": f.name, "id": f._id, "encodedValue": `${macroType}.${actor._id}.${f._id}` })
-                return active;
+                lair.actions.push(feat);
+                return;
             }
-            
+
             if (activationType == "legendary") {
-                legendary.actions.push({ "name": f.name, "id": f._id, "encodedValue": `${macroType}.${actor._id}.${f._id}` })
-                return active;
-            }
-    
-            active.actions.push({ "name": f.name, "id": f._id, "encodedValue": `${macroType}.${actor._id}.${f._id}` });
-    
-            return dispose;
+                legendary.actions.push(feat)
+                return;
+            } 
+
+            active.actions.push(feat);
+
+            return;
         }, {});
     
         let result = {
