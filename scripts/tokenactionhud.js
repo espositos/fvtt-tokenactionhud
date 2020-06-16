@@ -88,7 +88,7 @@ export class TokenActionHUD extends Application {
         html.find(action)
         html.find(action).on('click', e => {
             let value = e.target.value;
-            this.actions.handleButtonClick(e, value);
+            this.actions.handleActionEvent(e, value);
         });
 
         html.find(repositionIcon).mousedown(ev => {
@@ -156,7 +156,7 @@ export class TokenActionHUD extends Application {
         if (value === undefined || value === "")
             return;
 
-        this.actions.handleButtonClick(event, value);
+        this.actions.handleActionEvent(event, value);
     }
 
     update() {
