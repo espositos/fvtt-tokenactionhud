@@ -123,7 +123,7 @@ export class ActionHandler5e extends ActionHandler {
         const activationTypes = Object.entries(game.dnd5e.config.abilityActivationTypes);
     
         let activeEquipment = equipment.filter(e => {
-            if (e.data.activation == undefined)
+            if (!e.data.activation)
                 return false;
     
             for (let [key, value] of activationTypes) {

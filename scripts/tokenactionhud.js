@@ -186,7 +186,7 @@ export class TokenActionHUD extends Application {
 
         let controlled = this.tokens.controlled;
 
-        return controlled.length === 1 && controlled[0] != null && controlled[0] != undefined;
+        return controlled.length === 1 && controlled[0];
     }
 
     shouldUpdateOnActorOrItemUpdate(actor) {
@@ -214,7 +214,7 @@ export class TokenActionHUD extends Application {
 
         let ct = controlled[0];
 
-        if (ct === null || ct === undefined)
+        if (!ct)
             return null;
 
         if(this._userHasPermission(ct))

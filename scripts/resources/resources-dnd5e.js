@@ -2,7 +2,7 @@ const localize = (string) => game.i18n.localize(string);
 
 export class ResourceBuilder5e {
     buildResourceList(actor) {
-        if (actor === null || actor === undefined) {
+        if (!actor) {
             return {};
         }
         
