@@ -9,7 +9,7 @@ export class RollHandlerBaseWfrp extends RollHandler {
         let payload = value.split('.');
         console.log(value);
         if (payload.length != 3) {
-            throw new Error("invalid button value received.");
+            super.throwInvalidValueErr();
         }
         
         let macroType = payload[0];
