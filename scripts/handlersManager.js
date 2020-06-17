@@ -1,10 +1,11 @@
 import { ActionHandler5e } from "./actions/actions-dnd5e.js";
 import { ActionHandlerWfrp } from "./actions/actions-wfrp.js";
-import { ResourceBuilder5e } from "./resources/resources-dnd5e.js";
-import { RollHandlerBase5e }from "./rolls/base-dnd5e-rolls.js";
-import { RollHandlerBaseWfrp } from "./rolls/base-wfrp-rolls.js";
+import { ActionHandler5e }from "./actions/actions-dnd5e.js";
+import { RollHandlerWfrp } from "./handlers/handler-wfrp.js";
+import { RollHandler5e } from "./handlers/handler-dnd5e.js";
 
-export class HandlersFactory {
+export class HandlersManager {
+    // Currently only planning for one kind of action handler for each system
     static getActionHandler(system) {
         switch (system) {
             case "wfrp4e":
@@ -15,12 +16,14 @@ export class HandlersFactory {
         throw new Error("System not supported by TokenActionHUD");
     }
 
+    // Possibility for several types of rollers (e.g. BetterRolls, MinorQOL for DND5e),
+    // so pass off to a RollHandler factory
     static getRollHandler(system) {
         switch (system) {
             case "wfrp4e":
-                return new RollHandlerBaseWfrp();
+                return RollHandlerWfrp.getRollhandler("");
             case "dnd5e":
-                return new RollHandlerBase5e();
+                return RollHandler5e.getRollHandler("")
         }
         throw new Error("System not supported by TokenActionHUD");
     }

@@ -1,5 +1,5 @@
 import { registerSettings } from "./registerSettings.js";
-import { HandlersFactory } from "./handlersFactory.js";
+import { HandlersManager } from "./handlersManager.js";
 import { TokenActionHUD } from "./tokenactionhud.js";
 
 Hooks.on('init', () => {
@@ -14,8 +14,8 @@ Hooks.on('init', () => {
     ]);
 
     if (!game.tokenActionHUD) {
-        let actionHandler = HandlersFactory.getActionHandler(game.data.system.id);
-        let rollHandler = HandlersFactory.getRollHandler(game.data.system.id);
+        let actionHandler = HandlersManager.getActionHandler(game.data.system.id);
+        let rollHandler = HandlersManager.getRollHandler(game.data.system.id);
         
         game.tokenActionHUD = new TokenActionHUD(actionHandler, rollHandler);
     }
