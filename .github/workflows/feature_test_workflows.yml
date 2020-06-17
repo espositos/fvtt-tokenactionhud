@@ -1,0 +1,64 @@
+name: Create Release Archive
+on:
+  push:
+    tags:
+      - v*
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        persist-credentials: false
+        fetch-depth: 0
+    - name: Get tag
+      uses: olegtarasov/get-tag@v2
+      id: tagName
+    - name: Patch files
+      uses: onlyutkarsh/patch-files-action@v1.0.2
+      env:
+        author: ^ and stick#0520
+      with:
+        files: |
+          module.json
+        patch-syntax: |
+          = /version => "${{ steps.tagName.outputs.tag }}"
+          = /author => "${{ env.author }}"
+          = /download => "https://github.com/espositos/fvtt-tokenactionhud/releases/download/${{ steps.tagName.outputs.tag }}/release_${{ steps.tagName.outputs.tag }}.zip"
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.tagName.outputs.tag }}
+        release_name: Release_${{ steps.tagName.outputs.tag }}
+        draft: false
+        prerelease: false
+    - name: Archive Release
+      uses: thedoctor0/zip-release@master
+      with:
+        filename: 'release_${{ steps.tagName.outputs.tag }}.zip'
+        exclusions: '*.git* .editorconfig foundry.js'
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./release_${{ steps.tagName.outputs.tag }}.zip
+        asset_name: release_${{ steps.tagName.outputs.tag }}.zip
+        asset_content_type: application/zip
+    - name: Commit files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add module.json
+        git commit -m "Update module.json"
+    - name: Push changes to master
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: master
