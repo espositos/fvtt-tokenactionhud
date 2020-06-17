@@ -2,9 +2,8 @@ import {ActionHandler} from './actionHandler.js';
 import * as checkLists from './checks-dnd5e.js';
 
 export class ActionHandler5e extends ActionHandler {
-    constructor (resources5e) {
+    constructor () {
         super();
-        this.resources = resources5e;
     }
 
     /** @override */
@@ -30,7 +29,6 @@ export class ActionHandler5e extends ActionHandler {
         let items = this._getItemList(actor, tokenId);
         let spells = this._getSpellsList(actor, tokenId);
         let feats = this._getFeatsList(actor, tokenId);
-        let resourceList = this.resources.buildResourceList(actor, tokenId);
         
         let checks = checkLists.buildChecksList(tokenId);
     
@@ -46,10 +44,6 @@ export class ActionHandler5e extends ActionHandler {
         for (let [k, v] of Object.entries(checks)) {
             if (Object.keys(checks[k].subcategories).length > 0 && !result.categories.hasOwnProperty(k))
                 result.categories[k] = v;
-        }
-
-        if (Object.keys(resourceList).length > 0) {
-            result["resources"] = resourceList;
         }
 
         return result;

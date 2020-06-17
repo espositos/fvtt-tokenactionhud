@@ -10,8 +10,7 @@ export class HandlersFactory {
             case "wfrp4e":
                 return new ActionHandlerWfrp();
             case "dnd5e":
-                let resourceBuilder = new ResourceBuilder5e();
-                return new ActionHandler5e(resourceBuilder);
+                return new ActionHandler5e();
         }
         throw new Error("System not supported by TokenActionHUD");
     }
