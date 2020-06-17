@@ -7,6 +7,8 @@
 	"esmodules" : ["./scripts/init.js"],
 	"styles": ["./templates/token-action-hud.css"],
 	"systems": ["dnd5e", "wfrp4e"],
-	"version" : "0.1.2",
+	"url": "https://github.com/espositos/fvtt-tokenactionhud",
+	"manifest": "https://github.com/espositos/fvtt-tokenactionhud/raw/master/module.json",
+	"version" : "v0.1.5",
 	"download" : ""
 }
