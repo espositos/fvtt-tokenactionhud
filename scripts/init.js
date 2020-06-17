@@ -1,8 +1,6 @@
-import { ActionHandler5e } from "./actions/actions-dnd5e.js";
-import { ResourceBuilder5e } from "./resources/resources-dnd5e.js";
-import { TokenActionHUD } from "./tokenactionhud.js";
 import { registerSettings } from "./registerSettings.js";
-import { RollHandlerBase5e }from "./rolls/base-dnd5e-rolls.js";
+import { HandlersFactory } from "./handlersFactory.js";
+import { TokenActionHUD } from "./tokenactionhud.js";
 
 Hooks.on('init', () => {
     Handlebars.registerHelper('cap', function(string) {
@@ -16,10 +14,10 @@ Hooks.on('init', () => {
     ]);
 
     if (!game.tokenActionHUD) {
-        let resourceBuilder = new ResourceBuilder5e();
-        let rollHandler = new RollHandlerBase5e();
-        let actionHandler = new ActionHandler5e(rollHandler, resourceBuilder);
-        game.tokenActionHUD = new TokenActionHUD(actionHandler);
+        let actionHandler = HandlersFactory.getActionHandler(game.data.system.id);
+        let rollHandler = HandlersFactory.getRollHandler(game.data.system.id);
+        
+        game.tokenActionHUD = new TokenActionHUD(actionHandler, rollHandler);
     }
 
     registerSettings(game.tokenActionHUD);
@@ -39,6 +37,11 @@ Hooks.on('controlToken', () => {
 });
 
 Hooks.on('updateToken', () => {
+    if (game.tokenActionHUD.shouldUpdateOnControlTokenChange())
+        game.tokenActionHUD.update();
+});
+
+Hooks.on('deleteToken', () => {
     if (game.tokenActionHUD.shouldUpdateOnControlTokenChange())
         game.tokenActionHUD.update();
 });

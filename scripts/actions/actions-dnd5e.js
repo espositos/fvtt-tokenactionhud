@@ -1,39 +1,10 @@
-import * as checkLists from './checks-dnd5e.js';
 import {ActionHandler} from './actionHandler.js';
+import * as checkLists from './checks-dnd5e.js';
 
 export class ActionHandler5e extends ActionHandler {
-    constructor (rollHandler5e, resources5e) {
+    constructor (resources5e) {
         super();
-        this.rollHandler = rollHandler5e;
         this.resources = resources5e;
-    }
-
-    /** @override */
-    handleActionEvent(event, value) {
-        let payload = value.split('.');
-        
-        if (payload.length != 3)
-        return;
-        
-        let macroType = payload[0];
-        let tokenId = payload[1];
-        let actionId = payload[2];
-        
-        switch (macroType) {
-            case "ability":
-                this.rollHandler.rollAbilityMacro(event, tokenId, actionId);
-                break;
-            case "skill":
-                this.rollHandler.rollSkillMacro(event, tokenId, actionId);
-                break;
-            case "item":
-            case "spell":
-            case "feat":
-                this.rollHandler.rollItemMacro(event, tokenId, actionId);
-                break;
-            default:
-                break;
-        }
     }
 
     /** @override */

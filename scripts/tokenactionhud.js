@@ -9,11 +9,12 @@ export class TokenActionHUD extends Application {
     defaultX = 150;
     defaultY = 80;
 
-    constructor(actions) {
+    constructor(actions, rollHandler) {
         super();
         this.refresh_timeout = null;
         this.tokens = null;
         this.actions = actions;
+        this.rollHandler = rollHandler;
     }
 
     setTokensReference(tokens) {
@@ -85,10 +86,21 @@ export class TokenActionHUD extends Application {
         const action = '.tokenActionHud-action';
         const closeIcon = '#tokenActionHud-close';      
 
-        html.find(action)
         html.find(action).on('click', e => {
-            let value = e.target.value;
-            this.actions.handleActionEvent(e, value);
+            if (this.debug)
+                log(e);
+
+            let target = e.target;
+
+            if (target.tagName !== "BUTTON")
+                target = e.currentTarget.children[0];
+
+            let value = target.value;
+            try {
+                this.rollHandler.handleActionEvent(e, value);
+            } catch (error) {
+                log(error);
+            }
         });
 
         html.find(repositionIcon).mousedown(ev => {
@@ -148,15 +160,6 @@ export class TokenActionHUD extends Application {
                 }
             }
         });
-    }
-
-    /** @private */
-    _clickDropdownContent(event) {
-        let value = event.target.value;
-        if (value === undefined || value === "")
-            return;
-
-        this.actions.handleActionEvent(event, value);
     }
 
     update() {
