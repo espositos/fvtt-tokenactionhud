@@ -41,6 +41,11 @@ Hooks.on('updateToken', () => {
         game.tokenActionHUD.update();
 });
 
+Hooks.on('deleteToken', () => {
+    if (game.tokenActionHUD.shouldUpdateOnControlTokenChange())
+        game.tokenActionHUD.update();
+});
+
 Hooks.on('updateActor', (actor) => {
     if (game.tokenActionHUD.shouldUpdateOnActorOrItemUpdate(actor))
         game.tokenActionHUD.update();

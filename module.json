@@ -1,11 +1,11 @@
 {
 	"name" : "tokenActionHud",
 	"title" : "Token Action HUD",
-	"description" : "Creates a bar showing a selected token's actions.",
 	"author" : "^ and stick#0520",
-	"version" : "0.1.2",
+	"description" : "Creates a bar showing a selected token's actions.",
 	"minimumCoreVersion" : "0.6.0",
 	"esmodules" : ["./scripts/init.js"],
 	"styles": ["./templates/token-action-hud.css"],
-	"systems": ["dnd5e", "wfrp4e"]
+	"systems": ["dnd5e", "wfrp4e"],
+	"version" : "0.1.2"
 }
