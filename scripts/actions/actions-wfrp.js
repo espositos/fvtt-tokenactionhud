@@ -27,7 +27,6 @@ export class ActionHandlerWfrp extends ActionHandler {
         result.actorId = actor._id;
         
         let weapons = this._getSubcategoryList(actor, tokenId, "weapon");
-        // let armour = this._getSubcategoryList(actor, tokenId, "armour");
         let spells = this._getSubcategoryList(actor, tokenId, "spell");
         let prayers = this._getSubcategoryList(actor, tokenId, "prayer");
         let traits = this._getSubcategoryList(actor, tokenId, "trait");
@@ -36,9 +35,6 @@ export class ActionHandlerWfrp extends ActionHandler {
         
         if (Object.entries(weapons.subcategories).length > 0)
             result.categories["weapons"] = weapons;
-        
-        // if (Object.entries(weapons.subcategories).length > 0)
-        //     result.categories["armour"] = armour;
     
         if (Object.entries(spells.subcategories).length > 0)
             result.categories["spells"] = spells;

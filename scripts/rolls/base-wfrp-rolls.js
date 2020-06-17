@@ -9,7 +9,7 @@ export class RollHandlerBaseWfrp extends RollHandler {
         let payload = value.split('.');
         console.log(value);
         if (payload.length != 3) {
-            throw new Error("invalid button value received.");
+            super.throwInvalidValueErr();
         }
         
         let macroType = payload[0];
@@ -26,17 +26,17 @@ export class RollHandlerBaseWfrp extends RollHandler {
 
         switch (macroType) {
             case "weapon":
-                return actor.setupWeapon(item, bypassData)
+                return actor.setupWeapon(item, bypassData);
             case "spell":
-                return actor.spellDialog(item)
+                return actor.spellDialog(item, bypassData);
             case "prayer":
-                return actor.setupPrayer(item)
+                return actor.setupPrayer(item, bypassData);
             case "trait":
-                return actor.setupTrait(item, bypassData)
+                return actor.setupTrait(item, bypassData);
             case "skill":
-                return actor.setupSkill(item, bypassData)
+                return actor.setupSkill(item, bypassData);
             case "characteristic":
-                return actor.setupCharacteristic(item, bypassData)
+                return actor.setupCharacteristic(item, bypassData);
         }
     }
 }

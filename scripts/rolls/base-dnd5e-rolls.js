@@ -11,7 +11,7 @@ export class RollHandlerBase5e extends RollHandler {
         let payload = value.split('.');
         
         if (payload.length != 3) {
-            throw new Error("Token Action HUD | invalid button value received.")
+            super.throwInvalidValueErr();
         }
         
         let macroType = payload[0];
