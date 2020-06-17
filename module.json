@@ -7,5 +7,6 @@
 	"esmodules" : ["./scripts/init.js"],
 	"styles": ["./templates/token-action-hud.css"],
 	"systems": ["dnd5e", "wfrp4e"],
-	"version" : "0.1.2"
+	"version" : "0.1.2",
+	"download" : ""
 }
