@@ -1,12 +1,13 @@
 import {RollHandlerBase5e as Core} from "../rolls/base-dnd5e-rolls.js"
 import {RollHandlerBetterRolls5e as BetterRolls5e} from "../rolls/betterrolls5e-dnd5e-rolls.js"
 
-static function getRollHandler(roller = "") {
-    switch (roller) {
+export function getRollHandler(rollHandler = "") {
+    switch (rollHandler) {
         case "betterrolls5e":
             return new BetterRolls5e();
         case "core":
+            return new Core();
         default:
-            return Core();
+            return new Core();
     }
 }

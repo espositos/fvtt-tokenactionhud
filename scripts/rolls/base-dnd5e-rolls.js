@@ -1,3 +1,4 @@
+import * as settings from "../settings.js"; 
 import { RollHandler } from "./rollHandler.js"
 
 export class RollHandlerBase5e extends RollHandler {
@@ -47,8 +48,10 @@ export class RollHandlerBase5e extends RollHandler {
         let actor = super.getActor(tokenId);
         let item = actor.getOwnedItem(itemId);
     
-        if (!item)
-            ui.notifications.warn("No item found");
+        if (!item) {
+            settings.Logger.error(`No item found with id ${itemId}`);
+            return;
+        }
     
         if (item.data.type === "spell")
             return actor.useSpell(item);

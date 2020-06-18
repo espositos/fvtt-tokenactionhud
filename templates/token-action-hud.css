@@ -1,10 +1,10 @@
-#tokenActionHud {
+#token-action-hud {
     z-index: 99;
     display: flex;
     flex-direction: row;
     align-items: center;
     top: 80px;
-    left: 150px; 
+    left: 150px;
     position: fixed;
     height: auto;
     width: auto;
@@ -19,24 +19,24 @@
     width: 100%;
 }
 
-#tokenActionHud:hover > #tokenActionHud-reposition, #tokenActionHud:hover > #tokenActionHud-close {
+#token-action-hud:hover > #token-action-hud-reposition, #token-action-hud:hover > #token-action-hud-close {
     display: block;
     position: absolute;
 }
 
-#tokenActionHud-reposition, #tokenActionHud-close {
+#token-action-hud-reposition, #token-action-hud-close {
     display: none;
 }
 
-#tokenActionHud-reposition {
+#token-action-hud-reposition {
     left: -20px;
 }
 
-#tokenActionHud-close {
+#token-action-hud-close {
     right: -20px;
 }
 
-#tokenActionHud-reposition > .fa, #tokenActionHud-reposition > .fas, #tokenActionHud-close > .fa, #tokenActionHud-close > .fas {
+#token-action-hud-reposition > .fa, #token-action-hud-reposition > .fas, #token-action-hud-close > .fa, #token-action-hud-close > .fas {
     color: #fff;
     font-size: small;
     padding: 3px;
@@ -46,17 +46,17 @@
     pointer-events: none;
 }
 
-#tokenActionHud-reposition:hover > i, #tokenActionHud-close:hover > i {
+#token-action-hud-reposition:hover > i, #token-action-hud-close:hover > i {
     text-shadow: 0 0 10px #ff6400;
 }
 
 /* The container <div> - needed to position the dropdown content */
-.tokenActionHud-category {
+.token-action-hud-category {
     position: relative;
     display: block;
 }
 
-.tokenActionHud-title-button {
+.token-action-hud-title-button {
     width: auto;
     height: auto;
     color: #fff;
@@ -67,18 +67,18 @@
     cursor: pointer;
 }
 
-.tokenActionHud-title-button:hover {
+.token-action-hud-title-button:hover {
     border-bottom: 1px solid #ff6400;
     box-shadow: 0 0 10px #ff6400;
 }
 
 /* Dropdown Content (Hidden by Default) */
-.tokenActionHud-content {
+.token-action-hud-content {
     display: none;
 }
 
 /* Show the dropdown menu on hover */
-.tokenActionHud-category:hover .tokenActionHud-content {
+.token-action-hud-category:hover .token-action-hud-content {
     display: block;
     padding: 2px;
     position: absolute;
@@ -86,13 +86,13 @@
     background: rgba(0, 0, 0, 0);
 }
 
-.tokenActionHud-subcategory {
+.token-action-hud-subcategory {
     display: grid;
     grid-template-columns: 80px auto;
     grid-auto-rows: auto;
 }
 
-.tokenActionHud-subtitle {
+.token-action-hud-subtitle {
     grid-column: 1;
     padding-top: 12px;
     min-width: 80px;    
@@ -105,7 +105,7 @@
     text-align: right;
 }
 
-.tokenActionHud-actions {
+.token-action-hud-actions {
     grid-column: 2;
     display: flex;
     flex-flow: row wrap;
@@ -114,7 +114,7 @@
 }
 
 /* Links inside the dropdown */
-.tokenActionHud-action {
+.token-action-hud-action {
     flex-grow: 0;
     flex-basis: auto;
     padding: 3px;
@@ -122,36 +122,36 @@
     background: none;
 }
 
-.tokenActionHud-action-charges, .tokenActionHud-action-quantity {
+.token-action-hud-action-charges, .token-action-hud-action-quantity {
     font-size: smaller;
     display: inline;
 }
 
-.tokenActionHud-action-charges {
+.token-action-hud-action-charges {
     text-shadow:  0 0 1px rgba(240, 2, 248, 0.95);
 }
 
-.tokenActionHud-action-quantity {
+.token-action-hud-action-quantity {
     text-shadow: 0 0 1px rgba(2, 248, 14, 0.95);
 }
 
-.tokenActionHud-action-charges:before {
+.token-action-hud-action-charges:before {
     content: " [chg ";
 }
 
-.tokenActionHud-action-charges:after {
+.token-action-hud-action-charges:after {
     content: "]";
 }
 
-.tokenActionHud-action-quantity:before {
+.token-action-hud-action-quantity:before {
     content: " (qty ";
 }
 
-.tokenActionHud-action-quantity:after {
+.token-action-hud-action-quantity:after {
     content: ")";
 }
  
-.tokenActionHud-action button {
+.token-action-hud-action button {
     width: 100%;
     font-size: small;
     text-decoration: none;
@@ -160,7 +160,7 @@
 }
 
 /* Change color of dropdown links on hover */
-.tokenActionHud-action button:hover {
+.token-action-hud-action button:hover {
     border-bottom: 1px solid #ff6400;
     box-shadow: 0 0 10px #ff6400;
 }

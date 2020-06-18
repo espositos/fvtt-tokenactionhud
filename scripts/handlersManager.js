@@ -1,8 +1,6 @@
 import { ActionHandler5e } from "./actions/actions-dnd5e.js";
 import { ActionHandlerWfrp } from "./actions/actions-wfrp.js";
-import { ActionHandler5e }from "./actions/actions-dnd5e.js";
-import { RollHandlerWfrp } from "./handlers/handler-wfrp.js";
-import { RollHandler5e } from "./handlers/handler-dnd5e.js";
+import * as roll5e from "./handlers/handler-dnd5e.js";
 
 export class HandlersManager {
     // Currently only planning for one kind of action handler for each system
@@ -13,7 +11,7 @@ export class HandlersManager {
             case "dnd5e":
                 return new ActionHandler5e();
         }
-        throw new Error("System not supported by TokenActionHUD");
+        throw new Error("System not supported by token-action-hud");
     }
 
     // Possibility for several types of rollers (e.g. BetterRolls, MinorQOL for DND5e),
@@ -23,9 +21,9 @@ export class HandlersManager {
             case "wfrp4e":
                 return RollHandlerWfrp.getRollhandler("");
             case "dnd5e":
-                return RollHandler5e.getRollHandler("")
+                return roll5e.getRollHandler()
         }
-        throw new Error("System not supported by TokenActionHUD");
+        throw new Error("System not supported by token-action-hud");
     }
 
     static getRollHandlerChoices(system) {
@@ -34,13 +32,13 @@ export class HandlersManager {
                 return {"core": "Core Wfrp"};
             case "dnd5e":
                 let choices = {"core": "Core 5e"};
-                testForModule(choices, "betterrolls5e");
-                testForModule(choices, "minor-qol");
+                this.testForModule(choices, "betterrolls5e");
+                this.testForModule(choices, "minor-qol");
                 return choices;
         }
     }
 
-    testForModule(id, choices) {
+    static testForModule(choices, id) {
         let module = game.modules.get(id);
         if (module && module.active) {
             let name = module.name;

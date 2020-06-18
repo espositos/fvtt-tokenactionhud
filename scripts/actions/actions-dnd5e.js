@@ -1,3 +1,4 @@
+import {Logger} from '../settings.js';
 import {ActionHandler} from './actionHandler.js';
 import * as checkLists from './checks-dnd5e.js';
 
@@ -45,7 +46,7 @@ export class ActionHandler5e extends ActionHandler {
             if (Object.keys(checks[k].subcategories).length > 0 && !result.categories.hasOwnProperty(k))
                 result.categories[k] = v;
         }
-
+        
         return result;
     }
     
@@ -195,6 +196,7 @@ export class ActionHandler5e extends ActionHandler {
         if (Object.keys(book.subcategories).length > 0)
             result.subcategories["books"] = book;
 
+        
         return result;
     }
     
