@@ -13,14 +13,19 @@ Hooks.on('init', () => {
         "modules/tokenActionHud/templates/action.hbs"
     ]);
 
+    let system = game.data.system.id;
+
+    let rollHandlers = HandlersManager.getRollHandlerChoices(system);
+
+    registerSettings(rollHandlers);
+
     if (!game.tokenActionHUD) {
-        let actionHandler = HandlersManager.getActionHandler(game.data.system.id);
-        let rollHandler = HandlersManager.getRollHandler(game.data.system.id);
+        let actionHandler = HandlersManager.getActionHandler(system);
+        let rollHandler = HandlersManager.getRollHandler(system);
         
         game.tokenActionHUD = new TokenActionHUD(actionHandler, rollHandler);
     }
 
-    registerSettings(game.tokenActionHUD);
 });
 
 Hooks.on('ready', () => {

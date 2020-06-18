@@ -27,4 +27,25 @@ export class HandlersManager {
         }
         throw new Error("System not supported by TokenActionHUD");
     }
+
+    static getRollHandlerChoices(system) {
+        switch (system) {
+            case "wfrp4e":
+                return {"core": "Core Wfrp"};
+            case "dnd5e":
+                let choices = {"core": "Core 5e"};
+                testForModule(choices, "betterrolls5e");
+                testForModule(choices, "minor-qol");
+                return choices;
+        }
+    }
+
+    testForModule(id, choices) {
+        let module = game.modules.get(id);
+        if (module && module.active) {
+            let name = module.name;
+            let title = module.title;
+            mergeObject(choices, { name: title })
+        }
+    }
 }
