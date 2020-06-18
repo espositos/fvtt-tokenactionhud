@@ -5,9 +5,9 @@ import * as wfrp4eSettings from "./settings/wfrp4e-settings.js"
 
 const app = 'token-action-hud';
 export const registerSettings = function(rollHandlers) {
-    game.settings.register(app,'roller', {
-        name : "Token Action HUD roll handler",
-        hint : "Choose output for Token Bar.",
+    game.settings.register(app,'rollHandler', {
+        name : "HUD roll handler",
+        hint : "Choose which module handles the HUD's button clicks.",
         scope : "world",
         config : true,
         type : String,
@@ -15,14 +15,14 @@ export const registerSettings = function(rollHandlers) {
         default : "core"
     });
     game.settings.register(app,'playerPermission', {
-        name : "Enable Token Action HUD for players",
-        hint : "Disable to restrict use to the GM",
+        name : "Enable HUD for players",
+        hint : "Disable this to restrict use of the HUD to the GM.",
         scope : "world",
         config : true,
         type : Boolean,
         default : true
     });
-    game.settings.register(app,'enabled', {
+    game.settings.register(app,'enabledForUser', {
         name : "Enable HUD for current user",
         hint : "Enables or disables the bar for the current user.",
         scope : "client",
@@ -81,8 +81,8 @@ export function setSetting(setting, value) {
 
 /** @enum */
 export const settings = {
-    npcShowAllItems: 'npcShowAllItems',
-    enabled: 'enabled',
+    rollHandler: 'rollHandler',
+    enabledForUser: 'enabledForUser',
     playerPermission: 'playerPermission',
     debug: 'debug'
 };

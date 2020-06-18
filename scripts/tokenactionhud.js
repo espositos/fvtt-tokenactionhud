@@ -15,10 +15,10 @@ export class TokenActionHUD extends Application {
     }
 
     trySetUserPos() {
-        if(!(game.user.data.flags.token-action-hud && game.user.data.flags.token-action-hud.hudPos))
+        if(!(game.user.data.flags.tokenactionhud && game.user.data.flags.tokenactionhud.hudPos))
             return;
 
-        let pos = game.user.data.flags.token-action-hud.hudPos;
+        let pos = game.user.data.flags.tokenactionhud.hudPos;
         
         return new Promise(resolve => {
             function check() {
@@ -147,7 +147,7 @@ export class TokenActionHUD extends Application {
                         elmnt.style.left = (xPos) + "px";
                     }
                     Logger.info(`Setting position to x: ${xPos}px, y: ${yPos}px, and saving in user flags.`)
-                    game.user.update({flags: {'token-action-hud':{ 'hudPos': {top: yPos, left: xPos}}}})
+                    game.user.update({flags: {'tokenactionhud':{ 'hudPos': {top: yPos, left: xPos}}}})
                 }
             }
         });
@@ -167,12 +167,12 @@ export class TokenActionHUD extends Application {
         
         this.targetActions = this.actions.buildActionList(token);
 
-        if (getSetting(settings.enabled)) {
-            this.render (true);
+        if (!getSetting(settings.enabledForUser)) {
+            this.close();
             return;
         }
 
-        this.close();
+        this.render(true);
     }
 
     shouldUpdateOnControlTokenChange() {

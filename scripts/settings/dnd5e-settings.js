@@ -8,17 +8,17 @@ export function registerSettings(app, settings) {
         type: Boolean,
         default: true
     });
-    
-    game.settings.register(app,'npcShowAllItems', {
-        name: "NPCs - show all items (not only equipped)",
-        hint: "Disable if you would like unequipped NPC items to be hidden from the HUD.",
+
+    game.settings.register(app,'showAllNpcItems', {
+        name: "Show all NPC items",
+        hint: "Determines whether all NPC items are shown, or only equipped items.",
         scope: "client",
         config: true,
         type: Boolean,
         default: true
     });
 
-    settings['npcShowAllItems'] = 'npcShowAllItems';
+    settings['showAllNpcItems'] = 'showAllNpcItems';
     settings['ignorePassiveFeats'] = 'ignorePassiveFeats';
 }
     

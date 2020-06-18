@@ -1,5 +1,5 @@
-import {Logger} from '../settings.js';
 import {ActionHandler} from './actionHandler.js';
+import {Logger, settings, getSetting} from '../settings.js';
 import * as checkLists from './checks-dnd5e.js';
 
 export class ActionHandler5e extends ActionHandler {
@@ -46,7 +46,7 @@ export class ActionHandler5e extends ActionHandler {
             if (Object.keys(checks[k].subcategories).length > 0 && !result.categories.hasOwnProperty(k))
                 result.categories[k] = v;
         }
-        
+
         return result;
     }
     
@@ -55,7 +55,14 @@ export class ActionHandler5e extends ActionHandler {
     /** @private */
     _getItemList(actor, tokenId) {
         let items = actor.data.items;
-        let equipped = items.filter(i => i.type !="consumable" && i.data.equipped && i.data.quantity > 0);
+
+        var equipped;
+        if (actor.data.type === "npc" && getSetting(settings.showAllNpcItems)) {
+            Logger.debug("NPC detected, showing all items.")
+            equipped = items.filter(i => i.type !== "consumable" && i.type !== "spell" && i.type !== "feat");
+        } else {
+            equipped = items.filter(i => i.type !== "consumable" && i.data.equipped && i.data.quantity > 0);
+        }
         let activeEquipped = this._getActiveEquipment(equipped);
         
         let weaponActions = this._mapToItemAction(tokenId, activeEquipped.filter(i => i.type == "weapon"));
@@ -270,7 +277,7 @@ export class ActionHandler5e extends ActionHandler {
         if (lair.actions.length > 0)
             result.subcategories["lair"] = lair;
     
-        if (passive.actions.length > 0)
+        if (passive.actions.length > 0 && !getSetting(settings.ignorePassiveFeats))
             result.subcategories["passive"] = passive;
         
         return result;

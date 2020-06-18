@@ -26,24 +26,27 @@ export class HandlersManager {
         throw new Error("System not supported by token-action-hud");
     }
 
+    // Not yet implemented.
     static getRollHandlerChoices(system) {
         switch (system) {
             case "wfrp4e":
                 return {"core": "Core Wfrp"};
             case "dnd5e":
                 let choices = {"core": "Core 5e"};
-                this.testForModule(choices, "betterrolls5e");
-                this.testForModule(choices, "minor-qol");
+                // this.testForModule(choices, "betterrolls5e");
+                // this.testForModule(choices, "minor-qol");
                 return choices;
         }
     }
 
     static testForModule(choices, id) {
         let module = game.modules.get(id);
+        console.log(id, module);
         if (module && module.active) {
-            let name = module.name;
-            let title = module.title;
-            mergeObject(choices, { name: title })
+            let id = module.id;
+            let title = module.data.title;
+            mergeObject(choices, { [id]: title })
         }
+        console.log(choices);
     }
 }
