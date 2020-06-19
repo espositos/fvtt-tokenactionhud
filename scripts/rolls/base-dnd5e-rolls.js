@@ -26,6 +26,12 @@ export class RollHandlerBase5e extends RollHandler {
             case "skill":
                 this.rollSkillMacro(event, tokenId, actionId);
                 break;
+            case "abilitySave":
+                this.rollAbilitySaveMacro(event, tokenId, actionId);
+                break;
+            case "abilityTest":
+                this.rollAbilityTestMacro(event, tokenId, actionId);
+                break;
             case "item":
             case "spell":
             case "feat":
@@ -38,6 +44,14 @@ export class RollHandlerBase5e extends RollHandler {
     
     rollAbilityMacro(event, tokenId, checkId) {
         super.getActor(tokenId).rollAbility(checkId, {event: event});
+    }
+    
+    rollAbilityTestMacro(event, tokenId, checkId) {
+        super.getActor(tokenId).rollAbilityTest(checkId, {event: event});
+    }
+
+    rollAbilitySaveMacro(event, tokenId, checkId) {
+        super.getActor(tokenId).rollAbilitySave(checkId, {event: event});
     }
     
     rollSkillMacro(event, tokenId, checkId) {
