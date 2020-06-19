@@ -14,33 +14,41 @@ Currently I only plan to have one action handler per system.
 The action handler has one public method, buildActionList(token), which takes a token with an actor and returns an action list that looks like:
 
 ## An ActionList
+```
 {
     "tokenId": "Normally token._id"
     "actionId": "Normally token.actor._id"
     "categories": {}
 }
+```
 
 ## A category:
+```
 key: {
     "subcategories": {}
 }
+```
 
 ## A subcategory:
+```
 key: {
     info: "Extra information to display alongside the category";
-    actions: {},
+    actions: [],
     subcategories: {}
 }
+```
 
 (note: subcategories can currently contain further subcategories)
 
 ## An action:
+```
     {
         name: "The name of the item",
         info1: "",
         info2: "",
         encodedValue: "";
     }
+```
 
 The encoded value is the data passed to the roll handler. For DND5e it uses the format "type.tokenId.actorId", which along with the click event should provide enough information for the roll handler.
 
