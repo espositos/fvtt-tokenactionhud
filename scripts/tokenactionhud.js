@@ -204,7 +204,7 @@ export class TokenActionHUD extends Application {
 
         let controlled = this.tokens.controlled;
 
-        return controlled.length === 1 && controlled[0];
+        return (controlled.length === 1 && controlled[0]) || controlled.length === 0;
     }
 
     shouldUpdateOnActorOrItemUpdate(actor) {
@@ -217,7 +217,7 @@ export class TokenActionHUD extends Application {
         }
             
         if (this.targetActions && actor._id === this.targetActions.actorId) {
-            settings.Logger.debug("Same IDs, should update HUD.");
+            settings.Logger.debug("Same actor IDs, should update HUD.");
             return true;
         }
 
