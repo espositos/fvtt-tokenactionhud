@@ -1,5 +1,5 @@
-import {RollHandlerBaseWfrp} from "../rolls/base-wfrp-rolls.js"
+import {RollHandlerBaseWfrp4e} from "../rolls/base-wfrp-rolls.js"
 
-export function getRollHandler(roller = "") {
-    return new RollHandlerBaseWfrp();
+export function getRollHandler(rollHandler = "") {
+    return new RollHandlerBaseWfrp4e();
 }

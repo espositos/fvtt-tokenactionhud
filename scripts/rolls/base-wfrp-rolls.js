@@ -1,6 +1,6 @@
 import { RollHandler } from "./rollHandler.js";
 
-export class RollHandlerBaseWfrp extends RollHandler {
+export class RollHandlerBaseWfrp4e extends RollHandler {
     constructor() {
         super();
     }

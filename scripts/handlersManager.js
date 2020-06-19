@@ -1,6 +1,7 @@
 import { ActionHandler5e } from "./actions/actions-dnd5e.js";
 import { ActionHandlerWfrp } from "./actions/actions-wfrp.js";
 import * as roll5e from "./handlers/handler-dnd5e.js";
+import * as rollWfrp from "./handlers/handler-wfrp.js";
 
 export class HandlersManager {
     // Currently only planning for one kind of action handler for each system
@@ -19,7 +20,7 @@ export class HandlersManager {
     static getRollHandler(system, handlerId) {
         switch (system) {
             case "wfrp4e":
-                return RollHandlerWfrp.getRollhandler(handlerId);
+                return rollWfrp.getRollhandler(handlerId);
             case "dnd5e":
                 return roll5e.getRollHandler(handlerId)
         }
