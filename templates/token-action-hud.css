@@ -122,32 +122,32 @@
     background: none;
 }
 
-.token-action-hud-action-charges, .token-action-hud-action-quantity {
+.token-action-hud-action-info2, .token-action-hud-action-info1 {
     font-size: smaller;
     display: inline;
 }
 
-.token-action-hud-action-charges {
+.token-action-hud-action-info2 {
     text-shadow:  0 0 1px rgba(240, 2, 248, 0.95);
 }
 
-.token-action-hud-action-quantity {
+.token-action-hud-action-info1 {
     text-shadow: 0 0 1px rgba(2, 248, 14, 0.95);
 }
 
-.token-action-hud-action-charges:before {
-    content: " [chg ";
+.token-action-hud-action-info2:before {
+    content: " [";
 }
 
-.token-action-hud-action-charges:after {
+.token-action-hud-action-info2:after {
     content: "]";
 }
 
-.token-action-hud-action-quantity:before {
-    content: " (qty ";
+.token-action-hud-action-info1:before {
+    content: " (";
 }
 
-.token-action-hud-action-quantity:after {
+.token-action-hud-action-info1:after {
     content: ")";
 }
  

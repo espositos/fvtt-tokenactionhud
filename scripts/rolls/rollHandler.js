@@ -7,5 +7,5 @@ export class RollHandler {
         throw new Error("invalid button value received.");
     }
 
-    handleActionEvent(event, value) {}    
+    handleActionEvent(event, encodedValue) {}    
 }

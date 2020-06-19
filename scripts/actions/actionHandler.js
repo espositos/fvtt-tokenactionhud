@@ -1,7 +1,5 @@
 export class ActionHandler {
-    constructor(rollHandler) {
-        this.rollHandler = rollHandler;
-    }
+    constructor() {}
 
     buildActionList(token) {};
 }

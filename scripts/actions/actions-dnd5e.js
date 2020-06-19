@@ -78,24 +78,23 @@ export class ActionHandler5e extends ActionHandler {
         let consumablesNoChargeActions = this._mapToItemAction(tokenId, consumables.filter(c => !c.data.uses.max && !c.data.uses.value));
         
         let itemsResult = {
-            "idAction": "tokenBarShowItems",
             "subcategories": {}
         }
             
         if (weaponActions.length > 0)
-            itemsResult.subcategories["weapons"] = {"actions": weaponActions };
+            itemsResult.subcategories["weapons"] = { "actions": weaponActions };
     
         if (equipmentActions.length > 0)
-            itemsResult.subcategories["equipment"] = {"actions": equipmentActions };
+            itemsResult.subcategories["equipment"] = { "actions": equipmentActions };
         
         if (otherActions.length > 0)
-            itemsResult.subcategories["other"] = {"actions": otherActions };
+            itemsResult.subcategories["other"] = { "actions": otherActions };
         
         if (consumablesChargedActions.length > 0)
-            itemsResult.subcategories["charged consumables"] = {"actions": consumablesChargedActions };
+            itemsResult.subcategories["charged consumables"] = { "actions": consumablesChargedActions };
         
         if (consumablesNoChargeActions.length > 0)
-            itemsResult.subcategories["consumables without charges"] = {"actions": consumablesNoChargeActions };
+            itemsResult.subcategories["consumables without charges"] = { "actions": consumablesNoChargeActions };
         
         return itemsResult;
     }
@@ -105,16 +104,17 @@ export class ActionHandler5e extends ActionHandler {
         const macroType = "item";
         return items.map(i => {
             let result = { "name": i.name, "id": i._id, "encodedValue": `${macroType}.${tokenId}.${i._id}`}
-            if (i.data.uses.value) {
-                result["charges"] = i.data.uses.value;
-                
-                if (i.data.uses.max) {
-                    result["charges"] += `/${i.data.uses.max}`
-                }
-            }
 
             if (i.data.quantity > 1) {
-                result["quantity"] = i.data.quantity;
+                result["info1"] = `qty: ${i.data.quantity}`;
+            }
+
+            if (i.data.uses.value) {
+                result["info2"] = `chg: ${i.data.uses.value}`;
+                
+                if (i.data.uses.max) {
+                    result["info2"] += `/${i.data.uses.max}`
+                }
             }
 
             return result; });
@@ -167,7 +167,7 @@ export class ActionHandler5e extends ActionHandler {
                     powers.subcategories[prepType] = { "actions": []};
 
                     if (spellSlots[prep] && spellSlots[prep].max > 0)
-                        powers.subcategories[prepType]["slots"] = `(${spellSlots[prep].value} / ${spellSlots[prep].max})`;
+                        powers.subcategories[prepType]["info"] = `(${spellSlots[prep].value} / ${spellSlots[prep].max})`;
                 }
 
                 powers.subcategories[prepType].actions.push(spell);
@@ -184,7 +184,7 @@ export class ActionHandler5e extends ActionHandler {
 
                 let spellLevelKey = 'spell' + level;
                 if (spellSlots[spellLevelKey] && spellSlots[spellLevelKey].max > 0)
-                    book.subcategories[levelText]["slots"] = `(${spellSlots[spellLevelKey].value} / ${spellSlots[spellLevelKey].max})`;
+                    book.subcategories[levelText]["info"] = `(${spellSlots[spellLevelKey].value} / ${spellSlots[spellLevelKey].max})`;
     
                 book.subcategories[levelText].actions.push(spell);
             }
@@ -193,7 +193,6 @@ export class ActionHandler5e extends ActionHandler {
         }, {});
     
         let result = {
-            "idAction": "tokenBarShowSpells",
             "subcategories": {}
         }
         
@@ -231,10 +230,10 @@ export class ActionHandler5e extends ActionHandler {
             let feat = { "name": f.name, "id": f._id, "encodedValue": `${macroType}.${tokenId}.${f._id}` }
 
             if (f.data.uses.value) {
-                feat["charges"] = f.data.uses.value;
+                feat["info2"] = f.data.uses.value;
 
                 if (f.data.uses.max) {
-                    feat["charges"] += `/${f.data.uses.max}`
+                    feat["info2"] += `/${f.data.uses.max}`
                 }
             }
             
@@ -263,7 +262,6 @@ export class ActionHandler5e extends ActionHandler {
         }, {});
     
         let result = {
-            "idAction": "tokenBarShowFeats",
             "subcategories": {}
         };
     
