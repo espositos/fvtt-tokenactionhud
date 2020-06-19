@@ -1,10 +1,10 @@
 import {ActionHandler} from './actionHandler.js';
+import * as settings from '../settings.js';
 import * as checkLists from './checks-dnd5e.js';
 
 export class ActionHandler5e extends ActionHandler {
-    constructor (resources5e) {
+    constructor () {
         super();
-        this.resources = resources5e;
     }
 
     /** @override */
@@ -30,7 +30,6 @@ export class ActionHandler5e extends ActionHandler {
         let items = this._getItemList(actor, tokenId);
         let spells = this._getSpellsList(actor, tokenId);
         let feats = this._getFeatsList(actor, tokenId);
-        let resourceList = this.resources.buildResourceList(actor, tokenId);
         
         let checks = checkLists.buildChecksList(tokenId);
     
@@ -48,10 +47,6 @@ export class ActionHandler5e extends ActionHandler {
                 result.categories[k] = v;
         }
 
-        if (Object.keys(resourceList).length > 0) {
-            result["resources"] = resourceList;
-        }
-
         return result;
     }
     
@@ -59,8 +54,15 @@ export class ActionHandler5e extends ActionHandler {
     
     /** @private */
     _getItemList(actor, tokenId) {
-        let items = actor.data.items;
-        let equipped = items.filter(i => i.type !="consumable" && i.data.equipped && i.data.quantity > 0);
+        let validItems = this._filterLongerActions(actor.data.items);
+
+        var equipped;
+        if (actor.data.type === "npc" && settings.get('showAllNpcItems')) {
+            settings.Logger.debug("NPC detected, showing all items.")
+            equipped = validItems.filter(i => i.type !== "consumable" && i.type !== "spell" && i.type !== "feat");
+        } else {
+            equipped = validItems.filter(i => i.type !== "consumable" && i.data.equipped && i.data.quantity > 0);
+        }
         let activeEquipped = this._getActiveEquipment(equipped);
         
         let weaponActions = this._mapToItemAction(tokenId, activeEquipped.filter(i => i.type == "weapon"));
@@ -69,7 +71,7 @@ export class ActionHandler5e extends ActionHandler {
         
         let otherActions = this._mapToItemAction(tokenId, activeEquipped.filter(i => i.type != "weapon" && i.type != "equipment"));
     
-        let consumables = items.filter(i => i.type == "consumable" && i.data.quantity > 0);
+        let consumables = validItems.filter(i => i.type == "consumable" && i.data.quantity > 0);
         
         let consumablesChargedActions = this._mapToItemAction(tokenId, consumables.filter(c => c.data.uses.value && c.data.uses.value > 0));
             
@@ -139,8 +141,8 @@ export class ActionHandler5e extends ActionHandler {
     
     /** @private */
     _getSpellsList(actor, tokenId) {
-        let preparedSpells = actor.data.items.filter(i => i.type == "spell" && i.data.preparation.prepared);
-        let spells = this._categoriseSpells(actor, tokenId, preparedSpells);
+        let validSpells = this._filterLongerActions(actor.data.items.filter(i => i.type == "spell" && i.data.preparation.prepared));
+        let spells = this._categoriseSpells(actor, tokenId, validSpells);
     
         return spells;
     }
@@ -200,7 +202,7 @@ export class ActionHandler5e extends ActionHandler {
     
         if (Object.keys(book.subcategories).length > 0)
             result.subcategories["books"] = book;
-
+        
         return result;
     }
     
@@ -208,8 +210,8 @@ export class ActionHandler5e extends ActionHandler {
 
     /** @private */
     _getFeatsList(actor, tokenId) {
-        let allFeats = actor.data.items.filter(i => i.type == "feat");
-        let feats = this._categoriseFeats(tokenId, allFeats);
+        let validFeats = this._filterLongerActions(actor.data.items.filter(i => i.type == "feat"));
+        let feats = this._categoriseFeats(tokenId, validFeats);
     
         return feats;
     }
@@ -274,9 +276,20 @@ export class ActionHandler5e extends ActionHandler {
         if (lair.actions.length > 0)
             result.subcategories["lair"] = lair;
     
-        if (passive.actions.length > 0)
+        if (passive.actions.length > 0 && !settings.get('ignorePassiveFeats'))
             result.subcategories["passive"] = passive;
         
         return result;
+    }
+    
+
+    /** @private */
+    _filterLongerActions(items) {
+        var result;
+
+        if (settings.get('hideLongerActions'))
+            result = items.filter(i => !i.data.activation || !(i.data.activation.type === 'minute' || i.data.activation.type === 'hour' || i.data.activation.type === 'day'));
+
+        return result ? result : items;
     }
 }

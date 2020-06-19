@@ -1,10 +1,9 @@
 
-<div id="{{id}}"  title="{{actions.actorId}}" style="top: {{top}}; left: {{left}};">
+<div id="{{id}}" style="top: {{top}}; left: {{left}};">
     {{#if actions.actorId}}
-    <div id="tokenActionHud-reposition"><i class="fas fa-arrows-alt"></i></div>
+    <div id="token-action-hud-reposition"><i class="fas fa-arrows-alt"></i></div>
     {{#each actions.categories}}
-    {{>"modules/tokenActionHud/templates/category.hbs"}}
+    {{>"modules/token-action-hud/templates/category.hbs"}}
     {{/each}}
-    {{!<div id="tokenActionHud-close"><i class="fa fa-window-close"></i></div>}}
     {{/if}}
 </div>

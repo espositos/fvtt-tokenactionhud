@@ -1,16 +1,16 @@
 
 {{#if this.actions}}
-<div class="tokenActionHud-subcategory">
-<div class="tokenActionHud-subtitle">{{cap @key}} {{#if this.slots}}{{this.slots}}{{/if}}</div>
-<div class="tokenActionHud-actions">
+<div class="token-action-hud-subcategory">
+<div class="token-action-hud-subtitle">{{cap @key}} {{#if this.slots}}{{this.slots}}{{/if}}</div>
+<div class="token-action-hud-actions">
 {{#each actions}}
-{{>"modules/tokenActionHud/templates/action.hbs"}}
+{{>"modules/token-action-hud/templates/action.hbs"}}
 {{/each}}
 </div>
 </div>
 {{/if}}
 {{#if this.subcategories}}
 {{#each subcategories}}
-{{>"modules/tokenActionHud/templates/subcategory.hbs"}}
+{{>"modules/token-action-hud/templates/subcategory.hbs"}}
 {{/each}}
 {{/if}}

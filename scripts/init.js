@@ -1,5 +1,5 @@
-import { registerSettings } from "./registerSettings.js";
-import { HandlersFactory } from "./handlersFactory.js";
+import * as settings from "./settings.js";
+import { HandlersManager } from "./handlersManager.js";
 import { TokenActionHUD } from "./tokenactionhud.js";
 
 Hooks.on('init', () => {
@@ -8,23 +8,29 @@ Hooks.on('init', () => {
     });
 
     loadTemplates([
-        "modules/tokenActionHud/templates/category.hbs",
-        "modules/tokenActionHud/templates/subcategory.hbs",
-        "modules/tokenActionHud/templates/action.hbs"
+        "modules/token-action-hud/templates/category.hbs",
+        "modules/token-action-hud/templates/subcategory.hbs",
+        "modules/token-action-hud/templates/action.hbs"
     ]);
 
+    let system = game.data.system.id;
+
+    let rollHandlers = HandlersManager.getRollHandlerChoices(system);
+
+    settings.registerSettings(rollHandlers);
+
     if (!game.tokenActionHUD) {
-        let actionHandler = HandlersFactory.getActionHandler(game.data.system.id);
-        let rollHandler = HandlersFactory.getRollHandler(game.data.system.id);
+        let actionHandler = HandlersManager.getActionHandler(system);
+        let handlerId = settings.get('rollHandler');
+        let rollHandler = HandlersManager.getRollHandler(system, handlerId);
         
         game.tokenActionHUD = new TokenActionHUD(actionHandler, rollHandler);
     }
 
-    registerSettings(game.tokenActionHUD);
 });
 
 Hooks.on('ready', () => {
-    game.tokenActionHUD.render(true);
+    ///game.tokenActionHUD.render(true);
 });
 
 Hooks.on('canvasReady', () => {
@@ -47,6 +53,11 @@ Hooks.on('deleteToken', () => {
 });
 
 Hooks.on('updateActor', (actor) => {
+    if (game.tokenActionHUD.shouldUpdateOnActorOrItemUpdate(actor))
+        game.tokenActionHUD.update();
+});
+
+Hooks.on('deleteActor', (actor) => {
     if (game.tokenActionHUD.shouldUpdateOnActorOrItemUpdate(actor))
         game.tokenActionHUD.update();
 });

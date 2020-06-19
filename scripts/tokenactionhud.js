@@ -1,14 +1,7 @@
-const log = (...args) => console.log("Token Action HUD | ", ...args);
+import * as settings from "./settings.js";
+import { HandlersManager } from "./handlersManager.js";
 
 export class TokenActionHUD extends Application {
-    
-    debug = true;
-    alwaysRegenerateBar = true;
-    globalListenersAdded = false;
-    moduleDir = "modules/tokenActionHud/";
-    defaultX = 150;
-    defaultY = 80;
-
     constructor(actions, rollHandler) {
         super();
         this.refresh_timeout = null;
@@ -17,20 +10,31 @@ export class TokenActionHUD extends Application {
         this.rollHandler = rollHandler;
     }
 
+    updateSettings() {
+        this.updateRollHandler();
+        this.update();
+    }
+
+    updateRollHandler() {
+        let handlerId = settings.get('rollHandler');
+        let system = game.data.system.id;
+        this.rollHandler = HandlersManager.getRollHandler(system, handlerId);
+    }
+
     setTokensReference(tokens) {
         this.tokens = tokens;
         return this;
     }
 
     trySetUserPos() {
-        if(!(game.user.data.flags.tokenActionHud && game.user.data.flags.tokenActionHud.hudPos))
+        if(!(game.user.data.flags.tokenactionhud && game.user.data.flags.tokenactionhud.hudPos))
             return;
 
-        let pos = game.user.data.flags.tokenActionHud.hudPos;
+        let pos = game.user.data.flags.tokenactionhud.hudPos;
         
         return new Promise(resolve => {
             function check() {
-                let elmnt = document.getElementById("tokenActionHud")
+                let elmnt = document.getElementById("token-action-hud")
                 if (elmnt) {
                 elmnt.style.bottom = null;
                 elmnt.style.top = (pos.top) + "px";
@@ -53,8 +57,8 @@ export class TokenActionHUD extends Application {
     /** @override */
     static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-        template: "/modules/tokenActionHud/templates/template.hbs",
-        id: "tokenActionHud",
+        template: "/modules/token-action-hud/templates/template.hbs",
+        id: "token-action-hud",
         classes: [],
         width: 200,
         height: 20,
@@ -64,7 +68,7 @@ export class TokenActionHUD extends Application {
         popOut: false,
         minimizable: false,
         resizable: false,
-        title: "tokenActionHud",
+        title: "token-action-hud",
         dragDrop: [],
         tabs: [],
         scrollY: []
@@ -75,20 +79,19 @@ export class TokenActionHUD extends Application {
     getData(options = {}) {
         const data = super.getData();
         data.actions = this.targetActions;
-        data.id = "tokenActionHud";
+        data.id = "token-action-hud";
+        settings.Logger.debug(data);
         return data;
     }
 
     /** @override */
     activateListeners(html) {
-        const tokenActionHud = '#tokenActionHud';
-        const repositionIcon = '#tokenActionHud-reposition';
-        const action = '.tokenActionHud-action';
-        const closeIcon = '#tokenActionHud-close';      
+        const tokenactionhud = '#token-action-hud';
+        const repositionIcon = '#token-action-hud-reposition';
+        const action = '.token-action-hud-action';   
 
         html.find(action).on('click', e => {
-            if (this.debug)
-                log(e);
+            settings.Logger.debug(e);
 
             let target = e.target;
 
@@ -99,7 +102,7 @@ export class TokenActionHUD extends Application {
             try {
                 this.rollHandler.handleActionEvent(e, value);
             } catch (error) {
-                log(error);
+                settings.Logger.error(e);
             }
         });
 
@@ -107,11 +110,11 @@ export class TokenActionHUD extends Application {
             ev.preventDefault();
             ev = ev || window.event;
 
-            let hud = $(document.body).find(tokenActionHud);
+            let hud = $(document.body).find(tokenactionhud);
             let marginLeft = parseInt(hud.css('marginLeft').replace('px', ''));
             let marginTop = parseInt(hud.css('marginTop').replace('px', ''));
 
-            dragElement(document.getElementById('tokenActionHud'));
+            dragElement(document.getElementById('token-action-hud'));
             let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
   
             function dragElement(elmnt) {
@@ -155,8 +158,8 @@ export class TokenActionHUD extends Application {
                         elmnt.style.top = (yPos) + "px";
                         elmnt.style.left = (xPos) + "px";
                     }
-                    log(`Setting position to x: ${xPos}px, y: ${yPos}px`)
-                    game.user.update({flags: {'tokenActionHud':{ 'hudPos': {top: yPos, left: xPos}}}})
+                    settings.Logger.info(`Setting position to x: ${xPos}px, y: ${yPos}px, and saving in user flags.`)
+                    game.user.update({flags: {'tokenactionhud':{ 'hudPos': {top: yPos, left: xPos}}}})
                 }
             }
         });
@@ -169,20 +172,35 @@ export class TokenActionHUD extends Application {
         this.refresh_timeout = setTimeout(this.updateHud.bind(this), 100)
     }
 
+    showHudEnabled() {
+        settings.Logger.debug(`isGM: ${game.user.isGM}`)
+        settings.Logger.debug(`enabledForUser: ${settings.get('enabledForUser')}`)
+        settings.Logger.debug(`playerPermission: ${settings.get('playerPermission')}`)
+
+        if (!settings.get('enabledForUser'))            
+            return false;
+
+        return (settings.get('playerPermission') || game.user.isGM);
+    }
+
     async updateHud() {
-        if (this.debug)
-            log("Updating HUD")
+        settings.Logger.debug("Updating HUD");
 
         let token = this._getTargetToken(this.tokens.controlled);
         
         this.targetActions = this.actions.buildActionList(token);
 
+        if (!this.showHudEnabled()) {
+            this.close();
+            return;
+        }
+
         this.render(true);
     }
 
     shouldUpdateOnControlTokenChange() {
-        if (this.debug)
-            log(`${this.tokens.controlled.length} tokens selected.`);
+        settings.Logger.debug("token change, checking controlled length");
+        settings.Logger.debug(`${this.tokens.controlled.length} controlled tokens.`);
 
         let controlled = this.tokens.controlled;
 
@@ -190,17 +208,16 @@ export class TokenActionHUD extends Application {
     }
 
     shouldUpdateOnActorOrItemUpdate(actor) {
-        if (this.debug) {
-            log(`updateActor detected, comparing actors`);
-            log(actor._id, this.targetActions.actorId);
-        }
+        settings.Logger.debug(`actor change, comparing actors`);
+        settings.Logger.debug(`actor._id: ${actor._id}; this.targetActions.actorId: ${this.targetActions?.actorId}`);
 
-        if (!actor)
+        if (!actor) {
+            settings.Logger.debug("No actor, possibly deleted, should update HUD.");
+            return true;
+        }
             
-        log (!!this.targetActions)
-        log(actor._id === this.targetActions.actorId);
         if (this.targetActions && actor._id === this.targetActions.actorId) {
-            log("should update")
+            settings.Logger.debug("Same IDs, should update HUD.");
             return true;
         }
 

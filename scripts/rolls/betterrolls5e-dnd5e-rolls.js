@@ -1,7 +1,6 @@
-import * as settings from "../settings.js"; 
 import { RollHandler } from "./rollHandler.js"
 
-export class RollHandlerBase5e extends RollHandler {
+export class RollHandlerBetterRolls5e extends RollHandler {
     constructor() {
         super();
     }
@@ -37,28 +36,31 @@ export class RollHandlerBase5e extends RollHandler {
     }
     
     rollAbilityMacro(event, tokenId, checkId) {
-        super.getActor(tokenId).rollAbility(checkId, {event: event});
+        let actor = super.getActor(tokenId);
+        
+        let params = {adv:0, disadv:0};
+		if (event.shiftKey) { params.adv = 1; }
+        if (keyboard.isCtrl(event)) { params.disadv = 1; }
+        
+        //need to update function used once documentation is added.
+        BetterRolls.rollAbilityCheck(actor._id, checkId, params);
     }
     
     rollSkillMacro(event, tokenId, checkId) {
-        super.getActor(tokenId).rollSkill(checkId, {event: event});
+        let actor = super.getActor(tokenId);
+        
+        let params = {adv:0, disadv:0};
+		if (event.shiftKey) { params.adv = 1; }
+        if (keyboard.isCtrl(event)) { params.disadv = 1; }
+        
+        //need to update function used once documentation is added.
+        BetterRolls.rollSkillCheck(actor._id, checkId, params);
     }
     
     rollItemMacro(event, tokenId, itemId) {
         let actor = super.getActor(tokenId);
         let item = actor.getOwnedItem(itemId);
     
-        if (!item) {
-            settings.Logger.error(`No item found with id ${itemId}`);
-            return;
-        }
-    
-        if (item.data.type === "spell")
-            return actor.useSpell(item);
-    
-        if (item.data.data.recharge && !item.data.data.recharge.charged && item.data.data.recharge.value)
-            return item.rollRecharge();
-            
-        return item.roll();
+        BetterRolls.quickRollById(actor._id, item._id);
     }
 }

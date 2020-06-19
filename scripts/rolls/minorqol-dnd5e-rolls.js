@@ -1,7 +1,6 @@
-import * as settings from "../settings.js"; 
 import { RollHandler } from "./rollHandler.js"
 
-export class RollHandlerBase5e extends RollHandler {
+export class RollHandlerMinorQol5e extends RollHandler {
     constructor() {
         super();
     }
@@ -48,17 +47,6 @@ export class RollHandlerBase5e extends RollHandler {
         let actor = super.getActor(tokenId);
         let item = actor.getOwnedItem(itemId);
     
-        if (!item) {
-            settings.Logger.error(`No item found with id ${itemId}`);
-            return;
-        }
-    
-        if (item.data.type === "spell")
-            return actor.useSpell(item);
-    
-        if (item.data.data.recharge && !item.data.data.recharge.charged && item.data.data.recharge.value)
-            return item.rollRecharge();
-            
-        return item.roll();
+        MinorQOL.doMacroRoll(event, item.data.name, item.data.type);
     }
 }
