@@ -30,7 +30,29 @@ export function registerSettings(app, settings, updateSettings) {
         onChange: value => { updateSettings(value); }
     });
 
+    game.settings.register(app,'abbreviateSkills', {
+        name: "Abbreviate skill and ability names",
+        hint: "If enabled, skills and abilities will use a three-character abbreviation.",
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: true,
+        onChange: value => { updateSettings(value); }
+    });
+
+    game.settings.register(app,'splitAbilities', {
+        name: "Show separate ability test and save categories",
+        hint: "If enabled, abilities will be separated into tests and saves.",
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: true,
+        onChange: value => { updateSettings(value); }
+    });
+
     settings['showAllNpcItems'] = 'showAllNpcItems';
     settings['ignorePassiveFeats'] = 'ignorePassiveFeats';
     settings['hideLongerActions'] = 'hideLongerActions';
+    settings['abbreviateSkills'] = 'abbreviateSkills';
+    settings['splitAbilities'] = 'splitAbilities';
 }

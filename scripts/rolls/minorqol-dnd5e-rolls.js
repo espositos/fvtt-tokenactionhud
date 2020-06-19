@@ -1,48 +1,11 @@
-import { RollHandler } from "./rollHandler.js"
+import { RollHandlerBase5e } from "./base-dnd5e-rolls.js"
 
-export class RollHandlerMinorQol5e extends RollHandler {
+export class RollHandlerMinorQol5e extends RollHandlerBase5e {
     constructor() {
         super();
     }
 
     /** @override */
-    handleActionEvent(event, encodedValue) {
-        console.log(encodedValue);
-        let payload = encodedValue.split('.');
-        
-        if (payload.length != 3) {
-            super.throwInvalidValueErr();
-        }
-        
-        let macroType = payload[0];
-        let tokenId = payload[1];
-        let actionId = payload[2];
-        
-        switch (macroType) {
-            case "ability":
-                this.rollAbilityMacro(event, tokenId, actionId);
-                break;
-            case "skill":
-                this.rollSkillMacro(event, tokenId, actionId);
-                break;
-            case "item":
-            case "spell":
-            case "feat":
-                this.rollItemMacro(event, tokenId, actionId);
-                break;
-            default:
-                break;
-        }
-    }
-    
-    rollAbilityMacro(event, tokenId, checkId) {
-        super.getActor(tokenId).rollAbility(checkId, {event: event});
-    }
-    
-    rollSkillMacro(event, tokenId, checkId) {
-        super.getActor(tokenId).rollSkill(checkId, {event: event});
-    }
-    
     rollItemMacro(event, tokenId, itemId) {
         let actor = super.getActor(tokenId);
         let item = actor.getOwnedItem(itemId);
