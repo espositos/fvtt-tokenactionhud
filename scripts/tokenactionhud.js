@@ -1,4 +1,5 @@
-import {Logger, settings, getSetting, setSetting} from "./settings.js";
+import * as settings from "./settings.js";
+import { HandlersManager } from "./handlersManager.js";
 
 export class TokenActionHUD extends Application {
     constructor(actions, rollHandler) {
@@ -7,6 +8,17 @@ export class TokenActionHUD extends Application {
         this.tokens = null;
         this.actions = actions;
         this.rollHandler = rollHandler;
+    }
+
+    updateSettings() {
+        this.updateRollHandler();
+        this.update();
+    }
+
+    updateRollHandler() {
+        let handlerId = settings.get('rollHandler');
+        let system = game.data.system.id;
+        this.rollHandler = HandlersManager.getRollHandler(system, handlerId);
     }
 
     setTokensReference(tokens) {
@@ -68,7 +80,7 @@ export class TokenActionHUD extends Application {
         const data = super.getData();
         data.actions = this.targetActions;
         data.id = "token-action-hud";
-        Logger.debug(data);
+        settings.Logger.debug(data);
         return data;
     }
 
@@ -79,7 +91,7 @@ export class TokenActionHUD extends Application {
         const action = '.token-action-hud-action';   
 
         html.find(action).on('click', e => {
-            Logger.debug(e);
+            settings.Logger.debug(e);
 
             let target = e.target;
 
@@ -90,7 +102,7 @@ export class TokenActionHUD extends Application {
             try {
                 this.rollHandler.handleActionEvent(e, value);
             } catch (error) {
-                Logger.error(e);
+                settings.Logger.error(e);
             }
         });
 
@@ -146,7 +158,7 @@ export class TokenActionHUD extends Application {
                         elmnt.style.top = (yPos) + "px";
                         elmnt.style.left = (xPos) + "px";
                     }
-                    Logger.info(`Setting position to x: ${xPos}px, y: ${yPos}px, and saving in user flags.`)
+                    settings.Logger.info(`Setting position to x: ${xPos}px, y: ${yPos}px, and saving in user flags.`)
                     game.user.update({flags: {'tokenactionhud':{ 'hudPos': {top: yPos, left: xPos}}}})
                 }
             }
@@ -160,14 +172,25 @@ export class TokenActionHUD extends Application {
         this.refresh_timeout = setTimeout(this.updateHud.bind(this), 100)
     }
 
+    showHudEnabled() {
+        settings.Logger.debug(`isGM: ${game.user.isGM}`)
+        settings.Logger.debug(`enabledForUser: ${settings.get('enabledForUser')}`)
+        settings.Logger.debug(`playerPermission: ${settings.get('playerPermission')}`)
+
+        if (!settings.get('enabledForUser'))            
+            return false;
+
+        return (settings.get('playerPermission') || game.user.isGM);
+    }
+
     async updateHud() {
-        Logger.debug("Updating HUD");
+        settings.Logger.debug("Updating HUD");
 
         let token = this._getTargetToken(this.tokens.controlled);
         
         this.targetActions = this.actions.buildActionList(token);
 
-        if (!getSetting(settings.enabledForUser)) {
+        if (!this.showHudEnabled()) {
             this.close();
             return;
         }
@@ -176,8 +199,8 @@ export class TokenActionHUD extends Application {
     }
 
     shouldUpdateOnControlTokenChange() {
-        Logger.debug("token change, checking controlled length");
-        Logger.debug(`${this.tokens.controlled.length} controlled tokens.`);
+        settings.Logger.debug("token change, checking controlled length");
+        settings.Logger.debug(`${this.tokens.controlled.length} controlled tokens.`);
 
         let controlled = this.tokens.controlled;
 
@@ -185,16 +208,16 @@ export class TokenActionHUD extends Application {
     }
 
     shouldUpdateOnActorOrItemUpdate(actor) {
-        Logger.debug(`actor change, comparing actors`);
-        Logger.debug(`actor._id: ${actor._id}; this.targetActions.actorId: ${this.targetActions?.actorId}`);
+        settings.Logger.debug(`actor change, comparing actors`);
+        settings.Logger.debug(`actor._id: ${actor._id}; this.targetActions.actorId: ${this.targetActions?.actorId}`);
 
         if (!actor) {
-            Logger.debug("No actor, possibly deleted, should update HUD.");
+            settings.Logger.debug("No actor, possibly deleted, should update HUD.");
             return true;
         }
             
         if (this.targetActions && actor._id === this.targetActions.actorId) {
-            Logger.debug("Same IDs, should update HUD.");
+            settings.Logger.debug("Same IDs, should update HUD.");
             return true;
         }
 

@@ -16,12 +16,12 @@ export class HandlersManager {
 
     // Possibility for several types of rollers (e.g. BetterRolls, MinorQOL for DND5e),
     // so pass off to a RollHandler factory
-    static getRollHandler(system) {
+    static getRollHandler(system, handlerId) {
         switch (system) {
             case "wfrp4e":
-                return RollHandlerWfrp.getRollhandler("");
+                return RollHandlerWfrp.getRollhandler(handlerId);
             case "dnd5e":
-                return roll5e.getRollHandler()
+                return roll5e.getRollHandler(handlerId)
         }
         throw new Error("System not supported by token-action-hud");
     }
@@ -33,8 +33,8 @@ export class HandlersManager {
                 return {"core": "Core Wfrp"};
             case "dnd5e":
                 let choices = {"core": "Core 5e"};
-                // this.testForModule(choices, "betterrolls5e");
-                // this.testForModule(choices, "minor-qol");
+                this.testForModule(choices, "betterrolls5e");
+                this.testForModule(choices, "minor-qol");
                 return choices;
         }
     }

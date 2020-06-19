@@ -21,7 +21,8 @@ Hooks.on('init', () => {
 
     if (!game.tokenActionHUD) {
         let actionHandler = HandlersManager.getActionHandler(system);
-        let rollHandler = HandlersManager.getRollHandler(system);
+        let handlerId = settings.get('rollHandler');
+        let rollHandler = HandlersManager.getRollHandler(system, handlerId);
         
         game.tokenActionHUD = new TokenActionHUD(actionHandler, rollHandler);
     }
