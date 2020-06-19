@@ -4,13 +4,11 @@ export function buildChecksList(tokenId) {
 
     return {
         "abilities": {
-            "idAction": "tokenBarShowAbilities",
             "subcategories": {
                 "abilities": { "actions": abilities }
             }
         },
         "skills": {
-            "idAction": "tokenBarShowSkills",
             "subcategories": {
                 "skills": { "actions": skills }
             }

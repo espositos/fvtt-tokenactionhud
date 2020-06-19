@@ -5,9 +5,9 @@ export class RollHandlerBaseWfrp4e extends RollHandler {
         super();
     }
     
-    handleActionEvent(event, value) {
-        let payload = value.split('.');
-        console.log(value);
+    handleActionEvent(event, encodedValue) {
+        let payload = encodedValue.split('.');
+        console.log(encodedValue);
         if (payload.length != 3) {
             super.throwInvalidValueErr();
         }

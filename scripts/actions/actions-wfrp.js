@@ -56,12 +56,13 @@ export class ActionHandlerWfrp extends ActionHandler {
     }
 
     _getSubcategoryList(actor, tokenId, type) {
+        let types = type+'s';
         let result = {
-            "idAction": "tokenBarShowWeapons",
             "subcategories": {}
         }
 
-        let subcategory = { "actions": this._produceMap(tokenId ,actor.items.filter(i => i.type == type), type) };
+        let subcategory = { 
+            "actions": this._produceMap(tokenId ,actor.items.filter(i => i.type == type), type) };
 
         if (subcategory.actions.length > 0)
             result.subcategories[type+'s'] = subcategory;

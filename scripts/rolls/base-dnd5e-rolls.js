@@ -7,9 +7,9 @@ export class RollHandlerBase5e extends RollHandler {
     }
 
     /** @override */
-    handleActionEvent(event, value) {
-        console.log(value);
-        let payload = value.split('.');
+    handleActionEvent(event, encodedValue) {
+        console.log(encodedValue);
+        let payload = encodedValue.split('.');
         
         if (payload.length != 3) {
             super.throwInvalidValueErr();
