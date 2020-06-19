@@ -20,7 +20,7 @@ export class HandlersManager {
     static getRollHandler(system, handlerId) {
         switch (system) {
             case "wfrp4e":
-                return rollWfrp.getRollhandler(handlerId);
+                return rollWfrp.getRollHandler(handlerId);
             case "dnd5e":
                 return roll5e.getRollHandler(handlerId)
         }
