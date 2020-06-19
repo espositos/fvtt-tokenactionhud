@@ -10,10 +10,19 @@ This is a FoundryVTT module which populates a floating HUD showing actions for a
 # Usage
 Once activated, selecting a token that has an actor/character sheet associated with it and that you have permission to control should display an an action bar that is populated with the actions and abilities available for that token.
 
+The HUD provides easy access to the most frequent actions carried out by a token.
+![Easy action access](https://github.com/espositos/fvtt-tokenactionhud/raw/master/.github/readme/token_action_hud_eg1.gif)
+
+Offers a variety of settings including support for third-party roll handlers (Please contact me if you'd like to add yours, or improve the functionality of those offered).
+![Customizable settings](https://github.com/espositos/fvtt-tokenactionhud/raw/master/.github/readme/token_action_hud_eg2.gif)
+
+Should be able to support most systems, although currently limited to DND5e and extremely basic WFRP4e support. Please contact me if you would like to help.
+![Modular support for multiple systems](https://github.com/espositos/fvtt-tokenactionhud/raw/master/.github/readme/token_action_hud_eg3.gif)
+
 # Supported systems
 * DND5e
-* WFRP4e (basic)
-* Any other system? I believe the HUD is modular enough that if anyone would like to help me add support for another system, it will hopefully be relatively painless. Please approach me on the Foundry Discord - or feel free to take the code and go your own way.
+* WFRP4e (proof of concept only at the moment)
+* Any other system? I believe the HUD is modular enough that anyone who understands what the players of their system want and how actions in their system are handled could quickly build it into the HUD. Please contact me if you'd like to add support for your favourite system.
 
 # Support
 For questions, feature requests, or bug reports, feel free to contact me on the Foundry Discord (^ and stick#0520) or open an issue here directly.
