@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.16] 2020-06-20
+### Changed
+- Updated CSS for buttons because they were being overridden by the Alt5e sheet.
+
 ## [0.1.15] 2020-06-20
 ### Added
 - Agnostic - basic hovering, adapted from Token Tooltip, borrowed from Kekilla's issues tracking
