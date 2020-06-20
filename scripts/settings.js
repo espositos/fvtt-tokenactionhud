@@ -35,6 +35,16 @@ export const registerSettings = function(rollHandlers) {
         default : true,
         onChange: value => { updateSettings(value); }
     });
+    game.settings.register(app,'onTokenHover', {
+        name : "Enable hovering",
+        hint : `If enabled, the HUD will appear when hovering over a controllable token.
+        Warning: Due to the unpredictable position of a token on the canvas, some actiosn may fall off the screen.`,
+        scope : "client",
+        config : true,
+        type : Boolean,
+        default : false,
+        onChange: value => { updateSettings(value); }
+    });
     game.settings.register(app,'debug', {
         name : "Enable debugging",
         hint : "Enable debug logging.",
@@ -90,7 +100,8 @@ export const configVars = {
     rollHandler: 'rollHandler',
     enabledForUser: 'enabledForUser',
     playerPermission: 'playerPermission',
-    debug: 'debug'
+    debug: 'debug',
+    onTokenHover: 'onTokenHover'
 };
 
 /** @enum */

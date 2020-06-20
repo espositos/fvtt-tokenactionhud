@@ -26,28 +26,59 @@ export class TokenActionHUD extends Application {
         return this;
     }
 
-    trySetUserPos() {
+    trySetPos() {
+        if (!(this.targetActions && this.targetActions.tokenId))
+            return;
+
+        if (settings.get('onTokenHover')) {
+            function hoverPos(token) {
+                return new Promise(resolve => {
+                    function check(token) {
+                        let elmnt = $('#token-action-hud');
+                        if (elmnt) {
+                            elmnt.css('bottom', null);
+                            elmnt.css('left', (token.worldTransform.tx + (((token.data.width * canvas.dimensions.size) + 55) * canvas.scene._viewPosition.scale)) + 'px');
+                            elmnt.css('top', (token.worldTransform.ty + 0) + 'px');
+                            elmnt.css('position', 'fixed');
+                            elmnt.css('zIndex', 100);
+                            resolve();
+                        } else {
+                            setTimeout(check, 30);
+                        }
+                    }
+                    check(token);
+                });
+            }
+            
+            let token = canvas.tokens.placeables.find(t => t.data._id === this.targetActions.tokenId);
+            hoverPos(token);
+            return;
+        }
+
         if(!(game.user.data.flags.tokenactionhud && game.user.data.flags.tokenactionhud.hudPos))
             return;
 
-        let pos = game.user.data.flags.tokenactionhud.hudPos;
-        
-        return new Promise(resolve => {
-            function check() {
-                let elmnt = document.getElementById("token-action-hud")
-                if (elmnt) {
-                elmnt.style.bottom = null;
-                elmnt.style.top = (pos.top) + "px";
-                elmnt.style.left = (pos.left) + "px";
-                elmnt.style.position = 'fixed';
-                elmnt.style.zIndex = 100;
-                resolve();
-                } else {
-                setTimeout(check, 30);
+            let userPos = function (pos) {
+                return new Promise(resolve => {
+                    function check() {
+                        let elmnt = document.getElementById("token-action-hud")
+                        if (elmnt) {
+                            elmnt.style.bottom = null;
+                            elmnt.style.top = (pos.top) + "px";
+                            elmnt.style.left = (pos.left) + "px";
+                        elmnt.style.position = 'fixed';
+                        elmnt.style.zIndex = 100;
+                        resolve();
+                    } else {
+                        setTimeout(check, 30);
+                    }
                 }
-            }
-            check();
-        });
+                check();
+            });
+        }
+        
+        let pos = game.user.data.flags.tokenactionhud.hudPos;
+        userPos(pos);
     }
 
     static path(filepath) {
@@ -77,9 +108,11 @@ export class TokenActionHUD extends Application {
 
     /** @override */
     getData(options = {}) {
+        let hovering = settings.get('onTokenHover');
         const data = super.getData();
         data.actions = this.targetActions;
         data.id = "token-action-hud";
+        data.hovering = hovering;
         settings.Logger.debug(data);
         return data;
     }
@@ -205,6 +238,13 @@ export class TokenActionHUD extends Application {
         let controlled = this.tokens.controlled;
 
         return (controlled.length === 1 && controlled[0]) || controlled.length === 0;
+    }
+
+    shouldUpdateOnControlTokenHover(token, hovered) {
+        settings.Logger.debug("token hover, checking permission");
+        settings.Logger.debug(`${this.tokens.controlled.length} controlled tokens.`);
+
+        return settings.get('onTokenHover');
     }
 
     shouldUpdateOnActorOrItemUpdate(actor) {

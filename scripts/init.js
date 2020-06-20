@@ -37,18 +37,23 @@ Hooks.on('canvasReady', () => {
     game.tokenActionHUD.setTokensReference(canvas.tokens);
 });
 
-Hooks.on('controlToken', () => {
+Hooks.on('controlToken', (token, controlled) => {
     if (game.tokenActionHUD.shouldUpdateOnControlTokenChange())
         game.tokenActionHUD.update();
 });
 
-Hooks.on('updateToken', () => {
+Hooks.on('updateToken', (scene, token, diff, options, idUser) => {
     if (game.tokenActionHUD.shouldUpdateOnControlTokenChange())
         game.tokenActionHUD.update();
 });
 
-Hooks.on('deleteToken', () => {
+Hooks.on('deleteToken', (scene, token, empty, userId) => {
     if (game.tokenActionHUD.shouldUpdateOnControlTokenChange())
+        game.tokenActionHUD.update();
+});
+
+Hooks.on('hoverToken', (token, hovered) => {
+    if (game.tokenActionHUD.shouldUpdateOnControlTokenHover())
         game.tokenActionHUD.update();
 });
 
@@ -81,5 +86,5 @@ Hooks.on('updateOwnedItem', (source, item) => {
 });
 
 Hooks.on('renderTokenActionHUD', () => {
-    game.tokenActionHUD.trySetUserPos();
+    game.tokenActionHUD.trySetPos();
 });
