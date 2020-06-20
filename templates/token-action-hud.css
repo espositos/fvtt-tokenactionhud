@@ -68,6 +68,8 @@
 }
 
 .token-action-hud-title-button:hover {
+    font-weight: normal;
+    color: #fff;
     border-bottom: 1px solid #ff6400;
     box-shadow: 0 0 10px #ff6400;
 }
@@ -161,6 +163,8 @@
 
 /* Change color of dropdown links on hover */
 .token-action-hud-action button:hover {
+    font-weight: normal;
+    color: #fff;
     border-bottom: 1px solid #ff6400;
     box-shadow: 0 0 10px #ff6400;
 }
