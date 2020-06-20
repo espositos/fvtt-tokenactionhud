@@ -31,7 +31,9 @@ For questions, feature requests, or bug reports, feel free to contact me on the 
 
 # Thanks
 Enormous thanks goes to the following people for their help in getting the HUD to its current state:
-Kekilla#7036, Skimble#8601, Forien#2130, and the Fabricator General, as well as any other module developers who I have pilfered code and ideas from (KaKaRoTo).
+Kekilla#7036, Skimble#8601, Forien#2130, and the Fabricator General.
+I'd also like to acknowledge the other module develops I've taken ideas and code from:
+Kekilla, again; KaKaRoTo; SkyCaptain; DasSauerkraut, and others I've missed I'm sure.
 
 # License
 This Foundry VTT module is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).

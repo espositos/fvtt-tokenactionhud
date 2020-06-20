@@ -1,7 +1,9 @@
 
 <div id="{{id}}" style="top: {{top}}; left: {{left}};">
     {{#if actions.actorId}}
+    {{#unless hovering}}
     <div id="token-action-hud-reposition"><i class="fas fa-arrows-alt"></i></div>
+    {{/unless}}
     {{#each actions.categories}}
     {{>"modules/token-action-hud/templates/category.hbs"}}
     {{/each}}
