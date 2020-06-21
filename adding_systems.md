@@ -9,7 +9,7 @@ The goal is not for the Token Action HUD to cover all edge cases and obscure use
 If your favourite system or roller is not yet supported, or you have strong objections about how I have divided actions for your system, please contact me and we can work together to improve the HUD.
 
 # Action Handlers
-Currently I only plan to have one action handler per system.
+Currently I only plan to have one action handler per system. They are found in [the rolls](scripts/rolls/) and [actions folders](scripts/actions/)
 
 The action handler has one public method, buildActionList(token), which takes a token with an actor and returns an action list that looks like:
 
