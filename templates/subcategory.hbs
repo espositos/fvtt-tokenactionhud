@@ -1,8 +1,8 @@
 
 {{#if this.actions}}
-<div class="token-action-hud-subcategory">
-<div class="token-action-hud-subtitle">{{cap @key}} {{#if this.info}}{{this.info}}{{/if}}</div>
-<div class="token-action-hud-actions">
+<div class="tah-subcategory">
+<div class="tah-subtitle">{{cap @key}} {{#if this.info}}{{this.info}}{{/if}}</div>
+<div class="tah-actions">
 {{#each actions}}
 {{>"modules/token-action-hud/templates/action.hbs"}}
 {{/each}}

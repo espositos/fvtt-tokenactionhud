@@ -120,10 +120,10 @@ export class TokenActionHUD extends Application {
     /** @override */
     activateListeners(html) {
         const tokenactionhud = '#token-action-hud';
-        const repositionIcon = '#token-action-hud-reposition';
-        const action = '.token-action-hud-action';   
+        const repositionIcon = '#tah-reposition';
+        const action = '.tah-action';   
 
-        html.find(action).on('click', e => {
+        const handleClick = e => {
             settings.Logger.debug(e);
 
             let target = e.target;
@@ -132,11 +132,19 @@ export class TokenActionHUD extends Application {
                 target = e.currentTarget.children[0];
 
             let value = target.value;
-            try {
+            //try {
                 this.rollHandler.handleActionEvent(e, value);
-            } catch (error) {
-                settings.Logger.error(e);
-            }
+            // } catch (error) {
+            //     settings.Logger.error(e);
+            // }
+        }
+
+        html.find(action).on('click', e => {
+            handleClick(e);
+        });
+
+        html.find(action).contextmenu(e => {
+            handleClick(e);
         });
 
         html.find(repositionIcon).mousedown(ev => {
