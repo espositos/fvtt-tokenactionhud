@@ -65,59 +65,44 @@ export class ActionHandler5e extends ActionHandler {
         }
         let activeEquipped = this._getActiveEquipment(equipped);
         
-        let weaponActions = this._mapToItemAction(tokenId, activeEquipped.filter(i => i.type == "weapon"));
+        let macroType = "item";
+        let weapons = activeEquipped.filter(i => i.type == "weapon");
+        let weaponActions = weapons.map(w => this._buildItem(tokenId, actor, macroType, w));
     
-        let equipmentActions = this._mapToItemAction(tokenId, activeEquipped.filter(i => i.type == "equipment"));
+        let equipment = activeEquipped.filter(i => i.type == "equipment");
+        let equipmentActions = equipment.map(e => this._buildItem(tokenId, actor, macroType, e));
         
-        let otherActions = this._mapToItemAction(tokenId, activeEquipped.filter(i => i.type != "weapon" && i.type != "equipment"));
+        let other = activeEquipped.filter(i => i.type != "weapon" && i.type != "equipment")
+        let otherActions = other.map(o => this._buildItem(tokenId, actor, macroType, o));
     
-        let consumables = validItems.filter(i => i.type == "consumable" && i.data.quantity > 0);
+        let allConsumables = validItems.filter(i => i.type == "consumable" && i.data.quantity > 0);
         
-        let consumablesChargedActions = this._mapToItemAction(tokenId, consumables.filter(c => c.data.uses.value && c.data.uses.value > 0));
-            
-        let consumablesNoChargeActions = this._mapToItemAction(tokenId, consumables.filter(c => !c.data.uses.max && !c.data.uses.value));
+        let consumable = allConsumables.filter(c => c.data.uses.value && c.data.uses.value > 0)
+        let consumableActions = consumable.map(c => this._buildItem(tokenId, actor, macroType, c));
+        
+        let inconsumable = allConsumables.filter(c => !(c.data.uses.max || c.data.uses.value) && c.data.consumableType != 'ammo')
+        let incomsumableActions = inconsumable.map(i => this._buildItem(tokenId, actor, macroType, i));
         
         let itemsResult = {
             "subcategories": {}
         }
             
         if (weaponActions.length > 0)
-            itemsResult.subcategories["weapons"] = { "actions": weaponActions };
+            itemsResult.subcategories.weapon = { "actions": weaponActions };
     
         if (equipmentActions.length > 0)
-            itemsResult.subcategories["equipment"] = { "actions": equipmentActions };
+            itemsResult.subcategories.equipment = { "actions": equipmentActions };
         
         if (otherActions.length > 0)
-            itemsResult.subcategories["other"] = { "actions": otherActions };
+            itemsResult.subcategories.other = { "actions": otherActions };
         
-        if (consumablesChargedActions.length > 0)
-            itemsResult.subcategories["charged consumables"] = { "actions": consumablesChargedActions };
+        if (consumableActions.length > 0)
+            itemsResult.subcategories.consumables = { "actions": consumableActions };
         
-        if (consumablesNoChargeActions.length > 0)
-            itemsResult.subcategories["consumables without charges"] = { "actions": consumablesNoChargeActions };
+        if (incomsumableActions.length > 0)
+            itemsResult.subcategories.inconsumables = { "actions": incomsumableActions };
         
         return itemsResult;
-    }
-
-    /** @private */
-    _mapToItemAction(tokenId, items) {
-        const macroType = "item";
-        return items.map(i => {
-            let result = { "name": i.name, "id": i._id, "encodedValue": `${macroType}.${tokenId}.${i._id}`}
-
-            if (i.data.quantity > 1) {
-                result["info1"] = `qty: ${i.data.quantity}`;
-            }
-
-            if (i.data.uses.value) {
-                result["info2"] = `chg: ${i.data.uses.value}`;
-                
-                if (i.data.uses.max) {
-                    result["info2"] += `/${i.data.uses.max}`
-                }
-            }
-
-            return result; });
     }
 
     /** @private */
@@ -156,7 +141,7 @@ export class ActionHandler5e extends ActionHandler {
         const spellSlots = actor.data.data.spells;
 
         let dispose = spells.reduce(function (dispose, s) {
-            let spell = { "name": s.name, "id": s._id, "encodedValue": `${macroType}.${tokenId}.${s._id}` };
+            let spell = this._buildItem(tokenId, actor, macroType, s);
 
             var level = s.data.level;
             let prep = s.data.preparation.mode;
@@ -167,7 +152,7 @@ export class ActionHandler5e extends ActionHandler {
                     powers.subcategories[prepType] = { "actions": []};
 
                     if (spellSlots[prep] && spellSlots[prep].max > 0)
-                        powers.subcategories[prepType]["info"] = `(${spellSlots[prep].value} / ${spellSlots[prep].max})`;
+                        powers.subcategories[prepType].info = `(${spellSlots[prep].value} / ${spellSlots[prep].max})`;
                 }
 
                 powers.subcategories[prepType].actions.push(spell);
@@ -184,23 +169,23 @@ export class ActionHandler5e extends ActionHandler {
 
                 let spellLevelKey = 'spell' + level;
                 if (spellSlots[spellLevelKey] && spellSlots[spellLevelKey].max > 0)
-                    book.subcategories[levelText]["info"] = `(${spellSlots[spellLevelKey].value} / ${spellSlots[spellLevelKey].max})`;
+                    book.subcategories[levelText].info = `(${spellSlots[spellLevelKey].value} / ${spellSlots[spellLevelKey].max})`;
     
                 book.subcategories[levelText].actions.push(spell);
             }
     
             return dispose;
-        }, {});
+        }.bind(this), {});
     
         let result = {
             "subcategories": {}
         }
         
         if (Object.keys(powers.subcategories).length > 0)
-            result.subcategories["powers"] = powers;
+            result.subcategories.powers = powers;
     
         if (Object.keys(book.subcategories).length > 0)
-            result.subcategories["books"] = book;
+            result.subcategories.books = book;
         
         return result;
     }
@@ -210,36 +195,24 @@ export class ActionHandler5e extends ActionHandler {
     /** @private */
     _getFeatsList(actor, tokenId) {
         let validFeats = this._filterLongerActions(actor.data.items.filter(i => i.type == "feat"));
-        let feats = this._categoriseFeats(tokenId, validFeats);
+        let feats = this._categoriseFeats(tokenId, actor, validFeats);
     
         return feats;
     }
     
     /** @private */
-    _categoriseFeats(tokenId, feats) {
+    _categoriseFeats(tokenId, actor, feats) {
         let active = { "actions": []};
         let passive = { "actions": []};
         let lair = { "actions": []};
         let legendary = { "actions": []};
-    
+
         let dispose = feats.reduce(function (dispose, f) {
             const activationTypes = game.dnd5e.config.abilityActivationTypes;
             const activationType = f.data.activation.type;
             const macroType = "feat";
 
-            let feat = { "name": f.name, "id": f._id, "encodedValue": `${macroType}.${tokenId}.${f._id}` }
-
-            if (f.data.uses.value) {
-                feat["info2"] = f.data.uses.value;
-
-                if (f.data.uses.max) {
-                    feat["info2"] += `/${f.data.uses.max}`
-                }
-            }
-            
-            if (f.data.recharge && !f.data.recharge.charged && f.data.recharge.value) {
-                feat["name"] += " (Recharge)";
-            }
+            let feat = this._buildItem(tokenId, actor, macroType, f);
             
             if (!activationType || activationType === "") {
                 passive.actions.push(feat);
@@ -259,7 +232,7 @@ export class ActionHandler5e extends ActionHandler {
             active.actions.push(feat);
 
             return;
-        }, {});
+        }.bind(this), {});
     
         let result = {
             "subcategories": {}
@@ -279,7 +252,77 @@ export class ActionHandler5e extends ActionHandler {
         
         return result;
     }
-    
+
+    /** @private */
+    _buildItem(tokenId, actor, macroType, item) {
+        let result = { "name": item.name, "id": item._id, "encodedValue": `${macroType}.${tokenId}.${item._id}` }
+        
+        if (item.data.recharge && !item.data.recharge.charged && item.data.recharge.value) {
+            result.name += " (Recharge)";
+        }
+
+        result.info1 = this._getQuantityData(item);
+
+        result.info2 = this._getUsesData(item);
+
+        result.info3 = this._getConsumeData(item, actor)
+
+        return result;
+    }
+
+    /** @private */
+    _getQuantityData(item) {
+        let result = "";
+        if (item.data.quantity > 1) {
+            result = item.data.quantity;
+        }
+
+        return result;
+    }
+
+    /** @private */
+    _getUsesData(item) {
+        let result = "";
+        if (item.data.uses?.value) {
+            result = item.data.uses.value;
+
+            if (item.data.uses.max) {
+                result += `/${item.data.uses.max}`
+            }
+        }
+
+        return result;
+    }
+
+    /** @private */
+    _getConsumeData(item, actor) {
+        let result = "";
+
+        let consumeType = item.data.consume?.type;
+        if (consumeType && consumeType !== '') {
+            let consumeId = item.data.consume.target;
+            if (consumeType === 'attribute') {
+                let target = getProperty(actor, `actor.data.data.${consumeId}`);
+
+                if (target?.value) {
+                    result = target.value;
+                    if (target.max)
+                        result += `/${target.max}`
+                }
+            }
+
+            if (consumeType !== 'attribute') {
+                let consumeId = item.data.consume.target;
+                let target = actor.getOwnedItem(consumeId);
+
+                if (target?.data.data.quantity) {
+                    result = target.data.data.quantity;
+                }
+            }
+        }
+
+        return result;
+    }    
 
     /** @private */
     _filterLongerActions(items) {

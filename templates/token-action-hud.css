@@ -19,24 +19,24 @@
     width: 100%;
 }
 
-#token-action-hud:hover > #token-action-hud-reposition, #token-action-hud:hover > #token-action-hud-close {
+#token-action-hud:hover > #tah-reposition, #token-action-hud:hover > #tah-close {
     display: block;
     position: absolute;
 }
 
-#token-action-hud-reposition, #token-action-hud-close {
+#tah-reposition, #tah-close {
     display: none;
 }
 
-#token-action-hud-reposition {
+#tah-reposition {
     left: -20px;
 }
 
-#token-action-hud-close {
+#tah-close {
     right: -20px;
 }
 
-#token-action-hud-reposition > .fa, #token-action-hud-reposition > .fas, #token-action-hud-close > .fa, #token-action-hud-close > .fas {
+#tah-reposition > .fa, #tah-reposition > .fas, #tah-close > .fa, #tah-close > .fas {
     color: #fff;
     font-size: small;
     padding: 3px;
@@ -46,17 +46,17 @@
     pointer-events: none;
 }
 
-#token-action-hud-reposition:hover > i, #token-action-hud-close:hover > i {
+#tah-reposition:hover > i, #tah-close:hover > i {
     text-shadow: 0 0 10px #ff6400;
 }
 
 /* The container <div> - needed to position the dropdown content */
-.token-action-hud-category {
+.tah-category {
     position: relative;
     display: block;
 }
 
-.token-action-hud-title-button {
+.tah-title-button {
     width: auto;
     height: auto;
     color: #fff;
@@ -67,7 +67,7 @@
     cursor: pointer;
 }
 
-.token-action-hud-title-button:hover {
+.tah-title-button:hover {
     font-weight: normal;
     color: #fff;
     border-bottom: 1px solid #ff6400;
@@ -75,12 +75,12 @@
 }
 
 /* Dropdown Content (Hidden by Default) */
-.token-action-hud-content {
+.tah-content {
     display: none;
 }
 
 /* Show the dropdown menu on hover */
-.token-action-hud-category:hover .token-action-hud-content {
+.tah-category:hover .tah-content {
     display: block;
     padding: 2px;
     position: absolute;
@@ -88,13 +88,13 @@
     background: rgba(0, 0, 0, 0);
 }
 
-.token-action-hud-subcategory {
+.tah-subcategory {
     display: grid;
     grid-template-columns: 80px auto;
     grid-auto-rows: auto;
 }
 
-.token-action-hud-subtitle {
+.tah-subtitle {
     grid-column: 1;
     padding-top: 12px;
     min-width: 80px;    
@@ -107,7 +107,7 @@
     text-align: right;
 }
 
-.token-action-hud-actions {
+.tah-actions {
     grid-column: 2;
     display: flex;
     flex-flow: row wrap;
@@ -116,7 +116,7 @@
 }
 
 /* Links inside the dropdown */
-.token-action-hud-action {
+.tah-action {
     flex-grow: 0;
     flex-basis: auto;
     padding: 3px;
@@ -124,36 +124,48 @@
     background: none;
 }
 
-.token-action-hud-action-info2, .token-action-hud-action-info1 {
+.tah-info1, .tah-info2, .tah-info3 {
     font-size: smaller;
     display: inline;
 }
 
-.token-action-hud-action-info2 {
-    text-shadow:  0 0 1px rgba(240, 2, 248, 0.95);
-}
-
-.token-action-hud-action-info1 {
+.tahinfo1 {
     text-shadow: 0 0 1px rgba(2, 248, 14, 0.95);
 }
 
-.token-action-hud-action-info2:before {
-    content: " [";
+.tah-info2 {
+    text-shadow:  0 0 1px rgba(240, 2, 248, 0.95);
 }
 
-.token-action-hud-action-info2:after {
-    content: "]";
+.tah-info3 {
+    text-shadow:  0 0 1px rgba(2, 240, 248, 0.95);
 }
 
-.token-action-hud-action-info1:before {
+.tah-info1:before {
     content: " (";
 }
 
-.token-action-hud-action-info1:after {
+.tah-info1:after {
     content: ")";
 }
+
+.tah-info2:before {
+    content: " [";
+}
+
+.tah-info2:after {
+    content: "]";
+}
+
+.tah-info3:before {
+    content: " {";
+}
+
+.tah-info3:after {
+    content: "}";
+}
  
-.token-action-hud-action button {
+.tah-action button {
     width: 100%;
     font-size: small;
     text-decoration: none;
@@ -162,7 +174,7 @@
 }
 
 /* Change color of dropdown links on hover */
-.token-action-hud-action button:hover {
+.tah-action button:hover {
     font-weight: normal;
     color: #fff;
     border-bottom: 1px solid #ff6400;
