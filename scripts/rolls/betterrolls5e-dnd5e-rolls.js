@@ -45,11 +45,16 @@ export class RollHandlerBetterRolls5e extends RollHandlerBase5e {
     rollItemMacro(event, tokenId, itemId) {
         let actor = super.getActor(tokenId);
         let item = actor.getOwnedItem(itemId);
-        
+
         var versatile = false;
         if (item.data.data.properties?.ver)
             versatile = event.originalEvent.button === 2;
 
-        BetterRolls.rollItem(item, params, [["attack"], ["damage", {index: "all", versatile: versatile}]]).toMessage();
+        if (item.type === 'weapon') {
+            BetterRolls.rollItem(item, null, [["attack"], ["damage", {index: "all", versatile: versatile}]]).toMessage();
+            return;
+        }
+
+        BetterRolls.quickRollById(actor._id, item._id);
     }
 }

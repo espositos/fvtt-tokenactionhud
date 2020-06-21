@@ -2,7 +2,7 @@
 
 ##[0.1.17] 2020-06-21
 ### Added
-- MinorQOL & BetterRolls - added ability to right click weapons for versatile attack (right-click acts as normal click if item has no versatile property)
+- MinorQOL & BetterRolls - added ability to right click weapons for versatile attack when one exists (right-click acts as normal click if item has no versatile property). Has a slight problem with BetterRolls which uses shift for advantage, because shift right click is hardcoded to bring up the context menu in some browsers, but I don't want to mess with BR's shift/ctrl/alt preferences.
 
 ### Changed
 - Renamed some CSS classes because they were really long.
