@@ -1,6 +1,14 @@
 # Changelog
 
-##[0.1.17] 2020-06-21
+## [0.1.18] 2020-06-22
+### Added
+- DND5e - the order of feats and items now follows their draggable order in the inventory.
+
+### Changed
+- CSS - changed appearance of info next to subcategory name (currently only used to indicate spell slots).
+- DND5e - spells should now be sorted by level and then alphabetically.
+
+## [0.1.17] 2020-06-21
 ### Added
 - MinorQOL & BetterRolls - added ability to right click weapons for versatile attack when one exists (right-click acts as normal click if item has no versatile property). Has a slight problem with BetterRolls which uses shift for advantage, because shift right click is hardcoded to bring up the context menu in some browsers, but I don't want to mess with BR's shift/ctrl/alt preferences.
 

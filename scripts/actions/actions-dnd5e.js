@@ -9,7 +9,7 @@ export class ActionHandler5e extends ActionHandler {
 
     /** @override */
     buildActionList(token) {
-        let result = { "tokenId": "", "actorId": "", "categories": {}};
+        let result = this.initializeEmptyActionList();
 
         if (!token) {
             return result;
@@ -34,13 +34,13 @@ export class ActionHandler5e extends ActionHandler {
         let checks = checkLists.buildChecksList(tokenId);
     
         if (Object.keys(items.subcategories).length > 0)
-            result.categories["items"] = items;
+            result.categories.items = items;
     
         if (Object.keys(spells.subcategories).length > 0)
-            result.categories["spells"] = spells;
+            result.categories.spells = spells;
     
         if (Object.keys(feats.subcategories).length > 0)
-            result.categories["feats"] = feats;
+            result.categories.feats = feats;
     
         for (let [k, v] of Object.entries(checks)) {
             if (Object.keys(checks[k].subcategories).length > 0 && !result.categories.hasOwnProperty(k))
@@ -55,27 +55,28 @@ export class ActionHandler5e extends ActionHandler {
     /** @private */
     _getItemList(actor, tokenId) {
         let validItems = this._filterLongerActions(actor.data.items);
-
+        let sortedItems = this._sortByItemSort(validItems);
+        let macroType = 'item';
         var equipped;
-        if (actor.data.type === "npc" && settings.get('showAllNpcItems')) {
-            settings.Logger.debug("NPC detected, showing all items.")
-            equipped = validItems.filter(i => i.type !== "consumable" && i.type !== "spell" && i.type !== "feat");
+
+        if (actor.data.type === 'npc' && settings.get('showAllNpcItems')) {
+            settings.Logger.debug('NPC detected, showing all items.')
+            equipped = sortedItems.filter(i => i.type !== 'consumable' && i.type !== 'spell' && i.type !== 'feat');
         } else {
-            equipped = validItems.filter(i => i.type !== "consumable" && i.data.equipped && i.data.quantity > 0);
+            equipped = sortedItems.filter(i => i.type !== 'consumable' && i.data.equipped && i.data.quantity > 0);
         }
         let activeEquipped = this._getActiveEquipment(equipped);
         
-        let macroType = "item";
-        let weapons = activeEquipped.filter(i => i.type == "weapon");
+        let weapons = activeEquipped.filter(i => i.type == 'weapon');
         let weaponActions = weapons.map(w => this._buildItem(tokenId, actor, macroType, w));
     
-        let equipment = activeEquipped.filter(i => i.type == "equipment");
+        let equipment = activeEquipped.filter(i => i.type == 'equipment');
         let equipmentActions = equipment.map(e => this._buildItem(tokenId, actor, macroType, e));
         
-        let other = activeEquipped.filter(i => i.type != "weapon" && i.type != "equipment")
+        let other = activeEquipped.filter(i => i.type != 'weapon' && i.type != 'equipment')
         let otherActions = other.map(o => this._buildItem(tokenId, actor, macroType, o));
     
-        let allConsumables = validItems.filter(i => i.type == "consumable" && i.data.quantity > 0);
+        let allConsumables = sortedItems.filter(i => i.type == 'consumable' && i.data.quantity > 0);
         
         let consumable = allConsumables.filter(c => c.data.uses.value && c.data.uses.value > 0)
         let consumableActions = consumable.map(c => this._buildItem(tokenId, actor, macroType, c));
@@ -83,38 +84,36 @@ export class ActionHandler5e extends ActionHandler {
         let inconsumable = allConsumables.filter(c => !(c.data.uses.max || c.data.uses.value) && c.data.consumableType != 'ammo')
         let incomsumableActions = inconsumable.map(i => this._buildItem(tokenId, actor, macroType, i));
         
-        let itemsResult = {
-            "subcategories": {}
-        }
+        let itemsResult = this.initializeEmptyCategory();
             
         if (weaponActions.length > 0)
-            itemsResult.subcategories.weapon = { "actions": weaponActions };
+            itemsResult.subcategories.weapon = { actions: weaponActions };
     
         if (equipmentActions.length > 0)
-            itemsResult.subcategories.equipment = { "actions": equipmentActions };
+            itemsResult.subcategories.equipment = { actions: equipmentActions };
         
         if (otherActions.length > 0)
-            itemsResult.subcategories.other = { "actions": otherActions };
+            itemsResult.subcategories.other = { actions: otherActions };
         
         if (consumableActions.length > 0)
-            itemsResult.subcategories.consumables = { "actions": consumableActions };
+            itemsResult.subcategories.consumables = { actions: consumableActions };
         
         if (incomsumableActions.length > 0)
-            itemsResult.subcategories.inconsumables = { "actions": incomsumableActions };
+            itemsResult.subcategories.inconsumables = { actions: incomsumableActions };
         
         return itemsResult;
     }
 
     /** @private */
     _getActiveEquipment(equipment) {
-        const activationTypes = Object.entries(game.dnd5e.config.abilityActivationTypes);
+        const activationTypes = Object.keys(game.dnd5e.config.abilityActivationTypes);
     
         let activeEquipment = equipment.filter(e => {
             if (!e.data.activation)
                 return false;
     
-            for (let [key, value] of activationTypes) {
-                if (e.data.activation.type == key)
+            for (let key of activationTypes) {
+                if (e.data.activation.type === key)
                     return true;
             }
             
@@ -123,63 +122,87 @@ export class ActionHandler5e extends ActionHandler {
     
         return activeEquipment;
     }
+
+    /** SPELLS **/
     
     /** @private */
     _getSpellsList(actor, tokenId) {
-        let validSpells = this._filterLongerActions(actor.data.items.filter(i => i.type == "spell" && i.data.preparation.prepared));
-        let spells = this._categoriseSpells(actor, tokenId, validSpells);
+        let validSpells = this._filterLongerActions(actor.data.items.filter(i => i.type == 'spell' && i.data.preparation.prepared));
+        let spellsSorted = this._sortSpellsByLevel(validSpells);
+        let spells = this._categoriseSpells(actor, tokenId, spellsSorted);
     
         return spells;
     }
+
+    /** @private */
+    _sortSpellsByLevel(spells) {
+        let result = Object.values(spells);
+
+        result.sort((a,b) => {
+            if (a.data.level === b.data.level)
+                return a.name.toUpperCase().localeCompare(b.name.toUpperCase(), undefined, {sensitivity: 'base'});
+            return a.data.level - b.data.level;
+        });
+
+        return result;
+    }
     
-    /** SPELLS **/
     /** @private */
     _categoriseSpells(actor, tokenId, spells) {
-        const powers = { "subcategories": {} };
-        const book = { "subcategories": {} };
-        const macroType = "spell";
+        const powers = this.initializeEmptyCategory();
+        const book = this.initializeEmptyCategory();
+        const macroType = 'spell';
         const spellSlots = actor.data.data.spells;
 
         let dispose = spells.reduce(function (dispose, s) {
             let spell = this._buildItem(tokenId, actor, macroType, s);
-
             var level = s.data.level;
             let prep = s.data.preparation.mode;
             const prepType = game.dnd5e.config.spellPreparationModes[prep];
+            let power = (prep === 'pact' || prep === 'atwill' || prep === 'innate')
+            var max, slots, levelName;
     
-            if (prep == "pact" || prep == "atwill" || prep == "innate") {
+            if (power) {
                 if (!powers.subcategories.hasOwnProperty(prepType)) {
-                    powers.subcategories[prepType] = { "actions": []};
-
-                    if (spellSlots[prep] && spellSlots[prep].max > 0)
-                        powers.subcategories[prepType].info = `(${spellSlots[prep].value} / ${spellSlots[prep].max})`;
+                    powers.subcategories[prepType] = this.initializeEmptyActions();
+                    
+                    if (spellSlots[prep] && spellSlots[prep].max > 0) {
+                        max = spellSlots[prep].max;
+                        slots = spellSlots[prep].value;
+                        powers.subcategories[prepType].info = `${slots}/${max}`;
+                    }
                 }
-
-                powers.subcategories[prepType].actions.push(spell);
-
-            } else {
-                let levelText = "Level " + level;
+            } else {                
+                if (level === 0) {
+                    levelName = 'Cantrips';
+                } else {
+                    levelName = `Level ${level}`;
+                }
                 
-                if (level == 0)
-                    levelText = "Cantrips";
-
-                if (!book.subcategories.hasOwnProperty(levelText)) {
-                    book.subcategories[levelText] = { "actions": []};
+                if (!book.subcategories.hasOwnProperty(levelName)) {
+                    book.subcategories[levelName] = this.initializeEmptyActions();
                 }
-
+                
                 let spellLevelKey = 'spell' + level;
-                if (spellSlots[spellLevelKey] && spellSlots[spellLevelKey].max > 0)
-                    book.subcategories[levelText].info = `(${spellSlots[spellLevelKey].value} / ${spellSlots[spellLevelKey].max})`;
-    
-                book.subcategories[levelText].actions.push(spell);
+                if (spellSlots[spellLevelKey] && spellSlots[spellLevelKey].max > 0) {
+                    max = spellSlots[spellLevelKey].max;
+                    slots = spellSlots[spellLevelKey].value;
+                    book.subcategories[levelName].info = `${spellSlots[spellLevelKey].value}/${spellSlots[spellLevelKey].max}`;
+                }
             }
-    
+
+            if (!max || slots > 0) {
+                if (power) {
+                    powers.subcategories[prepType].actions.push(spell);
+                } else {
+                    book.subcategories[levelName].actions.push(spell);
+                }
+            }
+            
             return dispose;
         }.bind(this), {});
     
-        let result = {
-            "subcategories": {}
-        }
+        let result = this.initializeEmptyCategory();
         
         if (Object.keys(powers.subcategories).length > 0)
             result.subcategories.powers = powers;
@@ -194,37 +217,38 @@ export class ActionHandler5e extends ActionHandler {
 
     /** @private */
     _getFeatsList(actor, tokenId) {
-        let validFeats = this._filterLongerActions(actor.data.items.filter(i => i.type == "feat"));
-        let feats = this._categoriseFeats(tokenId, actor, validFeats);
+        let validFeats = this._filterLongerActions(actor.data.items.filter(i => i.type == 'feat'));
+        let sortedFeats = this._sortByItemSort(validFeats);
+        let feats = this._categoriseFeats(tokenId, actor, sortedFeats);
     
         return feats;
     }
     
     /** @private */
     _categoriseFeats(tokenId, actor, feats) {
-        let active = { "actions": []};
-        let passive = { "actions": []};
-        let lair = { "actions": []};
-        let legendary = { "actions": []};
+        let active = this.initializeEmptyActions();
+        let passive = this.initializeEmptyActions();
+        let lair = this.initializeEmptyActions();
+        let legendary = this.initializeEmptyActions();
 
         let dispose = feats.reduce(function (dispose, f) {
             const activationTypes = game.dnd5e.config.abilityActivationTypes;
             const activationType = f.data.activation.type;
-            const macroType = "feat";
+            const macroType = 'feat';
 
             let feat = this._buildItem(tokenId, actor, macroType, f);
             
-            if (!activationType || activationType === "") {
+            if (!activationType || activationType === '') {
                 passive.actions.push(feat);
                 return;
             } 
             
-            if (activationType == "lair") {
+            if (activationType == 'lair') {
                 lair.actions.push(feat);
                 return;
             }
 
-            if (activationType == "legendary") {
+            if (activationType == 'legendary') {
                 legendary.actions.push(feat)
                 return;
             } 
@@ -234,31 +258,29 @@ export class ActionHandler5e extends ActionHandler {
             return;
         }.bind(this), {});
     
-        let result = {
-            "subcategories": {}
-        };
+        let result = this.initializeEmptyCategory()
     
         if (active.actions.length > 0)
-            result.subcategories["active"] = active;
+            result.subcategories.active = active;
     
         if (legendary.actions.length > 0)
-            result.subcategories["legendary"] = legendary;
+            result.subcategories.legendary = legendary;
     
         if (lair.actions.length > 0)
-            result.subcategories["lair"] = lair;
+            result.subcategories.lair = lair;
     
         if (passive.actions.length > 0 && !settings.get('ignorePassiveFeats'))
-            result.subcategories["passive"] = passive;
+            result.subcategories.passive = passive;
         
         return result;
     }
 
     /** @private */
     _buildItem(tokenId, actor, macroType, item) {
-        let result = { "name": item.name, "id": item._id, "encodedValue": `${macroType}.${tokenId}.${item._id}` }
+        let result = { 'name': item.name, 'id': item._id, 'encodedValue': `${macroType}.${tokenId}.${item._id}` }
         
         if (item.data.recharge && !item.data.recharge.charged && item.data.recharge.value) {
-            result.name += " (Recharge)";
+            result.name += ' (Recharge)';
         }
 
         result.info1 = this._getQuantityData(item);
@@ -272,7 +294,7 @@ export class ActionHandler5e extends ActionHandler {
 
     /** @private */
     _getQuantityData(item) {
-        let result = "";
+        let result = '';
         if (item.data.quantity > 1) {
             result = item.data.quantity;
         }
@@ -282,7 +304,7 @@ export class ActionHandler5e extends ActionHandler {
 
     /** @private */
     _getUsesData(item) {
-        let result = "";
+        let result = '';
         if (item.data.uses?.value) {
             result = item.data.uses.value;
 
@@ -296,7 +318,7 @@ export class ActionHandler5e extends ActionHandler {
 
     /** @private */
     _getConsumeData(item, actor) {
-        let result = "";
+        let result = '';
 
         let consumeType = item.data.consume?.type;
         if (consumeType && consumeType !== '') {
@@ -332,5 +354,23 @@ export class ActionHandler5e extends ActionHandler {
             result = items.filter(i => !i.data.activation || !(i.data.activation.type === 'minute' || i.data.activation.type === 'hour' || i.data.activation.type === 'day'));
 
         return result ? result : items;
+    }
+
+    /** @private */
+    _sortByItemSort(items) {
+        let result = Object.values(items);
+
+        result.sort((a,b) => a.sort - b.sort);
+
+        return result;
+    }
+
+    /** @private */
+    _sortAlphabetically(items) {
+        let result = Object.values(items);
+
+        result.sort((a,b) => a.name.toUpperCase().localeCompare(b.name.toUpperCase(), undefined, {sensitivity: 'base'}));
+        
+        return result;
     }
 }
