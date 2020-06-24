@@ -29,25 +29,26 @@ export class HandlersManager {
 
     // Not yet implemented.
     static getRollHandlerChoices(system) {
+        let choices;
+
         switch (system) {
             case "wfrp4e":
-                return {"core": "Core Wfrp"};
+                choices = {"core": "Core Wfrp"};
             case "dnd5e":
-                let choices = {"core": "Core 5e"};
+                choices = {"core": "Core 5e"};
                 this.testForModule(choices, "betterrolls5e");
                 this.testForModule(choices, "minor-qol");
-                return choices;
         }
+
+        return choices;
     }
 
     static testForModule(choices, id) {
         let module = game.modules.get(id);
-        console.log(id, module);
         if (module && module.active) {
             let id = module.id;
             let title = module.data.title;
             mergeObject(choices, { [id]: title })
         }
-        console.log(choices);
     }
 }

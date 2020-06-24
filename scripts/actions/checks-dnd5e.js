@@ -34,8 +34,6 @@ function mapToSubcategory(tokenId, categoryName, categoryType, list, abbr) {
                 })
             }
         };
-    
-    settings.Logger.debug(categoryName, result);
 
     return result;
 }

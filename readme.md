@@ -16,11 +16,14 @@ The HUD provides easy access to the most frequent actions carried out by a token
 Offers a variety of settings including support for third-party roll handlers (Please contact me if you'd like to add yours, or improve the functionality of those offered).
 ![Customizable settings](.github/readme/token_action_hud_eg2.gif)
 
+Can be repositioned.
+![Draggable](.github/readme/token_action_hud_eg4.gif)
+
 Should be able to support most systems, although currently limited to DND5e and extremely basic WFRP4e support. Please contact me if you would like to help.
 ![Modular support for multiple systems](.github/readme/token_action_hud_eg3.gif)
 
 # Supported systems
-* DND5e
+* DND5e (BetterRolls and MinorQol)
 * WFRP4e (proof of concept only at the moment)
 * Any other system? I believe the HUD is modular enough that anyone who understands what the players of their system want and how actions in their system are handled could quickly build it into the HUD. Please contact me if you'd like to add support for your favourite system.
 
@@ -32,8 +35,7 @@ For questions, feature requests, or bug reports, feel free to contact me on the 
 # Thanks
 Enormous thanks goes to the following people for their help in getting the HUD to its current state:
 Kekilla#7036, Skimble#8601, Forien#2130, and the Fabricator General.
-I'd also like to acknowledge the other module develops I've taken ideas and code from:
-Kekilla, again; KaKaRoTo; SkyCaptain; DasSauerkraut, and others I've missed I'm sure.
+I'd also like to acknowledge the other module develops I've taken ideas and code from, as well as the other developers who make FoundryVTT a joy to use.
 
 # License
 This Foundry VTT module is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).

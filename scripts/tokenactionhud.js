@@ -113,7 +113,7 @@ export class TokenActionHUD extends Application {
         data.actions = this.targetActions;
         data.id = "token-action-hud";
         data.hovering = hovering;
-        settings.Logger.debug(data);
+        settings.Logger.debug('HUD data:', data);
         return data;
     }
 
@@ -124,8 +124,6 @@ export class TokenActionHUD extends Application {
         const action = '.tah-action';   
 
         const handleClick = e => {
-            settings.Logger.debug(e);
-
             let target = e.target;
 
             if (target.tagName !== "BUTTON")
@@ -214,9 +212,7 @@ export class TokenActionHUD extends Application {
     }
 
     showHudEnabled() {
-        settings.Logger.debug(`isGM: ${game.user.isGM}`)
-        settings.Logger.debug(`enabledForUser: ${settings.get('enabledForUser')}`)
-        settings.Logger.debug(`playerPermission: ${settings.get('playerPermission')}`)
+        settings.Logger.debug('showHudEnabled()', `isGM: ${game.user.isGM}`, `enabledForUser: ${settings.get('enabledForUser')}`, `playerPermission: ${settings.get('playerPermission')}`);
 
         if (!settings.get('enabledForUser'))            
             return false;
@@ -240,18 +236,12 @@ export class TokenActionHUD extends Application {
     }
 
     shouldUpdateOnControlTokenChange() {
-        settings.Logger.debug("token change, checking controlled length");
-        settings.Logger.debug(`${this.tokens.controlled.length} controlled tokens.`);
-
         let controlled = this.tokens.controlled;
 
         return (controlled.length === 1 && controlled[0]) || controlled.length === 0;
     }
 
     shouldUpdateOnControlTokenHover(token, hovered) {
-        settings.Logger.debug("token hover, checking permission");
-        settings.Logger.debug(`${this.tokens.controlled.length} controlled tokens.`);
-
         return settings.get('onTokenHover');
     }
 
@@ -269,6 +259,7 @@ export class TokenActionHUD extends Application {
             return true;
         }
 
+        settings.Logger.debug("Different actor, no need to update HUD.");
         return false;
     }
 
