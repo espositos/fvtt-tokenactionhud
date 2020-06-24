@@ -60,7 +60,6 @@ export class ActionHandler5e extends ActionHandler {
         var equipped;
 
         if (actor.data.type === 'npc' && settings.get('showAllNpcItems')) {
-            settings.Logger.debug('NPC detected, showing all items.')
             equipped = sortedItems.filter(i => i.type !== 'consumable' && i.type !== 'spell' && i.type !== 'feat');
         } else {
             equipped = sortedItems.filter(i => i.type !== 'consumable' && i.data.equipped);
@@ -152,46 +151,64 @@ export class ActionHandler5e extends ActionHandler {
         const powers = this.initializeEmptyCategory();
         const book = this.initializeEmptyCategory();
         const macroType = 'spell';
-        const spellSlots = actor.data.data.spells;
+
+        // Reverse sort spells by level
+        const spellSlotInfo = Object.entries(actor.data.data.spells).sort((a,b) => {
+            return b[0].toUpperCase().localeCompare(a[0].toUpperCase(), undefined, {sensitivity: 'base'});
+        });
+
+        // Go through spells and if higher available slots exist, mark spell slots available at lower levels.
+        var slotsAvailable = false;
+        spellSlotInfo.forEach(s => {
+            if (s[0].startsWith('spell')) {
+                if (!slotsAvailable && s[1].max > 0 && s[1].value > 0)
+                    slotsAvailable = true;
+    
+                s[1].slotsAvailable = slotsAvailable;
+            } else {
+                s[1].slotsAvailable = !s[1].max || s[1].value > 0;
+            }
+        })
 
         let dispose = spells.reduce(function (dispose, s) {
-            let spell = this._buildItem(tokenId, actor, macroType, s);
-            var level = s.data.level;
             let prep = s.data.preparation.mode;
             const prepType = game.dnd5e.config.spellPreparationModes[prep];
+
+            var level = s.data.level;
             let power = (prep === 'pact' || prep === 'atwill' || prep === 'innate')
-            var max, slots, levelName;
-    
+            var max, slots, levelName, levelKey, levelInfo;
+                      
+            if (power) {
+                levelKey = prep;
+            }
+            else {
+                levelKey = 'spell' + level;
+                levelName = level === 0 ? 'Cantrips' : `Level ${level}`;
+            }
+
+            levelInfo = spellSlotInfo.find(lvl => lvl[0] === levelKey)?.[1];
+            slots = levelInfo?.value;
+            max = levelInfo?.max;
+
+            // Initialise subcategory if non-existant.
             if (power) {
                 if (!powers.subcategories.hasOwnProperty(prepType)) {
                     powers.subcategories[prepType] = this.initializeEmptyActions();
-                    
-                    if (spellSlots[prep] && spellSlots[prep].max > 0) {
-                        max = spellSlots[prep].max;
-                        slots = spellSlots[prep].value;
+                    if (max > 0) {
                         powers.subcategories[prepType].info = `${slots}/${max}`;
                     }
                 }
-            } else {                
-                if (level === 0) {
-                    levelName = 'Cantrips';
-                } else {
-                    levelName = `Level ${level}`;
-                }
-                
+            } else {                                
                 if (!book.subcategories.hasOwnProperty(levelName)) {
                     book.subcategories[levelName] = this.initializeEmptyActions();
-                }
-                
-                let spellLevelKey = 'spell' + level;
-                if (spellSlots[spellLevelKey] && spellSlots[spellLevelKey].max > 0) {
-                    max = spellSlots[spellLevelKey].max;
-                    slots = spellSlots[spellLevelKey].value;
-                    book.subcategories[levelName].info = `${spellSlots[spellLevelKey].value}/${spellSlots[spellLevelKey].max}`;
+                    if (max > 0) {
+                        book.subcategories[levelName].info = `${slots}/${max}`;
+                    }
                 }
             }
-
-            if (!max || slots > 0) {
+            
+            let spell = this._buildItem(tokenId, actor, macroType, s);
+            if (!max || levelInfo?.slotsAvailable) {
                 if (power) {
                     powers.subcategories[prepType].actions.push(spell);
                 } else {
