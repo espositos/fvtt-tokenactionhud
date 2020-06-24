@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.1.19] 2020-06-24
+### Bugfix
+- Default to the core role handler for each system if the third-party module is unavailable.
+- DND5e: Fixed spell slot check. Now shows spells when there are higher-level slots available to upcast.
+- DND5e: Don't display items with no quantity.
+
+### Changed
+- Tried to remove some unnecessary logging when debug mode enabled.
+- Removed some cruft.
+
 ## [0.1.18] 2020-06-22
 ### Added
 - DND5e - the order of feats and items now follows their draggable order in the inventory.
