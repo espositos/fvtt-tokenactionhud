@@ -70,8 +70,6 @@ export const registerSettings = function(rollHandlers) {
         default:
             throw new Error(`Unknown system: ${system}`);
     }
-
-    Logger.debug("settings ENUM: ", configVars);
     Logger.debug("rollHandlers: ", rollHandlers);
 }
 

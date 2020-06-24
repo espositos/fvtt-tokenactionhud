@@ -42,12 +42,10 @@ export class HandlersManager {
 
     static testForModule(choices, id) {
         let module = game.modules.get(id);
-        console.log(id, module);
         if (module && module.active) {
             let id = module.id;
             let title = module.data.title;
             mergeObject(choices, { [id]: title })
         }
-        console.log(choices);
     }
 }
