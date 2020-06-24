@@ -17,15 +17,7 @@ export const registerSettings = function(rollHandlers) {
         default : "core",
         onChange: value => { updateSettings(value); }
     });
-    game.settings.register(app,'playerPermission', {
-        name : "Enable HUD for players",
-        hint : "If enabled, players will be able to use the HUD.",
-        scope : "world",
-        config : true,
-        type : Boolean,
-        default : true,
-        onChange: value => { updateSettings(value); }
-    });
+    
     game.settings.register(app,'enabledForUser', {
         name : "Enable HUD for current user",
         hint : "If enabled, the HUD is active for the user. Does not override the player permission setting.",
@@ -35,19 +27,11 @@ export const registerSettings = function(rollHandlers) {
         default : true,
         onChange: value => { updateSettings(value); }
     });
+
     game.settings.register(app,'onTokenHover', {
         name : "Enable hovering",
         hint : `If enabled, the HUD will appear when hovering over a controllable token.
         Warning: Due to the unpredictable position of a token on the canvas, some actiosn may fall off the screen.`,
-        scope : "client",
-        config : true,
-        type : Boolean,
-        default : false,
-        onChange: value => { updateSettings(value); }
-    });
-    game.settings.register(app,'debug', {
-        name : "Enable debugging",
-        hint : "Enable debug logging.",
         scope : "client",
         config : true,
         type : Boolean,
@@ -70,6 +54,27 @@ export const registerSettings = function(rollHandlers) {
         default:
             throw new Error(`Unknown system: ${system}`);
     }
+    
+    game.settings.register(app,'playerPermission', {
+        name : "Enable HUD for players",
+        hint : "If enabled, players will be able to use the HUD.",
+        scope : "world",
+        config : true,
+        type : Boolean,
+        default : true,
+        onChange: value => { updateSettings(value); }
+    });
+    
+    game.settings.register(app,'debug', {
+        name : "Enable debugging",
+        hint : "Enable debug logging.",
+        scope : "client",
+        config : true,
+        type : Boolean,
+        default : false,
+        onChange: value => { updateSettings(value); }
+    });
+
     Logger.debug("rollHandlers: ", rollHandlers);
 }
 
