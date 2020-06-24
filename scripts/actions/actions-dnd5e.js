@@ -54,7 +54,7 @@ export class ActionHandler5e extends ActionHandler {
     
     /** @private */
     _getItemList(actor, tokenId) {
-        let validItems = this._filterLongerActions(actor.data.items);
+        let validItems = this._filterLongerActions(actor.data.items.filter(i => i.data.quantity > 0));
         let sortedItems = this._sortByItemSort(validItems);
         let macroType = 'item';
         var equipped;
@@ -63,7 +63,7 @@ export class ActionHandler5e extends ActionHandler {
             settings.Logger.debug('NPC detected, showing all items.')
             equipped = sortedItems.filter(i => i.type !== 'consumable' && i.type !== 'spell' && i.type !== 'feat');
         } else {
-            equipped = sortedItems.filter(i => i.type !== 'consumable' && i.data.equipped && i.data.quantity > 0);
+            equipped = sortedItems.filter(i => i.type !== 'consumable' && i.data.equipped);
         }
         let activeEquipped = this._getActiveEquipment(equipped);
         
@@ -76,7 +76,7 @@ export class ActionHandler5e extends ActionHandler {
         let other = activeEquipped.filter(i => i.type != 'weapon' && i.type != 'equipment')
         let otherActions = other.map(o => this._buildItem(tokenId, actor, macroType, o));
     
-        let allConsumables = sortedItems.filter(i => i.type == 'consumable' && i.data.quantity > 0);
+        let allConsumables = sortedItems.filter(i => i.type == 'consumable');
         
         let consumable = allConsumables.filter(c => c.data.uses.value && c.data.uses.value > 0)
         let consumableActions = consumable.map(c => this._buildItem(tokenId, actor, macroType, c));
