@@ -364,13 +364,4 @@ export class ActionHandler5e extends ActionHandler {
 
         return result;
     }
-
-    /** @private */
-    _sortAlphabetically(items) {
-        let result = Object.values(items);
-
-        result.sort((a,b) => a.name.toUpperCase().localeCompare(b.name.toUpperCase(), undefined, {sensitivity: 'base'}));
-        
-        return result;
-    }
 }
