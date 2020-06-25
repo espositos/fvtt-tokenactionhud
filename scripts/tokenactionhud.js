@@ -130,11 +130,11 @@ export class TokenActionHUD extends Application {
                 target = e.currentTarget.children[0];
 
             let value = target.value;
-            //try {
+            try {
                 this.rollHandler.handleActionEvent(e, value);
-            // } catch (error) {
-            //     settings.Logger.error(e);
-            // }
+            } catch (error) {
+                settings.Logger.error(e);
+            }
         }
 
         html.find(action).on('click', e => {
@@ -235,17 +235,20 @@ export class TokenActionHUD extends Application {
         this.render(true);
     }
 
-    shouldUpdateOnControlTokenChange() {
+    // Really just checks if only one token is being controlled. Not smart.
+    validTokenChange() {
         let controlled = this.tokens.controlled;
 
         return (controlled.length === 1 && controlled[0]) || controlled.length === 0;
     }
 
-    shouldUpdateOnControlTokenHover(token, hovered) {
-        return settings.get('onTokenHover');
+    // Is something being hovered on, is the setting on, and is it the token you're currently selecting.
+    validTokenHover(token, hovered) {
+        return hovered && settings.get('onTokenHover') && token._id === this.targetActions?.tokenId;
     }
 
-    shouldUpdateOnActorOrItemUpdate(actor) {
+    // Basically update any time. All this logic could be improved.
+    validActorOrItemUpdate(actor) {
         settings.Logger.debug(`actor change, comparing actors`);
         settings.Logger.debug(`actor._id: ${actor._id}; this.targetActions.actorId: ${this.targetActions?.actorId}`);
 
