@@ -9,8 +9,8 @@ export function buildChecksList(tokenId) {
     result["skills"] = { subcategories: skills };
 
     if (settings.get('splitAbilities')) {
-        let tests = mapToSubcategory(tokenId, "tests", "abilityTest", game.dnd5e.config.abilities, abbr);
-        result["tests"] = { subcategories: tests };
+        let checks = mapToSubcategory(tokenId, "checks", "abilityChecks", game.dnd5e.config.abilities, abbr);
+        result["checks"] = { subcategories: checks };
 
         let saves = mapToSubcategory(tokenId, "saves", "abilitySave", game.dnd5e.config.abilities, abbr);
         result["saves"] = { subcategories: saves}; 
@@ -24,7 +24,7 @@ export function buildChecksList(tokenId) {
 }
 
 function mapToSubcategory(tokenId, categoryName, categoryType, list, abbr) {
-    console.log(abbr);
+    
     let result = { [categoryName]: 
             { 
                 "actions": Object.entries(list).map(e => {

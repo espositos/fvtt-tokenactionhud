@@ -10,6 +10,16 @@ export function registerSettings(app, settings, updateSettings) {
         onChange: value => { updateSettings(value); }
     });
 
+    game.settings.register(app,'showSpellInfo', {
+        name: "Display spell information",
+        hint: "If enabled, spell component information, concentration, and ritual status will be noted next to the spell name.",
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: true,
+        onChange: value => { updateSettings(value); }
+    });
+
     game.settings.register(app,'showAllNonpreparableSpells', {
         name: "Show all non-preparable spells",
         hint: "If disabled, spells such as cantrips, innate, pact, and at-will spells need to be 'prepared' via the spell details to be shown on the HUD.",
@@ -41,8 +51,8 @@ export function registerSettings(app, settings, updateSettings) {
     });
 
     game.settings.register(app,'splitAbilities', {
-        name: "Show separate ability test and save categories",
-        hint: "If enabled, abilities will be separated into tests and saves.",
+        name: "Show separate ability check and save categories",
+        hint: "If enabled, abilities will be separated into checks and saves.",
         scope: "client",
         config: true,
         type: Boolean,
@@ -66,4 +76,5 @@ export function registerSettings(app, settings, updateSettings) {
     settings['hideLongerActions'] = 'hideLongerActions';
     settings['abbreviateSkills'] = 'abbreviateSkills';
     settings['splitAbilities'] = 'splitAbilities';
+    settings['showSpellInfo'] = 'showSpellInfo';
 }

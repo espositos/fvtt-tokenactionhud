@@ -209,6 +209,10 @@ export class ActionHandler5e extends ActionHandler {
             }
             
             let spell = this._buildItem(tokenId, actor, macroType, s);
+            
+            if (settings.get('showSpellInfo'))
+                this._addSpellInfo(s, spell);
+
             if (!max || levelInfo?.slotsAvailable) {
                 if (power) {
                     powers.subcategories[prepType].actions.push(spell);
@@ -229,6 +233,26 @@ export class ActionHandler5e extends ActionHandler {
             result.subcategories.books = book;
         
         return result;
+    }
+
+    /** @private */
+    _addSpellInfo(s, spell) {
+        let c = s.data.components;
+
+        if (c?.vocal)
+            spell.info1 += 'V';
+
+        if (c?.somatic)
+            spell.info1 += 'S';
+        
+        if (c?.material)
+            spell.info1 += 'M';
+
+        if (c?.concentration)
+            spell.info2 += 'C';
+
+        if (c?.ritual)
+            spell.info3 += 'R';
     }
     
     /** FEATS **/
