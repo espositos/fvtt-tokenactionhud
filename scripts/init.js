@@ -22,7 +22,6 @@ Hooks.on('init', () => {
     if (!game.tokenActionHUD) {
         let actionHandler = HandlersManager.getActionHandler(system);
         let handlerId = settings.get('rollHandler');
-        console.log(handlerId);
         
         if (! (handlerId === 'core' || game.modules.get(handlerId).active) ) {
             settings.Logger.error(handlerId, "not found, reverting to core roller.")
@@ -31,7 +30,6 @@ Hooks.on('init', () => {
         }
 
         let rollHandler = HandlersManager.getRollHandler(system, handlerId);
-        console.log(rollHandler);
         
         game.tokenActionHUD = new TokenActionHUD(actionHandler, rollHandler);
     }

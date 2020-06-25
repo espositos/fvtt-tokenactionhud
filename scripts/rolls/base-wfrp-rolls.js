@@ -7,7 +7,7 @@ export class RollHandlerBaseWfrp4e extends RollHandler {
     
     handleActionEvent(event, encodedValue) {
         let payload = encodedValue.split('.');
-        console.log(encodedValue);
+        settings.Logger.debug(encodedValue);
         if (payload.length != 3) {
             super.throwInvalidValueErr();
         }
@@ -18,11 +18,8 @@ export class RollHandlerBaseWfrp4e extends RollHandler {
 
         let actor = super.getActor(tokenId);
         let item = actor.getOwnedItem(actionId).data;
-        console.log(item);
-        console.log(event);
 
         let bypassData = {bypass: !!event.shiftKey};
-        console.log("BypassData: ", bypassData);
 
         switch (macroType) {
             case "weapon":

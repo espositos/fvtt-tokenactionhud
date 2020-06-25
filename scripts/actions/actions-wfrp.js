@@ -51,7 +51,6 @@ export class ActionHandlerWfrp extends ActionHandler {
         if (Object.entries(characteristics.subcategories).length > 0)
             result.categories["characteristics"] = characteristics;
 
-        console.log(result);
         return result;
     }
 

@@ -24,7 +24,7 @@ export function buildChecksList(tokenId) {
 }
 
 function mapToSubcategory(tokenId, categoryName, categoryType, list, abbr) {
-    console.log(abbr);
+    
     let result = { [categoryName]: 
             { 
                 "actions": Object.entries(list).map(e => {
