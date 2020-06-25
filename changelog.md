@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.1] 2-2-06-25
+### Changed
+- Removed some excess logging.
+- DND5e: Renamed Ability Tests to Ability Checks.
+- DND5e: Add choice of showing VSM/C/R info next to spells.
+
 ## [0.2.0] 2020-06-25
 ### Added
 - DND5e: add choice of showing all nonprepared spells (innate, pact, at-will, always prepared), or hiding based on their 'prepared'-ness.
