@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.20] 2020-06-25
+### Bugfix
+- Choice of roll handler was not sticking due to some poor logic.
+
+### Changed
+- Added some shadows to info fields on categories to make them more visible against similarly coloured backgrounds.
+
 ## [0.1.19] 2020-06-24
 ### Bugfix
 - Default to the core role handler for each system if the third-party module is unavailable.
