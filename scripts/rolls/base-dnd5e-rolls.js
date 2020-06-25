@@ -29,8 +29,8 @@ export class RollHandlerBase5e extends RollHandler {
             case "abilitySave":
                 this.rollAbilitySaveMacro(event, tokenId, actionId);
                 break;
-            case "abilityTest":
-                this.rollAbilityTestMacro(event, tokenId, actionId);
+            case "abilityCheck":
+                this.rollAbilityCheckMacro(event, tokenId, actionId);
                 break;
             case "item":
             case "spell":
@@ -46,7 +46,7 @@ export class RollHandlerBase5e extends RollHandler {
         super.getActor(tokenId).rollAbility(checkId, {event: event});
     }
     
-    rollAbilityTestMacro(event, tokenId, checkId) {
+    rollAbilityCheckMacro(event, tokenId, checkId) {
         super.getActor(tokenId).rollAbilityTest(checkId, {event: event});
     }
 

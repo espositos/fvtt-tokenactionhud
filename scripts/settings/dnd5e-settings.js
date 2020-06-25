@@ -41,8 +41,8 @@ export function registerSettings(app, settings, updateSettings) {
     });
 
     game.settings.register(app,'splitAbilities', {
-        name: "Show separate ability test and save categories",
-        hint: "If enabled, abilities will be separated into tests and saves.",
+        name: "Show separate ability check and save categories",
+        hint: "If enabled, abilities will be separated into checks and saves.",
         scope: "client",
         config: true,
         type: Boolean,

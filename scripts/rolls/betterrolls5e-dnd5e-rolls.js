@@ -6,7 +6,7 @@ export class RollHandlerBetterRolls5e extends RollHandlerBase5e {
     }
 
     /** @override */
-    rollAbilityTestMacro(event, tokenId, checkId) {
+    rollAbilityCheckMacro(event, tokenId, checkId) {
         let actor = super.getActor(tokenId);
         
         let params = {adv:0, disadv:0};
