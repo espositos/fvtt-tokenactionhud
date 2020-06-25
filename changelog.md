@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.0] 2020-06-25
+### Added
+- DND5e: add choice of showing all nonprepared spells (innate, pact, at-will, always prepared), or hiding based on their 'prepared'-ness.
+
 ## [0.1.20] 2020-06-25
 ### Bugfix
 - Choice of roll handler was not sticking due to some poor logic.
