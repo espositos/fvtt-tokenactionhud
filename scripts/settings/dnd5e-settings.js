@@ -10,6 +10,16 @@ export function registerSettings(app, settings, updateSettings) {
         onChange: value => { updateSettings(value); }
     });
 
+    game.settings.register(app,'showAllNonpreparableSpells', {
+        name: "Show all non-preparable spells",
+        hint: "If disabled, spells such as cantrips, innate, pact, and at-will spells need to be 'prepared' via the spell details to be shown on the HUD.",
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: true,
+        onChange: value => { updateSettings(value); }
+    });
+
     game.settings.register(app,'hideLongerActions', {
         name: "Hide actions with an activation longer than 1 round",
         hint: "If enabled, actions with longer activation types (minutes, hours, or days) are not shown.",
@@ -52,6 +62,7 @@ export function registerSettings(app, settings, updateSettings) {
 
     settings['showAllNpcItems'] = 'showAllNpcItems';
     settings['ignorePassiveFeats'] = 'ignorePassiveFeats';
+    settings['showAllNonpreparableSpells'] = 'showAllNonpreparableSpells';
     settings['hideLongerActions'] = 'hideLongerActions';
     settings['abbreviateSkills'] = 'abbreviateSkills';
     settings['splitAbilities'] = 'splitAbilities';
