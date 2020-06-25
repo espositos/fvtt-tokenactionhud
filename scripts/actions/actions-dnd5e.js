@@ -126,7 +126,8 @@ export class ActionHandler5e extends ActionHandler {
     
     /** @private */
     _getSpellsList(actor, tokenId) {
-        let validSpells = this._filterLongerActions(actor.data.items.filter(i => i.type == 'spell' && i.data.preparation.prepared));
+        let validSpells = this._filterLongerActions(actor.data.items.filter(i => i.type == 'spell'));
+        validSpells = this._filterNonpreparedSpells(validSpells);
         let spellsSorted = this._sortSpellsByLevel(validSpells);
         let spells = this._categoriseSpells(actor, tokenId, spellsSorted);
     
@@ -371,6 +372,20 @@ export class ActionHandler5e extends ActionHandler {
             result = items.filter(i => !i.data.activation || !(i.data.activation.type === 'minute' || i.data.activation.type === 'hour' || i.data.activation.type === 'day'));
 
         return result ? result : items;
+    }
+
+    /** @private */
+    _filterNonpreparedSpells(spells) {
+        const nonpreparableSpells = Object.keys(game.dnd5e.config.spellPreparationModes).filter(p => p != 'prepared');
+        let result = spells;
+
+        if (settings.get('showAllNonpreparableSpells')) {
+            result = spells.filter(i => i.data.preparation.prepared || nonpreparableSpells.includes(i.data.preparation.mode))
+        } else {
+            result = spells.filter(i => i.data.preparation.prepared);
+        }
+
+        return result;
     }
 
     /** @private */
