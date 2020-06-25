@@ -22,19 +22,20 @@ Hooks.on('init', () => {
     if (!game.tokenActionHUD) {
         let actionHandler = HandlersManager.getActionHandler(system);
         let handlerId = settings.get('rollHandler');
+        console.log(handlerId);
         
-        if (handlerId !== 'core' || !game.modules.get(handlerId))
+        if (! (handlerId === 'core' || game.modules.get(handlerId).active) ) {
+            settings.Logger.error(handlerId, "not found, reverting to core roller.")
             handlerId = 'core';
+            settings.set('rollHandler', handlerId);
+        }
 
         let rollHandler = HandlersManager.getRollHandler(system, handlerId);
+        console.log(rollHandler);
         
         game.tokenActionHUD = new TokenActionHUD(actionHandler, rollHandler);
     }
 
-});
-
-Hooks.on('ready', () => {
-    ///game.tokenActionHUD.render(true);
 });
 
 Hooks.on('canvasReady', () => {
