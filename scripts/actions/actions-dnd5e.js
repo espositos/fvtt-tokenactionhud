@@ -159,17 +159,30 @@ export class ActionHandler5e extends ActionHandler {
         });
 
         // Go through spells and if higher available slots exist, mark spell slots available at lower levels.
+        var pactInfo = spellSlotInfo.find(s => s[0] === 'pact');
+        
         var slotsAvailable = false;
         spellSlotInfo.forEach(s => {
             if (s[0].startsWith('spell')) {
                 if (!slotsAvailable && s[1].max > 0 && s[1].value > 0)
                     slotsAvailable = true;
+
+                if (!slotsAvailable && s[0] === 'spell'+pactInfo[1]?.level) {
+                    if (pactInfo[1].max > 0 && pactInfo[1].value > 0)
+                        slotsAvailable = true;
+                }
     
                 s[1].slotsAvailable = slotsAvailable;
             } else {
                 s[1].slotsAvailable = !s[1].max || s[1].value > 0;
             }
         })
+
+        let pactIndex = spellSlotInfo.findIndex(p => p[0] ==='pact');
+        if (!spellSlotInfo[pactIndex][1].slotsAvailable) {
+            var pactSpellEquivalent = spellSlotInfo.findIndex(s => s[0] === 'spell'+pactInfo[1].level);
+            spellSlotInfo[pactIndex][1].slotsAvailable = spellSlotInfo[pactSpellEquivalent][1].slotsAvailable;
+        }
 
         let dispose = spells.reduce(function (dispose, s) {
             let prep = s.data.preparation.mode;
