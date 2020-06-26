@@ -50,7 +50,7 @@ export class RollHandlerBetterRolls5e extends RollHandlerBase5e {
         if (item.data.data.properties?.ver)
             versatile = event.originalEvent.button === 2;
 
-        if (item.type === 'weapon') {
+        if (item.type === 'weapon' && versatile) {
             BetterRolls.rollItem(item, null, [["attack"], ["damage", {index: "all", versatile: versatile}]]).toMessage();
             return;
         }
