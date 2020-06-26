@@ -126,7 +126,7 @@ export class ActionHandler5e extends ActionHandler {
     
     /** @private */
     _getSpellsList(actor, tokenId) {
-        let validSpells = this._filterLongerActions(actor.data.items.filter(i => i.type == 'spell'));
+        let validSpells = this._filterLongerActions(actor.data.items.filter(i => i.type === 'spell' && i.data.uses.value >= i.data.uses.max));
         validSpells = this._filterNonpreparedSpells(validSpells);
         let spellsSorted = this._sortSpellsByLevel(validSpells);
         let spells = this._categoriseSpells(actor, tokenId, spellsSorted);
