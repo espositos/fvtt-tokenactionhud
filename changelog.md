@@ -1,6 +1,17 @@
 # Changelog
 
-## [0.2.1] 2-2-06-25
+## [0.2.2] 2020-06-26
+### Bugfix
+- DND5e: Pact slots weren't being shared with other spell levels or vice-versa
+
+### Changed
+- DND5e: spells that are on a use-per-day/short-rest/etc. basis are now filtered out if they're expended.
+
+## [0.2.2] 2020-06-25
+### Bugfix
+- Missed one of the ability check renames
+
+## [0.2.1] 2020-06-25
 ### Changed
 - Removed some excess logging.
 - DND5e: Renamed Ability Tests to Ability Checks.
