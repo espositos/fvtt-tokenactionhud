@@ -1,6 +1,10 @@
 # Changelog
 
-## [0.2.2] 2020-06-26
+## [0.2.4] 2020-06-26
+### Bugfix
+- DND5e: all BetterRoll weapon attacks were going through rollItem not quickRoll, but only a right-click versatile attack should go via rollItem.
+
+## [0.2.3] 2020-06-26
 ### Bugfix
 - DND5e: Pact slots weren't being shared with other spell levels or vice-versa
 
