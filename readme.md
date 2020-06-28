@@ -19,11 +19,12 @@ Offers a variety of settings including support for third-party roll handlers (Pl
 Can be repositioned.
 ![Draggable](.github/readme/token_action_hud_eg4.gif)
 
-Should be able to support most systems, although currently limited to DND5e and extremely basic WFRP4e support. Please contact me if you would like to help.
+Should be able to support most systems, although currently limited to DND5e, PF2E, and extremely basic WFRP4e support. Please contact me if you would like to help.
 ![Modular support for multiple systems](.github/readme/token_action_hud_eg3.gif)
 
 # Supported systems
-* DND5e (BetterRolls and MinorQol)
+* DND5e (including BetterRolls and MinorQol)
+* PF2E
 * WFRP4e (proof of concept only at the moment)
 * Any other system? I believe the HUD is modular enough that anyone who understands what the players of their system want and how actions in their system are handled could quickly build it into the HUD. Please contact me if you'd like to add support for your favourite system.
 

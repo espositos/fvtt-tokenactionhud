@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.5] 2020-06-26
+### Added
+- PF2E: Added first stage of implementation for Pathfinder 2E. A lot of things aren't implemented in PF2E yet, so this isn't quite as feature-rich as DND5e.
+
 ## [0.2.4] 2020-06-26
 ### Bugfix
 - DND5e: all BetterRoll weapon attacks were going through rollItem not quickRoll, but only a right-click versatile attack should go via rollItem.
