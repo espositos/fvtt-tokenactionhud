@@ -1,5 +1,5 @@
 # Changelog
-## [0.2.5] 2020-06-28
+## [0.2.6] 2020-06-28
 ### Bugfix
 - Forgot to break switch for handlers manager.
 
