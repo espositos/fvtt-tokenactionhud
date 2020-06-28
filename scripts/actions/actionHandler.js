@@ -23,6 +23,9 @@ export class ActionHandler {
     }
 
     _combineCategoryWithList(result, categoryName, category) {
+        if (!category)
+            return;
+
         if (Object.entries(category.subcategories).length > 0)
             result.categories[categoryName] = category;
     }

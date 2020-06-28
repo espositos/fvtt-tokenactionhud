@@ -23,17 +23,30 @@ export class ActionHandlerPf2e extends ActionHandler {
         if (!actor) {
             return result;
         }
+
+        let legitimateActors = ['character', 'npc'];
+        if (!legitimateActors.includes(actor.data.type))
+            return result;
         
         result.actorId = actor._id;
 
-        let strikes = this._getStrikesList(actor, tokenId); // ??? profit
-        let actions = this._getActionsList(actor, tokenId); // actions, reactions, free actions
+        let strikes, actions, skills, saves;
+        if (actor.data.type === 'character') {
+            strikes = this._getStrikesList(actor, tokenId); // ??? profit
+            actions = this._getActionsList(actor, tokenId); // actions, reactions, free actions
+            skills = this._getSkillsList(actor, tokenId); // skills and lore
+            saves = this._getSaveList(actor, tokenId);
+        }
+
+        if (actor.data.type === 'npc') {
+            skills = this._getSkillsListNpc(actor, tokenId);
+            saves = this._getSaveListNpc(actor, tokenId);
+        }
+
         let items = this._getItemsList(actor, tokenId); // weapons, consumables, other?
         let spells = this._getSpellsList(actor, tokenId);
         let feats = this._getFeatsList(actor, tokenId); // active and passive
-        let skills = this._getSkillsList(actor, tokenId); // skills and lore
         let abilities = this._getAbilityList(actor, tokenId);
-        let saves = this._getSaveList(actor, tokenId);
 
         this._combineCategoryWithList(result, 'strikes', strikes);
         this._combineCategoryWithList(result, 'actions', actions);
@@ -47,6 +60,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         return result;
     }
 
+    /** @private */
     _getStrikesList(actor, tokenId) {
         let result = this.initializeEmptyCategory();
 
@@ -70,6 +84,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         return result;
     }
 
+    /** @private */
     _getActionsList(actor, tokenId, type) {
         let result = this.initializeEmptyCategory();
 
@@ -91,20 +106,29 @@ export class ActionHandlerPf2e extends ActionHandler {
         return result;
     }
 
+    /** @private */
     _getItemsList(actor, tokenId) {
+        let macroType = 'item';
+
         let result = this.initializeEmptyCategory();
 
         let filter = ['weapon', 'equipment', 'consumable'];
         let items = (actor.items ?? []).filter(a => filter.includes(a.type));
+        
+        let weaponsList = items.filter(i => i.type == 'weapon');
+        if (actor.data.type === 'character')
+            weaponsList = items.filter(i => i.data.data.equipped.value);
+
+        let weaponActions = weaponsList.map(w => this._buildItem(tokenId, actor, macroType, w));
 
         let weapons = this.initializeEmptySubcategory();
-        weapons.actions = this._produceMap(tokenId, (items ?? []).filter(a => a.data.type === 'weapon'), 'item');
+        weapons.actions = weaponActions; //this._produceMap(tokenId, (items ?? []).filter(a => a.data.type === 'weapon'), macroType);
 
         let equipment = this.initializeEmptySubcategory();
-        equipment.actions = this._produceMap(tokenId, (items ?? []).filter(a => a.data.type === 'equipment'), 'item');
+        equipment.actions = this._produceMap(tokenId, (items ?? []).filter(a => a.data.type === 'equipment'), macroType);
 
         let consumables = this.initializeEmptySubcategory();
-        consumables.actions = this._produceMap(tokenId, (items ?? []).filter(a => a.data.type === 'consumable'), 'item');
+        consumables.actions = this._produceMap(tokenId, (items ?? []).filter(a => a.data.type === 'consumable'), macroType);
 
         this._combineSubcategoryWithCategory(result, 'weapons', weapons);
         this._combineSubcategoryWithCategory(result, 'equipment', equipment);
@@ -113,6 +137,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         return result;
     }
 
+    /** @private */
     _getSpellsList(actor, tokenId) {
         let result = this.initializeEmptyCategory();
 
@@ -127,6 +152,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         return result;
     }
 
+    /** @private */
     _getFeatsList(actor, tokenId) {
         let result = this.initializeEmptyCategory();
 
@@ -145,6 +171,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         return result;
     }
 
+    /** @private */
     _getSkillsList(actor, tokenId) {
         let result = this.initializeEmptyCategory();
 
@@ -163,6 +190,26 @@ export class ActionHandlerPf2e extends ActionHandler {
         return result;
     }
 
+    /** @private */
+    _getSkillsListNpc(actor, tokenId) {
+        let result = this.initializeEmptyCategory();
+
+        let actorSkills = actor.data.data.skills;
+        let skillMap = Object.keys(actorSkills).map(k => { return {'_id': k, 'name': k.charAt(0).toUpperCase()+k.slice(1)}});
+        let skills = this.initializeEmptySubcategory();
+        skills.actions = this._produceMap(tokenId, skillMap, 'skill');
+
+        let loreItems = actor.items.filter(i => i.data.type === 'lore');
+        let lore = this.initializeEmptySubcategory();
+        lore.actions = this._produceMap(tokenId, loreItems, 'lore');
+
+        this._combineSubcategoryWithCategory(result, 'skills', skills);
+        this._combineSubcategoryWithCategory(result, 'lore', lore);
+
+        return result;
+    }
+
+    /** @private */
     _getAbilityList(actor, tokenId) {
         let result = this.initializeEmptyCategory();
 
@@ -177,6 +224,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         return result;
     }
 
+    /** @private */
     _getSaveList(actor, tokenId) {
         let result = this.initializeEmptyCategory();
 
@@ -191,7 +239,43 @@ export class ActionHandlerPf2e extends ActionHandler {
         return result;
     }
 
+    /** @private */
+    _getSaveListNpc(actor, tokenId) {
+        let result = this.initializeEmptyCategory();
+
+        let actorSaves = actor.data.data.saves;
+        let saveMap = Object.keys(actorSaves).map(k => { return {'_id': k, 'name': k.charAt(0).toUpperCase()+k.slice(1)}});
+
+        let saves = this.initializeEmptySubcategory();
+        saves.actions = this._produceMap(tokenId, saveMap, 'save');
+
+        this._combineSubcategoryWithCategory(result, 'saves', saves);
+
+        return result;
+    }
+
+    /** @private */
     _produceMap(tokenId, itemSet, type) {
         return itemSet.map(i => { return { 'name': i.name, 'encodedValue': `${type}.${tokenId}.${i._id}`, 'id': i._id };});
-    } 
+    }
+
+    /** @private */
+    _buildItem(tokenId, actor, macroType, item) {
+        let result = { 'name': item.name, 'id': item._id, 'encodedValue': `${macroType}.${tokenId}.${item._id}` };
+
+        result.info1 = this._getQuantityData(item);
+
+        return result;
+    }
+
+    /** @private */
+    _getQuantityData(item) {
+        let result = '';
+        let quantity = item.data.data.quantity?.value;
+        if (quantity > 1) {
+            result = quantity;
+        }
+
+        return result;
+    }
 }
