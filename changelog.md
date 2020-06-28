@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.5] 2020-06-26
+## [0.2.5] 2020-06-28
 ### Added
 - PF2E: Added first stage of implementation for Pathfinder 2E. A lot of things aren't implemented in PF2E yet, so this isn't quite as feature-rich as DND5e.
 
