@@ -42,10 +42,13 @@ export class HandlersManager {
                 choices = {"core": "Core 5e"};
                 this.testForModule(choices, "betterrolls5e");
                 this.testForModule(choices, "minor-qol");
+                break;
             case "pf2e":
                 choices = {"core": "Core PF2E"};
+                break;
             case "wfrp4e":
                 choices = {"core": "Core Wfrp"};
+                break;
         }
 
         return choices;
