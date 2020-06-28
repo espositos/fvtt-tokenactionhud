@@ -1,4 +1,5 @@
 import { RollHandler } from "./rollHandler.js";
+import * as settings from '../settings.js';
 
 export class RollHandlerBaseWfrp4e extends RollHandler {
     constructor() {

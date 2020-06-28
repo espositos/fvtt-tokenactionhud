@@ -130,11 +130,11 @@ export class TokenActionHUD extends Application {
                 target = e.currentTarget.children[0];
 
             let value = target.value;
-            try {
+            // try {
                 this.rollHandler.handleActionEvent(e, value);
-            } catch (error) {
-                settings.Logger.error(e);
-            }
+            // } catch (error) {
+            //     settings.Logger.error(e);
+            // }
         }
 
         html.find(action).on('click', e => {

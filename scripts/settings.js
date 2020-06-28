@@ -2,6 +2,7 @@ import { Logger } from "./logger.js";
 export { Logger } from "./logger.js";
 import * as dnd5eSettings from "./settings/dnd5e-settings.js"
 import * as wfrp4eSettings from "./settings/wfrp4e-settings.js"
+import * as pf2esettings from "./settings/pf2e-settings.js"
 
 const updateSettings = (value) => { Logger.debug("Settings updated. Refreshing HUD"); if (game.tokenActionHUD)game.tokenActionHUD.updateSettings(); }
 
@@ -50,6 +51,9 @@ export const registerSettings = function(rollHandlers) {
             break;
         case "wfrp4e":
             wfrp4eSettings.registerSettings(app, configVars, updateSettings);
+            break;
+        case "pf2e":
+            pf2esettings.registerSettings(app, configVars, updateSettings);
             break;
         default:
             throw new Error(`Unknown system: ${system}`);
@@ -110,5 +114,6 @@ export const configVars = {
 /** @enum */
 export const knownSystems = {
     wfrp4e: "wfrp4e",
-    dnd5e: "dnd5e"
+    dnd5e: "dnd5e",
+    pf2e: "pf2e"
 }

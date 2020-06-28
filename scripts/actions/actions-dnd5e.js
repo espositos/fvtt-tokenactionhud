@@ -33,18 +33,11 @@ export class ActionHandler5e extends ActionHandler {
         
         let checks = checkLists.buildChecksList(tokenId);
     
-        if (Object.keys(items.subcategories).length > 0)
-            result.categories.items = items;
-    
-        if (Object.keys(spells.subcategories).length > 0)
-            result.categories.spells = spells;
-    
-        if (Object.keys(feats.subcategories).length > 0)
-            result.categories.feats = feats;
-    
+        this._combineCategoryWithList(result, "items", items);
+        this._combineCategoryWithList(result, "spells", spells);
+        this._combineCategoryWithList(result, "feats", feats);
         for (let [k, v] of Object.entries(checks)) {
-            if (Object.keys(checks[k].subcategories).length > 0 && !result.categories.hasOwnProperty(k))
-                result.categories[k] = v;
+            this._combineCategoryWithList(result, k, v);
         }
 
         return result;
