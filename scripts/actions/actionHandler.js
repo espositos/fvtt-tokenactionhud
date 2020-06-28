@@ -31,7 +31,10 @@ export class ActionHandler {
     }
 
     _combineSubcategoryWithCategory(category, subcategoryName, subcategory) {
-        if (Object.entries(subcategory.actions).length > 0)
+        if (!subcategory)
+            return;
+            
+        if (Object.entries(subcategory.actions)?.length > 0 || Object.entries(subcategory.subcategories)?.length > 0)
             category.subcategories[subcategoryName] = subcategory;
     }
 }

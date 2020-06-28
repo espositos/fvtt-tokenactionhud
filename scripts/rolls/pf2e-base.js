@@ -35,6 +35,8 @@ export class RollHandlerBasePf2e extends RollHandler {
                 this._rollLoreSkill(event, tokenId, actionId);
                 break;
             case 'action':
+            case 'spell':
+            case 'feat':
             case 'item':
                 this._rollItem(event, tokenId, actionId);
                 break;

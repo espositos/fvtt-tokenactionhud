@@ -112,25 +112,33 @@ export class ActionHandlerPf2e extends ActionHandler {
 
         let result = this.initializeEmptyCategory();
 
-        let filter = ['weapon', 'equipment', 'consumable'];
+        let filter = ['weapon', 'equipment', 'consumable', 'armor'];
         let items = (actor.items ?? []).filter(a => filter.includes(a.type));
         
-        let weaponsList = items.filter(i => i.type == 'weapon');
-        if (actor.data.type === 'character')
-            weaponsList = items.filter(i => i.data.data.equipped.value);
-
-        let weaponActions = weaponsList.map(w => this._buildItem(tokenId, actor, macroType, w));
-
+        let weaponsList = items.filter(i => i.type === 'weapon');
+        if (actor.data.type === 'character') weaponsList = weaponsList.filter(i => i.data.data.equipped.value);
+        let weaponActions = this._buildItemActions(tokenId, macroType, weaponsList);
         let weapons = this.initializeEmptySubcategory();
-        weapons.actions = weaponActions; //this._produceMap(tokenId, (items ?? []).filter(a => a.data.type === 'weapon'), macroType);
+        weapons.actions = weaponActions;
 
+        let armourList = items.filter(i => i.type === 'armor');
+        if (actor.data.type === 'character') armourList = armourList.filter(i => i.data.data.equipped.value);
+        let armourActions = this._buildItemActions(tokenId, macroType, armourList);
+        let armour = this.initializeEmptySubcategory();
+        armour.actions = armourActions;
+
+        let equipmentList = items.filter(i => i.type === 'equipment');
+        let equipmentActions = this._buildItemActions(tokenId, macroType, equipmentList);
         let equipment = this.initializeEmptySubcategory();
-        equipment.actions = this._produceMap(tokenId, (items ?? []).filter(a => a.data.type === 'equipment'), macroType);
+        equipment.actions = equipmentActions;
 
+        let consumablesList = items.filter(i => i.type === 'consumable');
+        let consumableActions = this._buildItemActions(tokenId, macroType, consumablesList);
         let consumables = this.initializeEmptySubcategory();
-        consumables.actions = this._produceMap(tokenId, (items ?? []).filter(a => a.data.type === 'consumable'), macroType);
+        consumables.actions = consumableActions;
 
         this._combineSubcategoryWithCategory(result, 'weapons', weapons);
+        this._combineSubcategoryWithCategory(result, 'armour', armour);
         this._combineSubcategoryWithCategory(result, 'equipment', equipment);
         this._combineSubcategoryWithCategory(result, 'consumables', consumables);
 
@@ -144,12 +152,59 @@ export class ActionHandlerPf2e extends ActionHandler {
         let filter = ['spell'];
         let items = (actor.items ?? []).filter(a => filter.includes(a.type));
 
-        let spells = this.initializeEmptySubcategory();
-        spells.actions = this._produceMap(tokenId, (items ?? []).filter(a => a.data.type === 'spell'), 'item');
-
-        this._combineSubcategoryWithCategory(result, 'spells', spells);
+        let spellsSorted = this._sortSpellsByLevel(items);
+        let spellCategories = this._categoriseSpells(actor, tokenId, spellsSorted);
+        
+        this._combineSubcategoryWithCategory(result, 'spells', spellCategories);
 
         return result;
+    }
+
+    /** @private */
+    _sortSpellsByLevel(spells) {
+        let result = Object.values(spells);
+
+        result.sort((a,b) => {
+            if (a.data.data.level.value === b.data.data.level.value)
+                return a.name.toUpperCase().localeCompare(b.name.toUpperCase(), undefined, {sensitivity: 'base'});
+            return a.data.data.level.value - b.data.data.level.value;
+        });
+
+        return result;
+    }
+    
+    /** @private */
+    _categoriseSpells(actor, tokenId, spells) {
+        let result = this.initializeEmptySubcategory();
+
+        const macroType = 'spell';
+
+        let dispose = spells.reduce(function (dispose, s) {
+            var level = s.data.data.level.value;
+
+            var levelName, levelKey;
+                      
+            levelKey = 'spell' + level;
+            levelName = level === 0 ? 'Cantrips' : `Level ${level}`;
+
+            if (!result.subcategories.hasOwnProperty(levelName)) {
+                result.subcategories[levelName] = this.initializeEmptyActions();
+            }
+            
+            let spell = this._buildItemAction(tokenId, macroType, s);
+            this._addSpellInfo(s, spell);
+
+            result.subcategories[levelName].actions.push(spell);
+            
+            return dispose;
+        }.bind(this), {});
+        
+        return result;
+    }
+
+    /** @private */
+    _addSpellInfo(s, spell) {
+        s.data.data.components?.value.split(',').forEach(c => spell.info1 += c.trim().charAt(0).toUpperCase());
     }
 
     /** @private */
@@ -160,10 +215,10 @@ export class ActionHandlerPf2e extends ActionHandler {
         let items = (actor.items ?? []).filter(a => filter.includes(a.type));
 
         let active = this.initializeEmptySubcategory();
-        active.actions = this._produceMap(tokenId, (items ?? []).filter(a => a.data.data.actionType.value !== 'passive'), 'item');
+        active.actions = this._produceMap(tokenId, (items ?? []).filter(a => a.data.data.actionType.value !== 'passive'), 'feat');
 
         let passive = this.initializeEmptySubcategory();
-        passive.actions = this._produceMap(tokenId, (items ?? []).filter(a => a.data.data.actionType.value === 'passive'), 'item');
+        passive.actions = this._produceMap(tokenId, (items ?? []).filter(a => a.data.data.actionType.value === 'passive'), 'feat');
 
         this._combineSubcategoryWithCategory(result, 'active', active);
         this._combineSubcategoryWithCategory(result, 'passive', passive);
@@ -260,7 +315,12 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
-    _buildItem(tokenId, actor, macroType, item) {
+    _buildItemActions(tokenId, macroType, itemList) {
+        return itemList.map(w => this._buildItemAction(tokenId, macroType, w));
+    }
+
+    /** @private */
+    _buildItemAction(tokenId, macroType, item) {
         let result = { 'name': item.name, 'id': item._id, 'encodedValue': `${macroType}.${tokenId}.${item._id}` };
 
         result.info1 = this._getQuantityData(item);
