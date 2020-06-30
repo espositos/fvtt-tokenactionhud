@@ -1,4 +1,4 @@
-import * as settings from '../settings.js';
+import * as settings from '../../settings.js';
 
 export function buildChecksList(tokenId) {
     let result = {};

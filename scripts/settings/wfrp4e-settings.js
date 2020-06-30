@@ -1,3 +1,3 @@
-export function registerSettings() {
+export function registerSettings(app, updateSettings) {
 }
     

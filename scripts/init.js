@@ -14,10 +14,9 @@ Hooks.on('init', () => {
     ]);
 
     let system = game.data.system.id;
-
     let rollHandlers = HandlersManager.getRollHandlerChoices(system);
 
-    settings.registerSettings(rollHandlers);
+    settings.registerSettings(system, rollHandlers);
 
     if (!game.tokenActionHUD) {
         let actionHandler = HandlersManager.getActionHandler(system);

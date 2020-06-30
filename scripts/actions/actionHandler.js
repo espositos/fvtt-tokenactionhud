@@ -26,7 +26,7 @@ export class ActionHandler {
         if (!category)
             return;
 
-        if (Object.entries(category.subcategories).length > 0)
+        if (Object.entries(category.subcategories)?.length > 0)
             result.categories[categoryName] = category;
     }
 

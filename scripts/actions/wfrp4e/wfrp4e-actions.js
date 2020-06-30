@@ -1,4 +1,4 @@
-import {ActionHandler} from './actionHandler.js';
+import {ActionHandler} from '../actionHandler.js';
 
 export class ActionHandlerWfrp extends ActionHandler {
     constructor(rollHandlerWfrp) {
