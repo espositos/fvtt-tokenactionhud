@@ -32,61 +32,60 @@ Hooks.on('init', () => {
         
         game.tokenActionHUD = new TokenActionHUD(actionHandler, rollHandler);
     }
-
 });
 
 Hooks.on('canvasReady', () => {
     game.tokenActionHUD.setTokensReference(canvas.tokens);
-});
 
-Hooks.on('controlToken', (token, controlled) => {
-    if (game.tokenActionHUD.validTokenChange())
-        game.tokenActionHUD.update();
-});
-
-Hooks.on('updateToken', (scene, token, diff, options, idUser) => {
-    if (game.tokenActionHUD.validTokenChange())
-        game.tokenActionHUD.update();
-});
-
-Hooks.on('deleteToken', (scene, token, empty, userId) => {
-    if (game.tokenActionHUD.validTokenChange())
-        game.tokenActionHUD.update();
-});
-
-Hooks.on('hoverToken', (token, hovered) => {
-    if (game.tokenActionHUD.validTokenHover(token, hovered))
-        game.tokenActionHUD.update();
-});
-
-Hooks.on('updateActor', (actor) => {
-    if (game.tokenActionHUD.validActorOrItemUpdate(actor))
-        game.tokenActionHUD.update();
-});
-
-Hooks.on('deleteActor', (actor) => {
-    if (game.tokenActionHUD.validActorOrItemUpdate(actor))
-        game.tokenActionHUD.update();
-});
-
-Hooks.on('deleteOwnedItem', (source, item) => {
-    let actor = source.data;
-    if (game.tokenActionHUD.validActorOrItemUpdate(actor))
-        game.tokenActionHUD.update();
-});
-
-Hooks.on('createOwnedItem', (source, item) => {
-    let actor = source.data;
-    if (game.tokenActionHUD.validActorOrItemUpdate(actor))
-        game.tokenActionHUD.update();
-});
-
-Hooks.on('updateOwnedItem', (source, item) => {
-    let actor = source.data;
-    if (game.tokenActionHUD.validActorOrItemUpdate(actor))
-        game.tokenActionHUD.update();
-});
-
-Hooks.on('renderTokenActionHUD', () => {
-    game.tokenActionHUD.trySetPos();
+    Hooks.on('controlToken', (token, controlled) => {
+        if (game.tokenActionHUD.validTokenChange())
+            game.tokenActionHUD.update();
+    });
+    
+    Hooks.on('updateToken', (scene, token, diff, options, idUser) => {
+        if (game.tokenActionHUD.validTokenChange())
+            game.tokenActionHUD.update();
+    });
+    
+    Hooks.on('deleteToken', (scene, token, empty, userId) => {
+        if (game.tokenActionHUD.validTokenChange())
+            game.tokenActionHUD.update();
+    });
+    
+    Hooks.on('hoverToken', (token, hovered) => {
+        if (game.tokenActionHUD.validTokenHover(token, hovered))
+            game.tokenActionHUD.update();
+    });
+    
+    Hooks.on('updateActor', (actor) => {
+        if (game.tokenActionHUD.validActorOrItemUpdate(actor))
+            game.tokenActionHUD.update();
+    });
+    
+    Hooks.on('deleteActor', (actor) => {
+        if (game.tokenActionHUD.validActorOrItemUpdate(actor))
+            game.tokenActionHUD.update();
+    });
+    
+    Hooks.on('deleteOwnedItem', (source, item) => {
+        let actor = source.data;
+        if (game.tokenActionHUD.validActorOrItemUpdate(actor))
+            game.tokenActionHUD.update();
+    });
+    
+    Hooks.on('createOwnedItem', (source, item) => {
+        let actor = source.data;
+        if (game.tokenActionHUD.validActorOrItemUpdate(actor))
+            game.tokenActionHUD.update();
+    });
+    
+    Hooks.on('updateOwnedItem', (source, item) => {
+        let actor = source.data;
+        if (game.tokenActionHUD.validActorOrItemUpdate(actor))
+            game.tokenActionHUD.update();
+    });
+    
+    Hooks.on('renderTokenActionHUD', () => {
+        game.tokenActionHUD.trySetPos();
+    });
 });

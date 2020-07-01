@@ -23,7 +23,6 @@ export class TokenActionHUD extends Application {
 
     setTokensReference(tokens) {
         this.tokens = tokens;
-        return this;
     }
 
     trySetPos() {
@@ -237,9 +236,9 @@ export class TokenActionHUD extends Application {
 
     // Really just checks if only one token is being controlled. Not smart.
     validTokenChange() {
-        let controlled = this.tokens.controlled;
+        let controlled = this.tokens?.controlled;
 
-        return (controlled.length === 1 && controlled[0]) || controlled.length === 0;
+        return (controlled?.length === 1 && controlled[0]) || controlled?.length === 0;
     }
 
     // Is something being hovered on, is the setting on, and is it the token you're currently selecting.
