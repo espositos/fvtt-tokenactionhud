@@ -202,14 +202,14 @@ export class ActionHandler5e extends ActionHandler {
                 if (!powers.subcategories.hasOwnProperty(prepType)) {
                     powers.subcategories[prepType] = this.initializeEmptyActions();
                     if (max > 0) {
-                        powers.subcategories[prepType].info = `${slots}/${max}`;
+                        powers.subcategories[prepType].info1 = `${slots}/${max}`;
                     }
                 }
             } else {                                
                 if (!book.subcategories.hasOwnProperty(levelName)) {
                     book.subcategories[levelName] = this.initializeEmptyActions();
                     if (max > 0) {
-                        book.subcategories[levelName].info = `${slots}/${max}`;
+                        book.subcategories[levelName].info1 = `${slots}/${max}`;
                     }
                 }
             }

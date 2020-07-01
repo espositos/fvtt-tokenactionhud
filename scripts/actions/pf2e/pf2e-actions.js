@@ -246,11 +246,12 @@ export class ActionHandlerPf2e extends ActionHandler {
         
         let spellbooks = actor.items.filter(i => i.data.type === 'spellcastingEntry');
         
-        // Initialise subcategories and fill category if it has prepared spells;
+        // get prepared spellbooks first, get spells from those, then turn to other spells
         spellbooks.forEach(s => {
             if (s.data.data.prepared.value !== 'prepared')
                 return;
-            let spellbookName = s.data.name;
+
+            let bookName = s.data.name;
             Object.entries(s.data.data.slots).forEach(slot => {
                 if (slot[1].prepared.length === 0 || slot[1].prepared.max <= 0)
                     return;
@@ -261,23 +262,28 @@ export class ActionHandlerPf2e extends ActionHandler {
 
                 levelName = level === 0 ? 'Cantrips' : levelName;
                 
-                let items = Object.values(slot[1].prepared).map(spell => actor.getOwnedItem(spell.id));
-                
+                let items = Object.values(slot[1].prepared).map(spell => { if (!spell.expended) return spells.find(sp => sp.data._id === spell.id) });
+                items = items.filter(i => !!i);
+
                 if (items.length > 0) {
-                    if (!result.subcategories.hasOwnProperty(spellbookName))
-                        result.subcategories[spellbookName] = this.initializeEmptySubcategory();
+                    if (!result.subcategories.hasOwnProperty(bookName))
+                        result.subcategories[bookName] = this.initializeEmptySubcategory();
                     
                     let levelSubcategory = this.initializeEmptySubcategory();
                     levelSubcategory.actions = this._produceMap(tokenId, actorType, items, 'spell');
 
-                    if (Object.keys(result.subcategories[spellbookName].subcategories).length === 0)
-                        levelName = `${spellbookName} - ${levelName}`;
+                    if (Object.keys(result.subcategories[bookName].subcategories).length === 0) {
+                        levelName = `${bookName} - ${levelName}`;
+                        if (actorType === 'character')
+                            levelSubcategory.info1 = this._getSpellSlotInfo(s, level, true);
 
-                    this._combineSubcategoryWithCategory(result.subcategories[spellbookName], levelName, levelSubcategory);
+                        levelSubcategory.info2 = this._getSpellDcInfo(s);
+                    }
+
+                    this._combineSubcategoryWithCategory(result.subcategories[bookName], levelName, levelSubcategory);
                 }
             });
         })
-        // get prepared spellbooks first, get spells from those, then turn to other spells
 
         spells.forEach( function(s) {
             var level = s.data.data.level.value;
@@ -291,30 +297,87 @@ export class ActionHandlerPf2e extends ActionHandler {
             if (!spellbook || spellbook.data.data.prepared.value === 'prepared')
                 return;
 
-            let spellbookName = spellbook.data.name;
+            let bookName = spellbook.data.name;
             
-            if (!result.subcategories.hasOwnProperty(spellbookName))
-                result.subcategories[spellbookName] = this.initializeEmptySubcategory();
-                      
-            let levelName = level === 0 ? 'Cantrips' : `Level ${level}`;
+            if (!result.subcategories.hasOwnProperty(bookName)) {
+                result.subcategories[bookName] = this.initializeEmptySubcategory();
+            }
+            let category = result.subcategories[bookName];
+            
+            let levelName = level == 0 ? 'Cantrips' : `Level ${level}`;
+            let levelNameWithBook = `${bookName} - ${levelName}`;
 
-            if (Object.keys(result.subcategories[spellbookName].subcategories).length === 0)
-                levelName = `${spellbookName} - ${levelName}`
+            // On first subcategory, include bookName, attack bonus, and spell DC.
+            if (Object.keys(category.subcategories).length === 0) {                
+                category.subcategories[levelNameWithBook] = this.initializeEmptySubcategory();
+                
+                if (actorType === 'character')
+                    category.subcategories[levelNameWithBook].info1 = this._getSpellSlotInfo(spellbook, level, true);
 
-            if (!result.subcategories[spellbookName].subcategories.hasOwnProperty(levelName)) {
-                result.subcategories[spellbookName].subcategories[levelName] = this.initializeEmptySubcategory();
-                let maxSlots = spellbook.data.data.slots[`slot${level}`].max;
-                let valueSlots = spellbook.data.data.slots[`slot${level}`].value;
-                result.subcategories[spellbookName].subcategories[levelName].info = valueSlots > 0 ? `${valueSlots}/${maxSlots}` : maxSlots;
+                category.subcategories[levelNameWithBook].info2 = this._getSpellDcInfo(spellbook);
             }
             
+            // If there's only one subcategory, check if it's the same as the current
+            let stillFirstSubcategory = Object.keys(category.subcategories).length === 1 && category.subcategories.hasOwnProperty(levelNameWithBook);
+            
+            if (!(stillFirstSubcategory || category.subcategories.hasOwnProperty(levelName))) {
+                category.subcategories[levelName] = this.initializeEmptySubcategory();
+                if (actorType === 'character')
+                    category.subcategories[levelName].info1 = this._getSpellSlotInfo(spellbook, level, false);
+            }
+
             let spell = { 'name': s.name, 'encodedValue': `${actorType}.${macroType}.${tokenId}.${s.data._id}`, 'id': s.data._id };
             this._addSpellInfo(s, spell);
-
-            result.subcategories[spellbookName].subcategories[levelName].actions.push(spell);
+            if (stillFirstSubcategory)
+                category.subcategories[levelNameWithBook].actions.push(spell);
+            else
+                category.subcategories[levelName].actions.push(spell);
             
         }.bind(this));
         
+        return result;
+    }
+
+    /** @private */
+    _getSpellDcInfo(spellbook) {
+        let result = '';
+        
+        let spelldc = spellbook.data.data.spelldc;
+        let attackBonus = spelldc.value >= 0 ? `Atk +${spelldc.value}` : `Atk -${spelldc.value}`;
+        let dcInfo = `DC${spellbook.data.data.spelldc.dc}`;
+
+        result = `${attackBonus} ${dcInfo}`;
+
+        return result;
+    }
+
+    /** @private */
+    _getSpellSlotInfo(spellbook, level, firstSubcategory) {
+        let result = '';
+
+        let maxSlots, valueSlots, slots;
+        let noSlotInfo = ['prepared', 'focus']
+        console.log(firstSubcategory, spellbook, spellbook.data.data.tradition.value)
+        if (firstSubcategory) {
+            if (spellbook.data.data.tradition.value === 'focus') {
+                let focus = spellbook.data.data.focus;
+                console.log(focus);
+                maxSlots = focus.pool;
+                valueSlots = focus.points;
+                result += `${valueSlots}/${maxSlots}`;
+            } else if (!noSlotInfo.includes(spellbook.data.data.prepared.value) && level > 0) {
+                slots = spellbook.data.data.slots;
+                maxSlots = slots[`slot${level}`].max;
+                valueSlots = slots[`slot${level}`].value;
+                result += `${valueSlots}/${maxSlots}`;
+            }
+        } else if (!noSlotInfo.includes(spellbook.data.data.prepared.value) && level > 0) {
+            slots = spellbook.data.data.slots;
+            maxSlots = slots[`slot${level}`].max;
+            valueSlots = slots[`slot${level}`].value;
+            result += `${valueSlots}/${maxSlots}`;
+        }
+
         return result;
     }
 
