@@ -6,7 +6,7 @@ export class ActionHandler {
     initializeEmptySubcategory() {
         return {
             info: '',
-            actions: {},
+            actions: [],
             subcategories: {}}
     }
 
