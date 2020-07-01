@@ -24,71 +24,91 @@ export class ActionHandlerDw extends ActionHandler {
 
         result.actorId = actor._id;
         let actorType = actor.data.type;
+        
         if (actorType === 'npc') {
-            let damage = this._getDamage(actor, tokenId);
-            let tags = this._getTags(actor, tokenId);
-            let specialQualities = this._getSpecialQualities(actor, tokenId);
+            let damage = this._getDamage(actor, tokenId, actorType);
+            let tags = this._getTags(actor, tokenId, actorType);
+            let specialQualities = this._getSpecialQualities(actor, tokenId, actorType);
+
+            this._combineCategoryWithList(result, 'damage', damage);
+            this._combineCategoryWithList(result, 'tags', tags);
+            this._combineCategoryWithList(result, 'special qualities', specialQualities);
         } else if (actorType === 'character') {
-            let basicMoves = this._getStartingMoves(actor, tokenId);
-            let advancedMoves = this._getAdvancedMoves(actor, tokenId);
-            let otherMoves = this._getStartingMoves(actor, tokenId);
-            let spells = this._getSpells(actor, tokenId);
-            let equipment = this._getEquipment(actor, tokenId);
-            let abilities = this._getAbilities(actor, tokenId);
+            let startingMoves = this._getMovesByType(actor, tokenId, actorType, 'starting');
+            let advancedMoves = this._getMovesByType(actor, tokenId, actorType, 'advanced');
+            let basicMoves = this._getMovesByType(actor, tokenId, actorType, 'basic');
+            let spells = this._getSubcategoryByType(actor, tokenId, actorType, 'spells', 'spell');
+            let equipment = this._getSubcategoryByType(actor, tokenId, actorType, 'equipment', 'equipment');
+            let abilities = this._getAbilities(actor, tokenId, actorType);
             
-            this._combineCategoryWithList(result, 'basic moves', actions);
-            this._combineCategoryWithList(result, 'advanced moves', actions);
-            this._combineCategoryWithList(result, 'other moves', actions);
-            this._combineCategoryWithList(result, 'spells', actions);
-            this._combineCategoryWithList(result, 'equipment', actions);
-            this._combineCategoryWithList(result, 'abilities', actions);
+            this._combineCategoryWithList(result, 'basic moves', startingMoves);
+            this._combineCategoryWithList(result, 'advanced moves', advancedMoves);
+            this._combineCategoryWithList(result, 'other moves', basicMoves);
+            this._combineCategoryWithList(result, 'spells', spells);
+            this._combineCategoryWithList(result, 'equipment', equipment);
+            this._combineCategoryWithList(result, 'abilities', abilities);
         }        
 
         return result;
     }
 
-    /** @private */
-    _getStartingMoves(actor, tokenId) {
+    _getMovesByType(actor, tokenId, actorType, movesType) {
+        let moves = actor.itemTypes.move.filter(m => m.data.data.moveType === movesType);
         let result = this.initializeEmptyCategory();
-        let moves = actor.itemTypes.move.filter(m => m.data.data.moveType === 'starting');
 
+        let rollCategory = this._getRollMoves(moves, tokenId, actorType);
+        let bookCategory = this._getBookMoves(moves, tokenId, actorType);
+
+        this._combineSubcategoryWithCategory(result, 'roll', rollCategory);
+        this._combineSubcategoryWithCategory(result, 'book', bookCategory);
+
+        return result;
+    }
+
+    _getRollMoves(moves, tokenId, actorType) {
         let rollMoves = moves.filter(m => m.data.data.rollType !== '');
         let rollActions = this._produceMap(tokenId, actorType, rollMoves, 'move');
         let rollCategory = this.initializeEmptySubcategory();
         rollCategory.actions = rollActions;
 
+        return rollCategory;
+    }
+
+    _getBookMoves(moves, tokenId, actorType) {
         let bookMoves = moves.filter(m => m.data.data.rollType === '');
         let bookActions = this._produceMap(tokenId, actorType, bookMoves, 'move');
         let bookCategory = this.initializeEmptySubcategory();
         bookCategory.actions = bookActions;
 
-        this._combineSubcategoryWithCategory(result, 'roll', rollCategory);
-        this._combineSubcategoryWithCategory(result, 'roll', bookCategory);
+        return bookCategory;
     }
 
     /** @private */
-    _getAdvancedMoves(actor, tokenId) {
-        let moves = actor.itemTypes.move.filter(m => m.data.data.moveType === 'advanced');
+    _getSubcategoryByType(actor, tokenId, actorType, categoryName, categoryType) {
+        let items = actor.itemTypes[categoryType];
+        let result = this.initializeEmptyCategory();
+        let actions = this._produceMap(tokenId, actorType, items, categoryType);
+        let category = this.initializeEmptySubcategory();
+        category.actions = actions;
+
+        this._combineSubcategoryWithCategory(result, categoryName, category);
+
+        return result;
     }
 
     /** @private */
-    _getStartingMoves(actor, tokenId) {
-        let moves = actor.itemTypes.move.filter(m => m.data.data.moveType === 'basic');
-    }
+    _getAbilities(actor, tokenId, actorType) {
+        let result = this.initializeEmptyCategory();
 
-    /** @private */
-    _getSpells(actor, tokenId) {
+        let abilities = Object.entries(actor.data.data.abilities);
+        let abilitiesMap = abilities.map(a => { return { data: { _id:a[0] }, name:a[1].label } })
+        let actions = this._produceMap(tokenId, actorType, abilitiesMap, 'ability');
+        let abilitiesCategory = this.initializeEmptySubcategory();
+        abilitiesCategory.actions = actions;
 
-    }
+        this._combineSubcategoryWithCategory(result, 'abilities', abilitiesCategory);
 
-    /** @private */
-    _getEquipment(actor, tokenId) {
-
-    }
-
-    /** @private */
-    _getAbilities(actor, tokenId) {
-
+        return result;
     }
 
     /** @private */
