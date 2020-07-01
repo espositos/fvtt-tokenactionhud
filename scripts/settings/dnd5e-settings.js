@@ -69,12 +69,4 @@ export function registerSettings(app, updateSettings) {
         default: true,
         onChange: value => { updateSettings(value); }
     });
-
-    settings['showAllNpcItems'] = 'showAllNpcItems';
-    settings['ignorePassiveFeats'] = 'ignorePassiveFeats';
-    settings['showAllNonpreparableSpells'] = 'showAllNonpreparableSpells';
-    settings['hideLongerActions'] = 'hideLongerActions';
-    settings['abbreviateSkills'] = 'abbreviateSkills';
-    settings['splitAbilities'] = 'splitAbilities';
-    settings['showSpellInfo'] = 'showSpellInfo';
 }

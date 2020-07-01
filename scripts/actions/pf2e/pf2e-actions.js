@@ -32,26 +32,27 @@ export class ActionHandlerPf2e extends ActionHandler {
         
         result.actorId = actor._id;
 
-        let strikes, actions, skills, saves, attributes;
+        let strikes, actions, skills, saves, attributes, abilities;
         if (actorType === 'character') {
             strikes = this._getStrikesList(actor, tokenId, actorType); // ??? profit
             actions = this._getActionsList(actor, tokenId, actorType); // actions, reactions, free actions
             skills = this._getSkillsList(actor, tokenId, actorType); // skills and lore
             saves = this._getSaveList(actor, tokenId, actorType);
             attributes = this._getAttributeList(actor, tokenId, actorType);
+            abilities = this._getAbilityList(actor, tokenId, actorType);
         }
 
         if (actorType === 'npc') {
+            strikes = this._getStrikesListNpc(actor, tokenId, actorType); // ??? profit
             skills = this._getSkillsListNpc(actor, tokenId, actorType);
             saves = this._getSaveListNpc(actor, tokenId, actorType);
             attributes = this._getAttributeListNpc(actor, tokenId, actorType);
+            actions = this._getActionsListNpc(actor, tokenId, actorType);
         }
 
         let items = this._getItemsList(actor, tokenId, actorType); // weapons, consumables, other?
         let spells = this._getSpellsList(actor, tokenId, actorType);
         let feats = this._getFeatsList(actor, tokenId, actorType); // active and passive
-        let abilities = this._getAbilityList(actor, tokenId, actorType);
-
 
         this._combineCategoryWithList(result, 'strikes', strikes);
         this._combineCategoryWithList(result, 'actions', actions);
@@ -92,6 +93,48 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
+    _getStrikesListNpc(actor, tokenId, actorType) {
+        let macroType = 'strike';
+        let result = this.initializeEmptyCategory();
+
+        let strikes = actor.items.filter(a => a.type === 'melee');
+
+        strikes.forEach(s => {
+            let subcategory = this.initializeEmptySubcategory();
+
+            let variantsMap = [];
+            let penalty = s.data.isAgile ? 4 : 5;
+            let bonusValue;
+            for (let i = 0; i < 3; i++) {
+                if (!bonusValue)
+                    bonusValue = s.data.data.bonus.value;
+                else
+                    bonusValue -= penalty;
+
+                if (bonusValue >= 0)
+                    bonusValue = `+${bonusValue}`;
+                else
+                    bonusValue = `-${bonusValue}`;
+
+                variantsMap.push({_id: `${s.data._id}>${i}`, name: bonusValue});
+            }
+                
+            subcategory.actions = this._produceMap(tokenId, actorType, variantsMap, macroType);
+            
+            subcategory.actions.push({name: 'Damage', encodedValue: `${actorType}.${macroType}.${tokenId}.${encodeURIComponent(s.data._id+'>damage')}`, id: encodeURIComponent(s.data._id+'>damage')})
+            subcategory.actions.push({name: 'Critical', encodedValue: `${actorType}.${macroType}.${tokenId}.${encodeURIComponent(s.data._id+'>critical')}`, id: encodeURIComponent(s.data._id+'>critical')})
+
+            let attackEffects = s.data.data.attackEffects?.value;
+            if (attackEffects.length > 0)
+                attackEffects.forEach(a => subcategory.actions.push({name: `Plus ${a}`, encodedValue: `${actorType}.${macroType}.${tokenId}.plus>${encodeURIComponent(a)}`}));
+
+            this._combineSubcategoryWithCategory(result, s.name, subcategory);
+        });
+
+        return result;
+    }
+
+    /** @private */
     _getActionsList(actor, tokenId, actorType) {
         let macroType = 'action';
         let result = this.initializeEmptyCategory();
@@ -115,19 +158,36 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
+    _getActionsListNpc(actor, tokenId, actorType) {
+        let macroType = 'action';
+        let result = this.initializeEmptyCategory();
+
+        let filteredActions = (actor.items ?? []).filter(a => a.data.type === macroType);
+
+        let actions = this.initializeEmptySubcategory();
+        actions.actions = this._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'action'), macroType);
+
+        let reactions = this.initializeEmptySubcategory();
+        reactions.actions = this._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'reaction'), macroType);
+
+        let free = this.initializeEmptySubcategory();
+        free.actions = this._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'free'), macroType);
+
+        this._combineSubcategoryWithCategory(result, 'actions', actions);
+        this._combineSubcategoryWithCategory(result, 'reactions', reactions);
+        this._combineSubcategoryWithCategory(result, 'free actions', free);
+
+        return result;
+    }
+
+    /** @private */
     _getItemsList(actor, tokenId, actorType) {
         let macroType = 'item';
         let result = this.initializeEmptyCategory();
         
-        let filter = ['weapon', 'equipment', 'consumable', 'armor'];
+        let filter = ['equipment', 'consumable', 'armor'];
         let items = (actor.items ?? []).filter(a => filter.includes(a.type));
         
-        let weaponsList = items.filter(i => i.type === 'weapon');
-        if (actorType === 'character') weaponsList = weaponsList.filter(i => i.data.data.equipped.value);
-        let weaponActions = this._buildItemActions(tokenId, actorType, macroType, weaponsList);
-        let weapons = this.initializeEmptySubcategory();
-        weapons.actions = weaponActions;
-
         let armourList = items.filter(i => i.type === 'armor');
         if (actor.data.type === 'character') armourList = armourList.filter(i => i.data.data.equipped.value);
         let armourActions = this._buildItemActions(tokenId, actorType, macroType, armourList);
@@ -144,7 +204,6 @@ export class ActionHandlerPf2e extends ActionHandler {
         let consumables = this.initializeEmptySubcategory();
         consumables.actions = consumableActions;
  
-        this._combineSubcategoryWithCategory(result, 'weapons', weapons);
         this._combineSubcategoryWithCategory(result, 'armour', armour);
         this._combineSubcategoryWithCategory(result, 'equipment', equipment);
         this._combineSubcategoryWithCategory(result, 'consumables', consumables);
@@ -178,77 +237,81 @@ export class ActionHandlerPf2e extends ActionHandler {
         });
 
         return result;
-    }
+    }    
     
     /** @private */
     _categoriseSpells(actor, tokenId, actorType, spells) {
         const macroType = 'spell';
         let result = this.initializeEmptySubcategory();
-
-        spells.forEach( function(s) {
-            var level = s.data.data.level.value;
-
-            var levelName, levelKey;
-                      
-            levelKey = 'spell' + level;
-            levelName = level === 0 ? 'Cantrips' : `Level ${level}`;
-
-            if (!result.subcategories.hasOwnProperty(levelName)) {
-                result.subcategories[levelName] = this.initializeEmptyActions();
-            }
-            
-            let spell = { 'name': s.name, 'encodedValue': `${actorType}.${macroType}.${tokenId}.${s._id}`, 'id': s._id };
-            this._addSpellInfo(s, spell);
-
-            result.subcategories[levelName].actions.push(spell);
-            
-        }.bind(this));
-        
-        return result;
-    }
-
-    
-    
-    /** @private */
-    _categoriseSpellsNew(actor, tokenId, actorType, spells) {
-        const macroType = 'spell';
-        let result = this.initializeEmptySubcategory();
         
         let spellbooks = actor.items.filter(i => i.data.type === 'spellcastingEntry');
         
+        // Initialise subcategories and fill category if it has prepared spells;
         spellbooks.forEach(s => {
             if (s.data.data.prepared.value !== 'prepared')
                 return;
+            let spellbookName = s.data.name;
+            Object.entries(s.data.data.slots).forEach(slot => {
+                if (slot[1].prepared.length === 0 || slot[1].prepared.max <= 0)
+                    return;
+                
+                let levelKey = slot[0];
+                let level = levelKey.substr(4);
+                let levelName = 'Level ' + level;
 
-            s.data.data.slots.forEach();
+                levelName = level === 0 ? 'Cantrips' : levelName;
+                
+                let items = Object.values(slot[1].prepared).map(spell => actor.getOwnedItem(spell.id));
+                
+                if (items.length > 0) {
+                    if (!result.subcategories.hasOwnProperty(spellbookName))
+                        result.subcategories[spellbookName] = this.initializeEmptySubcategory();
+                    
+                    let levelSubcategory = this.initializeEmptySubcategory();
+                    levelSubcategory.actions = this._produceMap(tokenId, actorType, items, 'spell');
+
+                    if (Object.keys(result.subcategories[spellbookName].subcategories).length === 0)
+                        levelName = `${spellbookName} - ${levelName}`;
+
+                    this._combineSubcategoryWithCategory(result.subcategories[spellbookName], levelName, levelSubcategory);
+                }
+            });
         })
         // get prepared spellbooks first, get spells from those, then turn to other spells
 
         spells.forEach( function(s) {
             var level = s.data.data.level.value;
             var spellbookId = s.data.data.location?.value;
-            
-            if (spellbookId && !spellbooks.hasOwnProperty(spellbookId))
-                spellbooks[spellbookId] = actor.getOwnedItem(spellbookId);
-            
-            let spellbook = spellbooks[spellbookId];
-            
-            if (spellbook && result.subcategories.hasOwnProperty(spellbook.name))
-                result.subcategories[spellbook.name] = this.initializeEmptySubcategory();
 
-            var levelName, levelKey;
+            let spellbook;
+            if (spellbookId)
+                spellbook = spellbooks.find(s => s.data._id === spellbookId);
+            
+            // return if 'prepared' because it should already have been handled above
+            if (!spellbook || spellbook.data.data.prepared.value === 'prepared')
+                return;
+
+            let spellbookName = spellbook.data.name;
+            
+            if (!result.subcategories.hasOwnProperty(spellbookName))
+                result.subcategories[spellbookName] = this.initializeEmptySubcategory();
                       
-            levelKey = 'spell' + level;
-            levelName = level === 0 ? 'Cantrips' : `Level ${level}`;
+            let levelName = level === 0 ? 'Cantrips' : `Level ${level}`;
 
-            if (!result.subcategories.hasOwnProperty(levelName)) {
-                result.subcategories[levelName] = this.initializeEmptyActions();
+            if (Object.keys(result.subcategories[spellbookName].subcategories).length === 0)
+                levelName = `${spellbookName} - ${levelName}`
+
+            if (!result.subcategories[spellbookName].subcategories.hasOwnProperty(levelName)) {
+                result.subcategories[spellbookName].subcategories[levelName] = this.initializeEmptySubcategory();
+                let maxSlots = spellbook.data.data.slots[`slot${level}`].max;
+                let valueSlots = spellbook.data.data.slots[`slot${level}`].value;
+                result.subcategories[spellbookName].subcategories[levelName].info = valueSlots > 0 ? `${valueSlots}/${maxSlots}` : maxSlots;
             }
             
-            let spell = { 'name': s.name, 'encodedValue': `${actorType}.${macroType}.${tokenId}.${s._id}`, 'id': s._id };
+            let spell = { 'name': s.name, 'encodedValue': `${actorType}.${macroType}.${tokenId}.${s.data._id}`, 'id': s.data._id };
             this._addSpellInfo(s, spell);
 
-            result.subcategories[levelName].actions.push(spell);
+            result.subcategories[spellbookName].subcategories[levelName].actions.push(spell);
             
         }.bind(this));
         
@@ -319,7 +382,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         lore.actions = this._produceMap(tokenId, actorType, loreItems, 'lore');
 
         if (abbr)
-            lore.actions.forEach(l => l.name = l.name.substr(0,3));
+            lore.actions.forEach(l => l.name = l.name.substr(0,4));
 
         this._combineSubcategoryWithCategory(result, 'skills', lore);
 

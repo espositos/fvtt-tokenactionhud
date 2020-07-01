@@ -71,7 +71,7 @@ export class RollHandlerBasePf2e extends RollHandler {
                 this._rollSkill(event, tokenId, actionId);
                 break;
             case 'strike':
-                this._rollStrike(event, tokenId, actionId);
+                this._rollStrikeNpc(event, tokenId, actionId);
                 break;    
             case 'lore':
                 this._rollLoreSkill(event, tokenId, actionId);
@@ -182,6 +182,42 @@ export class RollHandlerBasePf2e extends RollHandler {
                 break;
             default:
                 strike.variants[strikeType]?.roll(event, opts);
+        }
+    }
+
+    /** @private */
+    _rollStrikeNpc(event, tokenId, actionId) {
+        let actor = super.getActor(tokenId);
+
+        let actionParts = decodeURIComponent(actionId).split('>');
+
+        let strikeId = actionParts[0];
+        let strikeType = actionParts[1];
+
+        if (strikeId === 'plus') {
+            let item = actor.items.find(i => strikeType.toUpperCase().localeCompare(i.name.toUpperCase(), undefined, {sensitivity: 'base'}) === 0);
+            item.roll();
+            return;
+        }
+
+        let strike = actor.getOwnedItem(strikeId);
+
+        switch (strikeType) {
+            case 'damage':
+                strike.rollNPCDamage(event);
+                break;
+            case 'critical':
+                strike.rollNPCDamage(event, true);
+                break;
+            case '0':
+                strike.rollNPCAttack(event);
+                break;
+            case '1':            
+                strike.rollNPCAttack(event, 2);
+                break;
+            case '2':
+                strike.rollNPCAttack(event, 3);
+                break;
         }
     }
 
