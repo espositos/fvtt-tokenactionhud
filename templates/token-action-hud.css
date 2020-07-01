@@ -84,20 +84,20 @@
     display: block;
     padding: 2px;
     position: absolute;
-    left: -105px;
+    left: -155px;
     background: rgba(0, 0, 0, 0);
 }
 
 .tah-subcategory {
     display: grid;
-    grid-template-columns: 100px auto;
+    grid-template-columns: 150px auto;
     grid-auto-rows: auto;
 }
 
 .tah-subtitle {
     grid-column: 1;
     padding-top: 12px;
-    min-width: 100px;    
+    min-width: 150px;    
     color: #fff;
     text-shadow: -1px -1px 1px rgba(52, 52, 52, 1),
     -1px -1px 1px rgba(52, 52, 52, 1),
