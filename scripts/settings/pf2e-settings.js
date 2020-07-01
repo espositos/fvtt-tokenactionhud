@@ -18,4 +18,14 @@ export function registerSettings(app, updateSettings) {
         default: true,
         onChange: value => { updateSettings(value); }
     });
+
+    game.settings.register(app,'showPcAbilities', {
+        name: "Show PC abilities",
+        hint: "If enabled, PCs will also have an Abilities category on their HUD.",
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: true,
+        onChange: value => { updateSettings(value); }
+    });
 }
