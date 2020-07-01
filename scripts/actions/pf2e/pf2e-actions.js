@@ -61,7 +61,10 @@ export class ActionHandlerPf2e extends ActionHandler {
         this._combineCategoryWithList(result, 'feats', feats);
         this._combineCategoryWithList(result, 'skills', skills);
 
-        if (actorType === 'character' || settings.get('showNpcAbilities'))
+        if (actorType === 'character' && settings.get('showPcAbilities'))
+            this._combineCategoryWithList(result, 'abilities', abilities);
+            
+        if (actorType === 'npc' && settings.get('showNpcAbilities'))
             this._combineCategoryWithList(result, 'abilities', abilities);
 
         this._combineCategoryWithList(result, 'saves', saves);
@@ -360,11 +363,9 @@ export class ActionHandlerPf2e extends ActionHandler {
 
         let maxSlots, valueSlots, slots;
         let noSlotInfo = ['prepared', 'focus']
-        console.log(firstSubcategory, spellbook, spellbook.data.data.tradition.value)
         if (firstSubcategory) {
             if (spellbook.data.data.tradition.value === 'focus') {
                 let focus = spellbook.data.data.focus;
-                console.log(focus);
                 maxSlots = focus.pool;
                 valueSlots = focus.points;
                 result += `${valueSlots}/${maxSlots}`;
@@ -537,7 +538,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let result = this.initializeEmptyCategory();
         let attributes = this.initializeEmptySubcategory();
 
-        let rollableAttributes = Object.entries(actor.data.data.attributes).filter(a => !!a[1].roll);
+        let rollableAttributes = Object.entries(actor.data.data.attributes).filter(a => { if(a[1]) return !!a[1].roll });
         let attributesMap = rollableAttributes.map(a => {
             let name = a[0].charAt(0).toUpperCase()+a[0].slice(1);
             return { _id: a[0], name: name } 
