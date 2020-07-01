@@ -1,6 +1,6 @@
-import {RollHandlerBase5e as Core} from "../rolls/base-dnd5e-rolls.js"
-import {RollHandlerBetterRolls5e as BetterRolls5e} from "../rolls/betterrolls5e-dnd5e-rolls.js"
-import {RollHandlerMinorQol5e as MinorQol5e} from "../rolls/minorqol-dnd5e-rolls.js"
+import {RollHandlerBase5e as Core} from "./dnd5e-base.js"
+import {RollHandlerBetterRolls5e as BetterRolls5e} from "./dnd5e-betterrolls5e.js"
+import {RollHandlerMinorQol5e as MinorQol5e} from "./dnd5e-minorqol.js"
 
 export function getRollHandler(rollHandler = "") {
     switch (rollHandler) {

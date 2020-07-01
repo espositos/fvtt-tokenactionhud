@@ -1,9 +1,9 @@
-import { ActionHandler5e } from "./actions/actions-dnd5e.js";
-import { ActionHandlerWfrp } from "./actions/actions-wfrp.js";
-import { ActionHandlerPf2e } from "./actions/pf2e-actions.js";
-import * as roll5e from "./handlers/handler-dnd5e.js";
-import * as rollWfrp from "./handlers/handler-wfrp.js";
-import * as rollPf2e from "./handlers/handler-pf2e.js";
+import { ActionHandler5e } from "./actions/dnd5e/dnd5e-actions.js";
+import { ActionHandlerWfrp } from "./actions/wfrp4e/wfrp4e-actions.js";
+import { ActionHandlerPf2e } from "./actions/pf2e/pf2e-actions.js";
+import * as roll5e from "./rollHandlers/dnd5e/dnd5e-factory.js";
+import * as rollWfrp from "./rollHandlers/wfrp4e/wfrp4e-factory.js";
+import * as rollPf2e from "./rollHandlers/pf2e/pf2e-factory.js";
 
 export class HandlersManager {
     // Currently only planning for one kind of action handler for each system

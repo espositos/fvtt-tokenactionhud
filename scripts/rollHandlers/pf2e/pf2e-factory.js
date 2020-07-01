@@ -1,4 +1,4 @@
-import {RollHandlerBasePf2e as Core} from "../rolls/pf2e-base.js"
+import {RollHandlerBasePf2e as Core} from "./pf2e-base.js"
 
 export function getRollHandler(rollHandler = "") {
     switch (rollHandler) {

@@ -1,4 +1,4 @@
-export function registerSettings(app, settings, updateSettings) {
+export function registerSettings(app, updateSettings) {
 
     game.settings.register(app,'ignorePassiveFeats', {
         name: "Ignore passive feats",
@@ -69,12 +69,4 @@ export function registerSettings(app, settings, updateSettings) {
         default: true,
         onChange: value => { updateSettings(value); }
     });
-
-    settings['showAllNpcItems'] = 'showAllNpcItems';
-    settings['ignorePassiveFeats'] = 'ignorePassiveFeats';
-    settings['showAllNonpreparableSpells'] = 'showAllNonpreparableSpells';
-    settings['hideLongerActions'] = 'hideLongerActions';
-    settings['abbreviateSkills'] = 'abbreviateSkills';
-    settings['splitAbilities'] = 'splitAbilities';
-    settings['showSpellInfo'] = 'showSpellInfo';
 }

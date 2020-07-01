@@ -1,6 +1,6 @@
-import {ActionHandler} from './actionHandler.js';
-import * as settings from '../settings.js';
-import * as checkLists from './checks-dnd5e.js';
+import {ActionHandler} from '../actionHandler.js';
+import * as settings from '../../settings.js';
+import * as checkLists from './dnd5e-checks.js';
 
 export class ActionHandler5e extends ActionHandler {
     constructor () {

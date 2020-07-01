@@ -130,11 +130,11 @@ export class TokenActionHUD extends Application {
                 target = e.currentTarget.children[0];
 
             let value = target.value;
-            try {
+            // try {
                 this.rollHandler.handleActionEvent(e, value);
-            } catch (error) {
-                settings.Logger.error(e);
-            }
+            // } catch (error) {
+            //     settings.Logger.error(e);
+            // }
         }
 
         html.find(action).on('click', e => {
@@ -223,7 +223,7 @@ export class TokenActionHUD extends Application {
     async updateHud() {
         settings.Logger.debug("Updating HUD");
 
-        let token = this._getTargetToken(this.tokens.controlled);
+        let token = this._getTargetToken(this.tokens?.controlled);
         
         this.targetActions = this.actions.buildActionList(token);
 
