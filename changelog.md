@@ -1,4 +1,12 @@
 # Changelog
+## [0.2.8] 2020-06-30
+### Added
+- Further support for PF2E including NPC attacks and spells organised by level and type
+
+## [0.2.7] 2020-06-30
+### Added
+- PF2E support
+
 ## [0.2.6] 2020-06-28
 ### Bugfix
 - Forgot to break switch for handlers manager.
