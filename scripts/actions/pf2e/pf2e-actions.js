@@ -32,16 +32,15 @@ export class ActionHandlerPf2e extends ActionHandler {
         
         result.actorId = actor._id;
 
-        let strikes, actions, skills, saves, attributes, abilities;
+        let strikes, actions, skills, saves, attributes;
         if (actorType === 'character') {
             strikes = this._getStrikesList(actor, tokenId, actorType); // ??? profit
             actions = this._getActionsList(actor, tokenId, actorType); // actions, reactions, free actions
             skills = this._getSkillsList(actor, tokenId, actorType); // skills and lore
             saves = this._getSaveList(actor, tokenId, actorType);
             attributes = this._getAttributeList(actor, tokenId, actorType);
-            abilities = this._getAbilityList(actor, tokenId, actorType);
         }
-
+        
         if (actorType === 'npc') {
             strikes = this._getStrikesListNpc(actor, tokenId, actorType); // ??? profit
             skills = this._getSkillsListNpc(actor, tokenId, actorType);
@@ -49,18 +48,22 @@ export class ActionHandlerPf2e extends ActionHandler {
             attributes = this._getAttributeListNpc(actor, tokenId, actorType);
             actions = this._getActionsListNpc(actor, tokenId, actorType);
         }
-
+        
         let items = this._getItemsList(actor, tokenId, actorType); // weapons, consumables, other?
         let spells = this._getSpellsList(actor, tokenId, actorType);
         let feats = this._getFeatsList(actor, tokenId, actorType); // active and passive
-
+        let abilities = this._getAbilityList(actor, tokenId, actorType);
+        
         this._combineCategoryWithList(result, 'strikes', strikes);
         this._combineCategoryWithList(result, 'actions', actions);
         this._combineCategoryWithList(result, 'items', items);
         this._combineCategoryWithList(result, 'spells', spells);
         this._combineCategoryWithList(result, 'feats', feats);
         this._combineCategoryWithList(result, 'skills', skills);
-        this._combineCategoryWithList(result, 'abilities', abilities);
+
+        if (actorType === 'character' || settings.get('showNpcAbilities'))
+            this._combineCategoryWithList(result, 'abilities', abilities);
+
         this._combineCategoryWithList(result, 'saves', saves);
         this._combineCategoryWithList(result, 'attributes', attributes);
 
@@ -445,7 +448,9 @@ export class ActionHandlerPf2e extends ActionHandler {
         lore.actions = this._produceMap(tokenId, actorType, loreItems, 'lore');
 
         if (abbr)
-            lore.actions.forEach(l => l.name = l.name.substr(0,4));
+            lore.actions.forEach(l => { 
+                l.name = l.name.substr(0,3)
+            });
 
         this._combineSubcategoryWithCategory(result, 'skills', lore);
 
