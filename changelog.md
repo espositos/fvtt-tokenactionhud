@@ -1,4 +1,20 @@
 # Changelog
+
+## [0.3.0] 
+### Changed
+- PF2E - separated NPC and PC action list logic into their own classes.
+
+## [0.2.10] 2020-07-01
+### Bugfix
+- Reorganised initialisation logic to prevent players having to deselec then reselect their token to see the HUD.
+
+## [0.2.9] 2020-07-01
+### Bugfix
+- PF2E - iterating over some attributes caused the HUD to fail.
+
+### Changed
+- PF2E - improved support for spells
+
 ## [0.2.8] 2020-06-30
 ### Added
 - Further support for PF2E including NPC attacks and spells organised by level and type
