@@ -1,29 +1,28 @@
 import {ActionHandler} from '../actionHandler.js';
 import * as settings from '../../settings.js';
+import { PcActionHandlerPf2e } from './pf2e-actions-pc.js';
+import { NpcActionHandlerPf2e } from './pf2e-actions-npc.js';
 
 export class ActionHandlerPf2e extends ActionHandler {
-    constructor(rollHandlerPf2e) {
+    constructor() {
         super();
-        this.rollHandler = rollHandlerPf2e;
+        this.pcActionHandler = new PcActionHandlerPf2e(this);
+        this.npcActionHandler = new NpcActionHandlerPf2e(this);
     }    
 
     /** @override */
     buildActionList(token) {
         let result = this.initializeEmptyActionList();
 
-        if (!token) {
+        if (!token)
             return result;
-        }
 
         let tokenId = token.data._id;
-
         result.tokenId = tokenId;
 
         let actor = token.actor;
-
-        if (!actor) {
+        if (!actor)
             return result;
-        }
 
         let legitimateActors = ['character', 'npc'];
         let actorType = actor.data.type;
@@ -32,156 +31,11 @@ export class ActionHandlerPf2e extends ActionHandler {
         
         result.actorId = actor._id;
 
-        let strikes, actions, skills, saves, attributes;
-        if (actorType === 'character') {
-            strikes = this._getStrikesList(actor, tokenId, actorType); // ??? profit
-            actions = this._getActionsList(actor, tokenId, actorType); // actions, reactions, free actions
-            skills = this._getSkillsList(actor, tokenId, actorType); // skills and lore
-            saves = this._getSaveList(actor, tokenId, actorType);
-            attributes = this._getAttributeList(actor, tokenId, actorType);
-        }
+        if (actorType === 'character')
+            this.pcActionHandler.buildActionList(result, tokenId, actor);
         
-        if (actorType === 'npc') {
-            strikes = this._getStrikesListNpc(actor, tokenId, actorType); // ??? profit
-            skills = this._getSkillsListNpc(actor, tokenId, actorType);
-            saves = this._getSaveListNpc(actor, tokenId, actorType);
-            attributes = this._getAttributeListNpc(actor, tokenId, actorType);
-            actions = this._getActionsListNpc(actor, tokenId, actorType);
-        }
-        
-        let items = this._getItemsList(actor, tokenId, actorType); // weapons, consumables, other?
-        let spells = this._getSpellsList(actor, tokenId, actorType);
-        let feats = this._getFeatsList(actor, tokenId, actorType); // active and passive
-        let abilities = this._getAbilityList(actor, tokenId, actorType);
-        
-        this._combineCategoryWithList(result, 'strikes', strikes);
-        this._combineCategoryWithList(result, 'actions', actions);
-        this._combineCategoryWithList(result, 'items', items);
-        this._combineCategoryWithList(result, 'spells', spells);
-        this._combineCategoryWithList(result, 'feats', feats);
-        this._combineCategoryWithList(result, 'skills', skills);
-
-        if (actorType === 'character' && settings.get('showPcAbilities'))
-            this._combineCategoryWithList(result, 'abilities', abilities);
-            
-        if (actorType === 'npc' && settings.get('showNpcAbilities'))
-            this._combineCategoryWithList(result, 'abilities', abilities);
-
-        this._combineCategoryWithList(result, 'saves', saves);
-        this._combineCategoryWithList(result, 'attributes', attributes);
-
-        return result;
-    }
-
-    /** @private */
-    _getStrikesList(actor, tokenId, actorType) {
-        let macroType = 'strike';
-        let result = this.initializeEmptyCategory();
-
-        let strikes = actor.data.data.actions.filter(a => a.type === macroType);
-
-        strikes.forEach(s => {
-            let subcategory = this.initializeEmptySubcategory();
-
-            let variantsMap = s.variants.map(function (v) {
-                let name = v.label.lastIndexOf('+') >= 0 ? v.label.slice(v.label.lastIndexOf('+')-1) : v.label.slice(v.label.lastIndexOf('-')-1);
-                return {_id: encodeURIComponent(this.name+`>${this.variants.indexOf(v)}`), name: name }
-            }.bind(s));
-            subcategory.actions = this._produceMap(tokenId, actorType, variantsMap, macroType);
-            
-            subcategory.actions.push({name: 'Damage', encodedValue: `${actorType}.${macroType}.${tokenId}.${encodeURIComponent(s.name+'>damage')}`, id: encodeURIComponent(s.name+'>damage')})
-            subcategory.actions.push({name: 'Critical', encodedValue: `${actorType}.${macroType}.${tokenId}.${encodeURIComponent(s.name+'>critical')}`, id: encodeURIComponent(s.name+'>critical')})
-
-            this._combineSubcategoryWithCategory(result, s.name, subcategory);
-        });
-
-        return result;
-    }
-
-    /** @private */
-    _getStrikesListNpc(actor, tokenId, actorType) {
-        let macroType = 'strike';
-        let result = this.initializeEmptyCategory();
-
-        let strikes = actor.items.filter(a => a.type === 'melee');
-
-        strikes.forEach(s => {
-            let subcategory = this.initializeEmptySubcategory();
-
-            let variantsMap = [];
-            let penalty = s.data.isAgile ? 4 : 5;
-            let bonusValue;
-            for (let i = 0; i < 3; i++) {
-                if (!bonusValue)
-                    bonusValue = s.data.data.bonus.value;
-                else
-                    bonusValue -= penalty;
-
-                if (bonusValue >= 0)
-                    bonusValue = `+${bonusValue}`;
-                else
-                    bonusValue = `-${bonusValue}`;
-
-                variantsMap.push({_id: `${s.data._id}>${i}`, name: bonusValue});
-            }
-                
-            subcategory.actions = this._produceMap(tokenId, actorType, variantsMap, macroType);
-            
-            subcategory.actions.push({name: 'Damage', encodedValue: `${actorType}.${macroType}.${tokenId}.${encodeURIComponent(s.data._id+'>damage')}`, id: encodeURIComponent(s.data._id+'>damage')})
-            subcategory.actions.push({name: 'Critical', encodedValue: `${actorType}.${macroType}.${tokenId}.${encodeURIComponent(s.data._id+'>critical')}`, id: encodeURIComponent(s.data._id+'>critical')})
-
-            let attackEffects = s.data.data.attackEffects?.value;
-            if (attackEffects.length > 0)
-                attackEffects.forEach(a => subcategory.actions.push({name: `Plus ${a}`, encodedValue: `${actorType}.${macroType}.${tokenId}.plus>${encodeURIComponent(a)}`}));
-
-            this._combineSubcategoryWithCategory(result, s.name, subcategory);
-        });
-
-        return result;
-    }
-
-    /** @private */
-    _getActionsList(actor, tokenId, actorType) {
-        let macroType = 'action';
-        let result = this.initializeEmptyCategory();
-
-        let filteredActions = (actor.data.data.actions ?? []).filter(a => a.type === macroType);
-
-        let actions = this.initializeEmptySubcategory();
-        actions.actions = this._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.actionType === 'action'), macroType);
-
-        let reactions = this.initializeEmptySubcategory();
-        reactions.actions = this._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.actionType === 'reaction'), macroType);
-
-        let free = this.initializeEmptySubcategory();
-        free.actions = this._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.actionType === 'free'), macroType);
-
-        this._combineSubcategoryWithCategory(result, 'actions', actions);
-        this._combineSubcategoryWithCategory(result, 'reactions', reactions);
-        this._combineSubcategoryWithCategory(result, 'free actions', free);
-
-        return result;
-    }
-
-    /** @private */
-    _getActionsListNpc(actor, tokenId, actorType) {
-        let macroType = 'action';
-        let result = this.initializeEmptyCategory();
-
-        let filteredActions = (actor.items ?? []).filter(a => a.data.type === macroType);
-
-        let actions = this.initializeEmptySubcategory();
-        actions.actions = this._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'action'), macroType);
-
-        let reactions = this.initializeEmptySubcategory();
-        reactions.actions = this._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'reaction'), macroType);
-
-        let free = this.initializeEmptySubcategory();
-        free.actions = this._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'free'), macroType);
-
-        this._combineSubcategoryWithCategory(result, 'actions', actions);
-        this._combineSubcategoryWithCategory(result, 'reactions', reactions);
-        this._combineSubcategoryWithCategory(result, 'free actions', free);
+        if (actorType === 'npc')
+            this.npcActionHandler.buildActionList(result, tokenId, actor);
 
         return result;
     }
@@ -359,30 +213,24 @@ export class ActionHandlerPf2e extends ActionHandler {
 
     /** @private */
     _getSpellSlotInfo(spellbook, level, firstSubcategory) {
-        let result = '';
+        let tradition = spellbook.data.data.tradition.value;
+        let prepType = spellbook.data.data.prepared.value;
 
-        let maxSlots, valueSlots, slots;
-        let noSlotInfo = ['prepared', 'focus']
-        if (firstSubcategory) {
-            if (spellbook.data.data.tradition.value === 'focus') {
-                let focus = spellbook.data.data.focus;
-                maxSlots = focus.pool;
-                valueSlots = focus.points;
-                result += `${valueSlots}/${maxSlots}`;
-            } else if (!noSlotInfo.includes(spellbook.data.data.prepared.value) && level > 0) {
-                slots = spellbook.data.data.slots;
-                maxSlots = slots[`slot${level}`].max;
-                valueSlots = slots[`slot${level}`].value;
-                result += `${valueSlots}/${maxSlots}`;
-            }
-        } else if (!noSlotInfo.includes(spellbook.data.data.prepared.value) && level > 0) {
-            slots = spellbook.data.data.slots;
-            maxSlots = slots[`slot${level}`].max;
-            valueSlots = slots[`slot${level}`].value;
-            result += `${valueSlots}/${maxSlots}`;
+        let slotInfo = !['prepared', 'focus'].includes(prepType);
+
+        let slots = spellbook.data.data.slots;
+        let maxSlots = slots[`slot${level}`].max;
+        let valueSlots = slots[`slot${level}`].value;
+
+        if (firstSubcategory && tradition === 'focus') {
+            let focus = spellbook.data.data.focus;
+            maxSlots = focus.pool;
+            valueSlots = focus.points;
+            return `${valueSlots}/${maxSlots}`;
         }
-
-        return result;
+        
+        if (slotInfo && level > 0)
+            return `${valueSlots}/${maxSlots}`;
     }
 
     /** @private */
@@ -414,46 +262,16 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
-    _getSkillsList(actor, tokenId, actorType) {
-        let result = this.initializeEmptyCategory();
-        
-        let abbr = settings.get('abbreviateSkills');
-
-        let actorSkills = actor.data.data.skills;
-        let skillMap = Object.keys(actorSkills).map(k => { 
-            let name = abbr ? k.charAt(0).toUpperCase()+k.slice(1) : CONFIG.PF2E.skills[k];
-            return {'_id': k, 'name': name}
-        });
-
-        let skills = this.initializeEmptySubcategory();
-        skills.actions = this._produceMap(tokenId, actorType, skillMap, 'skill');
-
-        let loreItems = actor.items.filter(i => i.data.type === 'lore');
-        let lore = this.initializeEmptySubcategory();
-        lore.actions = this._produceMap(tokenId, actorType, loreItems, 'lore');
-
-        this._combineSubcategoryWithCategory(result, 'skills', skills);
-        this._combineSubcategoryWithCategory(result, 'lore', lore);
-
-        return result;
-    }
-
-    /** @private */
-    _getSkillsListNpc(actor, tokenId, actorType) {
+    _getSaveList(actor, tokenId, actorType) {
         let result = this.initializeEmptyCategory();
 
-        let abbr = settings.get('abbreviateSkills');
+        let actorSaves = actor.data.data.saves;
+        let saveMap = Object.keys(actorSaves).map(k => { return {'_id': k, 'name': CONFIG.PF2E.saves[k]}});
 
-        let loreItems = actor.items.filter(i => i.data.type === 'lore');
-        let lore = this.initializeEmptySubcategory();
-        lore.actions = this._produceMap(tokenId, actorType, loreItems, 'lore');
+        let saves = this.initializeEmptySubcategory();
+        saves.actions = this._produceMap(tokenId, actorType, saveMap, 'save');
 
-        if (abbr)
-            lore.actions.forEach(l => { 
-                l.name = l.name.substr(0,3)
-            });
-
-        this._combineSubcategoryWithCategory(result, 'skills', lore);
+        this._combineSubcategoryWithCategory(result, 'saves', saves);
 
         return result;
     }
@@ -473,36 +291,6 @@ export class ActionHandlerPf2e extends ActionHandler {
         abilities.actions = this._produceMap(tokenId, actorType, abilityMap, 'ability');
 
         this._combineSubcategoryWithCategory(result, 'abilities', abilities);
-
-        return result;
-    }
-
-    /** @private */
-    _getSaveList(actor, tokenId, actorType) {
-        let result = this.initializeEmptyCategory();
-
-        let actorSaves = actor.data.data.saves;
-        let saveMap = Object.keys(actorSaves).map(k => { return {'_id': k, 'name': actorSaves[k].name.charAt(0).toUpperCase()+actorSaves[k].name.slice(1)}});
-
-        let saves = this.initializeEmptySubcategory();
-        saves.actions = this._produceMap(tokenId, actorType, saveMap, 'save');
-
-        this._combineSubcategoryWithCategory(result, 'saves', saves);
-
-        return result;
-    }
-
-    /** @private */
-    _getSaveListNpc(actor, tokenId, actorType) {
-        let result = this.initializeEmptyCategory();
-
-        let actorSaves = actor.data.data.saves;
-        let saveMap = Object.keys(actorSaves).map(k => { return {'_id': k, 'name': k.charAt(0).toUpperCase()+k.slice(1)}});
-
-        let saves = this.initializeEmptySubcategory();
-        saves.actions = this._produceMap(tokenId, actorType, saveMap, 'save');
-
-        this._combineSubcategoryWithCategory(result, 'saves', saves);
 
         return result;
     }
@@ -528,40 +316,6 @@ export class ActionHandlerPf2e extends ActionHandler {
         if (quantity > 1) {
             result = quantity;
         }
-
-        return result;
-    }
-
-    /** @private */
-    _getAttributeList(actor, tokenId, actorType) {
-        let macroType = 'attribute';
-        let result = this.initializeEmptyCategory();
-        let attributes = this.initializeEmptySubcategory();
-
-        let rollableAttributes = Object.entries(actor.data.data.attributes).filter(a => { if(a[1]) return !!a[1].roll });
-        let attributesMap = rollableAttributes.map(a => {
-            let name = a[0].charAt(0).toUpperCase()+a[0].slice(1);
-            return { _id: a[0], name: name } 
-        });
-        
-        attributes.actions = this._produceMap(tokenId, actorType, attributesMap, macroType);
-        
-        this._combineSubcategoryWithCategory(result, 'attributes', attributes);
-
-        return result;
-    }
-
-    /** @private */
-    _getAttributeListNpc(actor, tokenId, actorType) {
-        let macroType = 'attribute';
-        let result = this.initializeEmptyCategory();
-        let attributes = this.initializeEmptySubcategory();
-
-        let attributesMap = [{_id: 'perception', name: 'Perception'},{_id: 'initiative', name: 'Initiative'}]
-        
-        attributes.actions = this._produceMap(tokenId, actorType, attributesMap, macroType);
-        
-        this._combineSubcategoryWithCategory(result, 'attributes', attributes);
 
         return result;
     }

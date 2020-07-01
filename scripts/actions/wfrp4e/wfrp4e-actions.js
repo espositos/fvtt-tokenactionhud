@@ -1,9 +1,8 @@
 import {ActionHandler} from '../actionHandler.js';
 
 export class ActionHandlerWfrp extends ActionHandler {
-    constructor(rollHandlerWfrp) {
+    constructor() {
         super();
-        this.rollHandler = rollHandlerWfrp;
     }    
 
     /** @override */
