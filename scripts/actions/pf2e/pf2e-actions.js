@@ -2,9 +2,8 @@ import {ActionHandler} from '../actionHandler.js';
 import * as settings from '../../settings.js';
 
 export class ActionHandlerPf2e extends ActionHandler {
-    constructor(rollHandlerPf2e) {
+    constructor() {
         super();
-        this.rollHandler = rollHandlerPf2e;
     }    
 
     /** @override */

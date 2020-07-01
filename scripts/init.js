@@ -88,4 +88,6 @@ Hooks.on('canvasReady', () => {
     Hooks.on('renderTokenActionHUD', () => {
         game.tokenActionHUD.trySetPos();
     });
+
+    game.tokenActionHUD.update();
 });
