@@ -171,17 +171,21 @@ export class RollHandlerBasePf2e extends RollHandler {
         let strikeType = actionParts[1];
 
         let strike = actor.data.data.actions.filter(a => a.type === 'strike').find(s => s.name === strikeName);
-        const opts = actor.getRollOptions(['all', 'attack-roll']);
 
+        let options;
         switch (strikeType) {
             case 'damage':
-                strike.damage(event, opts);
+                options = actor.getRollOptions(['all', 'damage-roll']);
+                strike.damage(event, options);
                 break;
             case 'critical':
-                strike.critical(event, opts);
+                options = actor.getRollOptions(['all', 'damage-roll']);
+                strike.critical(event, options);
                 break;
             default:
-                strike.variants[strikeType]?.roll(event, opts);
+                options = actor.getRollOptions(['all', 'attack-roll']);
+                strike.variants[strikeType]?.roll(event, options);
+                break;
         }
     }
 

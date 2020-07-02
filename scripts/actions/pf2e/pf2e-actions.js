@@ -11,7 +11,7 @@ export class ActionHandlerPf2e extends ActionHandler {
     }    
 
     /** @override */
-    buildActionList(token) {
+    async buildActionList(token) {
         let result = this.initializeEmptyActionList();
 
         if (!token)
@@ -32,10 +32,10 @@ export class ActionHandlerPf2e extends ActionHandler {
         result.actorId = actor._id;
 
         if (actorType === 'character')
-            this.pcActionHandler.buildActionList(result, tokenId, actor);
+            await this.pcActionHandler.buildActionList(result, tokenId, actor);
         
         if (actorType === 'npc')
-            this.npcActionHandler.buildActionList(result, tokenId, actor);
+            await this.npcActionHandler.buildActionList(result, tokenId, actor);
 
         return result;
     }
@@ -45,9 +45,15 @@ export class ActionHandlerPf2e extends ActionHandler {
         let macroType = 'item';
         let result = this.initializeEmptyCategory();
         
-        let filter = ['equipment', 'consumable', 'armor'];
+        let filter = ['weapon', 'equipment', 'consumable', 'armor'];
         let items = (actor.items ?? []).filter(a => filter.includes(a.type));
         
+        let weaponList = items.filter(i => i.type === 'weapon');
+        if (actor.data.type === 'character') weaponList = weaponList.filter(i => i.data.data.equipped.value);
+        let weaponActions = this._buildItemActions(tokenId, actorType, macroType, weaponList);
+        let weapons = this.initializeEmptySubcategory();
+        weapons.actions = weaponActions;
+
         let armourList = items.filter(i => i.type === 'armor');
         if (actor.data.type === 'character') armourList = armourList.filter(i => i.data.data.equipped.value);
         let armourActions = this._buildItemActions(tokenId, actorType, macroType, armourList);
@@ -64,6 +70,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let consumables = this.initializeEmptySubcategory();
         consumables.actions = consumableActions;
  
+        this._combineSubcategoryWithCategory(result, 'weapons', weapons);
         this._combineSubcategoryWithCategory(result, 'armour', armour);
         this._combineSubcategoryWithCategory(result, 'equipment', equipment);
         this._combineSubcategoryWithCategory(result, 'consumables', consumables);

@@ -1,6 +1,19 @@
 # Changelog
 
-## [0.3.0] 
+## [0.3.1] 2020-07-02
+### Bugfix
+- PF2E: fix double minus in front of negative monster MAP
+- DND5E: correctly allow cantrips through the nonpreparable filter
+
+### Added
+- Dungeon World: Support for PCs, NPCs, and GMs
+
+### Changed
+- Add transparent border to catalogue buttons to prevent movement (thanks to ZBell)
+- PF2E: Improve MAP logic for PCs
+- PF2E: re-add weapons to items until shift damage click is fixed.
+
+## [0.3.0] 2020-07-01
 ### Changed
 - PF2E - separated NPC and PC action list logic into their own classes.
 

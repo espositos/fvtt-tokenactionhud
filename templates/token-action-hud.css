@@ -63,7 +63,7 @@
     background: rgba(52, 52, 52, 0.95);
     padding: 3px;
     margin: 3px;
-    border: none;
+    border: 1px solid transparent;
     cursor: pointer;
 }
 

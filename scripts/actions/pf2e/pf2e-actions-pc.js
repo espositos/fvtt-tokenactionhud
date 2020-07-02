@@ -6,7 +6,7 @@ export class PcActionHandlerPf2e {
         this.baseHandler = actionHandlerpf2e;
     }
 
-    buildActionList(result, tokenId, actor) {
+    async buildActionList(result, tokenId, actor) {
         let actorType = 'character';
 
         let strikes = this._getStrikesList(actor, tokenId, actorType);
@@ -38,14 +38,31 @@ export class PcActionHandlerPf2e {
         let result = this.baseHandler.initializeEmptyCategory();
 
         let strikes = actor.data.data.actions.filter(a => a.type === macroType);
+        
+        let calculateAttackPenalty = settings.get('calculateAttackPenalty')
 
         strikes.forEach(s => {
             let subcategory = this.baseHandler.initializeEmptySubcategory();
+            let map = s.traits.some(t => t.name === 'agile') ? 4 : 5;
+            let attackMod = s.totalModifier;
+            
+            let currentMap = 0;
+            let currentBonus = attackMod;
+            let calculatePenalty = calculateAttackPenalty;
 
             let variantsMap = s.variants.map(function (v) {
-                let name = v.label.lastIndexOf('+') >= 0 ? v.label.slice(v.label.lastIndexOf('+')-1) : v.label.slice(v.label.lastIndexOf('-')-1);
+                let name;
+                if (currentBonus === attackMod || calculatePenalty) {
+                    name = currentBonus >= 0 ? `+${currentBonus}` : `${currentBonus}`;
+                }
+                else {
+                    name = currentMap >= 0 ? `+${currentMap}` : `${currentMap}`;
+                }
+                currentMap -= map;
+                currentBonus -= map;
                 return {_id: encodeURIComponent(this.name+`>${this.variants.indexOf(v)}`), name: name }
             }.bind(s));
+
             subcategory.actions = this.baseHandler._produceMap(tokenId, actorType, variantsMap, macroType);
             
             subcategory.actions.push({name: 'Damage', encodedValue: `${actorType}.${macroType}.${tokenId}.${encodeURIComponent(s.name+'>damage')}`, id: encodeURIComponent(s.name+'>damage')})
