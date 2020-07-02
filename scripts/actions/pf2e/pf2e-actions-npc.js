@@ -6,7 +6,7 @@ export class NpcActionHandlerPf2e {
         this.baseHandler = actionHandlerpf2e;
     }
 
-    buildActionList(result, tokenId, actor) {
+    async buildActionList(result, tokenId, actor) {
         let actorType = 'npc';
 
         let strikes = this._getStrikesListNpc(actor, tokenId, actorType);

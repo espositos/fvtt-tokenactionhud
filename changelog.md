@@ -9,6 +9,10 @@
 - Add transparent border to catalogue buttons to prevent movement (thanks to ZBell)
 - PF2E: Improve MAP logic for PCs
 
+## DUNGEON WORLD
+### Added
+- Support for PCs, NPCs, and GMs
+
 ## [0.3.0] 
 ### Changed
 - PF2E - separated NPC and PC action list logic into their own classes.

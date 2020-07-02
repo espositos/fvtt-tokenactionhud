@@ -8,7 +8,7 @@ export class ActionHandler5e extends ActionHandler {
     }
 
     /** @override */
-    buildActionList(token) {
+    async buildActionList(token) {
         let result = this.initializeEmptyActionList();
 
         if (!token) {

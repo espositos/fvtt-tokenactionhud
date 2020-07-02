@@ -24,6 +24,7 @@ Should be able to support most systems, although currently limited to DND5e, PF2
 
 # Supported systems
 * DND5e (including BetterRolls and MinorQol)
+* Dungeon World
 * PF2E
 * WFRP4e (proof of concept only at the moment)
 * Any other system? I believe the HUD is modular enough that anyone who understands what the players of their system want and how actions in their system are handled could quickly build it into the HUD. Please contact me if you'd like to add support for your favourite system.
@@ -32,6 +33,8 @@ Should be able to support most systems, although currently limited to DND5e, PF2
 
 # Support
 For questions, feature requests, or bug reports, feel free to contact me on the Foundry Discord (^ and stick#0520) or open an issue here directly.
+* Feel free to submit pull requests with a justification of your change, or ask me before starting.
+* The HUD's layout could do with some love. If you think you can improve things and know how your way around CSS, please get in touch!
 
 # Thanks
 Enormous thanks goes to the following people for their help in getting the HUD to its current state:
