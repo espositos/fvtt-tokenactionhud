@@ -54,7 +54,7 @@ export class NpcActionHandlerPf2e {
                 if (bonusValue >= 0)
                     bonusValue = `+${bonusValue}`;
                 else
-                    bonusValue = `-${bonusValue}`;
+                    bonusValue = `${bonusValue}`;
 
                 variantsMap.push({_id: `${s.data._id}>${i}`, name: bonusValue});
             }
