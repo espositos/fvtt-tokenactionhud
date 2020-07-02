@@ -45,9 +45,15 @@ export class ActionHandlerPf2e extends ActionHandler {
         let macroType = 'item';
         let result = this.initializeEmptyCategory();
         
-        let filter = ['equipment', 'consumable', 'armor'];
+        let filter = ['weapon', 'equipment', 'consumable', 'armor'];
         let items = (actor.items ?? []).filter(a => filter.includes(a.type));
         
+        let weaponList = items.filter(i => i.type === 'weapon');
+        if (actor.data.type === 'character') weaponList = weaponList.filter(i => i.data.data.equipped.value);
+        let weaponActions = this._buildItemActions(tokenId, actorType, macroType, weaponList);
+        let weapons = this.initializeEmptySubcategory();
+        weapons.actions = weaponActions;
+
         let armourList = items.filter(i => i.type === 'armor');
         if (actor.data.type === 'character') armourList = armourList.filter(i => i.data.data.equipped.value);
         let armourActions = this._buildItemActions(tokenId, actorType, macroType, armourList);
