@@ -410,7 +410,7 @@ export class ActionHandler5e extends ActionHandler {
         let result = spells;
 
         if (settings.get('showAllNonpreparableSpells')) {
-            result = spells.filter(i => i.data.preparation.prepared || nonpreparableSpells.includes(i.data.preparation.mode))
+            result = spells.filter(i => i.data.preparation.prepared || nonpreparableSpells.includes(i.data.preparation.mode) || i.data.level === 0)
         } else {
             result = spells.filter(i => i.data.preparation.prepared);
         }
