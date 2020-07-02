@@ -70,6 +70,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let consumables = this.initializeEmptySubcategory();
         consumables.actions = consumableActions;
  
+        this._combineSubcategoryWithCategory(result, 'weapons', weapons);
         this._combineSubcategoryWithCategory(result, 'armour', armour);
         this._combineSubcategoryWithCategory(result, 'equipment', equipment);
         this._combineSubcategoryWithCategory(result, 'consumables', consumables);

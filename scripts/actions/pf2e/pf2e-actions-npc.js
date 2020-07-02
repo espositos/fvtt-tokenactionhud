@@ -53,7 +53,7 @@ export class NpcActionHandlerPf2e {
 
             for (let i = 0; i < 3; i++) {
                 if (currentBonus === attackMod || calculateAttackPenalty) {
-                    name = bonus >= 0 ? `+${bonus}` : `${bonus}`;
+                    name = currentBonus >= 0 ? `+${currentBonus}` : `${currentBonus}`;
                 }
                 else {
                     name = currentMap >= 0 ? `+${currentMap}` : `${currentMap}`;

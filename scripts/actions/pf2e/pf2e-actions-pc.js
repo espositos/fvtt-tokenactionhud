@@ -43,7 +43,7 @@ export class PcActionHandlerPf2e {
 
         strikes.forEach(s => {
             let subcategory = this.baseHandler.initializeEmptySubcategory();
-            let map = s.traits.some(t => t.name === 'agile') ? -4 : -5;
+            let map = s.traits.some(t => t.name === 'agile') ? 4 : 5;
             let attackMod = s.totalModifier;
             
             let currentMap = 0;
@@ -53,7 +53,7 @@ export class PcActionHandlerPf2e {
             let variantsMap = s.variants.map(function (v) {
                 let name;
                 if (currentBonus === attackMod || calculatePenalty) {
-                    name = bonus >= 0 ? `+${bonus}` : `${bonus}`;
+                    name = currentBonus >= 0 ? `+${currentBonus}` : `${currentBonus}`;
                 }
                 else {
                     name = currentMap >= 0 ? `+${currentMap}` : `${currentMap}`;
