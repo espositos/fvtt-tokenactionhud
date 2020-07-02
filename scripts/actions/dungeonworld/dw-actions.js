@@ -147,7 +147,7 @@ export class ActionHandlerDw extends ActionHandler {
         return {data: {_id: encodedValue}, name: move};
         });
 
-        let instinctActions = this._produceMap(tokenId, actorType, instinctMap, 'npcInstinct');
+        let instinctActions = this._produceMap(tokenId, actorType, instinctMap, 'instinct');
         instinctsCategory.actions = instinctActions;
 
         let movesCategory = this.initializeEmptySubcategory();
@@ -158,7 +158,7 @@ export class ActionHandlerDw extends ActionHandler {
         return {data: {_id: encodedValue}, name: move};
         });
 
-        let movesActions = this._produceMap(tokenId, actorType, movesMap, 'npcMove')
+        let movesActions = this._produceMap(tokenId, actorType, movesMap, 'move')
         movesCategory.actions = movesActions;
         
         this._combineSubcategoryWithCategory(result, 'Instinct', instinctsCategory);
@@ -198,7 +198,7 @@ export class ActionHandlerDw extends ActionHandler {
     _getCompendiumEntries(categoryName, compendiumName) {
         let result = this.initializeEmptyCategory();
         let pack = game.packs.get(compendiumName);
-        let entriesMap = pack.index.map(e => { return {name: e.name, encodedValue: `gm.${compendiumName}._.${e._id}`, id: e.id } });
+        let entriesMap = pack.index.map(e => { return {name: e.name, encodedValue: `gm.compendium.${compendiumName}.${e._id}`, id: e.id } });
         let entries = this.initializeEmptySubcategory();
         entries.actions = entriesMap();
 
