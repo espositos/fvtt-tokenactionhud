@@ -60,7 +60,7 @@ export class RollHandlerBaseDw extends RollHandler {
         let actor = super.getActor(tokenId);
 
         let damage = actor.data.data.attributes.damage;
-        let damageDie = `1${damage.value}`;
+        let damageDie = `${damage.value}`;
         let damageMod = damage.misc.length > 0 ? damage.misc.length : 0;
 
         let flavour = damage.piercing;
