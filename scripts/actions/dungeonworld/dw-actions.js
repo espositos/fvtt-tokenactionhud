@@ -4,6 +4,8 @@ import * as settings from '../../settings.js';
 export class ActionHandlerDw extends ActionHandler {
     constructor () {
         super();
+        const gmmoves = this._getCompendiumEntries('GM Moves', 'gm-movesprincipals');
+        const charts = this._getCompendiumEntries('charts', 'charts');
     }
 
     /** @override */
@@ -29,11 +31,15 @@ export class ActionHandlerDw extends ActionHandler {
             let damage = this._getDamage(actor, tokenId, actorType);
             let tags = this._getTags(actor, tokenId, actorType);
             let specialQualities = this._getSpecialQualities(actor, tokenId, actorType);
+            this.moves = this._getMovesNpc(actor, tokenId, actorType);
 
             this._combineCategoryWithList(result, 'damage', damage);
             this._combineCategoryWithList(result, 'tags', tags);
             this._combineCategoryWithList(result, 'special qualities', specialQualities);
+            this._combineCategoryWithList(result, 'GM moves', this.gmmoves);
+            this._combineCategoryWithList(result, 'Charts', this.charts);
         } else if (actorType === 'character') {
+            let damage = this._getDamage(actor, tokenId, actorType);
             let startingMoves = this._getMovesByType(actor, tokenId, actorType, 'starting');
             let advancedMoves = this._getMovesByType(actor, tokenId, actorType, 'advanced');
             let basicMoves = this._getMovesByType(actor, tokenId, actorType, 'basic');
@@ -41,6 +47,7 @@ export class ActionHandlerDw extends ActionHandler {
             let equipment = this._getSubcategoryByType(actor, tokenId, actorType, 'equipment', 'equipment');
             let abilities = this._getAbilities(actor, tokenId, actorType);
             
+            this._combineCategoryWithList(result, 'damage', damage);
             this._combineCategoryWithList(result, 'basic moves', startingMoves);
             this._combineCategoryWithList(result, 'advanced moves', advancedMoves);
             this._combineCategoryWithList(result, 'other moves', basicMoves);
@@ -48,6 +55,16 @@ export class ActionHandlerDw extends ActionHandler {
             this._combineCategoryWithList(result, 'equipment', equipment);
             this._combineCategoryWithList(result, 'abilities', abilities);
         }        
+
+        return result;
+    }
+
+    _getDamage(actor, tokenId, actorType) {
+        let result = this.initializeEmptyCategory();
+        let damageCategory = this.initializeEmptySubcategory();
+        damageCategory.actions.push({name: 'Damage', encodedValue: `${actorType}.damage.${tokenId}.damage`, 'id': 'damage' })
+
+        this._combineSubcategoryWithCategory(result, 'damage', damageCategory);
 
         return result;
     }
@@ -109,6 +126,78 @@ export class ActionHandlerDw extends ActionHandler {
         this._combineSubcategoryWithCategory(result, 'abilities', abilitiesCategory);
 
         return result;
+    }
+
+    _getMovesNpc(actor, tokenId, actorType) {
+        let result = this.initializeEmptyCategory();
+
+        let biography = actor.data.data.details.biography;
+        
+        
+        let instinctsCategory = this.initializeEmptySubcategory();
+        let instinctRegex = new RegExp('<p(|\s+[^>]*)>(Instinct:.*?)<\/p\s*>', 'g')
+        let instinctMap = Array.from(biography.matchAll(instinctRegex)).map(m => {
+            move = m[2];
+            let encodedValue = encodeURIComponent(move);
+        return {data: {_id: encodedValue}, name: move};
+        });
+
+        let instinctActions = this._produceMap(tokenId, actorType, instinctMap, 'npcInstinct');
+        instinctsCategory.actions = instinctActions;
+
+        let movesCategory = this.initializeEmptySubcategory();
+        var movesRegex = new RegExp('<li(|\s+[^>]*)>(.*?)<\/li\s*>', 'g');
+        var movesMap = Array.from(biography.matchAll(movesRegex)).map(m => {
+            move = m[2];
+            let encodedValue = encodeURIComponent(move);
+        return {data: {_id: encodedValue}, name: move};
+        });
+
+        let movesActions = this._produceMap(tokenId, actorType, movesMap, 'npcMove')
+        movesCategory.actions = movesActions;
+        
+        this._combineSubcategoryWithCategory(result, 'Instinct', instinctsCategory);
+        this._combineSubcategoryWithCategory(result, 'monster moves', movesCategory);
+
+        return result;
+    }
+
+    _getTags(actor, tokenId, actorType) {
+        let result = this.initializeEmptyCategory();
+        let tags = actor.data.data.tagsString.split(',').map(t => {
+            let tag = t.trim();
+            return {_id: encodeURIComponent(tag), name: tag};
+        });
+
+        let tagCategory = this.initializeEmptySubcategory();
+        tagCategory.actions = this._produceMap(tokenId, actorType, tags, 'tag');
+
+        this._combineSubcategoryWithCategory(result, 'tags', tagCategory);
+        return result;
+    }
+
+    _getSpecialQualities(actor, tokenId, actorType) {
+        let result = this.initializeEmptyCategory();
+        let tags = actor.data.data.attributes.specialQualities.value.split(',').map(s => {
+            let quality = s.trim();
+            return {_id: encodeURIComponent(quality), name: quality};
+        });
+
+        let tagCategory = this.initializeEmptySubcategory();
+        tagCategory.actions = this._produceMap(tokenId, actorType, tags, 'quality');
+
+        this._combineSubcategoryWithCategory(result, 'special qualities', tagCategory);
+        return result;
+    }
+
+    _getCompendiumEntries(categoryName, compendiumName) {
+        let result = this.initializeEmptyCategory();
+        let pack = game.packs.get(compendiumName);
+        let entriesMap = pack.index.map(e => { return {name: e.name, encodedValue: `gm.${compendiumName}._.${e._id}`, id: e.id } });
+        let entries = this.initializeEmptySubcategory();
+        entries.actions = entriesMap();
+
+        this._combineSubcategoryWithCategory(result, categoryName, entries);
     }
 
     /** @private */
