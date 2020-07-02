@@ -41,9 +41,12 @@ export class PcActionHandlerPf2e {
 
         strikes.forEach(s => {
             let subcategory = this.baseHandler.initializeEmptySubcategory();
-
+            let isAgile = s.traits.some(t => t.name === 'agile');
+            let map = isAgile ? -4 : -5;
+            let bonus = s.totalModifier;
             let variantsMap = s.variants.map(function (v) {
-                let name = v.label.lastIndexOf('+') >= 0 ? v.label.slice(v.label.lastIndexOf('+')-1) : v.label.slice(v.label.lastIndexOf('-')-1);
+                let name = bonus >= 0 ? `+${bonus}` : `${bonus}`;
+                bonus -= map;
                 return {_id: encodeURIComponent(this.name+`>${this.variants.indexOf(v)}`), name: name }
             }.bind(s));
             subcategory.actions = this.baseHandler._produceMap(tokenId, actorType, variantsMap, macroType);
