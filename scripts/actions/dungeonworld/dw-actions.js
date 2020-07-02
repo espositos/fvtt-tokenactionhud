@@ -4,14 +4,22 @@ import * as settings from '../../settings.js';
 export class ActionHandlerDw extends ActionHandler {
     constructor () {
         super();
-        let gmmoves = null;
-        let charts = null;
-        let treasure = null;
     }
 
     /** @override */
     async buildActionList(token) {
         let result = this.initializeEmptyActionList();
+
+        if (game.user.isGM) {
+            result.tokenId = 'gm';
+            result.actorId = 'gm';
+            let gmmoves = await this._getCompendiumEntries('GM Moves', 'dungeonworld.gm-movesprincipals');
+            let charts = await this._getCompendiumEntries('charts', 'dungeonworld.charts');
+            let treasure = await this._getCompendiumEntries('tables', 'dungeonworld.rollable-tables');
+            this._combineCategoryWithList(result, 'GM Moves', gmmoves);
+            this._combineCategoryWithList(result, 'charts', charts);
+            this._combineCategoryWithList(result, 'treasure', treasure);
+        }
 
         if (!token)
             return result;
@@ -28,14 +36,6 @@ export class ActionHandlerDw extends ActionHandler {
         result.actorId = actor._id;
         let actorType = actor.data.type;
 
-        if (game.user.isGM) {
-            this.gmmoves = await this._getCompendiumEntries('GM Moves', 'dungeonworld.gm-movesprincipals');
-            this.charts = await this._getCompendiumEntries('charts', 'dungeonworld.charts');
-            this.treasure = await this._getCompendiumEntries('tables', 'dungeonworld.rollable-tables');
-            this._combineCategoryWithList(result, 'GM moves', this.gmmoves);
-            this._combineCategoryWithList(result, 'charts', this.charts);
-            this._combineCategoryWithList(result, 'treasure', this.treasure);
-        }
         if (actorType === 'npc') {
             let damage = this._getDamage(actor, tokenId, actorType);
             let tags = this._getTags(actor, tokenId, actorType);
