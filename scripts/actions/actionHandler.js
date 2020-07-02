@@ -1,7 +1,7 @@
 export class ActionHandler {
     constructor() {}
 
-    buildActionList(token) {};
+    async buildActionList(token) {};
 
     initializeEmptySubcategory() {
         return {

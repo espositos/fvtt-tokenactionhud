@@ -97,19 +97,21 @@ export class RollHandlerBaseDw extends RollHandler {
 
     _handleTextNpc(macroType, event, tokenId, actionId) {
         let actor = super.getActor(tokenId);
+        let action = decodeURIComponent(actionId);
 
         let title = macroType.charAt(0).toUpperCase() + macroType.slice(1);
         let templateData = {
             title: title,
-            details: actionId,
+            details: action,
         };
-        canvas.tokens.controlled[0].actor.rollMove(formula, actor, {}, templateData);
+        canvas.tokens.controlled[0].actor.rollMove(null, actor, {}, templateData);
     }
 
     _handleCompendium(macroType, event, tokenId, actionId) {
-        let pack = game.pack.get(tokenId);
-        let entry = pack.getEntry(actionId);
+        let compendiumName = tokenId.replace('>', '.');
+        console.log(compendiumName, actionId);
+        let pack = game.packs.get(compendiumName);
 
-        entry.sheet.render(true);
+        pack.getEntity(actionId).then(e => e.sheet.render(true));
     }
 }

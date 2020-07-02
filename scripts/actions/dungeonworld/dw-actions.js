@@ -10,7 +10,7 @@ export class ActionHandlerDw extends ActionHandler {
     }
 
     /** @override */
-    buildActionList(token) {
+    async buildActionList(token) {
         let result = this.initializeEmptyActionList();
 
         if (!token)
@@ -29,9 +29,9 @@ export class ActionHandlerDw extends ActionHandler {
         let actorType = actor.data.type;
 
         if (game.user.isGM) {
-            this.gmmoves = this._getCompendiumEntries('GM Moves', 'dungeonworld.gm-movesprincipals');
-            this.charts = this._getCompendiumEntries('charts', 'dungeonworld.charts');
-            this.treasure = this._getCompendiumEntries('tables', 'dungeonworld.rollable-tables');
+            this.gmmoves = await this._getCompendiumEntries('GM Moves', 'dungeonworld.gm-movesprincipals');
+            this.charts = await this._getCompendiumEntries('charts', 'dungeonworld.charts');
+            this.treasure = await this._getCompendiumEntries('tables', 'dungeonworld.rollable-tables');
             this._combineCategoryWithList(result, 'GM moves', this.gmmoves);
             this._combineCategoryWithList(result, 'charts', this.charts);
             this._combineCategoryWithList(result, 'treasure', this.treasure);
@@ -157,7 +157,7 @@ export class ActionHandlerDw extends ActionHandler {
         let movesCategory = this.initializeEmptySubcategory();
         var movesRegex = new RegExp('<li(|\s+[^>]*)>(.*?)<\/li\s*>', 'g');
         var movesMap = Array.from(biography.matchAll(movesRegex)).map(m => {
-            move = m[2];
+            let move = m[2];
             let encodedValue = encodeURIComponent(move);
         return {data: {_id: encodedValue}, name: move};
         });
@@ -207,14 +207,18 @@ export class ActionHandlerDw extends ActionHandler {
         return result;
     }
 
-    _getCompendiumEntries(categoryName, compendiumName) {
+    async _getCompendiumEntries(categoryName, compendiumName) {
         let result = this.initializeEmptyCategory();
         let pack = game?.packs?.get(compendiumName);
-        console.log(pack);
+
         if (!pack)
             return;
 
-        let entriesMap = pack.index.map(e => { return {name: e.name, encodedValue: `gm.compendium.${compendiumName}.${e._id}`, id: e.id } });
+        let packEntries = pack.index.length > 0 ? pack.index : await pack.getIndex();
+        
+        let safeCompendiumName = compendiumName.replace('.', '>')
+
+        let entriesMap = packEntries.map(e => { return {name: e.name, encodedValue: `gm.compendium.${safeCompendiumName}.${e._id}`, id: e.id } })
         let entries = this.initializeEmptySubcategory();
         entries.actions = entriesMap;
 

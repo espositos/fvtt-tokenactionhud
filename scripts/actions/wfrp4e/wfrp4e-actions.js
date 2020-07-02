@@ -6,7 +6,7 @@ export class ActionHandlerWfrp extends ActionHandler {
     }    
 
     /** @override */
-    buildActionList(token) {
+    async buildActionList(token) {
         let result = { "tokenId": "", "actorId": "", "categories": {}};
 
         if (!token) {
