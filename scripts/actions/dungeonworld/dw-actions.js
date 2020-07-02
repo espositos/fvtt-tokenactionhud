@@ -6,6 +6,7 @@ export class ActionHandlerDw extends ActionHandler {
         super();
         const gmmoves = this._getCompendiumEntries('GM Moves', 'gm-movesprincipals');
         const charts = this._getCompendiumEntries('charts', 'charts');
+        const treasure = this._getCompendiumEntries('treasure', 'treasure');
     }
 
     /** @override */
@@ -36,8 +37,12 @@ export class ActionHandlerDw extends ActionHandler {
             this._combineCategoryWithList(result, 'damage', damage);
             this._combineCategoryWithList(result, 'tags', tags);
             this._combineCategoryWithList(result, 'special qualities', specialQualities);
-            this._combineCategoryWithList(result, 'GM moves', this.gmmoves);
-            this._combineCategoryWithList(result, 'Charts', this.charts);
+
+            if (game.user.isGM) {
+                this._combineCategoryWithList(result, 'GM moves', this.gmmoves);
+                this._combineCategoryWithList(result, 'charts', this.charts);
+                this._combineCategoryWithList(result, 'treasure', this.treasure);
+            }
         } else if (actorType === 'character') {
             let damage = this._getDamage(actor, tokenId, actorType);
             let startingMoves = this._getMovesByType(actor, tokenId, actorType, 'starting');
