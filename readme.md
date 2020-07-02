@@ -32,6 +32,8 @@ Should be able to support most systems, although currently limited to DND5e, PF2
 
 # Support
 For questions, feature requests, or bug reports, feel free to contact me on the Foundry Discord (^ and stick#0520) or open an issue here directly.
+* Feel free to submit pull requests with a justification of your change, or ask me before starting.
+* The HUD's layout could do with some love. If you think you can improve things and know how your way around CSS, please get in touch!
 
 # Thanks
 Enormous thanks goes to the following people for their help in getting the HUD to its current state:

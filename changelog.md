@@ -1,5 +1,9 @@
 # Changelog
 
+## DUNGEON WORLD
+### Added
+- Support for PCs, NPCs, and GMs
+
 ## [0.3.0] 
 ### Changed
 - PF2E - separated NPC and PC action list logic into their own classes.
