@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.1] 
+### Bugfix
+- PF2E: fix double minus in front of negative monster MAP
+- DND5E: correctly allow cantrips through the nonpreparable filter
+
+### Changed
+- Add transparent border to catalogue buttons to prevent movement (thanks to ZBell)
+- PF2E: Improve MAP logic for PCs
+
 ## [0.3.0] 
 ### Changed
 - PF2E - separated NPC and PC action list logic into their own classes.
