@@ -38,17 +38,31 @@ export class PcActionHandlerPf2e {
         let result = this.baseHandler.initializeEmptyCategory();
 
         let strikes = actor.data.data.actions.filter(a => a.type === macroType);
+        
+        let calculateAttackPenalty = settings.get('calculateAttackPenalty')
 
         strikes.forEach(s => {
             let subcategory = this.baseHandler.initializeEmptySubcategory();
-            let isAgile = s.traits.some(t => t.name === 'agile');
-            let map = isAgile ? -4 : -5;
-            let bonus = s.totalModifier;
+            let map = s.traits.some(t => t.name === 'agile') ? -4 : -5;
+            let attackMod = s.totalModifier;
+            
+            let currentMap = 0;
+            let currentBonus = attackMod;
+            let calculatePenalty = calculateAttackPenalty;
+
             let variantsMap = s.variants.map(function (v) {
-                let name = bonus >= 0 ? `+${bonus}` : `${bonus}`;
-                bonus -= map;
+                let name;
+                if (currentBonus === attackMod || calculatePenalty) {
+                    name = bonus >= 0 ? `+${bonus}` : `${bonus}`;
+                }
+                else {
+                    name = currentMap >= 0 ? `+${currentMap}` : `${currentMap}`;
+                }
+                currentMap -= map;
+                currentBonus -= map;
                 return {_id: encodeURIComponent(this.name+`>${this.variants.indexOf(v)}`), name: name }
             }.bind(s));
+
             subcategory.actions = this.baseHandler._produceMap(tokenId, actorType, variantsMap, macroType);
             
             subcategory.actions.push({name: 'Damage', encodedValue: `${actorType}.${macroType}.${tokenId}.${encodeURIComponent(s.name+'>damage')}`, id: encodeURIComponent(s.name+'>damage')})

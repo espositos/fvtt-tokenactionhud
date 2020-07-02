@@ -39,24 +39,29 @@ export class NpcActionHandlerPf2e {
 
         let strikes = actor.items.filter(a => a.type === 'melee');
 
+        let calculateAttackPenalty = settings.get('calculateAttackPenalty')
+
         strikes.forEach(s => {
             let subcategory = this.baseHandler.initializeEmptySubcategory();
 
             let variantsMap = [];
-            let penalty = s.data.isAgile ? 4 : 5;
-            let bonusValue;
+            let map = s.data.isAgile ? 4 : 5;
+            let attackMod = s.data.data.bonus.total;
+            
+            let currentMap = 0;
+            let currentBonus = attackMod;
+
             for (let i = 0; i < 3; i++) {
-                if (!bonusValue)
-                    bonusValue = s.data.data.bonus.value;
-                else
-                    bonusValue -= penalty;
+                if (currentBonus === attackMod || calculateAttackPenalty) {
+                    name = bonus >= 0 ? `+${bonus}` : `${bonus}`;
+                }
+                else {
+                    name = currentMap >= 0 ? `+${currentMap}` : `${currentMap}`;
+                }
+                currentMap -= map;
+                currentBonus -= map;
 
-                if (bonusValue >= 0)
-                    bonusValue = `+${bonusValue}`;
-                else
-                    bonusValue = `${bonusValue}`;
-
-                variantsMap.push({_id: `${s.data._id}>${i}`, name: bonusValue});
+                variantsMap.push({_id: `${s.data._id}>${i}`, name: name});
             }
                 
             subcategory.actions = this.baseHandler._produceMap(tokenId, actorType, variantsMap, macroType);
