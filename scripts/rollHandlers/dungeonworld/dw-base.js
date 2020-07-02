@@ -65,7 +65,7 @@ export class RollHandlerBaseDw extends RollHandler {
 
         let flavour = damage.piercing;
 
-        let formula = `${damageDie}+${damageMod}`
+        let formula = damageMod > 0 ? `${damageDie}+${damageMod}` : damageDie;
 
         let templateData = {
             title: `Damage`,

@@ -4,9 +4,9 @@ import * as settings from '../../settings.js';
 export class ActionHandlerDw extends ActionHandler {
     constructor () {
         super();
-        const gmmoves = this._getCompendiumEntries('GM Moves', 'gm-movesprincipals');
-        const charts = this._getCompendiumEntries('charts', 'charts');
-        const treasure = this._getCompendiumEntries('treasure', 'treasure');
+        let gmmoves = null;
+        let charts = null;
+        let treasure = null;
     }
 
     /** @override */
@@ -27,7 +27,15 @@ export class ActionHandlerDw extends ActionHandler {
 
         result.actorId = actor._id;
         let actorType = actor.data.type;
-        
+
+        if (game.user.isGM) {
+            this.gmmoves = this._getCompendiumEntries('GM Moves', 'dungeonworld.gm-movesprincipals');
+            this.charts = this._getCompendiumEntries('charts', 'dungeonworld.charts');
+            this.treasure = this._getCompendiumEntries('tables', 'dungeonworld.rollable-tables');
+            this._combineCategoryWithList(result, 'GM moves', this.gmmoves);
+            this._combineCategoryWithList(result, 'charts', this.charts);
+            this._combineCategoryWithList(result, 'treasure', this.treasure);
+        }
         if (actorType === 'npc') {
             let damage = this._getDamage(actor, tokenId, actorType);
             let tags = this._getTags(actor, tokenId, actorType);
@@ -37,12 +45,6 @@ export class ActionHandlerDw extends ActionHandler {
             this._combineCategoryWithList(result, 'damage', damage);
             this._combineCategoryWithList(result, 'tags', tags);
             this._combineCategoryWithList(result, 'special qualities', specialQualities);
-
-            if (game.user.isGM) {
-                this._combineCategoryWithList(result, 'GM moves', this.gmmoves);
-                this._combineCategoryWithList(result, 'charts', this.charts);
-                this._combineCategoryWithList(result, 'treasure', this.treasure);
-            }
         } else if (actorType === 'character') {
             let damage = this._getDamage(actor, tokenId, actorType);
             let startingMoves = this._getMovesByType(actor, tokenId, actorType, 'starting');
@@ -59,7 +61,9 @@ export class ActionHandlerDw extends ActionHandler {
             this._combineCategoryWithList(result, 'spells', spells);
             this._combineCategoryWithList(result, 'equipment', equipment);
             this._combineCategoryWithList(result, 'abilities', abilities);
-        }        
+        }
+
+        
 
         return result;
     }
@@ -142,7 +146,7 @@ export class ActionHandlerDw extends ActionHandler {
         let instinctsCategory = this.initializeEmptySubcategory();
         let instinctRegex = new RegExp('<p(|\s+[^>]*)>(Instinct:.*?)<\/p\s*>', 'g')
         let instinctMap = Array.from(biography.matchAll(instinctRegex)).map(m => {
-            move = m[2];
+            let move = m[2];
             let encodedValue = encodeURIComponent(move);
         return {data: {_id: encodedValue}, name: move};
         });
@@ -171,7 +175,11 @@ export class ActionHandlerDw extends ActionHandler {
         let result = this.initializeEmptyCategory();
         let tags = actor.data.data.tagsString.split(',').map(t => {
             let tag = t.trim();
-            return {_id: encodeURIComponent(tag), name: tag};
+            if (tag.length === 0)
+                return;
+
+            let encodedValue = encodeURIComponent(tag);
+            return { data: {_id: encodedValue}, name: tag};
         });
 
         let tagCategory = this.initializeEmptySubcategory();
@@ -183,30 +191,40 @@ export class ActionHandlerDw extends ActionHandler {
 
     _getSpecialQualities(actor, tokenId, actorType) {
         let result = this.initializeEmptyCategory();
-        let tags = actor.data.data.attributes.specialQualities.value.split(',').map(s => {
+        let qualities = actor.data.data.attributes.specialQualities.value.split(',').map(s => {
             let quality = s.trim();
-            return {_id: encodeURIComponent(quality), name: quality};
+            if (quality.length === 0)
+                return;
+
+            let encodedValue = encodeURIComponent(quality);
+            return { data: {_id: encodedValue}, name: quality};
         });
 
-        let tagCategory = this.initializeEmptySubcategory();
-        tagCategory.actions = this._produceMap(tokenId, actorType, tags, 'quality');
+        let qualityCategory = this.initializeEmptySubcategory();
+        qualityCategory.actions = this._produceMap(tokenId, actorType, qualities, 'quality');
 
-        this._combineSubcategoryWithCategory(result, 'special qualities', tagCategory);
+        this._combineSubcategoryWithCategory(result, 'special qualities', qualityCategory);
         return result;
     }
 
     _getCompendiumEntries(categoryName, compendiumName) {
         let result = this.initializeEmptyCategory();
-        let pack = game.packs.get(compendiumName);
+        let pack = game?.packs?.get(compendiumName);
+        console.log(pack);
+        if (!pack)
+            return;
+
         let entriesMap = pack.index.map(e => { return {name: e.name, encodedValue: `gm.compendium.${compendiumName}.${e._id}`, id: e.id } });
         let entries = this.initializeEmptySubcategory();
-        entries.actions = entriesMap();
+        entries.actions = entriesMap;
 
         this._combineSubcategoryWithCategory(result, categoryName, entries);
+
+        return result;
     }
 
     /** @private */
     _produceMap(tokenId, actorType, itemSet, macroType) {
-        return itemSet.map(i => { return { 'name': i.name, 'encodedValue': `${actorType}.${macroType}.${tokenId}.${i.data._id}`, 'id': i.data._id };});
+        return itemSet.filter(i => !!i).map(i => { return { 'name': i.name, 'encodedValue': `${actorType}.${macroType}.${tokenId}.${i.data._id}`, 'id': i.data._id };});
     }
 }
