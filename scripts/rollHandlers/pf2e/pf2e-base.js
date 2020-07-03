@@ -47,7 +47,7 @@ export class RollHandlerBasePf2e extends RollHandler {
                 this._rollItem(event, tokenId, actionId);
                 break;
             case 'spell':
-                this._rollSpell(event, tokenId, action);
+                this._rollSpell(event, tokenId, actionId);
         }
         
     }

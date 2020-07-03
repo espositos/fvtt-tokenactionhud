@@ -31,7 +31,7 @@ export function registerSettings(app, updateSettings) {
     
     game.settings.register(app,'printSpellCard', {
         name: "Print spell card to chat",
-        hint: "If disabled, left-clicking a spell will roll attack, right-clicking will roll damage. If attack or damage are not applicable, the other other will be rolled. If neither are applicable, the spell card will be printed to chat anyway.",
+        hint: "If disabled, left-clicking a spell will roll attack, right-clicking will roll damage. If one is not applicable, both clicks do the same thing. If neither are applicable, the spell card will be printed to chat anyway.",
         scope: "client",
         config: true,
         type: Boolean,
