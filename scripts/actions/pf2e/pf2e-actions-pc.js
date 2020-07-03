@@ -79,16 +79,16 @@ export class PcActionHandlerPf2e {
         let macroType = 'action';
         let result = this.baseHandler.initializeEmptyCategory();
 
-        let filteredActions = (actor.data.data.actions ?? []).filter(a => a.type === macroType);
+        let filteredActions = (actor.items ?? []).filter(a => a.type === macroType);
 
         let actions = this.baseHandler.initializeEmptySubcategory();
-        actions.actions = this.baseHandler._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.actionType === 'action'), macroType);
+        actions.actions = this.baseHandler._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'action'), macroType);
 
         let reactions = this.baseHandler.initializeEmptySubcategory();
-        reactions.actions = this.baseHandler._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.actionType === 'reaction'), macroType);
+        reactions.actions = this.baseHandler._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'reaction'), macroType);
 
         let free = this.baseHandler.initializeEmptySubcategory();
-        free.actions = this.baseHandler._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.actionType === 'free'), macroType);
+        free.actions = this.baseHandler._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'free'), macroType);
 
         this.baseHandler._combineSubcategoryWithCategory(result, 'actions', actions);
         this.baseHandler._combineSubcategoryWithCategory(result, 'reactions', reactions);
