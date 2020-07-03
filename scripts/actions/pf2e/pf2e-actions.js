@@ -79,6 +79,29 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
+    _getActionsList(actor, tokenId, actorType) {
+        let macroType = 'action';
+        let result = this.initializeEmptyCategory();
+
+        let filteredActions = (actor.items ?? []).filter(a => a.type === macroType);
+
+        let actions = this.initializeEmptySubcategory();
+        actions.actions = this._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'action'), macroType);
+
+        let reactions = this.initializeEmptySubcategory();
+        reactions.actions = this._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'reaction'), macroType);
+
+        let free = this.initializeEmptySubcategory();
+        free.actions = this._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'free'), macroType);
+
+        this._combineSubcategoryWithCategory(result, 'actions', actions);
+        this._combineSubcategoryWithCategory(result, 'reactions', reactions);
+        this._combineSubcategoryWithCategory(result, 'free actions', free);
+
+        return result;
+    }
+
+    /** @private */
     _getSpellsList(actor, tokenId, actorType) {
         let result = this.initializeEmptyCategory();
 

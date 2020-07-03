@@ -10,7 +10,7 @@ export class PcActionHandlerPf2e {
         let actorType = 'character';
 
         let strikes = this._getStrikesList(actor, tokenId, actorType);
-        let actions = this._getActionsList(actor, tokenId, actorType);
+        let actions = this.baseHandler._getActionsList(actor, tokenId, actorType);
         let items = this.baseHandler._getItemsList(actor, tokenId, actorType);
         let spells = this.baseHandler._getSpellsList(actor, tokenId, actorType);
         let feats = this.baseHandler._getFeatsList(actor, tokenId, actorType);
@@ -70,29 +70,6 @@ export class PcActionHandlerPf2e {
 
             this.baseHandler._combineSubcategoryWithCategory(result, s.name, subcategory);
         });
-
-        return result;
-    }
-
-    /** @private */
-    _getActionsList(actor, tokenId, actorType) {
-        let macroType = 'action';
-        let result = this.baseHandler.initializeEmptyCategory();
-
-        let filteredActions = (actor.items ?? []).filter(a => a.type === macroType);
-
-        let actions = this.baseHandler.initializeEmptySubcategory();
-        actions.actions = this.baseHandler._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'action'), macroType);
-
-        let reactions = this.baseHandler.initializeEmptySubcategory();
-        reactions.actions = this.baseHandler._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'reaction'), macroType);
-
-        let free = this.baseHandler.initializeEmptySubcategory();
-        free.actions = this.baseHandler._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'free'), macroType);
-
-        this.baseHandler._combineSubcategoryWithCategory(result, 'actions', actions);
-        this.baseHandler._combineSubcategoryWithCategory(result, 'reactions', reactions);
-        this.baseHandler._combineSubcategoryWithCategory(result, 'free actions', free);
 
         return result;
     }
