@@ -9,16 +9,20 @@ export class RollHandlerBase5e extends RollHandler {
     /** @override */
     handleActionEvent(event, encodedValue) {
         settings.Logger.debug(encodedValue);
-        let payload = encodedValue.split('.');
+        let payload = encodedValue.split('|');
         
-        if (payload.length != 3) {
+        if (payload.length != 4) {
             super.throwInvalidValueErr();
         }
         
-        let macroType = payload[0];
-        let tokenId = payload[1];
-        let actionId = payload[2];
-        
+        let actorType = payload[0];
+        let macroType = payload[1];
+        let tokenId = payload[2];
+        let actionId = payload[3];
+
+        if (this.handleCompendiums(macroType, event, tokenId, actionId))
+            return;
+
         switch (macroType) {
             case "ability":
                 this.rollAbilityMacro(event, tokenId, actionId);
@@ -61,12 +65,7 @@ export class RollHandlerBase5e extends RollHandler {
     rollItemMacro(event, tokenId, itemId) {
         let actor = super.getActor(tokenId);
         let item = actor.getOwnedItem(itemId);
-    
-        if (!item) {
-            settings.Logger.error(`No item found with id ${itemId}`);
-            return;
-        }
-    
+        
         if (item.data.type === "spell")
             return actor.useSpell(item);
     

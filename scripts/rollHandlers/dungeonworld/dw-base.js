@@ -7,7 +7,7 @@ export class RollHandlerBaseDw extends RollHandler {
     }
     
     handleActionEvent(event, encodedValue) {
-        let payload = encodedValue.split('.');
+        let payload = encodedValue.split('|');
         settings.Logger.debug(encodedValue);
         if (payload.length != 4) {
             super.throwInvalidValueErr();
@@ -17,6 +17,9 @@ export class RollHandlerBaseDw extends RollHandler {
         let macroType = payload[1];
         let tokenId = payload[2];
         let actionId = payload[3];
+
+        if (this.handleCompendiums(macroType, event, tokenId, actionId))
+            return;
 
         if (charType === 'character') {
             switch (macroType) {
@@ -46,14 +49,7 @@ export class RollHandlerBaseDw extends RollHandler {
                     this._handleTextNpc(macroType, event, tokenId, actionId);
                     break;
             }
-        }
-        else if (charType === 'gm') {
-            switch (macroType) {
-                case 'compendium':
-                    this._handleCompendium(macroType, event, tokenId, actionId);
-                    break;
-            }   
-        }    
+        }   
     }
 
     _handleDamage(macroType, event, tokenId, actionId) {
@@ -105,13 +101,5 @@ export class RollHandlerBaseDw extends RollHandler {
             details: action,
         };
         canvas.tokens.controlled[0].actor.rollMove(null, actor, {}, templateData);
-    }
-
-    _handleCompendium(macroType, event, tokenId, actionId) {
-        let compendiumName = tokenId.replace('>', '.');
-        console.log(compendiumName, actionId);
-        let pack = game.packs.get(compendiumName);
-
-        pack.getEntity(actionId).then(e => e.sheet.render(true));
     }
 }

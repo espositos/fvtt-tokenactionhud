@@ -89,5 +89,10 @@ Hooks.on('canvasReady', () => {
         game.tokenActionHUD.trySetPos();
     });
 
+    Hooks.on('renderCompendium', (source, html, ) => {
+        if (game.tokenActionHUD.isLinkedCompendium(source?.metadata?.label))
+            game.tokenActionHUD.update();
+    });
+
     game.tokenActionHUD.update();
 });
