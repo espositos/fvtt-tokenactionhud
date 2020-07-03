@@ -242,9 +242,25 @@ export class ActionHandlerPf2e extends ActionHandler {
 
     /** @private */
     _addSpellInfo(s, spell) {
+        this._addComponentsInfo(s, spell);
+        this._addAttackDamageInfo(s, spell);
+    }
+
+    _addComponentsInfo(s, spell) {
         let components = s.data.data.components?.value.split(',');
         let spellInfo = components.map(c => c.trim().charAt(0).toUpperCase()).join('');
         spell.info1 = spellInfo;
+    }
+
+    _addAttackDamageInfo(s, spell) {
+        let info = [];
+        if (spell.data.data.spellType.value === 'attack')
+            info.push('Atk');
+
+        if (s.data.data.damage.value)
+            info.push('Dmg');
+
+        s.info2 = info.join(', ');
     }
 
     /** @private */
