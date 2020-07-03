@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.2] 2020-07-03
+### Bugfix
+- PF2E: Actions weren't showing for PCs
+
+### Added
+- PF2E: setting between sending spell card to chat or using left and right click to roll attack and damage (with shift left-click and control right-click for bonus dialog)
+
 ## [0.3.1] 2020-07-02
 ### Bugfix
 - PF2E: fix double minus in front of negative monster MAP
