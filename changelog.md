@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.3.2] 2020-07-03
+## [0.3.2] 2020-07-04
 ### Bugfix
 - PF2E: Actions weren't showing for PCs
 
