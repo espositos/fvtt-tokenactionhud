@@ -1,4 +1,4 @@
-import { RollHandler } from "../rollHandler.js";
+import { RollHandler } from '../rollHandler.js';
 import * as settings from '../../settings.js';
 
 export class RollHandlerBaseWfrp4e extends RollHandler {
@@ -7,7 +7,7 @@ export class RollHandlerBaseWfrp4e extends RollHandler {
     }
     
     handleActionEvent(event, encodedValue) {
-        let payload = encodedValue.split('.');
+        let payload = encodedValue.split('|');
         settings.Logger.debug(encodedValue);
         if (payload.length != 3) {
             super.throwInvalidValueErr();
@@ -18,23 +18,33 @@ export class RollHandlerBaseWfrp4e extends RollHandler {
         let actionId = payload[2];
 
         let actor = super.getActor(tokenId);
-        let item = actor.getOwnedItem(actionId).data;
-
         let bypassData = {bypass: !!event.shiftKey};
 
+        if (macroType === 'characteristic')
+            return actor.setupCharacteristic(actionId, bypassData);
+
+        let item = actor.getOwnedItem(actionId);
+        let itemData = item.data;
+
+        let postItem = event.originalEvent.button === 2;
+        if (postItem)
+            return item.postItem();
+
         switch (macroType) {
-            case "weapon":
-                return actor.setupWeapon(item, bypassData);
-            case "spell":
-                return actor.spellDialog(item, bypassData);
-            case "prayer":
-                return actor.setupPrayer(item, bypassData);
-            case "trait":
-                return actor.setupTrait(item, bypassData);
-            case "skill":
-                return actor.setupSkill(item, bypassData);
-            case "characteristic":
-                return actor.setupCharacteristic(item, bypassData);
+            case 'weapon':
+                return actor.setupWeapon(itemData, bypassData);
+            case 'spell':
+                return actor.spellDialog(itemData, bypassData);
+            case 'prayer':
+                return actor.setupPrayer(itemData, bypassData);
+            case 'trait':
+            case 'talent':
+                if (itemData.data.rollable?.value)
+                    return actor.setupTrait(itemData, bypassData);
+                else 
+                    return item.postItem();
+            case 'skill':
+                return actor.setupSkill(itemData, bypassData);
         }
     }
 }

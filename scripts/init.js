@@ -1,16 +1,18 @@
-import * as settings from "./settings.js";
-import { HandlersManager } from "./handlersManager.js";
-import { TokenActionHUD } from "./tokenactionhud.js";
+import * as settings from './settings.js';
+import { HandlersManager } from './handlersManager.js';
+import { TokenActionHUD } from './tokenactionhud.js';
 
 Hooks.on('init', () => {
     Handlebars.registerHelper('cap', function(string) {
+        if (!string || string.length < 1)
+            return '';
         return string[0].toUpperCase() + string.slice(1); 
     });
 
     loadTemplates([
-        "modules/token-action-hud/templates/category.hbs",
-        "modules/token-action-hud/templates/subcategory.hbs",
-        "modules/token-action-hud/templates/action.hbs"
+        'modules/token-action-hud/templates/category.hbs',
+        'modules/token-action-hud/templates/subcategory.hbs',
+        'modules/token-action-hud/templates/action.hbs'
     ]);
 
     let system = game.data.system.id;
@@ -23,7 +25,7 @@ Hooks.on('init', () => {
         let handlerId = settings.get('rollHandler');
         
         if (! (handlerId === 'core' || game.modules.get(handlerId).active) ) {
-            settings.Logger.error(handlerId, "not found, reverting to core roller.")
+            settings.Logger.error(handlerId, 'not found, reverting to core roller.')
             handlerId = 'core';
             settings.set('rollHandler', handlerId);
         }
@@ -90,6 +92,11 @@ Hooks.on('canvasReady', () => {
     });
 
     Hooks.on('renderCompendium', (source, html, ) => {
+        if (game.tokenActionHUD.isLinkedCompendium(source?.metadata?.label))
+            game.tokenActionHUD.update();
+    });
+
+    Hooks.on('deleteCompendium', (source, html, ) => {
         if (game.tokenActionHUD.isLinkedCompendium(source?.metadata?.label))
             game.tokenActionHUD.update();
     });
