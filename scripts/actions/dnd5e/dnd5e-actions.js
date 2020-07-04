@@ -10,10 +10,10 @@ export class ActionHandler5e extends ActionHandler {
     /** @override */
     async buildActionList(token) {
         let result = this.initializeEmptyActionList();
+        await this.addCompendiums(result);
 
-        if (!token) {
+        if (!token)
             return result;
-        }
 
         let tokenId = token.data._id;
 
@@ -21,17 +21,16 @@ export class ActionHandler5e extends ActionHandler {
 
         let actor = token.actor;
 
-        if (!actor) {
+        if (!actor)
             return result;
-        }
 
         result.actorId = actor._id;
+        let actorType = actor.data.type;
+        let items = this._getItemList(actor, tokenId, actorType);
+        let spells = this._getSpellsList(actor, tokenId, actorType);
+        let feats = this._getFeatsList(actor, tokenId, actorType);
         
-        let items = this._getItemList(actor, tokenId);
-        let spells = this._getSpellsList(actor, tokenId);
-        let feats = this._getFeatsList(actor, tokenId);
-        
-        let checks = checkLists.buildChecksList(tokenId);
+        let checks = checkLists.buildChecksList(tokenId, actorType);
     
         this._combineCategoryWithList(result, "items", items);
         this._combineCategoryWithList(result, "spells", spells);
@@ -46,7 +45,7 @@ export class ActionHandler5e extends ActionHandler {
     /** ITEMS **/
     
     /** @private */
-    _getItemList(actor, tokenId) {
+    _getItemList(actor, tokenId, actorType) {
         let validItems = this._filterLongerActions(actor.data.items.filter(i => i.data.quantity > 0));
         let sortedItems = this._sortByItemSort(validItems);
         let macroType = 'item';
@@ -60,21 +59,21 @@ export class ActionHandler5e extends ActionHandler {
         let activeEquipped = this._getActiveEquipment(equipped);
         
         let weapons = activeEquipped.filter(i => i.type == 'weapon');
-        let weaponActions = weapons.map(w => this._buildItem(tokenId, actor, macroType, w));
+        let weaponActions = weapons.map(w => this._buildItem(tokenId, actorType, actor, macroType, w));
     
         let equipment = activeEquipped.filter(i => i.type == 'equipment');
-        let equipmentActions = equipment.map(e => this._buildItem(tokenId, actor, macroType, e));
+        let equipmentActions = equipment.map(e => this._buildItem(tokenId, actorType, actor, macroType, e));
         
         let other = activeEquipped.filter(i => i.type != 'weapon' && i.type != 'equipment')
-        let otherActions = other.map(o => this._buildItem(tokenId, actor, macroType, o));
+        let otherActions = other.map(o => this._buildItem(tokenId, actorType, actor, macroType, o));
     
         let allConsumables = sortedItems.filter(i => i.type == 'consumable');
         
         let consumable = allConsumables.filter(c => c.data.uses.value && c.data.uses.value > 0)
-        let consumableActions = consumable.map(c => this._buildItem(tokenId, actor, macroType, c));
+        let consumableActions = consumable.map(c => this._buildItem(tokenId, actorType, actor, macroType, c));
         
         let inconsumable = allConsumables.filter(c => !(c.data.uses.max || c.data.uses.value) && c.data.consumableType != 'ammo')
-        let incomsumableActions = inconsumable.map(i => this._buildItem(tokenId, actor, macroType, i));
+        let incomsumableActions = inconsumable.map(i => this._buildItem(tokenId, actorType, actor, macroType, i));
         
         let itemsResult = this.initializeEmptyCategory();
             
@@ -118,11 +117,11 @@ export class ActionHandler5e extends ActionHandler {
     /** SPELLS **/
     
     /** @private */
-    _getSpellsList(actor, tokenId) {
+    _getSpellsList(actor, tokenId, actorType) {
         let validSpells = this._filterLongerActions(actor.data.items.filter(i => i.type === 'spell' && i.data.uses.value >= i.data.uses.max));
         validSpells = this._filterNonpreparedSpells(validSpells);
         let spellsSorted = this._sortSpellsByLevel(validSpells);
-        let spells = this._categoriseSpells(actor, tokenId, spellsSorted);
+        let spells = this._categoriseSpells(actor, tokenId, actorType, spellsSorted);
     
         return spells;
     }
@@ -141,7 +140,7 @@ export class ActionHandler5e extends ActionHandler {
     }
     
     /** @private */
-    _categoriseSpells(actor, tokenId, spells) {
+    _categoriseSpells(actor, tokenId, actorType, spells) {
         const powers = this.initializeEmptyCategory();
         const book = this.initializeEmptyCategory();
         const macroType = 'spell';
@@ -214,7 +213,7 @@ export class ActionHandler5e extends ActionHandler {
                 }
             }
             
-            let spell = this._buildItem(tokenId, actor, macroType, s);
+            let spell = this._buildItem(tokenId, actorType, actor, macroType, s);
             
             if (settings.get('showSpellInfo'))
                 this._addSpellInfo(s, spell);
@@ -264,16 +263,16 @@ export class ActionHandler5e extends ActionHandler {
     /** FEATS **/
 
     /** @private */
-    _getFeatsList(actor, tokenId) {
+    _getFeatsList(actor, tokenId, actorType) {
         let validFeats = this._filterLongerActions(actor.data.items.filter(i => i.type == 'feat'));
         let sortedFeats = this._sortByItemSort(validFeats);
-        let feats = this._categoriseFeats(tokenId, actor, sortedFeats);
+        let feats = this._categoriseFeats(tokenId, actor, actorType, sortedFeats);
     
         return feats;
     }
     
     /** @private */
-    _categoriseFeats(tokenId, actor, feats) {
+    _categoriseFeats(tokenId, actor, actorType, feats) {
         let active = this.initializeEmptyActions();
         let passive = this.initializeEmptyActions();
         let lair = this.initializeEmptyActions();
@@ -284,7 +283,7 @@ export class ActionHandler5e extends ActionHandler {
             const activationType = f.data.activation.type;
             const macroType = 'feat';
 
-            let feat = this._buildItem(tokenId, actor, macroType, f);
+            let feat = this._buildItem(tokenId, actor, actorType, macroType, f);
             
             if (!activationType || activationType === '') {
                 passive.actions.push(feat);
@@ -324,8 +323,9 @@ export class ActionHandler5e extends ActionHandler {
     }
 
     /** @private */
-    _buildItem(tokenId, actor, macroType, item) {
-        let result = { 'name': item.name, 'id': item._id, 'encodedValue': `${macroType}.${tokenId}.${item._id}` }
+    _buildItem(tokenId, actorType, actor, macroType, item) {
+        let encodedValue = [actorType, macroType, tokenId, item._id].join(this.delimiter);
+        let result = { 'name': item.name, 'id': item._id, 'encodedValue': encodedValue }
         
         if (item.data.recharge && !item.data.recharge.charged && item.data.recharge.value) {
             result.name += ' (Recharge)';

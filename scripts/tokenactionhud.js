@@ -265,6 +265,11 @@ export class TokenActionHUD extends Application {
         return false;
     }
 
+    isLinkedCompendium(compendiumKey) {
+        settings.Logger.debug('Compendium hook triggered. Checking if compendium is linked.')
+        return this.actions.isLinkedCompendium(compendiumKey);
+    }
+
     /** @private */
     _getTargetToken(controlled) {
         if (controlled.length != 1)

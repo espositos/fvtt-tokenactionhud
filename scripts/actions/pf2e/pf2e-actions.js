@@ -79,6 +79,29 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
+    _getActionsList(actor, tokenId, actorType) {
+        let macroType = 'action';
+        let result = this.initializeEmptyCategory();
+
+        let filteredActions = (actor.items ?? []).filter(a => a.type === macroType);
+
+        let actions = this.initializeEmptySubcategory();
+        actions.actions = this._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'action'), macroType);
+
+        let reactions = this.initializeEmptySubcategory();
+        reactions.actions = this._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'reaction'), macroType);
+
+        let free = this.initializeEmptySubcategory();
+        free.actions = this._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'free'), macroType);
+
+        this._combineSubcategoryWithCategory(result, 'actions', actions);
+        this._combineSubcategoryWithCategory(result, 'reactions', reactions);
+        this._combineSubcategoryWithCategory(result, 'free actions', free);
+
+        return result;
+    }
+
+    /** @private */
     _getSpellsList(actor, tokenId, actorType) {
         let result = this.initializeEmptyCategory();
 
@@ -242,9 +265,26 @@ export class ActionHandlerPf2e extends ActionHandler {
 
     /** @private */
     _addSpellInfo(s, spell) {
+        this._addComponentsInfo(s, spell);
+        if (!settings.get('printSpellCard'))
+            this._addAttackDamageInfo(s, spell);
+    }
+
+    _addComponentsInfo(s, spell) {
         let components = s.data.data.components?.value.split(',');
         let spellInfo = components.map(c => c.trim().charAt(0).toUpperCase()).join('');
         spell.info1 = spellInfo;
+    }
+
+    _addAttackDamageInfo(s, spell) {
+        let info = [];
+        if (s.data.data.spellType.value === 'attack')
+            info.push('Atk');
+
+        if (s.data.data.damage.value)
+            info.push('Dmg');
+
+        spell.info2 = info.join(', ');
     }
 
     /** @private */

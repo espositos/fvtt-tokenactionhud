@@ -4,22 +4,17 @@ import * as settings from '../../settings.js';
 export class ActionHandlerDw extends ActionHandler {
     constructor () {
         super();
+        this.addGmSystemCompendium('moves', 'dungeonworld.gm-movesprincipals', false);
+        this.addGmSystemCompendium('charts', 'dungeonworld.charts', false);
+        this.addGmSystemCompendium('treasure', 'dungeonworld.rollable-tables', false);
     }
 
     /** @override */
     async buildActionList(token) {
         let result = this.initializeEmptyActionList();
 
-        if (game.user.isGM) {
-            result.tokenId = 'gm';
-            result.actorId = 'gm';
-            let gmmoves = await this._getCompendiumEntries('GM Moves', 'dungeonworld.gm-movesprincipals');
-            let charts = await this._getCompendiumEntries('charts', 'dungeonworld.charts');
-            let treasure = await this._getCompendiumEntries('tables', 'dungeonworld.rollable-tables');
-            this._combineCategoryWithList(result, 'GM Moves', gmmoves);
-            this._combineCategoryWithList(result, 'charts', charts);
-            this._combineCategoryWithList(result, 'treasure', treasure);
-        }
+        if (settings.get('showGmCompendiums'))
+            await this.addCompendiums(result);
 
         if (!token)
             return result;
@@ -71,7 +66,8 @@ export class ActionHandlerDw extends ActionHandler {
     _getDamage(actor, tokenId, actorType) {
         let result = this.initializeEmptyCategory();
         let damageCategory = this.initializeEmptySubcategory();
-        damageCategory.actions.push({name: 'Damage', encodedValue: `${actorType}.damage.${tokenId}.damage`, 'id': 'damage' })
+        let encodedValue = [actorType, 'damage', tokenId, 'damage'].join(this.delimiter);
+        damageCategory.actions.push({name: 'Damage', encodedValue: encodedValue, 'id': 'damage' })
 
         this._combineSubcategoryWithCategory(result, 'damage', damageCategory);
 
@@ -207,28 +203,11 @@ export class ActionHandlerDw extends ActionHandler {
         return result;
     }
 
-    async _getCompendiumEntries(categoryName, compendiumName) {
-        let result = this.initializeEmptyCategory();
-        let pack = game?.packs?.get(compendiumName);
-
-        if (!pack)
-            return;
-
-        let packEntries = pack.index.length > 0 ? pack.index : await pack.getIndex();
-        
-        let safeCompendiumName = compendiumName.replace('.', '>')
-
-        let entriesMap = packEntries.map(e => { return {name: e.name, encodedValue: `gm.compendium.${safeCompendiumName}.${e._id}`, id: e.id } })
-        let entries = this.initializeEmptySubcategory();
-        entries.actions = entriesMap;
-
-        this._combineSubcategoryWithCategory(result, categoryName, entries);
-
-        return result;
-    }
-
     /** @private */
     _produceMap(tokenId, actorType, itemSet, macroType) {
-        return itemSet.filter(i => !!i).map(i => { return { 'name': i.name, 'encodedValue': `${actorType}.${macroType}.${tokenId}.${i.data._id}`, 'id': i.data._id };});
+        return itemSet.filter(i => !!i).map(i => {
+            let encodedValue = [actorType, macroType, tokenId, i.data._id].join(this.delimiter);
+            return { name: i.name, encodedValue: encodedValue, id: i.data._id };
+        });
     }
 }
