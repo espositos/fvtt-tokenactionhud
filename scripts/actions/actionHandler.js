@@ -1,6 +1,6 @@
 export class ActionHandler {    
-    linkedSystemCompendiumsGm = {};
-    linkedSystemCompendiumsPlayer = {};
+    linkedCompendiumsGm = {};
+    linkedCompendiumsPlayer = {};
     delimiter = '|';
 
     constructor() {
@@ -21,22 +21,20 @@ export class ActionHandler {
     }
 
     addGmSystemCompendium(name, key, isMacro) {
-        this.linkedSystemCompendiumsGm[name] = {key: key, isMacro: isMacro};
+        this.linkedCompendiumsGm[name] = {key: key, isMacro: isMacro};
     }
 
     addPlayerSystemCompendium(name, key, isMacro) {
-        this.linkedSystemCompendiumsPlayer[name] = {key: key, isMacro: isMacro};
+        this.linkedCompendiumsPlayer[name] = {key: key, isMacro: isMacro};
     }
 
     async addCompendiums(actionList) {
         let actorType = game.user.isGM ? 'gm' : 'player';
-        let hudCompendiums = game.user.isGM ? this.linkedCompendiumsGm : this.linkedCompendiumsPlayer;
-        let systemCompendiums = game.user.isGM ? this.linkedSystemCompendiumsGm : this.linkedSystemCompendiumsPlayer;
+        let systemCompendiums = game.user.isGM ? this.linkedCompendiumsGm : this.linkedCompendiumsPlayer;
 
         actionList.tokenId = actorType;
         actionList.actorId = actorType;
 
-        await this._addCompendiums(actionList, actorType, hudCompendiums);
         await this._addCompendiums(actionList, actorType, systemCompendiums);
     }
 
