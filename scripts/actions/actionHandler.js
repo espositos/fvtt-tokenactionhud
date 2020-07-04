@@ -1,16 +1,7 @@
-export class ActionHandler {
-    linkedCompendiumsGm = {
-        macros: { key: 'world.token-action-hud.gm-macros', isMacros: true},
-        journals: { key: 'world.token-action-hud.gm-journals', isMacros: false},
-        tables: { key: 'world.token-action-hud.gm-tables', isMacros: false}
-    };
-    linkedCompendiumsPlayer = {
-        macros: { key: 'world.token-action-hud.player-macros', isMacros: true},
-        journals: { key: 'world.token-action-hud.player-journals', isMacros: false}
-    };
-    
+export class ActionHandler {    
     linkedSystemCompendiumsGm = {};
     linkedSystemCompendiumsPlayer = {};
+    delimiter = '|';
 
     constructor() {
     }

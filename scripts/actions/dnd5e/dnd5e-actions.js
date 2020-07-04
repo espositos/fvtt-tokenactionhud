@@ -324,7 +324,8 @@ export class ActionHandler5e extends ActionHandler {
 
     /** @private */
     _buildItem(tokenId, actorType, actor, macroType, item) {
-        let result = { 'name': item.name, 'id': item._id, 'encodedValue': `${actorType}|${macroType}|${tokenId}|${item._id}` }
+        let encodedValue = [actorType, macroType, tokenId, item._id].join(this.delimiter);
+        let result = { 'name': item.name, 'id': item._id, 'encodedValue': encodedValue }
         
         if (item.data.recharge && !item.data.recharge.charged && item.data.recharge.value) {
             result.name += ' (Recharge)';

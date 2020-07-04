@@ -12,7 +12,9 @@ export class ActionHandlerDw extends ActionHandler {
     /** @override */
     async buildActionList(token) {
         let result = this.initializeEmptyActionList();
-        await this.addCompendiums(result);
+
+        if (settings.get('showGmCompendiums'))
+            await this.addCompendiums(result);
 
         if (!token)
             return result;
@@ -64,7 +66,8 @@ export class ActionHandlerDw extends ActionHandler {
     _getDamage(actor, tokenId, actorType) {
         let result = this.initializeEmptyCategory();
         let damageCategory = this.initializeEmptySubcategory();
-        damageCategory.actions.push({name: 'Damage', encodedValue: `${actorType}|damage|${tokenId}|damage`, 'id': 'damage' })
+        let encodedValue = [actorType, 'damage', tokenId, 'damage'].join(this.delimiter);
+        damageCategory.actions.push({name: 'Damage', encodedValue: encodedValue, 'id': 'damage' })
 
         this._combineSubcategoryWithCategory(result, 'damage', damageCategory);
 
@@ -202,6 +205,9 @@ export class ActionHandlerDw extends ActionHandler {
 
     /** @private */
     _produceMap(tokenId, actorType, itemSet, macroType) {
-        return itemSet.filter(i => !!i).map(i => { return { 'name': i.name, 'encodedValue': `${actorType}|${macroType}|${tokenId}|${i.data._id}`, 'id': i.data._id };});
+        return itemSet.filter(i => !!i).map(i => {
+            let encodedValue = [actorType, macroType, tokenId, i.data._id].join(this.delimiter);
+            return { name: i.name, encodedValue: encodedValue, id: i.data._id };
+        });
     }
 }
