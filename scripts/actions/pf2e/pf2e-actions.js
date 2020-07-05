@@ -70,10 +70,10 @@ export class ActionHandlerPf2e extends ActionHandler {
         let consumables = this.initializeEmptySubcategory();
         consumables.actions = consumableActions;
  
-        this._combineSubcategoryWithCategory(result, 'weapons', weapons);
-        this._combineSubcategoryWithCategory(result, 'armour', armour);
-        this._combineSubcategoryWithCategory(result, 'equipment', equipment);
-        this._combineSubcategoryWithCategory(result, 'consumables', consumables);
+        this._combineSubcategoryWithCategory(result, game.i18n.localize('PF2E.InventoryWeaponsHeader'), weapons);
+        this._combineSubcategoryWithCategory(result, game.i18n.localize('PF2E.InventoryArmorHeader'), armour);
+        this._combineSubcategoryWithCategory(result, game.i18n.localize('PF2E.InventoryEquipmentHeader'), equipment);
+        this._combineSubcategoryWithCategory(result, game.i18n.localize('PF2E.InventoryConsumablesHeader'), consumables);
 
         return result;
     }
@@ -94,9 +94,9 @@ export class ActionHandlerPf2e extends ActionHandler {
         let free = this.initializeEmptySubcategory();
         free.actions = this._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'free'), macroType);
 
-        this._combineSubcategoryWithCategory(result, 'actions', actions);
-        this._combineSubcategoryWithCategory(result, 'reactions', reactions);
-        this._combineSubcategoryWithCategory(result, 'free actions', free);
+        this._combineSubcategoryWithCategory(result, game.i18n.localize('PF2E.TabActions'), actions);
+        this._combineSubcategoryWithCategory(result, game.i18n.localize('PF2E.ActionsReactionsHeader'), reactions);
+        this._combineSubcategoryWithCategory(result, game.i18n.localize('PF2E.ActionsFreeActionsHeader'), free);
 
         return result;
     }
@@ -111,7 +111,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let spellsSorted = this._sortSpellsByLevel(items);
         let spellCategories = this._categoriseSpells(actor, tokenId, actorType, spellsSorted);
         
-        this._combineSubcategoryWithCategory(result, 'spells', spellCategories);
+        this._combineSubcategoryWithCategory(result, game.i18n.localize('PF2E.TabSpellbookLabel'), spellCategories);
 
         return result;
     }
@@ -148,9 +148,9 @@ export class ActionHandlerPf2e extends ActionHandler {
                 
                 let levelKey = slot[0];
                 let level = levelKey.substr(4);
-                let levelName = 'Level ' + level;
+                let levelName =  `${game.i18n.localize('PF2E.CharacterLevelLabel')} ${level}`;
 
-                levelName = level === 0 ? 'Cantrips' : levelName;
+                levelName = level === 0 ? game.i18n.localize('TraitCantrip') : levelName;
                 
                 let items = Object.values(slot[1].prepared).map(spell => { if (!spell.expended) return spells.find(sp => sp.data._id === spell.id) });
                 items = items.filter(i => !!i);
@@ -194,7 +194,7 @@ export class ActionHandlerPf2e extends ActionHandler {
             }
             let category = result.subcategories[bookName];
             
-            let levelName = level == 0 ? 'Cantrips' : `Level ${level}`;
+            let levelName = level == 0 ? game.i18n.localize('PF2E.TraitCantrip') : `${game.i18n.localize('PF2E.CharacterLevelLabel')} ${level}`;
             let levelNameWithBook = `${bookName} - ${levelName}`;
 
             // On first subcategory, include bookName, attack bonus, and spell DC.
@@ -233,8 +233,8 @@ export class ActionHandlerPf2e extends ActionHandler {
         let result = '';
         
         let spelldc = spellbook.data.data.spelldc;
-        let attackBonus = spelldc.value >= 0 ? `Atk +${spelldc.value}` : `Atk -${spelldc.value}`;
-        let dcInfo = `DC${spellbook.data.data.spelldc.dc}`;
+        let attackBonus = spelldc.value >= 0 ? `${game.i18n.localize('tokenactionhud.pf2e.atk')} +${spelldc.value}` : `${game.i18n.localize('tokenactionhud.pf2e.atk')} -${spelldc.value}`;
+        let dcInfo = `${game.i18n.localize('PF2E.DCLabel')}${spellbook.data.data.spelldc.dc}`;
 
         result = `${attackBonus} ${dcInfo}`;
 
@@ -279,10 +279,10 @@ export class ActionHandlerPf2e extends ActionHandler {
     _addAttackDamageInfo(s, spell) {
         let info = [];
         if (s.data.data.spellType.value === 'attack')
-            info.push('Atk');
+            info.push(game.i18n.localize('tokenactionhud.pf2e.atk'));
 
         if (s.data.data.damage.value)
-            info.push('Dmg');
+            info.push(game.i18n.localize('tokenactionhud.pf2e.dmg'));
 
         spell.info2 = info.join(', ');
     }
@@ -302,8 +302,8 @@ export class ActionHandlerPf2e extends ActionHandler {
         let passive = this.initializeEmptySubcategory();
         passive.actions = this._produceMap(tokenId, actorType, (items ?? []).filter(a => a.data.data.actionType.value === 'passive'), macroType);
 
-        this._combineSubcategoryWithCategory(result, 'active', active);
-        this._combineSubcategoryWithCategory(result, 'passive', passive);
+        this._combineSubcategoryWithCategory(result, game.i18n.localize('tokenactionhud.pf2e.active'), active);
+        this._combineSubcategoryWithCategory(result, game.i18n.localize('PF2E.ActionTypePassive'), passive);
 
         return result;
     }
@@ -318,7 +318,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let saves = this.initializeEmptySubcategory();
         saves.actions = this._produceMap(tokenId, actorType, saveMap, 'save');
 
-        this._combineSubcategoryWithCategory(result, 'saves', saves);
+        this._combineSubcategoryWithCategory(result, game.i18n.localize('PF2E.SavesHeader'), saves);
 
         return result;
     }
@@ -337,7 +337,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let abilities = this.initializeEmptySubcategory();
         abilities.actions = this._produceMap(tokenId, actorType, abilityMap, 'ability');
 
-        this._combineSubcategoryWithCategory(result, 'abilities', abilities);
+        this._combineSubcategoryWithCategory(result, game.i18n.localize('PF2E.AbilityTitle'), abilities);
 
         return result;
     }

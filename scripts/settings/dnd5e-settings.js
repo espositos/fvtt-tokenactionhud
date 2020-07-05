@@ -1,8 +1,8 @@
 export function registerSettings(app, updateSettings) {
 
     game.settings.register(app,'ignorePassiveFeats', {
-        name: "Ignore passive feats",
-        hint: "If enabled, passive feats are not shown.",
+        name: game.i18n.localize('tokenactionhud.settings.dnd5e.ignorePassiveFeats.name'),
+        hint: game.i18n.localize('tokenactionhud.settings.dnd5e.ignorePassiveFeats.hint'),
         scope: "client",
         config: true,
         type: Boolean,
@@ -11,8 +11,8 @@ export function registerSettings(app, updateSettings) {
     });
 
     game.settings.register(app,'showSpellInfo', {
-        name: "Display spell information",
-        hint: "If enabled, spell component information, concentration, and ritual status will be noted next to the spell name.",
+        name: game.i18n.localize('tokenactionhud.settings.dnd5e.showSpellInfo.name'),
+        hint: game.i18n.localize('tokenactionhud.settings.dnd5e.showSpellInfo.hint'),
         scope: "client",
         config: true,
         type: Boolean,
@@ -21,8 +21,8 @@ export function registerSettings(app, updateSettings) {
     });
 
     game.settings.register(app,'showAllNonpreparableSpells', {
-        name: "Show all non-preparable spells",
-        hint: "If disabled, spells such as cantrips, innate, pact, and at-will spells need to be 'prepared' via the spell details to be shown on the HUD.",
+        name: game.i18n.localize('tokenactionhud.settings.dnd5e.showAllNonpreparableSpells.name'),
+        hint: game.i18n.localize('tokenactionhud.settings.dnd5e.showAllNonpreparableSpells.hint'),
         scope: "client",
         config: true,
         type: Boolean,
@@ -31,8 +31,8 @@ export function registerSettings(app, updateSettings) {
     });
 
     game.settings.register(app,'hideLongerActions', {
-        name: "Hide actions with an activation longer than 1 round",
-        hint: "If enabled, actions with longer activation types (minutes, hours, or days) are not shown.",
+        name: game.i18n.localize('tokenactionhud.settings.dnd5e.hideLongerActions.name'),
+        hint: game.i18n.localize('tokenactionhud.settings.dnd5e.hideLongerActions.hint'),
         scope: "client",
         config: true,
         type: Boolean,
@@ -41,8 +41,8 @@ export function registerSettings(app, updateSettings) {
     });
 
     game.settings.register(app,'abbreviateSkills', {
-        name: "Abbreviate skill and ability names",
-        hint: "If enabled, skills and abilities will use a three-character abbreviation.",
+        name: game.i18n.localize('tokenactionhud.settings.dnd5e.abbreviateSkills.name'),
+        hint: game.i18n.localize('tokenactionhud.settings.dnd5e.abbreviateSkills.hint'),
         scope: "client",
         config: true,
         type: Boolean,
@@ -51,8 +51,8 @@ export function registerSettings(app, updateSettings) {
     });
 
     game.settings.register(app,'splitAbilities', {
-        name: "Show separate ability check and save categories",
-        hint: "If enabled, abilities will be separated into checks and saves.",
+        name: game.i18n.localize('tokenactionhud.settings.dnd5e.splitAbilities.name'),
+        hint: game.i18n.localize('tokenactionhud.settings.dnd5e.splitAbilities.hint'),
         scope: "client",
         config: true,
         type: Boolean,
@@ -61,8 +61,8 @@ export function registerSettings(app, updateSettings) {
     });
 
     game.settings.register(app,'showAllNpcItems', {
-        name: "Show all NPC items",
-        hint: "If enabled, all items are shown for NPCs, not just equipped items.",
+        name: game.i18n.localize('tokenactionhud.settings.dnd5e.showAllNpcItems.name'),
+        hint: game.i18n.localize('tokenactionhud.settings.dnd5e.showAllNpcItems.hint'),
         scope: "client",
         config: true,
         type: Boolean,

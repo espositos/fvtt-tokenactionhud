@@ -32,9 +32,9 @@ export class ActionHandler5e extends ActionHandler {
         
         let checks = checkLists.buildChecksList(tokenId, actorType);
     
-        this._combineCategoryWithList(result, "items", items);
-        this._combineCategoryWithList(result, "spells", spells);
-        this._combineCategoryWithList(result, "feats", feats);
+        this._combineCategoryWithList(result, game.i18n.localize('DND5E.Inventory'), items);
+        this._combineCategoryWithList(result, game.i18n.localize('DND5E.ItemTypeSpellPl'), spells);
+        this._combineCategoryWithList(result, game.i18n.localize('tokenactionhud.dnd5e.feats'), feats);
         for (let [k, v] of Object.entries(checks)) {
             this._combineCategoryWithList(result, k, v);
         }
@@ -60,39 +60,52 @@ export class ActionHandler5e extends ActionHandler {
         
         let weapons = activeEquipped.filter(i => i.type == 'weapon');
         let weaponActions = weapons.map(w => this._buildItem(tokenId, actorType, actor, macroType, w));
+        let weaponsCat = this.initializeEmptySubcategory();
+        weaponsCat.actions = weaponActions;
     
         let equipment = activeEquipped.filter(i => i.type == 'equipment');
         let equipmentActions = equipment.map(e => this._buildItem(tokenId, actorType, actor, macroType, e));
+        let equipmentCat = this.initializeEmptySubcategory();
+        equipment.actions = equipmentActions;
         
         let other = activeEquipped.filter(i => i.type != 'weapon' && i.type != 'equipment')
         let otherActions = other.map(o => this._buildItem(tokenId, actorType, actor, macroType, o));
+        let otherCat = this.initializeEmptySubcategory();
+        otherCat.actions = otherActions;
     
         let allConsumables = sortedItems.filter(i => i.type == 'consumable');
         
         let consumable = allConsumables.filter(c => c.data.uses.value && c.data.uses.value > 0)
         let consumableActions = consumable.map(c => this._buildItem(tokenId, actorType, actor, macroType, c));
+        let consumablesCat = this.initializeEmptySubcategory();
+        consumablesCat.actions = consumableActions;
         
         let inconsumable = allConsumables.filter(c => !(c.data.uses.max || c.data.uses.value) && c.data.consumableType != 'ammo')
         let incomsumableActions = inconsumable.map(i => this._buildItem(tokenId, actorType, actor, macroType, i));
+        let inconsumablesCat = this.initializeEmptySubcategory();
+        inconsumablesCat.actions = incomsumableActions;
         
-        let itemsResult = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory();
             
-        if (weaponActions.length > 0)
-            itemsResult.subcategories.weapon = { actions: weaponActions };
+        this._combineSubcategoryWithCategory(result, game.i18n.localize('DND5E.ItemTypeWeaponPl'), weaponsCat);
+        this._combineSubcategoryWithCategory(result, game.i18n.localize('DND5E.ItemTypeEquipmentPl'), equipmentCat);
+        this._combineSubcategoryWithCategory(result, game.i18n.localize('DND5E.ActionOther'), otherCat);
+        this._combineSubcategoryWithCategory(result, game.i18n.localize('DND5E.ItemTypeConsumablePl'), consumablesCat);
+        this._combineSubcategoryWithCategory(result, game.i18n.localize('tokenactionhud.dnd5e.inconsumables'), inconsumablesCat);
     
         if (equipmentActions.length > 0)
-            itemsResult.subcategories.equipment = { actions: equipmentActions };
+            result.subcategories.equipment = { actions: equipmentActions };
         
         if (otherActions.length > 0)
-            itemsResult.subcategories.other = { actions: otherActions };
+            result.subcategories.other = { actions: otherActions };
         
         if (consumableActions.length > 0)
-            itemsResult.subcategories.consumables = { actions: consumableActions };
+            result.subcategories.consumables = { actions: consumableActions };
         
         if (incomsumableActions.length > 0)
-            itemsResult.subcategories.inconsumables = { actions: incomsumableActions };
+            result.subcategories.inconsumables = { actions: incomsumableActions };
         
-        return itemsResult;
+        return result;
     }
 
     /** @private */
@@ -245,19 +258,19 @@ export class ActionHandler5e extends ActionHandler {
         let c = s.data.components;
 
         if (c?.vocal)
-            spell.info1 += 'V';
+            spell.info1 += game.i18n.localize('DND5E.ComponentVerbal').charAt(0).toUpperCase();
 
         if (c?.somatic)
-            spell.info1 += 'S';
+            spell.info1 += game.i18n.localize('DND5E.ComponentSomatic').charAt(0).toUpperCase();
         
         if (c?.material)
-            spell.info1 += 'M';
+            spell.info1 += game.i18n.localize('DND5E.ComponentMaterial').charAt(0).toUpperCase();
 
         if (c?.concentration)
-            spell.info2 += 'C';
+            spell.info2 += game.i18n.localize('DND5E.Concentration').charAt(0).toUpperCase();
 
         if (c?.ritual)
-            spell.info3 += 'R';
+            spell.info3 += game.i18n.localize('DND5E.Ritual').charAt(0).toUpperCase();
     }
     
     /** FEATS **/
@@ -328,7 +341,7 @@ export class ActionHandler5e extends ActionHandler {
         let result = { 'name': item.name, 'id': item._id, 'encodedValue': encodedValue }
         
         if (item.data.recharge && !item.data.recharge.charged && item.data.recharge.value) {
-            result.name += ' (Recharge)';
+            result.name += ` (${game.i18n.localize('tokenactionhud.dnd5e.rechargeHint')})`;
         }
 
         result.info1 = this._getQuantityData(item);
