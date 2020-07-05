@@ -197,10 +197,15 @@ export class TokenActionHUD extends Application {
                         elmnt.style.left = (xPos) + "px";
                     }
                     settings.Logger.info(`Setting position to x: ${xPos}px, y: ${yPos}px, and saving in user flags.`)
-                    game.user.update({flags: {'tokenactionhud':{ 'hudPos': {top: yPos, left: xPos}}}})
+                    game.user.update({flags: {'token-action-hud':{ hudPos: {top: yPos, left: xPos}}}})
                 }
             }
         });
+    }
+
+    resetPosition() {
+        game.user.update({flags: {'token-action-hud': {hudPos: { top: 80, left: 150 }}}})
+        this.update();
     }
 
     update() {
