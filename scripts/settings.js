@@ -7,8 +7,8 @@ const updateSettings = (value) => { Logger.debug('Settings updated. Refreshing H
 const app = 'token-action-hud';
 export const registerSettings = function(system, rollHandlers) {
     game.settings.register(app,'rollHandler', {
-        name : 'HUD roll handler',
-        hint : `Choose which module will receive the HUD's actions.`,
+        name : game.i18n.localize('tokenactionhud.settings.rollHandler.name'),
+        hint : game.i18n.localize('tokenactionhud.settings.rollHandler.hint'),
         scope : 'world',
         config : true,
         type : String,
@@ -18,8 +18,8 @@ export const registerSettings = function(system, rollHandlers) {
     });
     
     game.settings.register(app,'enabledForUser', {
-        name : 'Enable HUD for current user',
-        hint : 'If enabled, the HUD is active for the user. Does not override the player permission setting.',
+        name : game.i18n.localize('tokenactionhud.settings.enabledForUser.name'),
+        hint : game.i18n.localize('tokenactionhud.settings.enabledForUser.hint'),
         scope : 'client',
         config : true,
         type : Boolean,
@@ -28,9 +28,8 @@ export const registerSettings = function(system, rollHandlers) {
     });
 
     game.settings.register(app,'onTokenHover', {
-        name : 'Enable hovering',
-        hint : `If enabled, the HUD will appear when hovering over a controllable token.
-        Warning: Due to the unpredictable position of a token on the canvas, some actiosn may fall off the screen.`,
+        name : game.i18n.localize('tokenactionhud.settings.onTokenHover.name'),
+        hint : game.i18n.localize('tokenactionhud.settings.onTokenHover.hint'),
         scope : 'client',
         config : true,
         type : Boolean,
@@ -41,8 +40,8 @@ export const registerSettings = function(system, rollHandlers) {
     systemSettings.setSettings(system, app, updateSettings);
     
     game.settings.register(app,'playerPermission', {
-        name : 'Enable HUD for players',
-        hint : 'If enabled, players will be able to use the HUD.',
+        name : game.i18n.localize('tokenactionhud.settings.playerPermission.name'),
+        hint : game.i18n.localize('tokenactionhud.settings.playerPermission.hint'),
         scope : 'world',
         config : true,
         type : Boolean,
@@ -51,8 +50,8 @@ export const registerSettings = function(system, rollHandlers) {
     });
     
     game.settings.register(app,'debug', {
-        name : 'Enable debugging',
-        hint : 'Enable debug logging.',
+        name : game.i18n.localize('tokenactionhud.settings.debug.name'),
+        hint : game.i18n.localize('tokenactionhud.settings.debug.hint'),
         scope : 'client',
         config : true,
         type : Boolean,
