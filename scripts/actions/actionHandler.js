@@ -39,7 +39,6 @@ export class ActionHandler {
     }
 
     async _addCompendiums(actionList, actorType, compendiums) {
-        console.log(compendiums);
         for (let [k, v] of Object.entries(compendiums)) {
             if (!(k && v))
                 continue;

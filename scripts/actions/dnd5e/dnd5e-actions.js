@@ -283,7 +283,7 @@ export class ActionHandler5e extends ActionHandler {
             const activationType = f.data.activation.type;
             const macroType = 'feat';
 
-            let feat = this._buildItem(tokenId, actor, actorType, macroType, f);
+            let feat = this._buildItem(tokenId, actorType, actor, macroType, f);
             
             if (!activationType || activationType === '') {
                 passive.actions.push(feat);
@@ -371,22 +371,35 @@ export class ActionHandler5e extends ActionHandler {
         let consumeType = item.data.consume?.type;
         if (consumeType && consumeType !== '') {
             let consumeId = item.data.consume.target;
+            let parentId = consumeId.substr(0, consumeId.lastIndexOf('.'));
             if (consumeType === 'attribute') {
-                let target = getProperty(actor, `actor.data.data.${consumeId}`);
+                let target = getProperty(actor, `data.data.${consumeId}`);
 
-                if (target?.value) {
-                    result = target.value;
-                    if (target.max)
-                        result += `/${target.max}`
+                if (target) {
+                    let parent = getProperty(actor, `data.data.${parentId}`)
+                    result = target;
+                    if (parent.max)
+                        result += `/${parent.max}`
                 }
             }
 
-            if (consumeType !== 'attribute') {
+            if (consumeType === 'charges') {
                 let consumeId = item.data.consume.target;
                 let target = actor.getOwnedItem(consumeId);
+                let uses = target?.data.data.uses;
+                if (uses?.value) {
+                    result = uses.value;
+                    if (uses.max)
+                        result += `/${uses.max}`
+                }
+            }
 
-                if (target?.data.data.quantity) {
-                    result = target.data.data.quantity;
+            if (!(consumeType === 'attribute' || consumeType === 'charges')) {
+                let consumeId = item.data.consume.target;
+                let target = actor.getOwnedItem(consumeId);
+                let quantity = target?.data.data.quantity;
+                if (quantity) {
+                    result = quantity;
                 }
             }
         }
