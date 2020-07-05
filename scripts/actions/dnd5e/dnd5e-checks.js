@@ -5,18 +5,18 @@ export function buildChecksList(tokenId, actorType) {
 
     let abbr = settings.get('abbreviateSkills');
 
-    let skills = mapToSubcategory(tokenId, actorType, 'skills', 'skill', game.dnd5e.config.skills, abbr);
-    result['skills'] = { subcategories: skills };
+    let skills = mapToSubcategory(tokenId, actorType, game.i18n.localize('tokenactionhud.dnd5e.skills'), 'skill', game.dnd5e.config.skills, abbr);
+    result[game.i18n.localize('tokenactionhud.dnd5e.skills')] = { subcategories: skills };
 
     if (settings.get('splitAbilities')) {
-        let checks = mapToSubcategory(tokenId, actorType, 'checks', 'abilityCheck', game.dnd5e.config.abilities, abbr);
-        result['checks'] = { subcategories: checks };
+        let checks = mapToSubcategory(tokenId, actorType, game.i18n.localize('tokenactionhud.dnd5e.checks'), 'abilityCheck', game.dnd5e.config.abilities, abbr);
+        result[game.i18n.localize('tokenactionhud.dnd5e.checks')] = { subcategories: checks };
 
-        let saves = mapToSubcategory(tokenId, actorType, 'saves', 'abilitySave', game.dnd5e.config.abilities, abbr);
-        result['saves'] = { subcategories: saves}; 
+        let saves = mapToSubcategory(tokenId, actorType, game.i18n.localize('DND5E.Save'), 'abilitySave', game.dnd5e.config.abilities, abbr);
+        result[game.i18n.localize('DND5E.Save')] = { subcategories: saves}; 
     } else {
-        let abilities = mapToSubcategory(tokenId, actorType, 'abilities', 'ability', game.dnd5e.config.abilities, abbr);
-        result['abilities'] = { subcategories: abilities}; 
+        let abilities = mapToSubcategory(tokenId, actorType, game.i18n.localize('DND5E.Ability'), 'ability', game.dnd5e.config.abilities, abbr);
+        result[game.i18n.localize('DND5E.Ability')] = { subcategories: abilities}; 
     }
     
     settings.Logger.debug(result);
