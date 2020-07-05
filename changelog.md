@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.5] 2020-07-04
+### Added
+- Added support for internationalization
+
+## [0.3.4] 2020-07-05
+### Bugfix
+- DND5e: Fixed bug where resources were being incorrectly read
+
+## [0.3.3] 2020-07-05
+### Changed
+- WFRP4e: Improved support and added more categories
+
 ## [0.3.2] 2020-07-04
 ### Bugfix
 - PF2E: Actions weren't showing for PCs

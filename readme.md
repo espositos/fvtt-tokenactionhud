@@ -26,7 +26,7 @@ Should be able to support most systems, although currently limited to DND5e, PF2
 * DND5e (including BetterRolls and MinorQol)
 * Dungeon World
 * PF2E
-* WFRP4e (proof of concept only at the moment)
+* WFRP4e
 * Any other system? I believe the HUD is modular enough that anyone who understands what the players of their system want and how actions in their system are handled could quickly build it into the HUD. Please contact me if you'd like to add support for your favourite system.
 
 [Developing for your system or module](adding_systems.md)
