@@ -85,6 +85,25 @@ export class TokenActionHUD extends Application {
     }
 
     async test() {
+        
+        Hooks.once('renderDialog', (Dialog, html, something) => {
+            let allowlist = Object.entries(game.dnd5e.config.skills).map(s => {return {value: s[1], id:s[0]}});
+            var $tagFilter = $(document.body).find('input[name="tokenactionhud-tagfilter"]');
+            if ($tagFilter.length > 0) {
+                var tagify = new Tagify($tagFilter[0], {
+                enforceWhitelist: true,
+                whitelist: allowlist,
+                maxTags: 'Infinity',
+                dropdown: {
+                    maxItems: 20,           // <- maxumum allowed rendered suggestions
+                    classname: "tags-look", // <- custom classname for this dropdown, so it could be targeted
+                    enabled: 0,             // <- show suggestions on focus
+                    closeOnSelect: false    // <- do not hide the suggestions dropdown once an item has been selected
+                }
+                });
+            }
+        })
+
         let content = `<input name='tokenactionhud-tagfilter' class='some_class_name' placeholder='write some tags' value=''/>`
         let d = new Dialog({
             title: "Enter skills to filter out",
@@ -93,35 +112,24 @@ export class TokenActionHUD extends Application {
              accept: {
               icon: '<i class="fas fa-check"></i>',
               label: "Accept",
-              callback: () => console.log("Chose One")
+              callback: async (html) => {
+                  console.log(html);
+                  let choices = html.find('input[name="tokenactionhud-tagfilter"]')[0].value;
+                  game.tokenActionHUD.submitFilter('skills', choices);
+              }
              },
              cancel: {
               icon: '<i class="fas fa-times"></i>',
-              label: "Cancel",
-              callback: () => console.log("Chose Two")
+              label: "Cancel"
              }
             },
             default: "cancel",
-            close: () => console.log("This always is logged no matter which option is chosen")
            });
            d.render(true);
+    }
 
-           // add observer to catch tokenActionHUD-tagfilter.
-           // Whitelist available names
-
-        var $tagFilter = $(document.body).find('input[name="tokenactionhud-tagfilter"]');
-        if ($tagFilter.length > 0) {
-            var tagify = new Tagify($tagFilter[0], {
-            whitelist: ['test'],
-            maxTags: 'Infinity',
-            dropdown: {
-                maxItems: 20,           // <- mixumum allowed rendered suggestions
-                classname: "tags-look", // <- custom classname for this dropdown, so it could be targeted
-                enabled: 1,             // <- show suggestions on focus
-                closeOnSelect: false    // <- do not hide the suggestions dropdown once an item has been selected
-            }
-            });
-        }
+    async submitFilter(categoryName, array) {
+        console.log(categoryName, array);
     }
 
     /** @override */
