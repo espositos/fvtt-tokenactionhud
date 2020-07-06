@@ -83,12 +83,11 @@ export class TokenActionHUD extends Application {
     static path(filepath) {
         return this._modDir + filepath;
     }
-
-    async test() {
-        
-        Hooks.once('renderDialog', (Dialog, html, something) => {
+    
+    showFilterDialog() {
+        Hooks.once('renderDialog', (app, html, options) => {
             let allowlist = Object.entries(game.dnd5e.config.skills).map(s => {return {value: s[1], id:s[0]}});
-            var $tagFilter = $(document.body).find('input[name="tokenactionhud-tagfilter"]');
+            var $tagFilter = html.find('input[name="tokenactionhud-tagfilter"]');
             if ($tagFilter.length > 0) {
                 var tagify = new Tagify($tagFilter[0], {
                 enforceWhitelist: true,
@@ -104,9 +103,9 @@ export class TokenActionHUD extends Application {
             }
         })
 
-        let content = `<input name='tokenactionhud-tagfilter' class='some_class_name' placeholder='write some tags' value=''/>`
+        let content = `<input name='tokenactionhud-tagfilter' class='some_class_name' placeholder='skills to ignore' value=''/>`
         let d = new Dialog({
-            title: "Enter skills to filter out",
+            title: "Enter skills to ignore",
             content: content,
             buttons: {
              accept: {
@@ -125,11 +124,22 @@ export class TokenActionHUD extends Application {
             },
             default: "cancel",
            });
+
            d.render(true);
     }
 
-    async submitFilter(categoryName, array) {
-        console.log(categoryName, array);
+    async submitFilter(categoryId, elements) {
+        this.addUserFilter(categoryId, elements);
+        this.update();
+    }
+
+    addUserFilter(categoryId, elements) {
+        let flags = { filters: { categoryId: categoryId, elements: elements } };
+        game.user.setFlag('token-action-hud', flags);
+    }
+
+    getUserFilters() {
+        return game.user.getFlag('token-action-hud', 'filters');
     }
 
     /** @override */
@@ -277,7 +287,8 @@ export class TokenActionHUD extends Application {
 
         let token = this._getTargetToken(this.tokens?.controlled);
         
-        this.targetActions = await this.actions.buildActionList(token);
+        let filters = this.getUserFilters();
+        this.targetActions = await this.actions.buildActionList(token, filters);
 
         if (!this.showHudEnabled()) {
             this.close();

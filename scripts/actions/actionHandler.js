@@ -1,7 +1,22 @@
-export class ActionHandler {    
+export class ActionHandler {
+    i18n = (toTranslate) => game.i18n.localize(toTranslate);
     linkedCompendiumsGm = {};
     linkedCompendiumsPlayer = {};
     delimiter = '|';
+
+    emptyCategory = {
+        id: '',
+        name: '',
+        canFilter: false,
+        subcategories: []
+    }
+
+    emptySubcategory = {
+        id: '',
+        name: '',
+        info: '',
+        actions: []
+    }
 
     constructor() {
     }
@@ -48,6 +63,8 @@ export class ActionHandler {
         }
     }
 
+    async submitFilter(categoryName, elements) {}
+
     initializeEmptySubcategory() {
         return {
             info: '',
@@ -55,8 +72,12 @@ export class ActionHandler {
             subcategories: {}}
     }
 
-    initializeEmptyActions() {
-        return {actions: []};
+    initializeEmptyCategory(categoryId, canFilter) {
+        return Object.assign(this.emptyCategory, {});
+    }
+
+    initializeEmptySubcategory() {
+        return Object.assign(this.emptySubcategory, {});
     }
 
     initializeEmptyCategory() {
@@ -95,7 +116,8 @@ export class ActionHandler {
 
         let packEntries = pack.index.length > 0 ? pack.index : await pack.getIndex();
 
-        let entriesMap = packEntries.map(e => { return {name: e.name, encodedValue: `${actorType}|${macroType}|${compendiumKey}|${e._id}`, id: e.id } })
+        let encodedValue = [actorType, macroType, compendiumKey, e._id].join(this.delimiter);
+        let entriesMap = packEntries.map(e => { return {name: e.name, encodedValue: encodedValue, id: e.id } })
         let entries = this.initializeEmptySubcategory();
         entries.actions = entriesMap;
 
