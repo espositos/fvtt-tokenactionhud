@@ -32,9 +32,9 @@ export class ActionHandler5e extends ActionHandler {
         
         let checks = checkLists.buildChecksList(tokenId, actorType);
     
-        this._combineCategoryWithList(result, game.i18n.localize('DND5E.Inventory'), items);
-        this._combineCategoryWithList(result, game.i18n.localize('DND5E.ItemTypeSpellPl'), spells);
-        this._combineCategoryWithList(result, game.i18n.localize('tokenactionhud.dnd5e.feats'), feats);
+        this._combineCategoryWithList(result, this.i18n('DND5E.Inventory'), items);
+        this._combineCategoryWithList(result, this.i18n('DND5E.ItemTypeSpellPl'), spells);
+        this._combineCategoryWithList(result, this.i18n('tokenactionhud.dnd5e.feats'), feats);
         for (let [k, v] of Object.entries(checks)) {
             this._combineCategoryWithList(result, k, v);
         }
@@ -66,7 +66,7 @@ export class ActionHandler5e extends ActionHandler {
         let equipment = activeEquipped.filter(i => i.type == 'equipment');
         let equipmentActions = equipment.map(e => this._buildItem(tokenId, actorType, actor, macroType, e));
         let equipmentCat = this.initializeEmptySubcategory();
-        equipment.actions = equipmentActions;
+        equipmentCat.actions = equipmentActions;
         
         let other = activeEquipped.filter(i => i.type != 'weapon' && i.type != 'equipment')
         let otherActions = other.map(o => this._buildItem(tokenId, actorType, actor, macroType, o));
@@ -87,23 +87,11 @@ export class ActionHandler5e extends ActionHandler {
         
         let result = this.initializeEmptyCategory();
             
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('DND5E.ItemTypeWeaponPl'), weaponsCat);
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('DND5E.ItemTypeEquipmentPl'), equipmentCat);
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('DND5E.ActionOther'), otherCat);
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('DND5E.ItemTypeConsumablePl'), consumablesCat);
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('tokenactionhud.dnd5e.inconsumables'), inconsumablesCat);
-    
-        if (equipmentActions.length > 0)
-            result.subcategories.equipment = { actions: equipmentActions };
-        
-        if (otherActions.length > 0)
-            result.subcategories.other = { actions: otherActions };
-        
-        if (consumableActions.length > 0)
-            result.subcategories.consumables = { actions: consumableActions };
-        
-        if (incomsumableActions.length > 0)
-            result.subcategories.inconsumables = { actions: incomsumableActions };
+        this._combineSubcategoryWithCategory(result, this.i18n('DND5E.ItemTypeWeaponPl'), weaponsCat);
+        this._combineSubcategoryWithCategory(result, this.i18n('DND5E.ItemTypeEquipmentPl'), equipmentCat);
+        this._combineSubcategoryWithCategory(result, this.i18n('DND5E.ActionOther'), otherCat);
+        this._combineSubcategoryWithCategory(result, this.i18n('DND5E.ItemTypeConsumablePl'), consumablesCat);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.dnd5e.inconsumables'), inconsumablesCat);
         
         return result;
     }
@@ -258,19 +246,19 @@ export class ActionHandler5e extends ActionHandler {
         let c = s.data.components;
 
         if (c?.vocal)
-            spell.info1 += game.i18n.localize('DND5E.ComponentVerbal').charAt(0).toUpperCase();
+            spell.info1 += this.i18n('DND5E.ComponentVerbal').charAt(0).toUpperCase();
 
         if (c?.somatic)
-            spell.info1 += game.i18n.localize('DND5E.ComponentSomatic').charAt(0).toUpperCase();
+            spell.info1 += this.i18n('DND5E.ComponentSomatic').charAt(0).toUpperCase();
         
         if (c?.material)
-            spell.info1 += game.i18n.localize('DND5E.ComponentMaterial').charAt(0).toUpperCase();
+            spell.info1 += this.i18n('DND5E.ComponentMaterial').charAt(0).toUpperCase();
 
         if (c?.concentration)
-            spell.info2 += game.i18n.localize('DND5E.Concentration').charAt(0).toUpperCase();
+            spell.info2 += this.i18n('DND5E.Concentration').charAt(0).toUpperCase();
 
         if (c?.ritual)
-            spell.info3 += game.i18n.localize('DND5E.Ritual').charAt(0).toUpperCase();
+            spell.info3 += this.i18n('DND5E.Ritual').charAt(0).toUpperCase();
     }
     
     /** FEATS **/
@@ -341,7 +329,7 @@ export class ActionHandler5e extends ActionHandler {
         let result = { 'name': item.name, 'id': item._id, 'encodedValue': encodedValue }
         
         if (item.data.recharge && !item.data.recharge.charged && item.data.recharge.value) {
-            result.name += ` (${game.i18n.localize('tokenactionhud.dnd5e.rechargeHint')})`;
+            result.name += ` (${this.i18n('tokenactionhud.dnd5e.rechargeHint')})`;
         }
 
         result.info1 = this._getQuantityData(item);
