@@ -4,9 +4,9 @@ import * as settings from '../../settings.js';
 export class ActionHandlerDw extends ActionHandler {
     constructor () {
         super();
-        this.addGmSystemCompendium(game.i18n.localize('DW.Moves'), 'dungeonworld.gm-movesprincipals', false);
-        this.addGmSystemCompendium(game.i18n.localize('tokenactionhud.dungeonworld.charts'), 'dungeonworld.charts', false);
-        this.addGmSystemCompendium(game.i18n.localize('tokenactionhud.dungeonworld.treasure'), 'dungeonworld.rollable-tables', false);
+        this.addGmSystemCompendium(this.i18n('DW.Moves'), 'dungeonworld.gm-movesprincipals', false);
+        this.addGmSystemCompendium(this.i18n('tokenactionhud.dungeonworld.charts'), 'dungeonworld.charts', false);
+        this.addGmSystemCompendium(this.i18n('tokenactionhud.dungeonworld.treasure'), 'dungeonworld.rollable-tables', false);
     }
 
     /** @override */
@@ -37,25 +37,25 @@ export class ActionHandlerDw extends ActionHandler {
             let specialQualities = this._getSpecialQualities(actor, tokenId, actorType);
             this.moves = this._getMovesNpc(actor, tokenId, actorType);
 
-            this._combineCategoryWithList(result, game.i18n.localize('DW.Damage'), damage);
-            this._combineCategoryWithList(result, game.i18n.localize('DW.Tags'), tags);
-            this._combineCategoryWithList(result, game.i18n.localize('DW.SpecialQualities'), specialQualities);
+            this._combineCategoryWithList(result, this.i18n('DW.Damage'), damage);
+            this._combineCategoryWithList(result, this.i18n('DW.Tags'), tags);
+            this._combineCategoryWithList(result, this.i18n('DW.SpecialQualities'), specialQualities);
         } else if (actorType === 'character') {
             let damage = this._getDamage(actor, tokenId, actorType);
-            let startingMoves = this._getMovesByType(actor, tokenId, actorType, game.i18n.localize('DW.MovesStarting'));
-            let advancedMoves = this._getMovesByType(actor, tokenId, actorType, game.i18n.localize('DW.MovesAdvanced'));
-            let basicMoves = this._getMovesByType(actor, tokenId, actorType, game.i18n.localize('DW.MovesOther'));
-            let spells = this._getSubcategoryByType(actor, tokenId, actorType, game.i18n.localize('DW.Spells'), 'spell');
-            let equipment = this._getSubcategoryByType(actor, tokenId, actorType, game.i18n.localize('DW.Equipment'), 'equipment');
+            let startingMoves = this._getMovesByType(actor, tokenId, actorType, this.i18n('DW.MovesStarting'));
+            let advancedMoves = this._getMovesByType(actor, tokenId, actorType, this.i18n('DW.MovesAdvanced'));
+            let basicMoves = this._getMovesByType(actor, tokenId, actorType, this.i18n('DW.MovesOther'));
+            let spells = this._getSubcategoryByType(actor, tokenId, actorType, this.i18n('DW.Spells'), 'spell');
+            let equipment = this._getSubcategoryByType(actor, tokenId, actorType, this.i18n('DW.Equipment'), 'equipment');
             let abilities = this._getAbilities(actor, tokenId, actorType);
             
-            this._combineCategoryWithList(result, game.i18n.localize('DW.Damage'), damage);
-            this._combineCategoryWithList(result, game.i18n.localize('DW.MovesStarting'), startingMoves);
-            this._combineCategoryWithList(result, game.i18n.localize('DW.MovesAdvanced'), advancedMoves);
-            this._combineCategoryWithList(result, game.i18n.localize('DW.MovesOther'), basicMoves);
-            this._combineCategoryWithList(result, game.i18n.localize('DW.Spells'), spells);
-            this._combineCategoryWithList(result, game.i18n.localize('DW.Equipment'), equipment);
-            this._combineCategoryWithList(result, game.i18n.localize('tokenactionhud.dungeonworld.abilities'), abilities);
+            this._combineCategoryWithList(result, this.i18n('DW.Damage'), damage);
+            this._combineCategoryWithList(result, this.i18n('DW.MovesStarting'), startingMoves);
+            this._combineCategoryWithList(result, this.i18n('DW.MovesAdvanced'), advancedMoves);
+            this._combineCategoryWithList(result, this.i18n('DW.MovesOther'), basicMoves);
+            this._combineCategoryWithList(result, this.i18n('DW.Spells'), spells);
+            this._combineCategoryWithList(result, this.i18n('DW.Equipment'), equipment);
+            this._combineCategoryWithList(result, this.i18n('tokenactionhud.dungeonworld.abilities'), abilities);
         }
 
         
@@ -64,10 +64,10 @@ export class ActionHandlerDw extends ActionHandler {
     }
 
     _getDamage(actor, tokenId, actorType) {
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory('damage', );
         let damageCategory = this.initializeEmptySubcategory();
         let encodedValue = [actorType, 'damage', tokenId, 'damage'].join(this.delimiter);
-        damageCategory.actions.push({name: game.i18n.localize('DW.Damage'), encodedValue: encodedValue, id: 'damage' })
+        damageCategory.actions.push({name: this.i18n('DW.Damage'), encodedValue: encodedValue, id: 'damage' })
 
         this._combineSubcategoryWithCategory(result, 'damage', damageCategory);
 
@@ -81,8 +81,8 @@ export class ActionHandlerDw extends ActionHandler {
         let rollCategory = this._getRollMoves(moves, tokenId, actorType);
         let bookCategory = this._getBookMoves(moves, tokenId, actorType);
 
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('DW.Roll'), rollCategory);
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('tokenactionhud.dungeonworld.book'), bookCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('DW.Roll'), rollCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.dungeonworld.book'), bookCategory);
 
         return result;
     }
@@ -128,7 +128,7 @@ export class ActionHandlerDw extends ActionHandler {
         let abilitiesCategory = this.initializeEmptySubcategory();
         abilitiesCategory.actions = actions;
 
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('tokenactionhud.dungeonworld.abilities'), abilitiesCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.dungeonworld.abilities'), abilitiesCategory);
 
         return result;
     }
@@ -161,8 +161,8 @@ export class ActionHandlerDw extends ActionHandler {
         let movesActions = this._produceMap(tokenId, actorType, movesMap, 'move')
         movesCategory.actions = movesActions;
         
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('tokenactionhud.dungeonworld.instinct'), instinctsCategory);
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('tokenactionhud.dungeonworld.monsterMoves'), movesCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.dungeonworld.instinct'), instinctsCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.dungeonworld.monsterMoves'), movesCategory);
 
         return result;
     }
@@ -181,7 +181,7 @@ export class ActionHandlerDw extends ActionHandler {
         let tagCategory = this.initializeEmptySubcategory();
         tagCategory.actions = this._produceMap(tokenId, actorType, tags, 'tag');
 
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('DW.Tags'), tagCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('DW.Tags'), tagCategory);
         return result;
     }
 
@@ -199,7 +199,7 @@ export class ActionHandlerDw extends ActionHandler {
         let qualityCategory = this.initializeEmptySubcategory();
         qualityCategory.actions = this._produceMap(tokenId, actorType, qualities, 'quality');
 
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('DW.SpecialQualities'), qualityCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('DW.SpecialQualities'), qualityCategory);
         return result;
     }
 

@@ -6,7 +6,7 @@ export class ActionHandlerWfrp extends ActionHandler {
     }    
 
     /** @override */
-    async buildActionList(token) {
+    async buildActionList(token, filters) {
         let result = { tokenId: '', actorId: '', categories: {}};
 
         if (!token) {
@@ -25,7 +25,7 @@ export class ActionHandlerWfrp extends ActionHandler {
 
         result.actorId = actor._id;
         
-        let weapons = this._getSubcategoryList(actor, tokenId, 'weapon');
+        let weapons = this._getCategoryList(actor, tokenId, 'weapon');
         let characteristics = this._getCharacteristics(actor, tokenId);
         let skills = this._getSkills(actor, tokenId);
         let spells = this._getSpells(actor, tokenId);
@@ -33,28 +33,25 @@ export class ActionHandlerWfrp extends ActionHandler {
         let talents = this._getTalents(actor, tokenId);
         let traits = this._getTraits(actor, tokenId);
         
-        this._combineCategoryWithList(result, game.i18n.localize('WFRP4E.TrappingType.Weapon'), weapons);
-        this._combineCategoryWithList(result, game.i18n.localize('Characteristics'), characteristics);
-        this._combineCategoryWithList(result, game.i18n.localize('Skills'), skills);
-        this._combineCategoryWithList(result, game.i18n.localize('Magic'), spells);
-        this._combineCategoryWithList(result, game.i18n.localize('Religion'), prayers);
-        this._combineCategoryWithList(result, game.i18n.localize('Talents'), talents);
-        this._combineCategoryWithList(result, game.i18n.localize('Traits'), traits);
+        this._combineCategoryWithList(result, this.i18n('WFRP4E.TrappingType.Weapon'), weapons);
+        this._combineCategoryWithList(result, this.i18n('Characteristics'), characteristics);
+        this._combineCategoryWithList(result, this.i18n('Skills'), skills);
+        this._combineCategoryWithList(result, this.i18n('Magic'), spells);
+        this._combineCategoryWithList(result, this.i18n('Religion'), prayers);
+        this._combineCategoryWithList(result, this.i18n('Talents'), talents);
+        this._combineCategoryWithList(result, this.i18n('Traits'), traits);
 
         return result;
     }
 
-    _getSubcategoryList(actor, tokenId, type) {
+    _getCategoryList(actor, tokenId, type) {
         let types = type+'s';
-        let result = {
-            'subcategories': {}
-        }
+        let result = this.initializeEmptyCategory();
 
-        let subcategory = { 
-            'actions': this._produceMap(tokenId ,actor.items.filter(i => i.type == type), type) };
+        let subcategory = this.initializeEmptySubcategory();
+        subcategory.actions = this._produceMap(tokenId ,actor.items.filter(i => i.type == type), type);
 
-        if (subcategory.actions.length > 0)
-            result.subcategories[type+'s'] = subcategory;
+        this._combineSubcategoryWithCategory(result, types, subcategory);
 
         return result;
     }
@@ -67,10 +64,10 @@ export class ActionHandlerWfrp extends ActionHandler {
         let characteristicsCategory = this.initializeEmptySubcategory();
         characteristicsCategory.actions = characteristics.map(c => {
             let encodedValue = [macroType, tokenId, c[0]].join(this.delimiter);
-            return {name: game.i18n.localize(c[1].abrev), encodedValue: encodedValue, id:c[0]}
+            return {name: this.i18n(c[1].abrev), encodedValue: encodedValue, id:c[0]}
         })
 
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('Characteristics'), characteristicsCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('Characteristics'), characteristicsCategory);
 
         return result;
     }
@@ -88,8 +85,8 @@ export class ActionHandlerWfrp extends ActionHandler {
         let advancedSkillsCat = this.initializeEmptySubcategory();
         advancedSkillsCat.actions = this._produceMap(tokenId, basicSkills, macroType);
         
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('Basic'), basicSkillsCat);
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('Advanced'), advancedSkillsCat);
+        this._combineSubcategoryWithCategory(result, this.i18n('Basic'), basicSkillsCat);
+        this._combineSubcategoryWithCategory(result, this.i18n('Advanced'), advancedSkillsCat);
 
         return result;
     }
@@ -116,10 +113,10 @@ export class ActionHandlerWfrp extends ActionHandler {
         let advancedSkillsCat = this.initializeEmptySubcategory();
         advancedSkillsCat.actions = this._produceMap(tokenId, advancedSkills, macroType);
         
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('NAME.Melee'), meleeCategory);
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('NAME.Ranged'), rangedCategory);
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('Basic'), basicSkillsCat);
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('Advanced'), advancedSkillsCat);
+        this._combineSubcategoryWithCategory(result, this.i18n('NAME.Melee'), meleeCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('NAME.Ranged'), rangedCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('Basic'), basicSkillsCat);
+        this._combineSubcategoryWithCategory(result, this.i18n('Advanced'), advancedSkillsCat);
 
         return result;
     }
@@ -134,7 +131,7 @@ export class ActionHandlerWfrp extends ActionHandler {
         let pettyCategory = this.initializeEmptySubcategory();
         pettyCategory.actions = this._produceMap(tokenId, petties, macroType);
 
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('SHEET.PettySpell'), pettyCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('SHEET.PettySpell'), pettyCategory);
 
         let lores = spells.filter(i => i.data.data.lore.value !== 'petty');
         let loresCategorised = lores.reduce((output, spell) => {
@@ -167,7 +164,7 @@ export class ActionHandlerWfrp extends ActionHandler {
         let blessingCategory = this.initializeEmptySubcategory();
         blessingCategory.actions = this._produceMap(tokenId, blessings, macroType);
 
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('Blessing'), blessingCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('Blessing'), blessingCategory);
 
         let miracles = prayers.filter(i => i.data.data.type.value !== 'blessing');
         let miraclesCategorised = miracles.reduce((output, prayer) => {
@@ -204,8 +201,8 @@ export class ActionHandlerWfrp extends ActionHandler {
         let unrollableCategory = this.initializeEmptySubcategory();
         unrollableCategory.actions = this._produceMap(tokenId, unrollableTalents, macroType);
         
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('tokenactionhud.rollable'), rollableCategory);
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('tokenactionhud.unrollable'), unrollableCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.rollable'), rollableCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.unrollable'), unrollableCategory);
         
         return result;
     }
@@ -224,8 +221,8 @@ export class ActionHandlerWfrp extends ActionHandler {
         let unrollableCategory = this.initializeEmptySubcategory();
         unrollableCategory.actions = this._produceMap(tokenId, unrollableTraits, macroType);
         
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('tokenactionhud.rollable'), rollableCategory);
-        this._combineSubcategoryWithCategory(result, game.i18n.localize('tokenactionhud.unrollable'), unrollableCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.rollable'), rollableCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.unrollable'), unrollableCategory);
 
         return result;
     }
