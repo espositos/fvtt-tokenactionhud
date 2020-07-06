@@ -16,7 +16,7 @@
     "tokenactionhud.settings.debug.hint": "Activar el registro de depuración.",
 
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.name": "Ignorar las dotes pasivas",
-    "tokenactionhud.settings.dnd5e.ignorePassiveFeats.hint": "Si está activo, las dotes pasivas no se motrarán.",
+    "tokenactionhud.settings.dnd5e.ignorePassiveFeats.hint": "Si está activo, las dotes pasivas no se mostrarán.",
     "tokenactionhud.settings.dnd5e.showSpellInfo.name": "Mostrar la información de conjuros",
     "tokenactionhud.settings.dnd5e.showSpellInfo.hint": "Si está activo, se indicarán los componentes, si requiere concentración y si se puede lanzar como ritual junto al nombre del conjuro.",
     "tokenactionhud.settings.dnd5e.showAllNonpreparableSpells.name": "Mostrar todos los conjuros no preparados",
