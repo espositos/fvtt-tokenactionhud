@@ -29,11 +29,12 @@ export class ActionHandler5e extends ActionHandler {
         let items = this._getItemList(actor, tokenId, actorType);
         let spells = this._getSpellsList(actor, tokenId, actorType);
         let feats = this._getFeatsList(actor, tokenId, actorType);
+        let skills = this._getSkillsList(actor, tokenId, actorType);
         
         let checks = checkLists.buildChecksList(tokenId, actorType);
     
-        this._combineCategoryWithList(result, this.i18n('DND5E.Inventory'), items);
-        this._combineCategoryWithList(result, this.i18n('DND5E.ItemTypeSpellPl'), spells);
+        this._combineCategoryWithList(result, this.i18n('tokenactionhud.inventory'), items);
+        this._combineCategoryWithList(result, this.i18n('tokenactionhud.spells'), spells);
         this._combineCategoryWithList(result, this.i18n('tokenactionhud.dnd5e.feats'), feats);
         for (let [k, v] of Object.entries(checks)) {
             this._combineCategoryWithList(result, k, v);
@@ -85,7 +86,7 @@ export class ActionHandler5e extends ActionHandler {
         let inconsumablesCat = this.initializeEmptySubcategory();
         inconsumablesCat.actions = incomsumableActions;
         
-        let result = this.initializeEmptyCategory('items', false);
+        let result = this.initializeEmptyCategory(this.i18n('tokenactionhud.inventory'), false);
             
         this._combineSubcategoryWithCategory(result, this.i18n('DND5E.ItemTypeWeaponPl'), weaponsCat);
         this._combineSubcategoryWithCategory(result, this.i18n('DND5E.ItemTypeEquipmentPl'), equipmentCat);
@@ -142,8 +143,8 @@ export class ActionHandler5e extends ActionHandler {
     
     /** @private */
     _categoriseSpells(actor, tokenId, actorType, spells) {
-        const powers = this.initializeEmptyCategory();
-        const book = this.initializeEmptyCategory();
+        const powers = this.initializeEmptySubcategory();
+        const book = this.initializeEmptySubcategory();
         const macroType = 'spell';
 
         // Reverse sort spells by level
@@ -190,7 +191,7 @@ export class ActionHandler5e extends ActionHandler {
             }
             else {
                 levelKey = 'spell' + level;
-                levelName = level === 0 ? 'Cantrips' : `Level ${level}`;
+                levelName = level === 0 ? this.i18n('tokenactionhud.cantrips') : `${this.i18n('tokenactionhud.level')} ${level}`;
             }
 
             levelInfo = spellSlotInfo.find(lvl => lvl[0] === levelKey)?.[1];
@@ -200,14 +201,14 @@ export class ActionHandler5e extends ActionHandler {
             // Initialise subcategory if non-existant.
             if (power) {
                 if (!powers.subcategories.hasOwnProperty(prepType)) {
-                    powers.subcategories[prepType] = this.initializeEmptyActions();
+                    powers.subcategories[prepType] = this.initializeEmptySubcategory();
                     if (max > 0) {
                         powers.subcategories[prepType].info1 = `${slots}/${max}`;
                     }
                 }
             } else {                                
                 if (!book.subcategories.hasOwnProperty(levelName)) {
-                    book.subcategories[levelName] = this.initializeEmptyActions();
+                    book.subcategories[levelName] = this.initializeEmptySubcategory();
                     if (max > 0) {
                         book.subcategories[levelName].info1 = `${slots}/${max}`;
                     }
@@ -324,9 +325,26 @@ export class ActionHandler5e extends ActionHandler {
     }
 
     /** @private */
+    getSkillsList(tokenId, actor, actorType) {
+        let result = this.initializeEmptyCategory('skills', false);
+        let abbr = settings.get('abbreviateSkills');
+        
+        let skillsActions = Object.entries(game.dnd5e.config.skills).map(e => {
+            let name = abbr ? e[0] : e[1];
+            name = name.charAt(0).toUpperCase() + name.slice(1);
+            let encodedValue = [actorType, 'skill', tokenId, e[0]].join(this.delimiter);
+            return { name: name, id: e[0], encodedValue: encodedValue }; 
+        });
+        let skillsCategory = this.initializeEmptySubcategory();
+        skillsCategory.actions = skillsActions;
+
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.dnd5e.skills'), skillsCategory);
+    }
+
+    /** @private */
     _buildItem(tokenId, actorType, actor, macroType, item) {
         let encodedValue = [actorType, macroType, tokenId, item._id].join(this.delimiter);
-        let result = { 'name': item.name, 'id': item._id, 'encodedValue': encodedValue }
+        let result = { name: item.name, id: item._id, encodedValue: encodedValue }
         
         if (item.data.recharge && !item.data.recharge.charged && item.data.recharge.value) {
             result.name += ` (${this.i18n('tokenactionhud.dnd5e.rechargeHint')})`;

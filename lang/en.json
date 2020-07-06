@@ -1,63 +1,86 @@
 {
-    "tokenactionhud.title": "Token Action HUD",
-    "tokenactionhud.handlerNotFound": "not found, reverting to core roller.",
-    "tokenactionhud.rollable": "Rollable",
-    "tokenactionhud.unrollable": "Unrollable",
+    "tokenactionhud": {
+        "title": "Token Action HUD",
+        "handlerNotFound": "not found, reverting to core roller.",
+        "rollable": "Rollable",
+        "unrollable": "Unrollable",
+        "skills": "Skills",
+        "inventory": "Inventory",
+        "level": "Level",
+        "cantrips": "Cantrips",
+        "spells": "Spells",
+        
+        "settings": {
+            "rollHandler.name": "HUD roll handler",
+            "rollHandler.hint": "Choose which module will receive the HUD's actions.",
+            "enabledForUser.name": "Enable HUD for current user",
+            "enabledForUser.hint": "If enabled, the HUD is active for the user. Does not override the player permission setting.",
+            "onTokenHover.name": "Enable hovering",
+            "onTokenHover.hint": "If enabled, the HUD will appear when hovering over a controllable token.\nWarning: Due to the unpredictable position of a token on the canvas, some actiosn may fall off the screen.",
+            "playerPermission.name": "Enable HUD for players",
+            "playerPermission.hint": "If enabled, players will be able to use the HUD.",
+            "debug.name": "Enable debugging",
+            "debug.hint": "Enable debug logging.",
 
-    "tokenactionhud.settings.rollHandler.name": "HUD roll handler",
-    "tokenactionhud.settings.rollHandler.hint": "Choose which module will receive the HUD's actions.",
-    "tokenactionhud.settings.enabledForUser.name": "Enable HUD for current user",
-    "tokenactionhud.settings.enabledForUser.hint": "If enabled, the HUD is active for the user. Does not override the player permission setting.",
-    "tokenactionhud.settings.onTokenHover.name": "Enable hovering",
-    "tokenactionhud.settings.onTokenHover.hint": "If enabled, the HUD will appear when hovering over a controllable token.\nWarning: Due to the unpredictable position of a token on the canvas, some actiosn may fall off the screen.",
-    "tokenactionhud.settings.playerPermission.name": "Enable HUD for players",
-    "tokenactionhud.settings.playerPermission.hint": "If enabled, players will be able to use the HUD.",
-    "tokenactionhud.settings.debug.name": "Enable debugging",
-    "tokenactionhud.settings.debug.hint": "Enable debug logging.",
+            "dnd5e": {
+                "ignorePassiveFeats.name": "Ignore passive feats",
+                "ignorePassiveFeats.hint": "If enabled, passive feats are not shown.",
+                "showSpellInfo.name": "Display spell information",
+                "showSpellInfo.hint": "If enabled, spell component information, concentration, and ritual status will be noted next to the spell name.",
+                "showAllNonpreparableSpells.name": "Show all non-preparable spells",
+                "showAllNonpreparableSpells.hint": "If disabled, spells such as cantrips, innate, pact, and at-will spells need to be 'prepared' via the spell details to be shown on the HUD.",
+                "hideLongerActions.name": "Hide actions with an activation longer than 1 round",
+                "hideLongerActions.hint": "If enabled, actions with longer activation types (minutes, hours, or days) are not shown.",
+                "abbreviateSkills.name": "Abbreviate skill and ability names",
+                "abbreviateSkills.hint": "If enabled, skills and abilities will use a three-character abbreviation.",
+                "splitAbilities.name": "Show separate ability check and save categories",
+                "splitAbilities.hint": "If enabled, abilities will be separated into checks and saves.",
+                "showAllNpcItems.name": "Show all NPC items",
+                "showAllNpcItems.hint": "If enabled, all items are shown for NPCs, not just equipped items."
+            },
+        
+            "pf2e": {
+                "showPcAbilities.name": "Show PC abilities",
+                "showPcAbilities.hint": "If enabled, PCs will also have an Abilities category on their HUD.",
+                "showNpcAbilities.name": "Show NPC abilities",
+                "showNpcAbilities.hint": "If enabled, NPCs will also have an Abilities category on their HUD.",
+                "calculateAttackPenalty.name": "Show calculated MAP",
+                "calculateAttackPenalty.hint": "If enabled, strikes will show their calculated attack bonus (attack bonus - MAP) instead of the flat MAP.",
+                "printSpellCard.name": "Print spell card to chat",
+                "printSpellCard.hint": "If disabled, left-clicking a spell will roll attack (shift right-click for bonus dialogue), right-clicking will roll damage (ctrl right-click for bonus dialogue). If neither are applicable, the spell card will be printed to chat anyway.",
+                "abbreviateSkills.name": "Abbreviate skill and ability names",
+                "abbreviateSkills.hint": "If enabled, skills and abilities will use a three-character abbreviation."
+            },
 
-    "tokenactionhud.settings.dnd5e.ignorePassiveFeats.name": "Ignore passive feats",
-    "tokenactionhud.settings.dnd5e.ignorePassiveFeats.hint": "If enabled, passive feats are not shown.",
-    "tokenactionhud.settings.dnd5e.showSpellInfo.name": "Display spell information",
-    "tokenactionhud.settings.dnd5e.showSpellInfo.hint": "If enabled, spell component information, concentration, and ritual status will be noted next to the spell name.",
-    "tokenactionhud.settings.dnd5e.showAllNonpreparableSpells.name": "Show all non-preparable spells",
-    "tokenactionhud.settings.dnd5e.showAllNonpreparableSpells.hint": "If disabled, spells such as cantrips, innate, pact, and at-will spells need to be 'prepared' via the spell details to be shown on the HUD.",
-    "tokenactionhud.settings.dnd5e.hideLongerActions.name": "Hide actions with an activation longer than 1 round",
-    "tokenactionhud.settings.dnd5e.hideLongerActions.hint": "If enabled, actions with longer activation types (minutes, hours, or days) are not shown.",
-    "tokenactionhud.settings.dnd5e.abbreviateSkills.name": "Abbreviate skill and ability names",
-    "tokenactionhud.settings.dnd5e.abbreviateSkills.hint": "If enabled, skills and abilities will use a three-character abbreviation.",
-    "tokenactionhud.settings.dnd5e.splitAbilities.name": "Show separate ability check and save categories",
-    "tokenactionhud.settings.dnd5e.splitAbilities.hint": "If enabled, abilities will be separated into checks and saves.",
-    "tokenactionhud.settings.dnd5e.showAllNpcItems.name": "Show all NPC items",
-    "tokenactionhud.settings.dnd5e.showAllNpcItems.hint": "If enabled, all items are shown for NPCs, not just equipped items.",
+            "dungeonworld": {
+                "showGmCompendiums.name": "Show GM Compendiums",
+                "showGmCompendiums.hint": "If enabled, and if the user is a GM, the HUD bar will include GM moves, treasure rollable-tables, and charts."
+            }   
+        }, 
 
-    "tokenactionhud.settings.pf2e.showPcAbilities.name": "Show PC abilities",
-    "tokenactionhud.settings.pf2e.showPcAbilities.hint": "If enabled, PCs will also have an Abilities category on their HUD.",
-    "tokenactionhud.settings.pf2e.showNpcAbilities.name": "Show NPC abilities",
-    "tokenactionhud.settings.pf2e.showNpcAbilities.hint": "If enabled, NPCs will also have an Abilities category on their HUD.",
-    "tokenactionhud.settings.pf2e.calculateAttackPenalty.name": "Show calculated MAP",
-    "tokenactionhud.settings.pf2e.calculateAttackPenalty.hint": "If enabled, strikes will show their calculated attack bonus (attack bonus - MAP) instead of the flat MAP.",
-    "tokenactionhud.settings.pf2e.printSpellCard.name": "Print spell card to chat",
-    "tokenactionhud.settings.pf2e.printSpellCard.hint": "If disabled, left-clicking a spell will roll attack (shift right-click for bonus dialogue), right-clicking will roll damage (ctrl right-click for bonus dialogue). If neither are applicable, the spell card will be printed to chat anyway.",
-    "tokenactionhud.settings.pf2e.abbreviateSkills.name": "Abbreviate skill and ability names",
-    "tokenactionhud.settings.pf2e.abbreviateSkills.hint": "If enabled, skills and abilities will use a three-character abbreviation.",
+        "dnd5e": {
+            "feats": "Feats",
+            "inconsumables": "Inconsumables",
+            "rechargeHint": "Recharge",
+            "checks": "Checks",
+            "skills": "Skills",
+            "abilities": "Abilities",
+            "saves": "Saves"
+        },
 
-    "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "Show GM Compendiums",
-    "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "If enabled, and if the user is a GM, the HUD bar will include GM moves, treasure rollable-tables, and charts.",
+        "dungeonworld": {
+            "abilities": "Abilities",
+            "charts": "Charts",
+            "treasure": "Treasure",
+            "instinct": "Instinct",
+            "monsterMoves": "Monster Moves",
+            "book": "Book"
+        },
 
-    "tokenactionhud.dnd5e.feats": "Feats",
-    "tokenactionhud.dnd5e.inconsumables": "Inconsumables",
-    "tokenactionhud.dnd5e.rechargeHint": "Recharge",
-    "tokenactionhud.dnd5e.checks": "Checks",
-    "tokenactionhud.dnd5e.skills": "Skills",
-
-    "tokenactionhud.dungeonworld.abilities": "Abilities",
-    "tokenactionhud.dungeonworld.charts": "Charts",
-    "tokenactionhud.dungeonworld.treasure": "Treasure",
-    "tokenactionhud.dungeonworld.instinct": "Instinct",
-    "tokenactionhud.dungeonworld.monsterMoves": "Monster Moves",
-    "tokenactionhud.dungeonworld.book": "Book",
-
-    "tokenactionhud.pf2e.active": "Active",
-    "tokenactionhud.pf2e.atk": "Atk",
-    "tokenactionhud.pf2e.dmg": "Dmg"
+        "pf2e": {
+            "active": "Active",
+            "atk": "Atk",
+            "dmg": "Dmg"
+        }
+    }
 }
