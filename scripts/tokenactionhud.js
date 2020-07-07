@@ -1,5 +1,6 @@
 import * as settings from "./settings.js";
 import { HandlersManager } from "./handlersManager.js";
+import { TagDialog } from "./tagDialog.js";
 
 export class TokenActionHUD extends Application {
     constructor(actions, rollHandler) {
@@ -91,17 +92,12 @@ export class TokenActionHUD extends Application {
         if (allowlist.length === 0)
             return;
 
-        Hooks.once('renderDialog', (app, html, options) => {
+        Hooks.once('renderTagDialog', (app, html, options) => {
 
             html.css('height', 'auto');
 
             var $tagFilter = html.find('input[name="tokenactionhud-tagfilter"]');
 
-            $tagFilter.on('keypress', e => {
-                if (event.keyCode === 13)
-                    event.preventDefault();
-            });
-            
             if ($tagFilter.length > 0) {
                 var tagify = new Tagify($tagFilter[0], {
                 enforceWhitelist: true,
@@ -120,7 +116,7 @@ export class TokenActionHUD extends Application {
         })
 
         let content = `<input name='tokenactionhud-tagfilter' class='some_class_name' placeholder='values to hide (split with semi-colon)' value=''/>`
-        let d = new Dialog({
+        let d = new TagDialog({
             title: "Enter values to hide",
             content: content,
             buttons: {

@@ -47,11 +47,14 @@ Hooks.on('canvasReady', () => {
     });
     
     Hooks.on('updateToken', (scene, token, diff, options, idUser) => {
+        // If it's an X or Y change assume the token is just moving.
+        if (diff.hasOwnProperty('y') || diff.hasOwnProperty('x'))
+            return;
         if (game.tokenActionHUD.validTokenChange())
             game.tokenActionHUD.update();
     });
     
-    Hooks.on('deleteToken', (scene, token, empty, userId) => {
+    Hooks.on('deleteToken', (scene, token, change, userId) => {
         if (game.tokenActionHUD.validTokenChange())
             game.tokenActionHUD.update();
     });

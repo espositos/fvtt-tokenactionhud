@@ -48,15 +48,6 @@ export class ActionHandler5e extends ActionHandler {
 
         return result;
     }
-
-    getFilterChoices(categoryId, actor) {
-        switch(categoryId) {
-            case 'feats':
-                return actor.data.items.filter(i => i.type === 'feat').map(f => {return {id: f._id, value:f.name}})
-            default:
-                return [];
-        }
-    }
     
     /** ITEMS **/
     
