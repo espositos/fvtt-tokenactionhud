@@ -85,19 +85,28 @@ export class TokenActionHUD extends Application {
     }
     
     showFilterDialog(categoryId) {
-        if (!this.categoryCanBeFiltered(categoryId))
+        let actor = this.tokens.controlled[0].actor;
+        let allowlist = this._getFilterChoices(categoryId, actor);
+        
+        if (allowlist.length === 0)
             return;
 
         Hooks.once('renderDialog', (app, html, options) => {
 
             html.css('height', 'auto');
 
-            game.tokenActionHUD.getFilterChoices(categoryId);
             var $tagFilter = html.find('input[name="tokenactionhud-tagfilter"]');
+
+            $tagFilter.on('keypress', e => {
+                if (event.keyCode === 13)
+                    event.preventDefault();
+            });
+            
             if ($tagFilter.length > 0) {
                 var tagify = new Tagify($tagFilter[0], {
                 enforceWhitelist: true,
                 whitelist: allowlist,
+                delimiters: ';',
                 maxTags: 'Infinity',
                 dropdown: {
                     maxItems: 20,           // <- maxumum allowed rendered suggestions
@@ -107,9 +116,10 @@ export class TokenActionHUD extends Application {
                 }
                 });
             }
+
         })
 
-        let content = `<input name='tokenactionhud-tagfilter' class='some_class_name' placeholder='values to hide' value=''/>`
+        let content = `<input name='tokenactionhud-tagfilter' class='some_class_name' placeholder='values to hide (split with semi-colon)' value=''/>`
         let d = new Dialog({
             title: "Enter values to hide",
             content: content,
@@ -139,8 +149,8 @@ export class TokenActionHUD extends Application {
         this.update();
     }
 
-    getFilterChoices(categoryId) {
-        return this.actions._getFilterChoices(categoryId);
+    _getFilterChoices(categoryId, actor) {
+        return this.actions.getFilterChoices(categoryId, actor);
     }
 
     _addUserFilter(categoryId, elements) {
@@ -210,6 +220,12 @@ export class TokenActionHUD extends Application {
 
         html.find(action).contextmenu(e => {
             handleClick(e);
+        });
+
+        html.find('.tah-title-button').contextmenu('click', e => {
+            let target = e.target;
+            if(target.value.length > 0)
+                game.tokenActionHUD.showFilterDialog(target.value);
         });
 
         html.find(repositionIcon).mousedown(ev => {

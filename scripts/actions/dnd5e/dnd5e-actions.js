@@ -1,6 +1,5 @@
 import {ActionHandler} from '../actionHandler.js';
 import * as settings from '../../settings.js';
-import * as checkLists from './dnd5e-checks.js';
 
 export class ActionHandler5e extends ActionHandler {
     constructor () {
@@ -48,6 +47,15 @@ export class ActionHandler5e extends ActionHandler {
         }
 
         return result;
+    }
+
+    getFilterChoices(categoryId, actor) {
+        switch(categoryId) {
+            case 'feats':
+                return actor.data.items.filter(i => i.type === 'feat').map(f => {return {id: f._id, value:f.name}})
+            default:
+                return [];
+        }
     }
     
     /** ITEMS **/
@@ -313,7 +321,7 @@ export class ActionHandler5e extends ActionHandler {
             return;
         }.bind(this), {});
     
-        let result = this.initializeEmptyCategory('feats', false)
+        let result = this.initializeEmptyCategory('feats', true)
 
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.active'), active);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.legendary'), legendary);
