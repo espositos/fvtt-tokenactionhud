@@ -4,9 +4,9 @@ import * as settings from '../../settings.js';
 export class ActionHandlerDw extends ActionHandler {
     constructor () {
         super();
-        this.addGmSystemCompendium(this.i18n('DW.Moves'), 'dungeonworld.gm-movesprincipals', false);
-        this.addGmSystemCompendium(this.i18n('tokenactionhud.dungeonworld.charts'), 'dungeonworld.charts', false);
-        this.addGmSystemCompendium(this.i18n('tokenactionhud.dungeonworld.treasure'), 'dungeonworld.rollable-tables', false);
+        this._addGmSystemCompendium(this.i18n('DW.Moves'), 'dungeonworld.gm-movesprincipals', false);
+        this._addGmSystemCompendium(this.i18n('tokenactionhud.dungeonworld.charts'), 'dungeonworld.charts', false);
+        this._addGmSystemCompendium(this.i18n('tokenactionhud.dungeonworld.treasure'), 'dungeonworld.rollable-tables', false);
     }
 
     /** @override */
@@ -14,7 +14,7 @@ export class ActionHandlerDw extends ActionHandler {
         let result = this.initializeEmptyActionList();
 
         if (settings.get('showGmCompendiums'))
-            await this.addCompendiums(result);
+            await this._addCompendiumsToList(result);
 
         if (!token)
             return result;
@@ -45,8 +45,8 @@ export class ActionHandlerDw extends ActionHandler {
             let startingMoves = this._getMovesByType(actor, tokenId, actorType, this.i18n('DW.MovesStarting'));
             let advancedMoves = this._getMovesByType(actor, tokenId, actorType, this.i18n('DW.MovesAdvanced'));
             let basicMoves = this._getMovesByType(actor, tokenId, actorType, this.i18n('DW.MovesOther'));
-            let spells = this._getSubcategoryByType(actor, tokenId, actorType, this.i18n('DW.Spells'), 'spell');
-            let equipment = this._getSubcategoryByType(actor, tokenId, actorType, this.i18n('DW.Equipment'), 'equipment');
+            let spells = this._getSubcategoryByType(actor, tokenId, actorType, 'spells', this.i18n('DW.Spells'), 'spell');
+            let equipment = this._getSubcategoryByType(actor, tokenId, actorType, 'equipment', this.i18n('DW.Equipment'), 'equipment');
             let abilities = this._getAbilities(actor, tokenId, actorType);
             
             this._combineCategoryWithList(result, this.i18n('DW.Damage'), damage);
@@ -64,7 +64,7 @@ export class ActionHandlerDw extends ActionHandler {
     }
 
     _getDamage(actor, tokenId, actorType) {
-        let result = this.initializeEmptyCategory('damage', );
+        let result = this.initializeEmptyCategory('damage', false);
         let damageCategory = this.initializeEmptySubcategory();
         let encodedValue = [actorType, 'damage', tokenId, 'damage'].join(this.delimiter);
         damageCategory.actions.push({name: this.i18n('DW.Damage'), encodedValue: encodedValue, id: 'damage' })
@@ -76,7 +76,7 @@ export class ActionHandlerDw extends ActionHandler {
 
     _getMovesByType(actor, tokenId, actorType, movesType) {
         let moves = actor.itemTypes.move.filter(m => m.data.data.moveType === movesType);
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory('moves', false);
 
         let rollCategory = this._getRollMoves(moves, tokenId, actorType);
         let bookCategory = this._getBookMoves(moves, tokenId, actorType);
@@ -106,9 +106,9 @@ export class ActionHandlerDw extends ActionHandler {
     }
 
     /** @private */
-    _getSubcategoryByType(actor, tokenId, actorType, categoryName, categoryType) {
+    _getSubcategoryByType(actor, tokenId, actorType, categoryId, categoryName, categoryType) {
         let items = actor.itemTypes[categoryType];
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory(categoryId, false);
         let actions = this._produceMap(tokenId, actorType, items, categoryType);
         let category = this.initializeEmptySubcategory();
         category.actions = actions;
@@ -120,7 +120,7 @@ export class ActionHandlerDw extends ActionHandler {
 
     /** @private */
     _getAbilities(actor, tokenId, actorType) {
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory('abilities', false);
 
         let abilities = Object.entries(actor.data.data.abilities);
         let abilitiesMap = abilities.map(a => { return { data: { _id:a[0] }, name:a[1].label } })
@@ -134,7 +134,7 @@ export class ActionHandlerDw extends ActionHandler {
     }
 
     _getMovesNpc(actor, tokenId, actorType) {
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory('moves', false);
 
         let biography = actor.data.data.details.biography;
         
@@ -168,7 +168,7 @@ export class ActionHandlerDw extends ActionHandler {
     }
 
     _getTags(actor, tokenId, actorType) {
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory('tags', false);
         let tags = actor.data.data.tagsString.split(',').map(t => {
             let tag = t.trim();
             if (tag.length === 0)
@@ -186,7 +186,7 @@ export class ActionHandlerDw extends ActionHandler {
     }
 
     _getSpecialQualities(actor, tokenId, actorType) {
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory('qualities', false);
         let qualities = actor.data.data.attributes.specialQualities.value.split(',').map(s => {
             let quality = s.trim();
             if (quality.length === 0)

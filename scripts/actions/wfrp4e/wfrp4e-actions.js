@@ -25,9 +25,9 @@ export class ActionHandlerWfrp extends ActionHandler {
 
         result.actorId = actor._id;
         
-        let weapons = this._getCategoryList(actor, tokenId, 'weapon');
+        let weapons = this._getItemsList(actor, tokenId, 'weapon');
         let characteristics = this._getCharacteristics(actor, tokenId);
-        let skills = this._getSkills(actor, tokenId);
+        let skills = this._getSkills(actor, tokenId, filters[skills]);
         let spells = this._getSpells(actor, tokenId);
         let prayers = this._getPrayers(actor, tokenId);
         let talents = this._getTalents(actor, tokenId);
@@ -44,9 +44,19 @@ export class ActionHandlerWfrp extends ActionHandler {
         return result;
     }
 
-    _getCategoryList(actor, tokenId, type) {
+    /** @override */
+    getFilterChoices(categoryId, actor) {
+        switch(categoryId) {
+            case 'skills':
+                return actor.items.filter(i.type === 'skill').map(s => { return {id: s._id, name: s.name} })
+            default:
+                return [];
+        }
+    }
+
+    _getItemsList(actor, tokenId, type) {
         let types = type+'s';
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory('items', false);
 
         let subcategory = this.initializeEmptySubcategory();
         subcategory.actions = this._produceMap(tokenId ,actor.items.filter(i => i.type == type), type);
@@ -57,7 +67,7 @@ export class ActionHandlerWfrp extends ActionHandler {
     }
 
     _getCharacteristics(actor, tokenId) {
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory('characteristics', false);
         let macroType = 'characteristic';
 
         let characteristics = Object.entries(actor.data.data.characteristics);
@@ -72,29 +82,10 @@ export class ActionHandlerWfrp extends ActionHandler {
         return result;
     }
 
-    _getItems(actor, tokenId) {
-        let result = this.initializeEmptyCategory();
-        let macroType = 'item';
-        let skills = actor.items.filter(i => i.type === macroType);
-
-        let basicSkills = skills.filter(s => s.data.data.grouped.value === 'isSpec');
-        let basicSkillsCat = this.initializeEmptySubcategory();
-        basicSkillsCat.actions = this._produceMap(tokenId, basicSkills, macroType);
-
-        let advancedSkills = skills.filter(s => s.data.data.grouped.value === 'isSpec');
-        let advancedSkillsCat = this.initializeEmptySubcategory();
-        advancedSkillsCat.actions = this._produceMap(tokenId, basicSkills, macroType);
-        
-        this._combineSubcategoryWithCategory(result, this.i18n('Basic'), basicSkillsCat);
-        this._combineSubcategoryWithCategory(result, this.i18n('Advanced'), advancedSkillsCat);
-
-        return result;
-    }
-
-    _getSkills(actor, tokenId) {
-        let result = this.initializeEmptyCategory();
+    _getSkills(actor, tokenId, filteredElements) {
+        let result = this.initializeEmptyCategory('skills', true);
         let macroType = 'skill';
-        let skills = actor.items.filter(i => i.type === macroType);
+        let skills = actor.items.filter(i => i.type === macroType && i._id);
 
         let meleeSkills = skills.filter(s => s.data.name.startsWith('Melee'));
         let meleeCategory = this.initializeEmptySubcategory();
@@ -104,7 +95,6 @@ export class ActionHandlerWfrp extends ActionHandler {
         let rangedCategory = this.initializeEmptySubcategory();
         rangedCategory.actions = this._produceMap(tokenId, rangedSkills, macroType);
 
-        let filter = ['ranged', 'melee'];
         let basicSkills = skills.filter(s => !(s.data.name.startsWith('Melee') || s.data.name.startsWith('Ranged'))  && s.data.data.grouped.value !== 'isSpec');
         let basicSkillsCat = this.initializeEmptySubcategory();
         basicSkillsCat.actions = this._produceMap(tokenId, basicSkills, macroType);
@@ -123,7 +113,7 @@ export class ActionHandlerWfrp extends ActionHandler {
 
     _getSpells(actor, tokenId) {
         let macroType = 'spell';
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory('spells', false);
 
         let spells = actor.items.filter(i => i.type === macroType);
         
@@ -156,7 +146,7 @@ export class ActionHandlerWfrp extends ActionHandler {
 
     _getPrayers(actor, tokenId) {
         let macroType = 'prayer';
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory('prayers', false);
 
         let prayers = actor.items.filter(i => i.type === macroType);
         
@@ -189,7 +179,7 @@ export class ActionHandlerWfrp extends ActionHandler {
     
     _getTalents(actor, tokenId) {
         let macroType = 'talent';
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory('talents', false);
 
         let talents = actor.items.filter(i => i.data.type === macroType);
 
@@ -209,7 +199,7 @@ export class ActionHandlerWfrp extends ActionHandler {
 
     _getTraits(actor, tokenId) {
         let macroType = 'trait';
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory('traits', false);
 
         let traits = actor.items.filter(i => i.data.type === macroType);
 

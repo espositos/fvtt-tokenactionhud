@@ -21,33 +21,41 @@ export class ActionHandler {
         id: '',
         name: '',
         info1: '',
-        actions: []
+        actions: [],
+        subcategories: []
     }
 
     constructor() {}
 
-    async buildActionList(token) {};
+    async buildActionList(token, filters) {};
 
     initializeEmptyActionList() {
-        return Object.assign(this.emptyActionList, {});
+        return JSON.parse(JSON.stringify(this.emptyActionList));
+    }
+
+    getFilterChoices(categoryId, actor) {
+        return [];
     }
 
     initializeEmptyCategory(categoryId, canFilter) {
-        let category = Object.assign(this.emptyCategory, {});
+        let category = JSON.parse(JSON.stringify(this.emptyCategory));
         category.canFilter = canFilter;
         category.id = categoryId;
         return category;
     }
 
-    initializeEmptySubcategory() {
-        return Object.assign(this.emptySubcategory, {});
+    initializeEmptySubcategory(subcategoryName = '') {
+        let subcategory = JSON.parse(JSON.stringify(this.emptySubcategory));
+        subcategory.name = subcategoryName;
+        return subcategory;
     }
 
     _combineCategoryWithList(result, categoryName, category) {
         if (!category)
             return;
 
-        category.name = categoryName;
+        if (categoryName?.length > 0)
+            category.name = categoryName;
 
         if (category.subcategories.length > 0)
             result.categories.push(category);
@@ -57,43 +65,34 @@ export class ActionHandler {
         if (!subcategory)
             return;
             
-        subcategory.name = subcategoryName;
+        if (subcategoryName?.length > 0)
+            subcategory.name = subcategoryName;
 
         if (subcategory.actions.length > 0 || subcategory.subcategories.length > 0)
             category.subcategories.push(subcategory);
     }
 
-    isLinkedCompendium(isGM, compendiumKey) {
-        if (!compendiumKey)
-            return false;
+    /** Compendiums */
 
-        let compendiums = isGM ? this.linkedCompendiumsGm : this.linkedCompendiumsPlayer;
-
-        if (!Array.isArray(compendiums))
-            return false;
-
-        return compendiums.includes(compendiumKey);
-    }
-
-    addGmSystemCompendium(name, key, isMacro) {
+    _addGmSystemCompendium(name, key, isMacro) {
         this.linkedCompendiumsGm[name] = {key: key, isMacro: isMacro};
     }
 
-    addPlayerSystemCompendium(name, key, isMacro) {
+    _addPlayerSystemCompendium(name, key, isMacro) {
         this.linkedCompendiumsPlayer[name] = {key: key, isMacro: isMacro};
     }
 
-    async addCompendiums(actionList) {
+    async _addCompendiumsToList(actionList) {
         let actorType = game.user.isGM ? 'gm' : 'player';
         let systemCompendiums = game.user.isGM ? this.linkedCompendiumsGm : this.linkedCompendiumsPlayer;
 
         actionList.tokenId = actorType;
         actionList.actorId = actorType;
 
-        await this._addCompendiums(actionList, actorType, systemCompendiums);
+        await this._combineCompendiums(actionList, actorType, systemCompendiums);
     }
 
-    async _addCompendiums(actionList, actorType, compendiums) {
+    async _combineCompendiums(actionList, actorType, compendiums) {
         for (let [k, v] of Object.entries(compendiums)) {
             if (!(k && v))
                 continue;

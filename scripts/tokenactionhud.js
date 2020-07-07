@@ -84,9 +84,15 @@ export class TokenActionHUD extends Application {
         return this._modDir + filepath;
     }
     
-    showFilterDialog() {
+    showFilterDialog(categoryId) {
+        if (!this.categoryCanBeFiltered(categoryId))
+            return;
+
         Hooks.once('renderDialog', (app, html, options) => {
-            let allowlist = Object.entries(game.dnd5e.config.skills).map(s => {return {value: s[1], id:s[0]}});
+
+            html.css('height', 'auto');
+
+            game.tokenActionHUD.getFilterChoices(categoryId);
             var $tagFilter = html.find('input[name="tokenactionhud-tagfilter"]');
             if ($tagFilter.length > 0) {
                 var tagify = new Tagify($tagFilter[0], {
@@ -103,9 +109,9 @@ export class TokenActionHUD extends Application {
             }
         })
 
-        let content = `<input name='tokenactionhud-tagfilter' class='some_class_name' placeholder='skills to ignore' value=''/>`
+        let content = `<input name='tokenactionhud-tagfilter' class='some_class_name' placeholder='values to hide' value=''/>`
         let d = new Dialog({
-            title: "Enter skills to ignore",
+            title: "Enter values to hide",
             content: content,
             buttons: {
              accept: {
@@ -114,7 +120,7 @@ export class TokenActionHUD extends Application {
               callback: async (html) => {
                   console.log(html);
                   let choices = html.find('input[name="tokenactionhud-tagfilter"]')[0].value;
-                  game.tokenActionHUD.submitFilter('skills', choices);
+                  game.tokenActionHUD.submitFilter(categoryId, choices);
               }
              },
              cancel: {
@@ -129,13 +135,17 @@ export class TokenActionHUD extends Application {
     }
 
     async submitFilter(categoryId, elements) {
-        this.addUserFilter(categoryId, elements);
+        this._addUserFilter(categoryId, elements);
         this.update();
     }
 
-    addUserFilter(categoryId, elements) {
+    getFilterChoices(categoryId) {
+        return this.actions._getFilterChoices(categoryId);
+    }
+
+    _addUserFilter(categoryId, elements) {
         let flags = { filters: { categoryId: categoryId, elements: elements } };
-        game.user.setFlag('token-action-hud', flags);
+        // game.user.setFlag('token-action-hud', flags);
     }
 
     getUserFilters() {

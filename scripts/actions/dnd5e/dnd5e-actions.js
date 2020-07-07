@@ -8,9 +8,8 @@ export class ActionHandler5e extends ActionHandler {
     }
 
     /** @override */
-    async buildActionList(token) {
+    async buildActionList(token, filters) {
         let result = this.initializeEmptyActionList();
-        await this.addCompendiums(result);
 
         if (!token)
             return result;
@@ -30,14 +29,22 @@ export class ActionHandler5e extends ActionHandler {
         let spells = this._getSpellsList(actor, tokenId, actorType);
         let feats = this._getFeatsList(actor, tokenId, actorType);
         let skills = this._getSkillsList(actor, tokenId, actorType);
-        
-        let checks = checkLists.buildChecksList(tokenId, actorType);
-    
+                
         this._combineCategoryWithList(result, this.i18n('tokenactionhud.inventory'), items);
         this._combineCategoryWithList(result, this.i18n('tokenactionhud.spells'), spells);
-        this._combineCategoryWithList(result, this.i18n('tokenactionhud.dnd5e.feats'), feats);
-        for (let [k, v] of Object.entries(checks)) {
-            this._combineCategoryWithList(result, k, v);
+        this._combineCategoryWithList(result, this.i18n('tokenactionhud.feats'), feats);
+        this._combineCategoryWithList(result, this.i18n('tokenactionhud.skills'), skills);
+        
+        if (settings.get('splitAbilities')) {
+            let saves = this._getAbilityList(tokenId, actorType, 'saves', this.i18n('tokenactionhud.saves'), 'abilitySave');
+            let checks = this._getAbilityList(tokenId, actorType, 'checks', this.i18n('tokenactionhud.checks'), 'abilityCheck');
+            
+            this._combineCategoryWithList(result, this.i18n('tokenactionhud.saves'), saves);
+            this._combineCategoryWithList(result, this.i18n('tokenactionhud.abilities'), checks);
+        } else {
+            let abilities = this._getAbilityList(tokenId, actorType, 'abilities', this.i18n('tokenactionhud.abilities'), 'ability');
+
+            this._combineCategoryWithListWithList(result, this.i18n('tokenactionhud.abilities'), abilities);
         }
 
         return result;
@@ -92,7 +99,7 @@ export class ActionHandler5e extends ActionHandler {
         this._combineSubcategoryWithCategory(result, this.i18n('DND5E.ItemTypeEquipmentPl'), equipmentCat);
         this._combineSubcategoryWithCategory(result, this.i18n('DND5E.ActionOther'), otherCat);
         this._combineSubcategoryWithCategory(result, this.i18n('DND5E.ItemTypeConsumablePl'), consumablesCat);
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.dnd5e.inconsumables'), inconsumablesCat);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.inconsumables'), inconsumablesCat);
         
         return result;
     }
@@ -201,16 +208,18 @@ export class ActionHandler5e extends ActionHandler {
             // Initialise subcategory if non-existant.
             if (power) {
                 if (!powers.subcategories.hasOwnProperty(prepType)) {
-                    powers.subcategories[prepType] = this.initializeEmptySubcategory();
+                    let prepTypeCat = this.initializeEmptySubcategory(prepType);
+                    powers.subcategories.push(prepTypeCat);
                     if (max > 0) {
-                        powers.subcategories[prepType].info1 = `${slots}/${max}`;
+                        prepTypeCat.info1 = `${slots}/${max}`;
                     }
                 }
             } else {                                
                 if (!book.subcategories.hasOwnProperty(levelName)) {
-                    book.subcategories[levelName] = this.initializeEmptySubcategory();
+                    let levelCat = this.initializeEmptySubcategory(levelName);
+                    book.subcategories.push(this.initializeEmptySubcategory(levelName));
                     if (max > 0) {
-                        book.subcategories[levelName].info1 = `${slots}/${max}`;
+                        levelCat.info1 = `${slots}/${max}`;
                     }
                 }
             }
@@ -222,9 +231,9 @@ export class ActionHandler5e extends ActionHandler {
 
             if (!max || levelInfo?.slotsAvailable) {
                 if (power) {
-                    powers.subcategories[prepType].actions.push(spell);
+                    powers.subcategories.find(s => s.name === prepType).actions.push(spell);
                 } else {
-                    book.subcategories[levelName].actions.push(spell);
+                    book.subcategories.find(s => s.name === levelName).actions.push(spell);
                 }
             }
             
@@ -232,13 +241,10 @@ export class ActionHandler5e extends ActionHandler {
         }.bind(this), {});
     
         let result = this.initializeEmptyCategory('spells', false);
-        
-        if (Object.keys(powers.subcategories).length > 0)
-            result.subcategories.powers = powers;
-    
-        if (Object.keys(book.subcategories).length > 0)
-            result.subcategories.books = book;
-        
+
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.powers'), powers)
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.books'), book)
+
         return result;
     }
 
@@ -307,26 +313,22 @@ export class ActionHandler5e extends ActionHandler {
             return;
         }.bind(this), {});
     
-        let result = this.initializeEmptyCategory('feats', true)
-    
-        if (active.actions.length > 0)
-            result.subcategories.active = active;
-    
-        if (legendary.actions.length > 0)
-            result.subcategories.legendary = legendary;
-    
-        if (lair.actions.length > 0)
-            result.subcategories.lair = lair;
-    
-        if (passive.actions.length > 0 && !settings.get('ignorePassiveFeats'))
-            result.subcategories.passive = passive;
+        let result = this.initializeEmptyCategory('feats', false)
+
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.active'), active);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.legendary'), legendary);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.lair'), lair);
+
+        if (!settings.get('ignorePassiveFeats'))
+            this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.passive'), passive);
         
         return result;
     }
 
     /** @private */
-    getSkillsList(tokenId, actor, actorType) {
+    _getSkillsList(tokenId, actor, actorType) {
         let result = this.initializeEmptyCategory('skills', false);
+        
         let abbr = settings.get('abbreviateSkills');
         
         let skillsActions = Object.entries(game.dnd5e.config.skills).map(e => {
@@ -338,7 +340,29 @@ export class ActionHandler5e extends ActionHandler {
         let skillsCategory = this.initializeEmptySubcategory();
         skillsCategory.actions = skillsActions;
 
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.dnd5e.skills'), skillsCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.skills'), skillsCategory);
+
+        return result;
+    }
+
+     /** @private */
+     _getAbilityList(tokenId, actorType, categoryId, categoryName, macroType) {
+        let result = this.initializeEmptyCategory(categoryId, false);
+        
+        let abbr = settings.get('abbreviateSkills');
+        
+        let actions = Object.entries(game.dnd5e.config.abilities).map(e => {
+            let name = abbr ? e[0] : e[1];
+            name = name.charAt(0).toUpperCase() + name.slice(1);
+            let encodedValue = [actorType, macroType, tokenId, e[0]].join(this.delimiter);
+            return { name: name, id: e[0], encodedValue: encodedValue }; 
+        });
+        let abilityCategory = this.initializeEmptySubcategory();
+        abilityCategory.actions = actions;
+
+        this._combineSubcategoryWithCategory(result, categoryName, abilityCategory);
+
+        return result;
     }
 
     /** @private */
@@ -347,7 +371,7 @@ export class ActionHandler5e extends ActionHandler {
         let result = { name: item.name, id: item._id, encodedValue: encodedValue }
         
         if (item.data.recharge && !item.data.recharge.charged && item.data.recharge.value) {
-            result.name += ` (${this.i18n('tokenactionhud.dnd5e.rechargeHint')})`;
+            result.name += ` (${this.i18n('tokenactionhud.recharge')})`;
         }
 
         result.info1 = this._getQuantityData(item);

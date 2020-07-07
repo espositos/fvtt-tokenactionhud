@@ -2,13 +2,26 @@
     "tokenactionhud": {
         "title": "Token Action HUD",
         "handlerNotFound": "not found, reverting to core roller.",
-        "rollable": "Rollable",
-        "unrollable": "Unrollable",
-        "skills": "Skills",
-        "inventory": "Inventory",
-        "level": "Level",
+
+        "abilities": "Abilities",
+        "active": "Active",
+        "books": "Books",
         "cantrips": "Cantrips",
+        "checks": "Checks",
+        "feats": "Feats",
+        "inconsumables": "Inconsumables",
+        "inventory": "Inventory",
+        "lair": "Lair",
+        "legendary": "Legendary",
+        "level": "Level",
+        "passive": "Passive",
+        "powers": "Powers",
+        "recharge": "Recharge",
+        "rollable": "Rollable",
+        "saves": "Saves",
+        "skills": "Skills",
         "spells": "Spells",
+        "unrollable": "Unrollable",
         
         "settings": {
             "rollHandler.name": "HUD roll handler",
@@ -56,16 +69,6 @@
                 "showGmCompendiums.name": "Show GM Compendiums",
                 "showGmCompendiums.hint": "If enabled, and if the user is a GM, the HUD bar will include GM moves, treasure rollable-tables, and charts."
             }   
-        }, 
-
-        "dnd5e": {
-            "feats": "Feats",
-            "inconsumables": "Inconsumables",
-            "rechargeHint": "Recharge",
-            "checks": "Checks",
-            "skills": "Skills",
-            "abilities": "Abilities",
-            "saves": "Saves"
         },
 
         "dungeonworld": {
