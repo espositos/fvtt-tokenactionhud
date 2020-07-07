@@ -93,7 +93,7 @@ export class ActionHandler5e extends ActionHandler {
         let inconsumablesCat = this.initializeEmptySubcategory();
         inconsumablesCat.actions = incomsumableActions;
         
-        let result = this.initializeEmptyCategory(this.i18n('tokenactionhud.inventory'), false);
+        let result = this.initializeEmptyCategory('inventory', false);
             
         this._combineSubcategoryWithCategory(result, this.i18n('DND5E.ItemTypeWeaponPl'), weaponsCat);
         this._combineSubcategoryWithCategory(result, this.i18n('DND5E.ItemTypeEquipmentPl'), equipmentCat);
