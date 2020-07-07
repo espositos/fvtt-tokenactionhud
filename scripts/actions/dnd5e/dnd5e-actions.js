@@ -28,22 +28,30 @@ export class ActionHandler5e extends ActionHandler {
         let spells = this._getSpellsList(actor, tokenId, actorType);
         let feats = this._getFeatsList(actor, tokenId, actorType);
         let skills = this._getSkillsList(actor, tokenId, actorType);
-                
-        this._combineCategoryWithList(result, this.i18n('tokenactionhud.inventory'), items);
-        this._combineCategoryWithList(result, this.i18n('tokenactionhud.spells'), spells);
-        this._combineCategoryWithList(result, this.i18n('tokenactionhud.feats'), feats);
-        this._combineCategoryWithList(result, this.i18n('tokenactionhud.skills'), skills);
+
+        let itemsTitle = this.i18n('tokenactionhud.inventory');
+        let spellsTitle = this.i18n('tokenactionhud.spells');
+        let featsTitle = this.i18n('tokenactionhud.feats');
+        let skillsTitle = this.i18n('tokenactionhud.skills');
+
+        this._combineCategoryWithList(result, itemsTitle, items);
+        this._combineCategoryWithList(result, spellsTitle, spells);
+        this._combineCategoryWithList(result, featsTitle, feats);
+        this._combineCategoryWithList(result, skillsTitle, skills);
         
         if (settings.get('splitAbilities')) {
-            let saves = this._getAbilityList(tokenId, actorType, 'saves', this.i18n('tokenactionhud.saves'), 'abilitySave');
-            let checks = this._getAbilityList(tokenId, actorType, 'checks', this.i18n('tokenactionhud.checks'), 'abilityCheck');
+            let savesTitle = this.i18n('tokenactionhud.saves');
+            let checksTitle = this.i18n('tokenactionhud.checks');
+            let saves = this._getAbilityList(tokenId, actorType, 'saves', savesTitle, 'abilitySave');
+            let checks = this._getAbilityList(tokenId, actorType, 'checks', checksTitle, 'abilityCheck');
             
-            this._combineCategoryWithList(result, this.i18n('tokenactionhud.saves'), saves);
-            this._combineCategoryWithList(result, this.i18n('tokenactionhud.abilities'), checks);
+            this._combineCategoryWithList(result, savesTitle, saves);
+            this._combineCategoryWithList(result, checksTitle, checks);
         } else {
-            let abilities = this._getAbilityList(tokenId, actorType, 'abilities', this.i18n('tokenactionhud.abilities'), 'ability');
+            let abilitiesTitle = this.i18n('tokenactionhud.abilities');
+            let abilities = this._getAbilityList(tokenId, actorType, 'abilities', abilitisTitle, 'ability');
 
-            this._combineCategoryWithListWithList(result, this.i18n('tokenactionhud.abilities'), abilities);
+            this._combineCategoryWithListWithList(result, abilitiesTitle, abilities);
         }
 
         return result;
@@ -56,8 +64,8 @@ export class ActionHandler5e extends ActionHandler {
         let validItems = this._filterLongerActions(actor.data.items.filter(i => i.data.quantity > 0));
         let sortedItems = this._sortByItemSort(validItems);
         let macroType = 'item';
-        var equipped;
 
+        let equipped;
         if (actor.data.type === 'npc' && settings.get('showAllNpcItems')) {
             equipped = sortedItems.filter(i => i.type !== 'consumable' && i.type !== 'spell' && i.type !== 'feat');
         } else {
@@ -92,13 +100,19 @@ export class ActionHandler5e extends ActionHandler {
         let inconsumablesCat = this.initializeEmptySubcategory();
         inconsumablesCat.actions = incomsumableActions;
         
+        let weaponsTitle = this.i18n('DND5E.ItemTypeWeaponPl');
+        let equipmentTitle = this.i18n('DND5E.ItemTypeEquipmentPl');
+        let otherTitle = this.i18n('DND5E.ActionOther');
+        let consumablesTitle = this.i18n('DND5E.ItemTypeConsumablePl');
+        let incomsumablesTitle = this.i18n('tokenactionhud.inconsumables');
+
         let result = this.initializeEmptyCategory('inventory', false);
-            
-        this._combineSubcategoryWithCategory(result, this.i18n('DND5E.ItemTypeWeaponPl'), weaponsCat);
-        this._combineSubcategoryWithCategory(result, this.i18n('DND5E.ItemTypeEquipmentPl'), equipmentCat);
-        this._combineSubcategoryWithCategory(result, this.i18n('DND5E.ActionOther'), otherCat);
-        this._combineSubcategoryWithCategory(result, this.i18n('DND5E.ItemTypeConsumablePl'), consumablesCat);
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.inconsumables'), inconsumablesCat);
+
+        this._combineSubcategoryWithCategory(result, weaponsTitle, weaponsCat);
+        this._combineSubcategoryWithCategory(result, equipmentTitle, equipmentCat);
+        this._combineSubcategoryWithCategory(result, otherTitle, otherCat);
+        this._combineSubcategoryWithCategory(result, consumablesTitle, consumablesCat);
+        this._combineSubcategoryWithCategory(result, incomsumablesTitle, inconsumablesCat);
         
         return result;
     }
@@ -241,8 +255,11 @@ export class ActionHandler5e extends ActionHandler {
     
         let result = this.initializeEmptyCategory('spells', false);
 
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.powers'), powers)
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.books'), book)
+        let powersTitle = this.i18n('tokenactionhud.powers');
+        let booksTitle = this.i18n('tokenactionhud.books');
+
+        this._combineSubcategoryWithCategory(result, powersTitle, powers)
+        this._combineSubcategoryWithCategory(result, booksTitle, book)
 
         return result;
     }
@@ -314,12 +331,18 @@ export class ActionHandler5e extends ActionHandler {
     
         let result = this.initializeEmptyCategory('feats', false)
 
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.active'), active);
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.legendary'), legendary);
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.lair'), lair);
+        let activeTitle = this.i18n('tokenactionhud.active');
+        let legendaryTitle = this.i18n('tokenactionhud.legendary');
+        let lairTitle = this.i18n('tokenactionhud.lair');
+        this._combineSubcategoryWithCategory(result, activeTitle, active);
+        this._combineSubcategoryWithCategory(result, legendaryTitle, legendary);
+        this._combineSubcategoryWithCategory(result, lairTitle, lair);
 
-        if (!settings.get('ignorePassiveFeats'))
-            this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.passive'), passive);
+        if (!settings.get('ignorePassiveFeats')) {
+            let passiveTitle = this.i18n('tokenactionhud.passive');
+            this._combineSubcategoryWithCategory(result, passiveTitle, passive);
+        }
+
         
         return result;
     }
@@ -327,19 +350,21 @@ export class ActionHandler5e extends ActionHandler {
     /** @private */
     _getSkillsList(tokenId, actor, actorType) {
         let result = this.initializeEmptyCategory('skills', false);
+        let macroType = 'skill';
         
         let abbr = settings.get('abbreviateSkills');
         
         let skillsActions = Object.entries(game.dnd5e.config.skills).map(e => {
             let name = abbr ? e[0] : e[1];
             name = name.charAt(0).toUpperCase() + name.slice(1);
-            let encodedValue = [actorType, 'skill', tokenId, e[0]].join(this.delimiter);
+            let encodedValue = [actorType, macroType, tokenId, e[0]].join(this.delimiter);
             return { name: name, id: e[0], encodedValue: encodedValue }; 
         });
         let skillsCategory = this.initializeEmptySubcategory();
         skillsCategory.actions = skillsActions;
 
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.skills'), skillsCategory);
+        let skillsTitle = this.i18n('tokenactionhud.skills');
+        this._combineSubcategoryWithCategory(result, skillsTitle, skillsCategory);
 
         return result;
     }
