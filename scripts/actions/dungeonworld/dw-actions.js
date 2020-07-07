@@ -5,8 +5,8 @@ export class ActionHandlerDw extends ActionHandler {
     constructor () {
         super();
         this._addGmSystemCompendium(this.i18n('DW.Moves'), 'dungeonworld.gm-movesprincipals', false);
-        this._addGmSystemCompendium(this.i18n('tokenactionhud.dungeonworld.charts'), 'dungeonworld.charts', false);
-        this._addGmSystemCompendium(this.i18n('tokenactionhud.dungeonworld.treasure'), 'dungeonworld.rollable-tables', false);
+        this._addGmSystemCompendium(this.i18n('tokenactionhud.charts'), 'dungeonworld.charts', false);
+        this._addGmSystemCompendium(this.i18n('tokenactionhud.treasure'), 'dungeonworld.rollable-tables', false);
     }
 
     /** @override */
@@ -55,7 +55,7 @@ export class ActionHandlerDw extends ActionHandler {
             this._combineCategoryWithList(result, this.i18n('DW.MovesOther'), basicMoves);
             this._combineCategoryWithList(result, this.i18n('DW.Spells'), spells);
             this._combineCategoryWithList(result, this.i18n('DW.Equipment'), equipment);
-            this._combineCategoryWithList(result, this.i18n('tokenactionhud.dungeonworld.abilities'), abilities);
+            this._combineCategoryWithList(result, this.i18n('tokenactionhud.abilities'), abilities);
         }
 
         
@@ -65,7 +65,7 @@ export class ActionHandlerDw extends ActionHandler {
 
     _getDamage(actor, tokenId, actorType) {
         let result = this.initializeEmptyCategory('damage', false);
-        let damageCategory = this.initializeEmptySubcategory();
+        let damageCategory = this.initializeEmptySubcategory(this.i18n('DW.Damage'));
         let encodedValue = [actorType, 'damage', tokenId, 'damage'].join(this.delimiter);
         damageCategory.actions.push({name: this.i18n('DW.Damage'), encodedValue: encodedValue, id: 'damage' })
 
@@ -82,7 +82,7 @@ export class ActionHandlerDw extends ActionHandler {
         let bookCategory = this._getBookMoves(moves, tokenId, actorType);
 
         this._combineSubcategoryWithCategory(result, this.i18n('DW.Roll'), rollCategory);
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.dungeonworld.book'), bookCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.book'), bookCategory);
 
         return result;
     }
@@ -90,7 +90,7 @@ export class ActionHandlerDw extends ActionHandler {
     _getRollMoves(moves, tokenId, actorType) {
         let rollMoves = moves.filter(m => m.data.data.rollType !== '');
         let rollActions = this._produceMap(tokenId, actorType, rollMoves, 'move');
-        let rollCategory = this.initializeEmptySubcategory();
+        let rollCategory = this.initializeEmptySubcategory(this.i18n('tokenactionhud.roll'));
         rollCategory.actions = rollActions;
 
         return rollCategory;
@@ -99,7 +99,7 @@ export class ActionHandlerDw extends ActionHandler {
     _getBookMoves(moves, tokenId, actorType) {
         let bookMoves = moves.filter(m => m.data.data.rollType === '');
         let bookActions = this._produceMap(tokenId, actorType, bookMoves, 'move');
-        let bookCategory = this.initializeEmptySubcategory();
+        let bookCategory = this.initializeEmptySubcategory(this.i18n('tokenactionhud.book'));
         bookCategory.actions = bookActions;
 
         return bookCategory;
@@ -110,7 +110,7 @@ export class ActionHandlerDw extends ActionHandler {
         let items = actor.itemTypes[categoryType];
         let result = this.initializeEmptyCategory(categoryId, false);
         let actions = this._produceMap(tokenId, actorType, items, categoryType);
-        let category = this.initializeEmptySubcategory();
+        let category = this.initializeEmptySubcategory(categoryname);
         category.actions = actions;
 
         this._combineSubcategoryWithCategory(result, categoryName, category);
@@ -125,10 +125,10 @@ export class ActionHandlerDw extends ActionHandler {
         let abilities = Object.entries(actor.data.data.abilities);
         let abilitiesMap = abilities.map(a => { return { data: { _id:a[0] }, name:a[1].label } })
         let actions = this._produceMap(tokenId, actorType, abilitiesMap, 'ability');
-        let abilitiesCategory = this.initializeEmptySubcategory();
+        let abilitiesCategory = this.initializeEmptySubcategory(this.i18n('tokenactionhud.abilities'));
         abilitiesCategory.actions = actions;
 
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.dungeonworld.abilities'), abilitiesCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.abilities'), abilitiesCategory);
 
         return result;
     }
@@ -161,8 +161,8 @@ export class ActionHandlerDw extends ActionHandler {
         let movesActions = this._produceMap(tokenId, actorType, movesMap, 'move')
         movesCategory.actions = movesActions;
         
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.dungeonworld.instinct'), instinctsCategory);
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.dungeonworld.monsterMoves'), movesCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.instinct'), instinctsCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.monsterMoves'), movesCategory);
 
         return result;
     }

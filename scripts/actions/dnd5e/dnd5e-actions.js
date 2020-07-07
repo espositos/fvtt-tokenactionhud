@@ -312,7 +312,7 @@ export class ActionHandler5e extends ActionHandler {
             return;
         }.bind(this), {});
     
-        let result = this.initializeEmptyCategory('feats', true)
+        let result = this.initializeEmptyCategory('feats', false)
 
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.active'), active);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.legendary'), legendary);

@@ -1,7 +1,10 @@
+import * as settings from '../settings.js';
+
 export class ActionHandler {
     i18n = (toTranslate) => game.i18n.localize(toTranslate);
-    linkedCompendiumsGm = {};
-    linkedCompendiumsPlayer = {};
+    registeredCategories = [];
+    linkedCompendiumsGm = [];
+    linkedCompendiumsPlayer = [];
     delimiter = '|';
 
     emptyActionList = {
@@ -34,10 +37,14 @@ export class ActionHandler {
     }
 
     getFilterChoices(categoryId, actor) {
-        return [];
+        if (!this.registeredCategories.includes(categoryId))
+            return [];
     }
 
     initializeEmptyCategory(categoryId, canFilter) {
+        if (this.registeredCategories.find(x => x === categoryId))
+            settings.Logger.error(`Category ${categoryId} already registered. Check for duplicate categories.`)
+
         let category = JSON.parse(JSON.stringify(this.emptyCategory));
         category.canFilter = canFilter;
         category.id = categoryId;
@@ -53,9 +60,6 @@ export class ActionHandler {
     _combineCategoryWithList(result, categoryName, category) {
         if (!category)
             return;
-
-        if (categoryName?.length > 0)
-            category.name = categoryName;
 
         if (category.subcategories.length > 0)
             result.categories.push(category);
@@ -75,11 +79,11 @@ export class ActionHandler {
     /** Compendiums */
 
     _addGmSystemCompendium(name, key, isMacro) {
-        this.linkedCompendiumsGm[name] = {key: key, isMacro: isMacro};
+        this.linkedCompendiumsGm.push( {name: name, key: key, isMacro: isMacro} );
     }
 
     _addPlayerSystemCompendium(name, key, isMacro) {
-        this.linkedCompendiumsPlayer[name] = {key: key, isMacro: isMacro};
+        this.linkedCompendiumsPlayer.push( {name: name, key: key, isMacro: isMacro} );
     }
 
     async _addCompendiumsToList(actionList) {
@@ -109,11 +113,14 @@ export class ActionHandler {
 
         let result = this.initializeEmptyCategory();
 
-        let macroType = isMacros ? 'macrocompendium' : 'compendium';            
+        let macroType = isMacros ? 'macros' : 'compendium';            
 
         let packEntries = pack.index.length > 0 ? pack.index : await pack.getIndex();
-        let encodedValue = [actorType, macroType, compendiumKey, e._id].join(this.delimiter);
-        let entriesMap = packEntries.map(e => { return {name: e.name, encodedValue: encodedValue, id: e.id } })
+        
+        let entriesMap = packEntries.map(e => { 
+            let encodedValue = [actorType, macroType, compendiumKey, e._id].join(this.delimiter);    
+            return {name: e.name, encodedValue: encodedValue, id: e._id }
+        });
         
         let entries = this.initializeEmptySubcategory();
         entries.actions = entriesMap;

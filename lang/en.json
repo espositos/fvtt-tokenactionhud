@@ -5,23 +5,37 @@
 
         "abilities": "Abilities",
         "active": "Active",
+        "atk": "Atk",
+        "book": "Book",
         "books": "Books",
         "cantrips": "Cantrips",
+        "characteristics": "Characteristics",
+        "charts": "Charts",
         "checks": "Checks",
+        "dmg": "Dmg",
         "feats": "Feats",
         "inconsumables": "Inconsumables",
+        "instinct": "Instinct",
         "inventory": "Inventory",
         "lair": "Lair",
         "legendary": "Legendary",
         "level": "Level",
+        "magic": "Magic",
+        "monsterMoves": "Monster Moves",
         "passive": "Passive",
         "powers": "Powers",
         "recharge": "Recharge",
+        "religion": "Religion",
         "rollable": "Rollable",
         "saves": "Saves",
         "skills": "Skills",
         "spells": "Spells",
+        "talents": "Talents",
+        "traits": "Traits",
+        "treasure": "Treasure",
         "unrollable": "Unrollable",
+        "weapons": "Weapons",
+        "roll": "Roll",
         
         "settings": {
             "rollHandler.name": "HUD roll handler",
@@ -69,21 +83,6 @@
                 "showGmCompendiums.name": "Show GM Compendiums",
                 "showGmCompendiums.hint": "If enabled, and if the user is a GM, the HUD bar will include GM moves, treasure rollable-tables, and charts."
             }   
-        },
-
-        "dungeonworld": {
-            "abilities": "Abilities",
-            "charts": "Charts",
-            "treasure": "Treasure",
-            "instinct": "Instinct",
-            "monsterMoves": "Monster Moves",
-            "book": "Book"
-        },
-
-        "pf2e": {
-            "active": "Active",
-            "atk": "Atk",
-            "dmg": "Dmg"
         }
     }
 }

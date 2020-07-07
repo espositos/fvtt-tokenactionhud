@@ -33,7 +33,7 @@ export class ActionHandlerWfrp extends ActionHandler {
         let talents = this._getTalents(actor, tokenId);
         let traits = this._getTraits(actor, tokenId);
         
-        this._combineCategoryWithList(result, this.i18n('WFRP4E.TrappingType.Weapon'), weapons);
+        this._combineCategoryWithList(result, this.i18n('tokenactionhud.weapons'), weapons);
         this._combineCategoryWithList(result, this.i18n('Characteristics'), characteristics);
         this._combineCategoryWithList(result, this.i18n('Skills'), skills);
         this._combineCategoryWithList(result, this.i18n('Magic'), spells);

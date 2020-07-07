@@ -7,7 +7,7 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
     
     handleActionEvent(event, encodedValue) {
-        let payload = encodedValue.split('.');
+        let payload = encodedValue.split('|');
         settings.Logger.debug(encodedValue);
         if (payload.length != 4) {
             super.throwInvalidValueErr();

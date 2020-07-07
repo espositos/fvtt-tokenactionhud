@@ -111,7 +111,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let spellsSorted = this._sortSpellsByLevel(items);
         let spellCategories = this._categoriseSpells(actor, tokenId, actorType, spellsSorted);
         
-        this._combineSubcategoryWithCategory(result, this.i18n('PF2E.TabSpellbookLabel'), spellCategories);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.spells'), spellCategories);
 
         return result;
     }
@@ -148,9 +148,9 @@ export class ActionHandlerPf2e extends ActionHandler {
                 
                 let levelKey = slot[0];
                 let level = levelKey.substr(4);
-                let levelName =  `${this.i18n('PF2E.CharacterLevelLabel')} ${level}`;
+                let levelName =  `${this.i18n('tokenactionhud.level')} ${level}`;
 
-                levelName = level === 0 ? this.i18n('TraitCantrip') : levelName;
+                levelName = level === 0 ? this.i18n('tokenactionhud.cantrips') : levelName;
                 
                 let items = Object.values(slot[1].prepared).map(spell => { if (!spell.expended) return spells.find(sp => sp.data._id === spell.id) });
                 items = items.filter(i => !!i);
@@ -194,7 +194,7 @@ export class ActionHandlerPf2e extends ActionHandler {
             }
             let category = result.subcategories[bookName];
             
-            let levelName = level == 0 ? this.i18n('PF2E.TraitCantrip') : `${this.i18n('PF2E.CharacterLevelLabel')} ${level}`;
+            let levelName = level == 0 ? this.i18n('tokenactionhud.cantrips') : `${this.i18n('tokenactionhud.level')} ${level}`;
             let levelNameWithBook = `${bookName} - ${levelName}`;
 
             // On first subcategory, include bookName, attack bonus, and spell DC.
@@ -216,7 +216,8 @@ export class ActionHandlerPf2e extends ActionHandler {
                     category.subcategories[levelName].info1 = this._getSpellSlotInfo(spellbook, level, false);
             }
 
-            let spell = { 'name': s.name, 'encodedValue': `${actorType}.${macroType}.${tokenId}.${s.data._id}`, 'id': s.data._id };
+            let encodedValue = [actorType, macroType, tokenId, s.data._id].join(this.delimiter);
+            let spell = { name: s.name, encodedValue: encodedValue, id: s.data._id };
             this._addSpellInfo(s, spell);
             if (stillFirstSubcategory)
                 category.subcategories[levelNameWithBook].actions.push(spell);
@@ -233,7 +234,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let result = '';
         
         let spelldc = spellbook.data.data.spelldc;
-        let attackBonus = spelldc.value >= 0 ? `${this.i18n('tokenactionhud.pf2e.atk')} +${spelldc.value}` : `${this.i18n('tokenactionhud.pf2e.atk')} -${spelldc.value}`;
+        let attackBonus = spelldc.value >= 0 ? `${this.i18n('tokenactionhud.atk')} +${spelldc.value}` : `${this.i18n('tokenactionhud.atk')} -${spelldc.value}`;
         let dcInfo = `${this.i18n('PF2E.DCLabel')}${spellbook.data.data.spelldc.dc}`;
 
         result = `${attackBonus} ${dcInfo}`;
@@ -279,10 +280,10 @@ export class ActionHandlerPf2e extends ActionHandler {
     _addAttackDamageInfo(s, spell) {
         let info = [];
         if (s.data.data.spellType.value === 'attack')
-            info.push(this.i18n('tokenactionhud.pf2e.atk'));
+            info.push(this.i18n('tokenactionhud.atk'));
 
         if (s.data.data.damage.value)
-            info.push(this.i18n('tokenactionhud.pf2e.dmg'));
+            info.push(this.i18n('tokenactionhud.dmg'));
 
         spell.info2 = info.join(', ');
     }
@@ -302,8 +303,8 @@ export class ActionHandlerPf2e extends ActionHandler {
         let passive = this.initializeEmptySubcategory();
         passive.actions = this._produceMap(tokenId, actorType, (items ?? []).filter(a => a.data.data.actionType.value === 'passive'), macroType);
 
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.pf2e.active'), active);
-        this._combineSubcategoryWithCategory(result, this.i18n('PF2E.ActionTypePassive'), passive);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.active'), active);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.passive'), passive);
 
         return result;
     }
@@ -313,7 +314,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let result = this.initializeEmptyCategory();
 
         let actorSaves = actor.data.data.saves;
-        let saveMap = Object.keys(actorSaves).map(k => { return {'_id': k, 'name': CONFIG.PF2E.saves[k]}});
+        let saveMap = Object.keys(actorSaves).map(k => { return {_id: k, name: CONFIG.PF2E.saves[k]}});
 
         let saves = this.initializeEmptySubcategory();
         saves.actions = this._produceMap(tokenId, actorType, saveMap, 'save');
@@ -332,7 +333,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let actorAbilities = actor.data.data.abilities;
         let abilityMap = Object.keys(actorAbilities).map(k => { 
             let name = abbr ? k.charAt(0).toUpperCase() + k.slice(1) : CONFIG.PF2E.abilities[k];
-            return {'_id': k, 'name': name}});
+            return {_id: k, name: name}});
 
         let abilities = this.initializeEmptySubcategory();
         abilities.actions = this._produceMap(tokenId, actorType, abilityMap, 'ability');
@@ -369,6 +370,7 @@ export class ActionHandlerPf2e extends ActionHandler {
     
     /** @private */
     _produceMap(tokenId, actorType, itemSet, type) {
-        return itemSet.map(i => { return { 'name': i.name, 'encodedValue': `${actorType}.${type}.${tokenId}.${i._id}`, 'id': i._id };});
+        let encodedValue = [actorType, type, tokenId, i._id].join(this.delimiter);
+        return itemSet.map(i => { return { name: i.name, encodedValue: encodedValue, id: i._id };});
     }
 }

@@ -64,7 +64,7 @@ export class RollHandlerBaseDw extends RollHandler {
         let formula = damageMod > 0 ? `${damageDie}+${damageMod}` : damageDie;
 
         let templateData = {
-            title: `Damage`,
+            title: this.i18n('tokenactionhud.damage'),
             flavor: `${flavour}`,
         };
         canvas.tokens.controlled[0].actor.rollMove(formula, actor, {}, templateData);
@@ -85,8 +85,8 @@ export class RollHandlerBaseDw extends RollHandler {
         let formula = `2d6+${mod}`
 
         let templateData = {
-            title: `${ability.label} Roll`,
-            flavor: 'Made a move using strength!',
+            title: `${ability.label} ${game.i18n.localize('tokenactionhud.roll')}`,
+            flavor: `Made a move using ${ability.label.toLowerCase()}!`,
         };
         canvas.tokens.controlled[0].actor.rollMove(formula, actor, {}, templateData);
     }
