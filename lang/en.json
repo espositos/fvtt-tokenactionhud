@@ -36,7 +36,10 @@
     "tokenactionhud.unrollable": "Unrollable",
     "tokenactionhud.weapons": "Weapons",
     "tokenactionhud.roll": "Roll",    
-
+    "tokenactionhud.free": "Free",    
+    "tokenactionhud.reactions": "Reactions",    
+    "tokenactionhud.actions": "Actions",    
+    
     "tokenactionhud.settings.rollHandler.name": "HUD roll handler",
     "tokenactionhud.settings.rollHandler.hint": "Choose which module will receive the HUD's actions.",
     "tokenactionhud.settings.enabledForUser.name": "Enable HUD for current user",

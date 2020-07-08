@@ -94,9 +94,9 @@ export class ActionHandlerPf2e extends ActionHandler {
         let free = this.initializeEmptySubcategory();
         free.actions = this._produceMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'free'), macroType);
 
-        this._combineSubcategoryWithCategory(result, this.i18n('PF2E.TabActions'), actions);
-        this._combineSubcategoryWithCategory(result, this.i18n('PF2E.ActionsReactionsHeader'), reactions);
-        this._combineSubcategoryWithCategory(result, this.i18n('PF2E.ActionsFreeActionsHeader'), free);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.actions'), actions);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.reactions'), reactions);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.free'), free);
 
         return result;
     }
@@ -156,13 +156,18 @@ export class ActionHandlerPf2e extends ActionHandler {
                 items = items.filter(i => !!i);
 
                 if (items.length > 0) {
-                    if (!result.subcategories.hasOwnProperty(bookName))
-                        result.subcategories[bookName] = this.initializeEmptySubcategory();
+                    let bookCategory;
+                    if (!result.subcategories.some(s => s.name === bookName)) {
+                        bookCategory = this.initializeEmptySubcategory(bookName);
+                        result.subcategories.push(bookCategory);
+                    } else {
+                        bookCategory = result.subcategories.find(b => b.name === bookName);
+                    }
                     
                     let levelSubcategory = this.initializeEmptySubcategory();
                     levelSubcategory.actions = this._produceMap(tokenId, items, 'spell');
 
-                    if (Object.keys(result.subcategories[bookName].subcategories).length === 0) {
+                    if (result.subcategories.find(s => s.name === bookName)?.subcategories.length === 0) {
                         levelName = `${bookName} - ${levelName}`;
                         if (actor.data.type === 'character')
                             levelSubcategory.info1 = this._getSpellSlotInfo(s, level, true);
@@ -170,7 +175,7 @@ export class ActionHandlerPf2e extends ActionHandler {
                         levelSubcategory.info2 = this._getSpellDcInfo(s);
                     }
 
-                    this._combineSubcategoryWithCategory(result.subcategories[bookName], levelName, levelSubcategory);
+                    this._combineSubcategoryWithCategory(bookCategory, levelName, levelSubcategory);
                 }
             });
         })
@@ -189,41 +194,47 @@ export class ActionHandlerPf2e extends ActionHandler {
 
             let bookName = spellbook.data.name;
             
-            if (!result.subcategories.hasOwnProperty(bookName)) {
-                result.subcategories[bookName] = this.initializeEmptySubcategory();
+            let category;
+            if (!result.subcategories.some(b => b.name === bookName)) {
+                category = this.initializeEmptySubcategory(bookName);
+                result.subcategories.push(category);
+            } else {
+                category = result.subcategories.find(b => b.name === bookName);
             }
-            let category = result.subcategories[bookName];
             
             let levelName = level == 0 ? this.i18n('tokenactionhud.cantrips') : `${this.i18n('tokenactionhud.level')} ${level}`;
             let levelNameWithBook = `${bookName} - ${levelName}`;
 
             // On first subcategory, include bookName, attack bonus, and spell DC.
-            if (Object.keys(category.subcategories).length === 0) {                
-                category.subcategories[levelNameWithBook] = this.initializeEmptySubcategory();
+            let levelCategory;
+            if (category.subcategories.length === 0) {                
+                levelCategory = this.initializeEmptySubcategory(levelNameWithBook);
+                category.subcategories.push(levelCategory);
                 
                 if (actor.data.type === 'character')
-                    category.subcategories[levelNameWithBook].info1 = this._getSpellSlotInfo(spellbook, level, true);
+                    levelCategory.info1 = this._getSpellSlotInfo(spellbook, level, true);
 
-                category.subcategories[levelNameWithBook].info2 = this._getSpellDcInfo(spellbook);
+                levelCategory.info2 = this._getSpellDcInfo(spellbook);
             }
             
             // If there's only one subcategory, check if it's the same as the current
-            let stillFirstSubcategory = Object.keys(category.subcategories).length === 1 && category.subcategories.hasOwnProperty(levelNameWithBook);
+            let stillFirstSubcategory = category.subcategories.length === 1 && category.subcategories.some(s => s.name === levelNameWithBook);
             
-            if (!(stillFirstSubcategory || category.subcategories.hasOwnProperty(levelName))) {
-                category.subcategories[levelName] = this.initializeEmptySubcategory();
+            if (!(stillFirstSubcategory || category.subcategories.some(s => s.name === levelName))) {
+                levelCategory = this.initializeEmptySubcategory(levelName);
+                category.subcategories.push(levelCategory);
                 if (actor.data.type === 'character')
-                    category.subcategories[levelName].info1 = this._getSpellSlotInfo(spellbook, level, false);
+                levelCategory.info1 = this._getSpellSlotInfo(spellbook, level, false);
             }
+            
+            let categoryName = stillFirstSubcategory ? levelNameWithBook : levelName;
+            levelCategory = category.subcategories.find(s => s.name === categoryName);
 
             let encodedValue = [macroType, tokenId, s.data._id].join(this.delimiter);
             let spell = { name: s.name, encodedValue: encodedValue, id: s.data._id };
             this._addSpellInfo(s, spell);
-            if (stillFirstSubcategory)
-                category.subcategories[levelNameWithBook].actions.push(spell);
-            else
-                category.subcategories[levelName].actions.push(spell);
-            
+            levelCategory.actions.push(spell);     
+                  
         }.bind(this));
         
         return result;
@@ -370,7 +381,9 @@ export class ActionHandlerPf2e extends ActionHandler {
     
     /** @private */
     _produceMap(tokenId, itemSet, type) {
-        let encodedValue = [type, tokenId, i._id].join(this.delimiter);
-        return itemSet.map(i => { return { name: i.name, encodedValue: encodedValue, id: i._id };});
+        return itemSet.map(i => {
+            let encodedValue = [type, tokenId, i._id].join(this.delimiter);
+            return { name: i.name, encodedValue: encodedValue, id: i._id };
+        });
     }
 }

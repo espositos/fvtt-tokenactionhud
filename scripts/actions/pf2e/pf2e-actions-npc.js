@@ -43,8 +43,8 @@ export class NpcActionHandlerPf2e {
             let subcategory = this.baseHandler.initializeEmptySubcategory();
 
             let variantsMap = [];
-            let map = s.data.isAgile ? 4 : 5;
-            let attackMod = s.data.data.bonus.total;
+            let map = (s.data.data.traits.value || []).includes('agile') || s.data.isAgile ? 4 : 5;
+            let attackMod = s.data.data.bonus.total ?? 0;
             
             let currentMap = 0;
             let currentBonus = attackMod;
