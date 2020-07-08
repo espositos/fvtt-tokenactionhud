@@ -6,8 +6,8 @@ export class ActionHandlerWfrp extends ActionHandler {
     }    
 
     /** @override */
-    async buildActionList(token, filters) {
-        let result = { tokenId: '', actorId: '', categories: {}};
+    async buildActionList(token, allowlists) {
+        let result = this.initializeEmptyActionList();
 
         if (!token) {
             return result;
@@ -27,7 +27,7 @@ export class ActionHandlerWfrp extends ActionHandler {
         
         let weapons = this._getItemsList(actor, tokenId, 'weapon');
         let characteristics = this._getCharacteristics(actor, tokenId);
-        let skills = this._getSkills(actor, tokenId, filters[skills]);
+        let skills = this._getSkills(actor, tokenId);
         let spells = this._getSpells(actor, tokenId);
         let prayers = this._getPrayers(actor, tokenId);
         let talents = this._getTalents(actor, tokenId);
