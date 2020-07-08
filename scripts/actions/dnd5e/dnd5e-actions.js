@@ -229,7 +229,7 @@ export class ActionHandler5e extends ActionHandler {
             } else {                                
                 if (!book.subcategories.hasOwnProperty(levelName)) {
                     let levelCat = this.initializeEmptySubcategory(levelName);
-                    book.subcategories.push(this.initializeEmptySubcategory(levelName));
+                    book.subcategories.push(levelCat);
                     if (max > 0) {
                         levelCat.info1 = `${slots}/${max}`;
                     }

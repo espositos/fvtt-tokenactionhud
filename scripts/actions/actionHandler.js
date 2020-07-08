@@ -95,20 +95,17 @@ export class ActionHandler {
         actionList.tokenId = actorType;
         actionList.actorId = actorType;
 
-        await this._combineCompendiums(actionList, actorType, systemCompendiums);
+        await this._combineCompendiums(actionList, systemCompendiums);
     }
 
-    async _combineCompendiums(actionList, actorType, compendiums) {
-        for (let [k, v] of Object.entries(compendiums)) {
-            if (!(k && v))
-                continue;
-
-            let entries = await this._getCompendiumEntries(actorType, k, v.key, v.isMacros);
-            this._combineCategoryWithList(actionList, k, entries);
+    async _combineCompendiums(actionList, compendiums) {
+        for (let c of compendiums) {
+            let entries = await this._getCompendiumEntries(c.name, c.key, c.isMacros);
+            this._combineCategoryWithList(actionList, c.name, entries);
         }
     }
     
-    async _getCompendiumEntries(actorType, categoryName, compendiumKey, isMacros) {
+    async _getCompendiumEntries(categoryName, compendiumKey, isMacros) {
         let pack = game?.packs?.get(compendiumKey);
         if (!pack)
             return;
@@ -120,7 +117,7 @@ export class ActionHandler {
         let packEntries = pack.index.length > 0 ? pack.index : await pack.getIndex();
         
         let entriesMap = packEntries.map(e => { 
-            let encodedValue = [actorType, macroType, compendiumKey, e._id].join(this.delimiter);    
+            let encodedValue = [macroType, compendiumKey, e._id].join(this.delimiter);    
             return {name: e.name, encodedValue: encodedValue, id: e._id }
         });
         

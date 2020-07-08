@@ -1,4 +1,6 @@
 export class RollHandler {
+    i18n = (toTranslate) => game.i18n.localize(toTranslate);
+    
     getActor(tokenId) {
         return canvas.tokens.placeables.find(t => t.data._id === tokenId)?.actor;
     }

@@ -32,22 +32,22 @@ export class ActionHandlerDw extends ActionHandler {
         let actorType = actor.data.type;
 
         if (actorType === 'npc') {
-            let damage = this._getDamage(actor, tokenId, actorType);
-            let tags = this._getTags(actor, tokenId, actorType);
-            let specialQualities = this._getSpecialQualities(actor, tokenId, actorType);
-            this.moves = this._getMovesNpc(actor, tokenId, actorType);
+            let damage = this._getDamage(actor, tokenId);
+            let tags = this._getTags(actor, tokenId);
+            let specialQualities = this._getSpecialQualities(actor, tokenId);
+            this.moves = this._getMovesNpc(actor, tokenId);
 
             this._combineCategoryWithList(result, this.i18n('DW.Damage'), damage);
             this._combineCategoryWithList(result, this.i18n('DW.Tags'), tags);
             this._combineCategoryWithList(result, this.i18n('DW.SpecialQualities'), specialQualities);
         } else if (actorType === 'character') {
-            let damage = this._getDamage(actor, tokenId, actorType);
-            let startingMoves = this._getMovesByType(actor, tokenId, actorType, this.i18n('DW.MovesStarting'));
-            let advancedMoves = this._getMovesByType(actor, tokenId, actorType, this.i18n('DW.MovesAdvanced'));
-            let basicMoves = this._getMovesByType(actor, tokenId, actorType, this.i18n('DW.MovesOther'));
-            let spells = this._getSubcategoryByType(actor, tokenId, actorType, 'spells', this.i18n('DW.Spells'), 'spell');
-            let equipment = this._getSubcategoryByType(actor, tokenId, actorType, 'equipment', this.i18n('DW.Equipment'), 'equipment');
-            let abilities = this._getAbilities(actor, tokenId, actorType);
+            let damage = this._getDamage(actor, tokenId);
+            let startingMoves = this._getMovesByType(actor, tokenId, this.i18n('DW.MovesStarting'));
+            let advancedMoves = this._getMovesByType(actor, tokenId, this.i18n('DW.MovesAdvanced'));
+            let basicMoves = this._getMovesByType(actor, tokenId, this.i18n('DW.MovesOther'));
+            let spells = this._getSubcategoryByType(actor, tokenId, 'spells', this.i18n('DW.Spells'), 'spell');
+            let equipment = this._getSubcategoryByType(actor, tokenId, 'equipment', this.i18n('DW.Equipment'), 'equipment');
+            let abilities = this._getAbilities(actor, tokenId);
             
             this._combineCategoryWithList(result, this.i18n('DW.Damage'), damage);
             this._combineCategoryWithList(result, this.i18n('DW.MovesStarting'), startingMoves);
@@ -63,10 +63,10 @@ export class ActionHandlerDw extends ActionHandler {
         return result;
     }
 
-    _getDamage(actor, tokenId, actorType) {
+    _getDamage(actor, tokenId) {
         let result = this.initializeEmptyCategory('damage', false);
         let damageCategory = this.initializeEmptySubcategory(this.i18n('DW.Damage'));
-        let encodedValue = [actorType, 'damage', tokenId, 'damage'].join(this.delimiter);
+        let encodedValue = ['damage', tokenId, 'damage'].join(this.delimiter);
         damageCategory.actions.push({name: this.i18n('DW.Damage'), encodedValue: encodedValue, id: 'damage' })
 
         this._combineSubcategoryWithCategory(result, 'damage', damageCategory);
@@ -74,12 +74,12 @@ export class ActionHandlerDw extends ActionHandler {
         return result;
     }
 
-    _getMovesByType(actor, tokenId, actorType, movesType) {
+    _getMovesByType(actor, tokenId, movesType) {
         let moves = actor.itemTypes.move.filter(m => m.data.data.moveType === movesType);
         let result = this.initializeEmptyCategory('moves', false);
 
-        let rollCategory = this._getRollMoves(moves, tokenId, actorType);
-        let bookCategory = this._getBookMoves(moves, tokenId, actorType);
+        let rollCategory = this._getRollMoves(moves, tokenId);
+        let bookCategory = this._getBookMoves(moves, tokenId);
 
         this._combineSubcategoryWithCategory(result, this.i18n('DW.Roll'), rollCategory);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.book'), bookCategory);
@@ -87,18 +87,18 @@ export class ActionHandlerDw extends ActionHandler {
         return result;
     }
 
-    _getRollMoves(moves, tokenId, actorType) {
+    _getRollMoves(moves, tokenId) {
         let rollMoves = moves.filter(m => m.data.data.rollType !== '');
-        let rollActions = this._produceMap(tokenId, actorType, rollMoves, 'move');
+        let rollActions = this._produceMap(tokenId, rollMoves, 'move');
         let rollCategory = this.initializeEmptySubcategory(this.i18n('tokenactionhud.roll'));
         rollCategory.actions = rollActions;
 
         return rollCategory;
     }
 
-    _getBookMoves(moves, tokenId, actorType) {
+    _getBookMoves(moves, tokenId) {
         let bookMoves = moves.filter(m => m.data.data.rollType === '');
-        let bookActions = this._produceMap(tokenId, actorType, bookMoves, 'move');
+        let bookActions = this._produceMap(tokenId, bookMoves, 'move');
         let bookCategory = this.initializeEmptySubcategory(this.i18n('tokenactionhud.book'));
         bookCategory.actions = bookActions;
 
@@ -106,11 +106,11 @@ export class ActionHandlerDw extends ActionHandler {
     }
 
     /** @private */
-    _getSubcategoryByType(actor, tokenId, actorType, categoryId, categoryName, categoryType) {
+    _getSubcategoryByType(actor, tokenId, categoryId, categoryName, categoryType) {
         let items = actor.itemTypes[categoryType];
         let result = this.initializeEmptyCategory(categoryId, false);
-        let actions = this._produceMap(tokenId, actorType, items, categoryType);
-        let category = this.initializeEmptySubcategory(categoryname);
+        let actions = this._produceMap(tokenId, items, categoryType);
+        let category = this.initializeEmptySubcategory(categoryName);
         category.actions = actions;
 
         this._combineSubcategoryWithCategory(result, categoryName, category);
@@ -119,12 +119,12 @@ export class ActionHandlerDw extends ActionHandler {
     }
 
     /** @private */
-    _getAbilities(actor, tokenId, actorType) {
+    _getAbilities(actor, tokenId) {
         let result = this.initializeEmptyCategory('abilities', false);
 
         let abilities = Object.entries(actor.data.data.abilities);
         let abilitiesMap = abilities.map(a => { return { data: { _id:a[0] }, name:a[1].label } })
-        let actions = this._produceMap(tokenId, actorType, abilitiesMap, 'ability');
+        let actions = this._produceMap(tokenId, abilitiesMap, 'ability');
         let abilitiesCategory = this.initializeEmptySubcategory(this.i18n('tokenactionhud.abilities'));
         abilitiesCategory.actions = actions;
 
@@ -133,12 +133,11 @@ export class ActionHandlerDw extends ActionHandler {
         return result;
     }
 
-    _getMovesNpc(actor, tokenId, actorType) {
+    _getMovesNpc(actor, tokenId) {
         let result = this.initializeEmptyCategory('moves', false);
 
         let biography = actor.data.data.details.biography;
-        
-        
+            
         let instinctsCategory = this.initializeEmptySubcategory();
         let instinctRegex = new RegExp('<p(|\s+[^>]*)>(Instinct:.*?)<\/p\s*>', 'g')
         let instinctMap = Array.from(biography.matchAll(instinctRegex)).map(m => {
@@ -147,7 +146,7 @@ export class ActionHandlerDw extends ActionHandler {
         return {data: {_id: encodedValue}, name: move};
         });
 
-        let instinctActions = this._produceMap(tokenId, actorType, instinctMap, 'instinct');
+        let instinctActions = this._produceMap(tokenId, instinctMap, 'instinct');
         instinctsCategory.actions = instinctActions;
 
         let movesCategory = this.initializeEmptySubcategory();
@@ -158,7 +157,7 @@ export class ActionHandlerDw extends ActionHandler {
         return {data: {_id: encodedValue}, name: move};
         });
 
-        let movesActions = this._produceMap(tokenId, actorType, movesMap, 'move')
+        let movesActions = this._produceMap(tokenId, movesMap, 'move')
         movesCategory.actions = movesActions;
         
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.instinct'), instinctsCategory);
@@ -167,7 +166,7 @@ export class ActionHandlerDw extends ActionHandler {
         return result;
     }
 
-    _getTags(actor, tokenId, actorType) {
+    _getTags(actor, tokenId) {
         let result = this.initializeEmptyCategory('tags', false);
         let tags = actor.data.data.tagsString.split(',').map(t => {
             let tag = t.trim();
@@ -179,13 +178,13 @@ export class ActionHandlerDw extends ActionHandler {
         });
 
         let tagCategory = this.initializeEmptySubcategory();
-        tagCategory.actions = this._produceMap(tokenId, actorType, tags, 'tag');
+        tagCategory.actions = this._produceMap(tokenId, tags, 'tag');
 
         this._combineSubcategoryWithCategory(result, this.i18n('DW.Tags'), tagCategory);
         return result;
     }
 
-    _getSpecialQualities(actor, tokenId, actorType) {
+    _getSpecialQualities(actor, tokenId) {
         let result = this.initializeEmptyCategory('qualities', false);
         let qualities = actor.data.data.attributes.specialQualities.value.split(',').map(s => {
             let quality = s.trim();
@@ -197,16 +196,16 @@ export class ActionHandlerDw extends ActionHandler {
         });
 
         let qualityCategory = this.initializeEmptySubcategory();
-        qualityCategory.actions = this._produceMap(tokenId, actorType, qualities, 'quality');
+        qualityCategory.actions = this._produceMap(tokenId, qualities, 'quality');
 
         this._combineSubcategoryWithCategory(result, this.i18n('DW.SpecialQualities'), qualityCategory);
         return result;
     }
 
     /** @private */
-    _produceMap(tokenId, actorType, itemSet, macroType) {
+    _produceMap(tokenId, itemSet, macroType) {
         return itemSet.filter(i => !!i).map(i => {
-            let encodedValue = [actorType, macroType, tokenId, i.data._id].join(this.delimiter);
+            let encodedValue = [macroType, tokenId, i.data._id].join(this.delimiter);
             return { name: i.name, encodedValue: encodedValue, id: i.data._id };
         });
     }
