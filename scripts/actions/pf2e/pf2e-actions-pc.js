@@ -7,16 +7,14 @@ export class PcActionHandlerPf2e {
     }
 
     async buildActionList(result, tokenId, actor) {
-        let actorType = 'character';
-
-        let strikes = this._getStrikesList(actor, tokenId, actorType);
-        let actions = this.baseHandler._getActionsList(actor, tokenId, actorType);
-        let items = this.baseHandler._getItemsList(actor, tokenId, actorType);
-        let spells = this.baseHandler._getSpellsList(actor, tokenId, actorType);
-        let feats = this.baseHandler._getFeatsList(actor, tokenId, actorType);
-        let skills = this._getSkillsList(actor, tokenId, actorType);
-        let saves = this.baseHandler._getSaveList(actor, tokenId, actorType);
-        let attributes = this._getAttributeList(actor, tokenId, actorType);        
+        let strikes = this._getStrikesList(actor, tokenId);
+        let actions = this.baseHandler._getActionsList(actor, tokenId);
+        let items = this.baseHandler._getItemsList(actor, tokenId);
+        let spells = this.baseHandler._getSpellsList(actor, tokenId);
+        let feats = this.baseHandler._getFeatsList(actor, tokenId);
+        let skills = this._getSkillsList(actor, tokenId);
+        let saves = this.baseHandler._getSaveList(actor, tokenId);
+        let attributes = this._getAttributeList(actor, tokenId);        
         
         this.baseHandler._combineCategoryWithList(result, 'strikes', strikes);
         this.baseHandler._combineCategoryWithList(result, 'actions', actions);
@@ -26,14 +24,14 @@ export class PcActionHandlerPf2e {
         this.baseHandler._combineCategoryWithList(result, 'skills', skills);
         this.baseHandler._combineCategoryWithList(result, 'saves', saves);
         if (settings.get('showPcAbilities')) {
-            let abilities = this.baseHandler._getAbilityList(actor, tokenId, actorType);
+            let abilities = this.baseHandler._getAbilityList(actor, tokenId);
             this.baseHandler._combineCategoryWithList(result, 'abilities', abilities);
         }
         this.baseHandler._combineCategoryWithList(result, 'attributes', attributes);
     }
 
     /** @private */
-    _getStrikesList(actor, tokenId, actorType) {
+    _getStrikesList(actor, tokenId) {
         let macroType = 'strike';
         let result = this.baseHandler.initializeEmptyCategory();
 
@@ -63,10 +61,12 @@ export class PcActionHandlerPf2e {
                 return {_id: encodeURIComponent(this.name+`>${this.variants.indexOf(v)}`), name: name }
             }.bind(s));
 
-            subcategory.actions = this.baseHandler._produceMap(tokenId, actorType, variantsMap, macroType);
+            subcategory.actions = this.baseHandler._produceMap(tokenId, variantsMap, macroType);
             
-            subcategory.actions.push({name: 'Damage', encodedValue: `${actorType}.${macroType}.${tokenId}.${encodeURIComponent(s.name+'>damage')}`, id: encodeURIComponent(s.name+'>damage')})
-            subcategory.actions.push({name: 'Critical', encodedValue: `${actorType}.${macroType}.${tokenId}.${encodeURIComponent(s.name+'>critical')}`, id: encodeURIComponent(s.name+'>critical')})
+            let damageEncodedValue = [macroType, tokenId, encodeURIComponent(s.data._id+'>damage')].join(this.baseHandler.delimiter);
+            let critEncodedValue = [macroType, tokenId, encodeURIComponent(s.data._id+'>critical')].join(this.baseHandler.delimiter);
+            subcategory.actions.push({name: 'Damage', encodedValue: damageEncodedValue, id: encodeURIComponent(s.name+'>damage')})
+            subcategory.actions.push({name: 'Critical', encodedValue: critEncodedValue, id: encodeURIComponent(s.name+'>critical')})
 
             this.baseHandler._combineSubcategoryWithCategory(result, s.name, subcategory);
         });
@@ -75,7 +75,7 @@ export class PcActionHandlerPf2e {
     }
 
     /** @private */
-    _getSkillsList(actor, tokenId, actorType) {
+    _getSkillsList(actor, tokenId) {
         let result = this.baseHandler.initializeEmptyCategory();
         
         let abbr = settings.get('abbreviateSkills');
@@ -87,11 +87,11 @@ export class PcActionHandlerPf2e {
         });
 
         let skills = this.baseHandler.initializeEmptySubcategory();
-        skills.actions = this.baseHandler._produceMap(tokenId, actorType, skillMap, 'skill');
+        skills.actions = this.baseHandler._produceMap(tokenId, skillMap, 'skill');
 
         let loreItems = actor.items.filter(i => i.data.type === 'lore');
         let lore = this.baseHandler.initializeEmptySubcategory();
-        lore.actions = this.baseHandler._produceMap(tokenId, actorType, loreItems, 'lore');
+        lore.actions = this.baseHandler._produceMap(tokenId, loreItems, 'lore');
 
         this.baseHandler._combineSubcategoryWithCategory(result, 'skills', skills);
         this.baseHandler._combineSubcategoryWithCategory(result, 'lore', lore);
@@ -100,7 +100,7 @@ export class PcActionHandlerPf2e {
     }
 
     /** @private */
-    _getAttributeList(actor, tokenId, actorType) {
+    _getAttributeList(actor, tokenId) {
         let macroType = 'attribute';
         let result = this.baseHandler.initializeEmptyCategory();
         let attributes = this.baseHandler.initializeEmptySubcategory();
@@ -111,7 +111,7 @@ export class PcActionHandlerPf2e {
             return { _id: a[0], name: name } 
         });
         
-        attributes.actions = this.baseHandler._produceMap(tokenId, actorType, attributesMap, macroType);
+        attributes.actions = this.baseHandler._produceMap(tokenId, attributesMap, macroType);
         
         this.baseHandler._combineSubcategoryWithCategory(result, 'attributes', attributes);
 

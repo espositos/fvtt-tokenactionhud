@@ -7,16 +7,14 @@ export class NpcActionHandlerPf2e {
     }
 
     async buildActionList(result, tokenId, actor) {
-        let actorType = 'npc';
-
-        let strikes = this._getStrikesListNpc(actor, tokenId, actorType);
-        let actions = this.baseHandler._getActionsList(actor, tokenId, actorType);
-        let items = this.baseHandler._getItemsList(actor, tokenId, actorType);
-        let spells = this.baseHandler._getSpellsList(actor, tokenId, actorType);
-        let feats = this.baseHandler._getFeatsList(actor, tokenId, actorType);
-        let skills = this._getSkillsListNpc(actor, tokenId, actorType);
-        let saves = this.baseHandler._getSaveList(actor, tokenId, actorType);
-        let attributes = this._getAttributeListNpc(actor, tokenId, actorType);     
+        let strikes = this._getStrikesListNpc(actor, tokenId);
+        let actions = this.baseHandler._getActionsList(actor, tokenId);
+        let items = this.baseHandler._getItemsList(actor, tokenId);
+        let spells = this.baseHandler._getSpellsList(actor, tokenId);
+        let feats = this.baseHandler._getFeatsList(actor, tokenId);
+        let skills = this._getSkillsListNpc(actor, tokenId);
+        let saves = this.baseHandler._getSaveList(actor, tokenId);
+        let attributes = this._getAttributeListNpc(actor, tokenId);     
         
         this.baseHandler._combineCategoryWithList(result, 'strikes', strikes);
         this.baseHandler._combineCategoryWithList(result, 'actions', actions);
@@ -26,14 +24,14 @@ export class NpcActionHandlerPf2e {
         this.baseHandler._combineCategoryWithList(result, 'skills', skills);
         this.baseHandler._combineCategoryWithList(result, 'saves', saves);
         if (settings.get('showNpcAbilities')) {
-            let abilities = this.baseHandler._getAbilityList(actor, tokenId, actorType);
+            let abilities = this.baseHandler._getAbilityList(actor, tokenId);
             this.baseHandler._combineCategoryWithList(result, 'abilities', abilities);
         }
         this.baseHandler._combineCategoryWithList(result, 'attributes', attributes);
     }
 
     /** @private */
-    _getStrikesListNpc(actor, tokenId, actorType) {
+    _getStrikesListNpc(actor, tokenId) {
         let macroType = 'strike';
         let result = this.baseHandler.initializeEmptyCategory();
 
@@ -64,14 +62,20 @@ export class NpcActionHandlerPf2e {
                 variantsMap.push({_id: `${s.data._id}>${i}`, name: name});
             }
                 
-            subcategory.actions = this.baseHandler._produceMap(tokenId, actorType, variantsMap, macroType);
+            subcategory.actions = this.baseHandler._produceMap(tokenId, variantsMap, macroType);
             
-            subcategory.actions.push({name: 'Damage', encodedValue: `${actorType}.${macroType}.${tokenId}.${encodeURIComponent(s.data._id+'>damage')}`, id: encodeURIComponent(s.data._id+'>damage')})
-            subcategory.actions.push({name: 'Critical', encodedValue: `${actorType}.${macroType}.${tokenId}.${encodeURIComponent(s.data._id+'>critical')}`, id: encodeURIComponent(s.data._id+'>critical')})
+            let damageEncodedValue = [macroType, tokenId, encodeURIComponent(s.data._id+'>damage')].join(this.baseHandler.delimiter);
+            let critEncodedValue = [macroType, tokenId, encodeURIComponent(s.data._id+'>critical')].join(this.baseHandler.delimiter);
+            subcategory.actions.push({name: 'Damage', encodedValue: damageEncodedValue, id: encodeURIComponent(s.data._id+'>damage')})
+            subcategory.actions.push({name: 'Critical', encodedValue: critEncodedValue, id: encodeURIComponent(s.data._id+'>critical')})
 
             let attackEffects = s.data.data.attackEffects?.value;
-            if (attackEffects.length > 0)
-                attackEffects.forEach(a => subcategory.actions.push({name: `Plus ${a}`, encodedValue: `${actorType}.${macroType}.${tokenId}.plus>${encodeURIComponent(a)}`}));
+            if (attackEffects.length > 0) {}
+                attackEffects.forEach(a => {
+                    let id = `plus>${encodeURIComponent(a)}`;
+                    let encodedValue = [macroType, tokenId, id].join(this.baseHandler.delimiter);
+                    subcategory.actions.push({name: `Plus ${a}`, encodedValue: encodedValue, id: id})
+                });
 
             this.baseHandler._combineSubcategoryWithCategory(result, s.name, subcategory);
         });
@@ -80,12 +84,12 @@ export class NpcActionHandlerPf2e {
     }
 
     /** @private */
-    _getSkillsListNpc(actor, tokenId, actorType) {
+    _getSkillsListNpc(actor, tokenId) {
         let result = this.baseHandler.initializeEmptyCategory();
         
         let loreItems = actor.items.filter(i => i.data.type === 'lore');
         let lore = this.baseHandler.initializeEmptySubcategory();
-        lore.actions = this.baseHandler._produceMap(tokenId, actorType, loreItems, 'lore');
+        lore.actions = this.baseHandler._produceMap(tokenId, loreItems, 'lore');
         
         let abbr = settings.get('abbreviateSkills');
         if (abbr)
@@ -99,14 +103,14 @@ export class NpcActionHandlerPf2e {
     }
 
     /** @private */
-    _getAttributeListNpc(actor, tokenId, actorType) {
+    _getAttributeListNpc(actor, tokenId) {
         let macroType = 'attribute';
         let result = this.baseHandler.initializeEmptyCategory();
         let attributes = this.baseHandler.initializeEmptySubcategory();
 
         let attributesMap = [{_id: 'perception', name: 'Perception'},{_id: 'initiative', name: 'Initiative'}]
         
-        attributes.actions = this.baseHandler._produceMap(tokenId, actorType, attributesMap, macroType);
+        attributes.actions = this.baseHandler._produceMap(tokenId, attributesMap, macroType);
         
         this.baseHandler._combineSubcategoryWithCategory(result, 'attributes', attributes);
 

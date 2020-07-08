@@ -41,7 +41,7 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
-    _getItemsList(actor, tokenId, actorType) {
+    _getItemsList(actor, tokenId) {
         let macroType = 'item';
         let result = this.initializeEmptyCategory();
         
@@ -50,23 +50,23 @@ export class ActionHandlerPf2e extends ActionHandler {
         
         let weaponList = items.filter(i => i.type === 'weapon');
         if (actor.data.type === 'character') weaponList = weaponList.filter(i => i.data.data.equipped.value);
-        let weaponActions = this._buildItemActions(tokenId, actorType, macroType, weaponList);
+        let weaponActions = this._buildItemActions(tokenId, macroType, weaponList);
         let weapons = this.initializeEmptySubcategory();
         weapons.actions = weaponActions;
 
         let armourList = items.filter(i => i.type === 'armor');
         if (actor.data.type === 'character') armourList = armourList.filter(i => i.data.data.equipped.value);
-        let armourActions = this._buildItemActions(tokenId, actorType, macroType, armourList);
+        let armourActions = this._buildItemActions(tokenId, macroType, armourList);
         let armour = this.initializeEmptySubcategory();
         armour.actions = armourActions;
 
         let equipmentList = items.filter(i => i.type === 'equipment');
-        let equipmentActions = this._buildItemActions(tokenId, actorType, macroType, equipmentList);
+        let equipmentActions = this._buildItemActions(tokenId, macroType, equipmentList);
         let equipment = this.initializeEmptySubcategory();
         equipment.actions = equipmentActions;
 
         let consumablesList = items.filter(i => i.type === 'consumable');
-        let consumableActions = this._buildItemActions(tokenId, actorType, macroType, consumablesList);
+        let consumableActions = this._buildItemActions(tokenId, macroType, consumablesList);
         let consumables = this.initializeEmptySubcategory();
         consumables.actions = consumableActions;
  
@@ -79,20 +79,20 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
-    _getActionsList(actor, tokenId, actorType) {
+    _getActionsList(actor, tokenId) {
         let macroType = 'action';
         let result = this.initializeEmptyCategory();
 
         let filteredActions = (actor.items ?? []).filter(a => a.type === macroType);
 
         let actions = this.initializeEmptySubcategory();
-        actions.actions = this._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'action'), macroType);
+        actions.actions = this._produceMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'action'), macroType);
 
         let reactions = this.initializeEmptySubcategory();
-        reactions.actions = this._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'reaction'), macroType);
+        reactions.actions = this._produceMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'reaction'), macroType);
 
         let free = this.initializeEmptySubcategory();
-        free.actions = this._produceMap(tokenId, actorType, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'free'), macroType);
+        free.actions = this._produceMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'free'), macroType);
 
         this._combineSubcategoryWithCategory(result, this.i18n('PF2E.TabActions'), actions);
         this._combineSubcategoryWithCategory(result, this.i18n('PF2E.ActionsReactionsHeader'), reactions);
@@ -102,14 +102,14 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
-    _getSpellsList(actor, tokenId, actorType) {
+    _getSpellsList(actor, tokenId) {
         let result = this.initializeEmptyCategory();
 
         let filter = ['spell'];
         let items = (actor.items ?? []).filter(a => filter.includes(a.type));
 
         let spellsSorted = this._sortSpellsByLevel(items);
-        let spellCategories = this._categoriseSpells(actor, tokenId, actorType, spellsSorted);
+        let spellCategories = this._categoriseSpells(actor, tokenId, spellsSorted);
         
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.spells'), spellCategories);
 
@@ -130,7 +130,7 @@ export class ActionHandlerPf2e extends ActionHandler {
     }    
     
     /** @private */
-    _categoriseSpells(actor, tokenId, actorType, spells) {
+    _categoriseSpells(actor, tokenId, spells) {
         const macroType = 'spell';
         let result = this.initializeEmptySubcategory();
         
@@ -160,11 +160,11 @@ export class ActionHandlerPf2e extends ActionHandler {
                         result.subcategories[bookName] = this.initializeEmptySubcategory();
                     
                     let levelSubcategory = this.initializeEmptySubcategory();
-                    levelSubcategory.actions = this._produceMap(tokenId, actorType, items, 'spell');
+                    levelSubcategory.actions = this._produceMap(tokenId, items, 'spell');
 
                     if (Object.keys(result.subcategories[bookName].subcategories).length === 0) {
                         levelName = `${bookName} - ${levelName}`;
-                        if (actorType === 'character')
+                        if (actor.data.type === 'character')
                             levelSubcategory.info1 = this._getSpellSlotInfo(s, level, true);
 
                         levelSubcategory.info2 = this._getSpellDcInfo(s);
@@ -201,7 +201,7 @@ export class ActionHandlerPf2e extends ActionHandler {
             if (Object.keys(category.subcategories).length === 0) {                
                 category.subcategories[levelNameWithBook] = this.initializeEmptySubcategory();
                 
-                if (actorType === 'character')
+                if (actor.data.type === 'character')
                     category.subcategories[levelNameWithBook].info1 = this._getSpellSlotInfo(spellbook, level, true);
 
                 category.subcategories[levelNameWithBook].info2 = this._getSpellDcInfo(spellbook);
@@ -212,11 +212,11 @@ export class ActionHandlerPf2e extends ActionHandler {
             
             if (!(stillFirstSubcategory || category.subcategories.hasOwnProperty(levelName))) {
                 category.subcategories[levelName] = this.initializeEmptySubcategory();
-                if (actorType === 'character')
+                if (actor.data.type === 'character')
                     category.subcategories[levelName].info1 = this._getSpellSlotInfo(spellbook, level, false);
             }
 
-            let encodedValue = [actorType, macroType, tokenId, s.data._id].join(this.delimiter);
+            let encodedValue = [macroType, tokenId, s.data._id].join(this.delimiter);
             let spell = { name: s.name, encodedValue: encodedValue, id: s.data._id };
             this._addSpellInfo(s, spell);
             if (stillFirstSubcategory)
@@ -289,7 +289,7 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
-    _getFeatsList(actor, tokenId, actorType) {
+    _getFeatsList(actor, tokenId) {
         let macroType = 'feat';
 
         let result = this.initializeEmptyCategory();
@@ -298,10 +298,10 @@ export class ActionHandlerPf2e extends ActionHandler {
         let items = (actor.items ?? []).filter(a => filter.includes(a.type));
 
         let active = this.initializeEmptySubcategory();
-        active.actions = this._produceMap(tokenId, actorType, (items ?? []).filter(a => a.data.data.actionType.value !== 'passive'), macroType);
+        active.actions = this._produceMap(tokenId, (items ?? []).filter(a => a.data.data.actionType.value !== 'passive'), macroType);
 
         let passive = this.initializeEmptySubcategory();
-        passive.actions = this._produceMap(tokenId, actorType, (items ?? []).filter(a => a.data.data.actionType.value === 'passive'), macroType);
+        passive.actions = this._produceMap(tokenId, (items ?? []).filter(a => a.data.data.actionType.value === 'passive'), macroType);
 
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.active'), active);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.passive'), passive);
@@ -310,14 +310,14 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
-    _getSaveList(actor, tokenId, actorType) {
+    _getSaveList(actor, tokenId) {
         let result = this.initializeEmptyCategory();
 
         let actorSaves = actor.data.data.saves;
         let saveMap = Object.keys(actorSaves).map(k => { return {_id: k, name: CONFIG.PF2E.saves[k]}});
 
         let saves = this.initializeEmptySubcategory();
-        saves.actions = this._produceMap(tokenId, actorType, saveMap, 'save');
+        saves.actions = this._produceMap(tokenId, saveMap, 'save');
 
         this._combineSubcategoryWithCategory(result, this.i18n('PF2E.SavesHeader'), saves);
 
@@ -325,7 +325,7 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
-    _getAbilityList(actor, tokenId, actorType) {
+    _getAbilityList(actor, tokenId) {
         let result = this.initializeEmptyCategory();
 
         let abbr = settings.get('abbreviateSkills');
@@ -336,7 +336,7 @@ export class ActionHandlerPf2e extends ActionHandler {
             return {_id: k, name: name}});
 
         let abilities = this.initializeEmptySubcategory();
-        abilities.actions = this._produceMap(tokenId, actorType, abilityMap, 'ability');
+        abilities.actions = this._produceMap(tokenId, abilityMap, 'ability');
 
         this._combineSubcategoryWithCategory(result, this.i18n('PF2E.AbilityTitle'), abilities);
 
@@ -344,8 +344,8 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
-    _buildItemActions(tokenId, actorType, macroType, itemList) {
-        let result = this._produceMap(tokenId, actorType, itemList, macroType);
+    _buildItemActions(tokenId, macroType, itemList) {
+        let result = this._produceMap(tokenId, itemList, macroType);
 
         result.forEach(i => this._addItemInfo( itemList.find(item => item.data._id === i.id), i));
 
@@ -369,8 +369,8 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
     
     /** @private */
-    _produceMap(tokenId, actorType, itemSet, type) {
-        let encodedValue = [actorType, type, tokenId, i._id].join(this.delimiter);
+    _produceMap(tokenId, itemSet, type) {
+        let encodedValue = [type, tokenId, i._id].join(this.delimiter);
         return itemSet.map(i => { return { name: i.name, encodedValue: encodedValue, id: i._id };});
     }
 }
