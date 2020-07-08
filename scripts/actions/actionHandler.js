@@ -2,7 +2,6 @@ import * as settings from '../settings.js';
 
 export class ActionHandler {
     i18n = (toTranslate) => game.i18n.localize(toTranslate);
-    registeredCategories = [];
     linkedCompendiumsGm = [];
     linkedCompendiumsPlayer = [];
     delimiter = '|';
@@ -28,7 +27,11 @@ export class ActionHandler {
         subcategories: []
     }
 
-    constructor() {}
+    filterManager = null;
+
+    constructor(filterManager) {
+        this.filterManager = filterManager;
+    }
 
     async buildActionList(token, filters) {};
 
@@ -36,17 +39,8 @@ export class ActionHandler {
         return JSON.parse(JSON.stringify(this.emptyActionList));
     }
 
-    getFilterChoices(categoryId, actor) {
-        if (!this.registeredCategories.includes(categoryId))
-            return [];
-    }
-
-    initializeEmptyCategory(categoryId, canFilter = false) {
-        if (this.registeredCategories.find(x => x === categoryId))
-            settings.Logger.error(`Category ${categoryId} already registered. Check for duplicate categories.`)
-
+    initializeEmptyCategory(categoryId) {
         let category = JSON.parse(JSON.stringify(this.emptyCategory));
-        category.canFilter = canFilter;
         category.id = categoryId;
         return category;
     }

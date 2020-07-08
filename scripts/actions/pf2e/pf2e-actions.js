@@ -4,8 +4,8 @@ import { PcActionHandlerPf2e } from './pf2e-actions-pc.js';
 import { NpcActionHandlerPf2e } from './pf2e-actions-npc.js';
 
 export class ActionHandlerPf2e extends ActionHandler {
-    constructor() {
-        super();
+    constructor(filterManager) {
+        super(filterManager);
         this.pcActionHandler = new PcActionHandlerPf2e(this);
         this.npcActionHandler = new NpcActionHandlerPf2e(this);
     }    
@@ -43,7 +43,7 @@ export class ActionHandlerPf2e extends ActionHandler {
     /** @private */
     _getItemsList(actor, tokenId) {
         let macroType = 'item';
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory('items');
         
         let filter = ['weapon', 'equipment', 'consumable', 'armor'];
         let items = (actor.items ?? []).filter(a => filter.includes(a.type));
@@ -81,7 +81,7 @@ export class ActionHandlerPf2e extends ActionHandler {
     /** @private */
     _getActionsList(actor, tokenId) {
         let macroType = 'action';
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory('actions');
 
         let filteredActions = (actor.items ?? []).filter(a => a.type === macroType);
 
@@ -103,7 +103,7 @@ export class ActionHandlerPf2e extends ActionHandler {
 
     /** @private */
     _getSpellsList(actor, tokenId) {
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory('spells');
 
         let filter = ['spell'];
         let items = (actor.items ?? []).filter(a => filter.includes(a.type));
@@ -303,7 +303,7 @@ export class ActionHandlerPf2e extends ActionHandler {
     _getFeatsList(actor, tokenId) {
         let macroType = 'feat';
 
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory('feats');
 
         let filter = [macroType];
         let items = (actor.items ?? []).filter(a => filter.includes(a.type));
@@ -322,7 +322,7 @@ export class ActionHandlerPf2e extends ActionHandler {
 
     /** @private */
     _getSaveList(actor, tokenId) {
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory('saves');
 
         let actorSaves = actor.data.data.saves;
         let saveMap = Object.keys(actorSaves).map(k => { return {_id: k, name: CONFIG.PF2E.saves[k]}});
@@ -337,7 +337,7 @@ export class ActionHandlerPf2e extends ActionHandler {
 
     /** @private */
     _getAbilityList(actor, tokenId) {
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory('abilities');
 
         let abbr = settings.get('abbreviateSkills');
 

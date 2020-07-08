@@ -2,6 +2,7 @@ import { ActionHandler5e } from './actions/dnd5e/dnd5e-actions.js';
 import { ActionHandlerWfrp } from './actions/wfrp4e/wfrp4e-actions.js';
 import { ActionHandlerPf2e } from './actions/pf2e/pf2e-actions.js';
 import { ActionHandlerDw } from './actions/dungeonworld/dw-actions.js';
+import { FilterManager } from './actions/filter/filterManager.js';
 import * as roll5e from './rollHandlers/dnd5e/dnd5e-factory.js';
 import * as rollWfrp from './rollHandlers/wfrp4e/wfrp4e-factory.js';
 import * as rollPf2e from './rollHandlers/pf2e/pf2e-factory.js';
@@ -9,16 +10,16 @@ import * as rollDw from './rollHandlers/dungeonworld/dw-factory.js';
 
 export class HandlersManager {
     // Currently only planning for one kind of action handler for each system
-    static getActionHandler(system) {
+    static getActionHandler(system, filterManager) {
         switch (system) {
             case 'dnd5e':
-                return new ActionHandler5e();
+                return new ActionHandler5e(filterManager);
             case 'pf2e':
-                return new ActionHandlerPf2e();
+                return new ActionHandlerPf2e(filterManager);
             case 'wfrp4e':
-                return new ActionHandlerWfrp();
+                return new ActionHandlerWfrp(filterManager);
             case 'dungeonworld':
-                return new ActionHandlerDw();
+                return new ActionHandlerDw(filterManager);
         }
         throw new Error('System not supported by Token Action HUD');
     }

@@ -1,14 +1,16 @@
-import * as settings from "./settings.js";
-import { HandlersManager } from "./handlersManager.js";
-import { TagDialog } from "./tagDialog.js";
+import * as settings from './settings.js';
+import { HandlersManager } from './handlersManager.js';
+import { TagDialog } from './tagDialog.js';
+import { FilterManager } from './actions/filter/filterManager.js';
 
 export class TokenActionHUD extends Application {
-    constructor(actions, rollHandler) {
+    constructor(actions, rollHandler, filterManager) {
         super();
         this.refresh_timeout = null;
         this.tokens = null;
         this.actions = actions;
         this.rollHandler = rollHandler;
+        this.filterManager = filterManager;
     }
 
     updateSettings() {
@@ -61,11 +63,11 @@ export class TokenActionHUD extends Application {
             let userPos = function (pos) {
                 return new Promise(resolve => {
                     function check() {
-                        let elmnt = document.getElementById("token-action-hud")
+                        let elmnt = document.getElementById('token-action-hud')
                         if (elmnt) {
                             elmnt.style.bottom = null;
-                            elmnt.style.top = (pos.top) + "px";
-                            elmnt.style.left = (pos.left) + "px";
+                            elmnt.style.top = (pos.top) + 'px';
+                            elmnt.style.left = (pos.left) + 'px';
                         elmnt.style.position = 'fixed';
                         elmnt.style.zIndex = 100;
                         resolve();
@@ -86,11 +88,7 @@ export class TokenActionHUD extends Application {
     }
     
     showFilterDialog(categoryId) {
-        let actor = this.tokens.controlled[0].actor;
-        let allowlist = this._getFilterChoices(categoryId, actor);
-        
-        if (allowlist.length === 0)
-            return;
+        let choices = this.filterManager.getSuggestions(categoryId);
 
         Hooks.once('renderTagDialog', (app, html, options) => {
 
@@ -98,15 +96,16 @@ export class TokenActionHUD extends Application {
 
             var $tagFilter = html.find('input[name="tokenactionhud-tagfilter"]');
 
+            html.find('select[id="isBlocklist"]').val(this.filterManager.isBlocklist(categoryId));
+
             if ($tagFilter.length > 0) {
                 var tagify = new Tagify($tagFilter[0], {
-                enforceWhitelist: true,
-                whitelist: allowlist,
+                whitelist: choices,
                 delimiters: ';',
                 maxTags: 'Infinity',
                 dropdown: {
                     maxItems: 20,           // <- maxumum allowed rendered suggestions
-                    classname: "tags-look", // <- custom classname for this dropdown, so it could be targeted
+                    classname: 'tags-look', // <- custom classname for this dropdown, so it could be targeted
                     enabled: 0,             // <- show suggestions on focus
                     closeOnSelect: false    // <- do not hide the suggestions dropdown once an item has been selected
                 }
@@ -115,54 +114,46 @@ export class TokenActionHUD extends Application {
 
         })
 
-        let content = `<input name='tokenactionhud-tagfilter' class='some_class_name' placeholder='values to hide (split with semi-colon)' value=''/>`
+        let content = `<input name='tokenactionhud-tagfilter' class='some_class_name' placeholder='hide (split with semi-colon)' value=''/>
+        <select id='isBlocklist' name='blocklist' size='1'>
+        <option value='true'>Blocklist</option>
+        <option value='false'>Allowlist</option>
+      </select>`
         let d = new TagDialog({
-            title: "Enter values to hide",
+            title: 'Enter values to hide',
             content: content,
             buttons: {
              accept: {
               icon: '<i class="fas fa-check"></i>',
-              label: "Accept",
+              label: 'Accept',
               callback: async (html) => {
                   console.log(html);
                   let choices = html.find('input[name="tokenactionhud-tagfilter"]')[0].value;
-                  game.tokenActionHUD.submitFilter(categoryId, choices);
+                  let isBlocklist = html.find('select[id="isBlocklist"]')[0].value
+                  game.tokenActionHUD.submitFilter(categoryId, choices, isBlocklist);
               }
              },
              cancel: {
               icon: '<i class="fas fa-times"></i>',
-              label: "Cancel"
+              label: 'Cancel'
              }
             },
-            default: "cancel",
+            default: 'cancel',
            });
 
            d.render(true);
     }
 
-    async submitFilter(categoryId, elements) {
-        this._addUserFilter(categoryId, elements);
+    async submitFilter(categoryId, elements, isBlocklist) {
+        this.filterManager.setFilteredElementsElements(categoryId, elements, isBlocklist);
         this.update();
-    }
-
-    _getFilterChoices(categoryId, actor) {
-        return this.actions.getFilterChoices(categoryId, actor);
-    }
-
-    _addUserFilter(categoryId, elements) {
-        let flags = { filters: { categoryId: categoryId, elements: elements } };
-        // game.user.setFlag('token-action-hud', flags);
-    }
-
-    getUserFilters() {
-        return game.user.getFlag('token-action-hud', 'filters');
     }
 
     /** @override */
     static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-        template: "/modules/token-action-hud/templates/template.hbs",
-        id: "token-action-hud",
+        template: '/modules/token-action-hud/templates/template.hbs',
+        id: 'token-action-hud',
         classes: [],
         width: 200,
         height: 20,
@@ -172,7 +163,7 @@ export class TokenActionHUD extends Application {
         popOut: false,
         minimizable: false,
         resizable: false,
-        title: "token-action-hud",
+        title: 'token-action-hud',
         dragDrop: [],
         tabs: [],
         scrollY: []
@@ -184,7 +175,7 @@ export class TokenActionHUD extends Application {
         let hovering = settings.get('onTokenHover');
         const data = super.getData();
         data.actions = this.targetActions;
-        data.id = "token-action-hud";
+        data.id = 'token-action-hud';
         data.hovering = hovering;
         settings.Logger.debug('HUD data:', data);
         return data;
@@ -199,7 +190,7 @@ export class TokenActionHUD extends Application {
         const handleClick = e => {
             let target = e.target;
 
-            if (target.tagName !== "BUTTON")
+            if (target.tagName !== 'BUTTON')
                 target = e.currentTarget.children[0];
 
             let value = target.value;
@@ -257,8 +248,8 @@ export class TokenActionHUD extends Application {
                     pos3 = e.clientX;
                     pos4 = e.clientY;
                     // set the element's new position:
-                    elmnt.style.top = (elmnt.offsetTop - pos2) - marginTop + "px";
-                    elmnt.style.left = (elmnt.offsetLeft - pos1) - marginLeft + "px";
+                    elmnt.style.top = (elmnt.offsetTop - pos2) - marginTop + 'px';
+                    elmnt.style.left = (elmnt.offsetLeft - pos1) - marginLeft + 'px';
                     elmnt.style.position = 'fixed';
                     elmnt.style.zIndex = 100;
                 }
@@ -273,8 +264,8 @@ export class TokenActionHUD extends Application {
                     xPos = xPos < 0 ? 0 : xPos
                     yPos = yPos < 0 ? 0 : yPos
                     if(xPos != (elmnt.offsetLeft - pos1) || yPos != (elmnt.offsetTop - pos2)){
-                        elmnt.style.top = (yPos) + "px";
-                        elmnt.style.left = (xPos) + "px";
+                        elmnt.style.top = (yPos) + 'px';
+                        elmnt.style.left = (xPos) + 'px';
                     }
                     settings.Logger.info(`Setting position to x: ${xPos}px, y: ${yPos}px, and saving in user flags.`)
                     game.user.update({flags: {'token-action-hud':{ hudPos: {top: yPos, left: xPos}}}})
@@ -305,12 +296,11 @@ export class TokenActionHUD extends Application {
     }
 
     async updateHud() {
-        settings.Logger.debug("Updating HUD");
+        settings.Logger.debug('Updating HUD');
 
         let token = this._getTargetToken(this.tokens?.controlled);
-        
-        let filters = this.getUserFilters();
-        this.targetActions = await this.actions.buildActionList(token, filters);
+
+        this.targetActions = await this.actions.buildActionList(token);
 
         if (!this.showHudEnabled()) {
             this.close();
@@ -338,16 +328,16 @@ export class TokenActionHUD extends Application {
         settings.Logger.debug(`actor._id: ${actor._id}; this.targetActions.actorId: ${this.targetActions?.actorId}`);
 
         if (!actor) {
-            settings.Logger.debug("No actor, possibly deleted, should update HUD.");
+            settings.Logger.debug('No actor, possibly deleted, should update HUD.');
             return true;
         }
             
         if (this.targetActions && actor._id === this.targetActions.actorId) {
-            settings.Logger.debug("Same actor IDs, should update HUD.");
+            settings.Logger.debug('Same actor IDs, should update HUD.');
             return true;
         }
 
-        settings.Logger.debug("Different actor, no need to update HUD.");
+        settings.Logger.debug('Different actor, no need to update HUD.');
         return false;
     }
 
@@ -373,7 +363,7 @@ export class TokenActionHUD extends Application {
     }
 
     /** @private */
-    _userHasPermission(token = "") {
+    _userHasPermission(token = '') {
         return game.user.isGM || token.actor.data.permission[game.userId] === 3;
     }
 }

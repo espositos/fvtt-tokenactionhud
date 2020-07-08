@@ -2,8 +2,8 @@ import {ActionHandler} from '../actionHandler.js';
 import * as settings from '../../settings.js';
 
 export class ActionHandler5e extends ActionHandler {
-    constructor () {
-        super();
+    constructor (filterManager) {
+        super(filterManager);
     }
 
     /** @override */

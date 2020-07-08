@@ -33,7 +33,7 @@ export class PcActionHandlerPf2e {
     /** @private */
     _getStrikesList(actor, tokenId) {
         let macroType = 'strike';
-        let result = this.baseHandler.initializeEmptyCategory();
+        let result = this.baseHandler.initializeEmptyCategory('strikes');
 
         let strikes = actor.data.data.actions.filter(a => a.type === macroType);
         
@@ -76,7 +76,7 @@ export class PcActionHandlerPf2e {
 
     /** @private */
     _getSkillsList(actor, tokenId) {
-        let result = this.baseHandler.initializeEmptyCategory();
+        let result = this.baseHandler.initializeEmptyCategory('skills');
         
         let abbr = settings.get('abbreviateSkills');
 
@@ -102,7 +102,7 @@ export class PcActionHandlerPf2e {
     /** @private */
     _getAttributeList(actor, tokenId) {
         let macroType = 'attribute';
-        let result = this.baseHandler.initializeEmptyCategory();
+        let result = this.baseHandler.initializeEmptyCategory('attributes');
         let attributes = this.baseHandler.initializeEmptySubcategory();
 
         let rollableAttributes = Object.entries(actor.data.data.attributes).filter(a => { if(a[1]) return !!a[1].roll });

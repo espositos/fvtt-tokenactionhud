@@ -33,7 +33,7 @@ export class NpcActionHandlerPf2e {
     /** @private */
     _getStrikesListNpc(actor, tokenId) {
         let macroType = 'strike';
-        let result = this.baseHandler.initializeEmptyCategory();
+        let result = this.baseHandler.initializeEmptyCategory('strikes');
 
         let strikes = actor.items.filter(a => a.type === 'melee');
 
@@ -85,7 +85,7 @@ export class NpcActionHandlerPf2e {
 
     /** @private */
     _getSkillsListNpc(actor, tokenId) {
-        let result = this.baseHandler.initializeEmptyCategory();
+        let result = this.baseHandler.initializeEmptyCategory('skills');
         
         let loreItems = actor.items.filter(i => i.data.type === 'lore');
         let lore = this.baseHandler.initializeEmptySubcategory();
@@ -105,7 +105,7 @@ export class NpcActionHandlerPf2e {
     /** @private */
     _getAttributeListNpc(actor, tokenId) {
         let macroType = 'attribute';
-        let result = this.baseHandler.initializeEmptyCategory();
+        let result = this.baseHandler.initializeEmptyCategory('attributes');
         let attributes = this.baseHandler.initializeEmptySubcategory();
 
         let attributesMap = [{_id: 'perception', name: 'Perception'},{_id: 'initiative', name: 'Initiative'}]
