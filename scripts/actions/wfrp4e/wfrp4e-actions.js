@@ -37,12 +37,12 @@ export class ActionHandlerWfrp extends ActionHandler {
         let traits = this._getTraits(actor, tokenId);
         
         this._combineCategoryWithList(result, this.i18n('tokenactionhud.weapons'), weapons);
-        this._combineCategoryWithList(result, this.i18n('Characteristics'), characteristics);
-        this._combineCategoryWithList(result, this.i18n('Skills'), skills);
-        this._combineCategoryWithList(result, this.i18n('Magic'), spells);
-        this._combineCategoryWithList(result, this.i18n('Religion'), prayers);
-        this._combineCategoryWithList(result, this.i18n('Talents'), talents);
-        this._combineCategoryWithList(result, this.i18n('Traits'), traits);
+        this._combineCategoryWithList(result, this.i18n('tokenactionhud.characteristics'), characteristics);
+        this._combineCategoryWithList(result, this.i18n('tokenactionhud.skills'), skills);
+        this._combineCategoryWithList(result, this.i18n('tokenactionhud.magic'), spells);
+        this._combineCategoryWithList(result, this.i18n('tokenactionhud.religion'), prayers);
+        this._combineCategoryWithList(result, this.i18n('tokenactionhud.talents'), talents);
+        this._combineCategoryWithList(result, this.i18n('tokenactionhud.traits'), traits);
 
         this._setFilterSuggestions(actor);
         this.filterManager.setCanFilter(result);
@@ -79,7 +79,7 @@ export class ActionHandlerWfrp extends ActionHandler {
             return {name: this.i18n(c[1].abrev), encodedValue: encodedValue, id:c[0]}
         })
 
-        this._combineSubcategoryWithCategory(result, this.i18n('Characteristics'), characteristicsCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.characteristics'), characteristicsCategory);
 
         return result;
     }
@@ -116,10 +116,10 @@ export class ActionHandlerWfrp extends ActionHandler {
         let advancedSkillsCat = this.initializeEmptySubcategory();
         advancedSkillsCat.actions = this._produceMap(tokenId, advancedSkills, macroType);
         
-        this._combineSubcategoryWithCategory(result, this.i18n('NAME.Melee'), meleeCategory);
-        this._combineSubcategoryWithCategory(result, this.i18n('NAME.Ranged'), rangedCategory);
-        this._combineSubcategoryWithCategory(result, this.i18n('Basic'), basicSkillsCat);
-        this._combineSubcategoryWithCategory(result, this.i18n('Advanced'), advancedSkillsCat);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.melee'), meleeCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.ranged'), rangedCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.basic'), basicSkillsCat);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.advanced'), advancedSkillsCat);
 
         return result;
     }
@@ -134,7 +134,7 @@ export class ActionHandlerWfrp extends ActionHandler {
         let pettyCategory = this.initializeEmptySubcategory();
         pettyCategory.actions = this._produceMap(tokenId, petties, macroType);
 
-        this._combineSubcategoryWithCategory(result, this.i18n('SHEET.PettySpell'), pettyCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.petty'), pettyCategory);
 
         let lores = spells.filter(i => i.data.data.lore.value !== 'petty');
         let loresCategorised = lores.reduce((output, spell) => {
@@ -167,7 +167,7 @@ export class ActionHandlerWfrp extends ActionHandler {
         let blessingCategory = this.initializeEmptySubcategory();
         blessingCategory.actions = this._produceMap(tokenId, blessings, macroType);
 
-        this._combineSubcategoryWithCategory(result, this.i18n('Blessing'), blessingCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.blessing'), blessingCategory);
 
         let miracles = prayers.filter(i => i.data.data.type.value !== 'blessing');
         let miraclesCategorised = miracles.reduce((output, prayer) => {

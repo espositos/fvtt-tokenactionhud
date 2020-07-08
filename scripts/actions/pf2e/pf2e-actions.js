@@ -70,10 +70,10 @@ export class ActionHandlerPf2e extends ActionHandler {
         let consumables = this.initializeEmptySubcategory();
         consumables.actions = consumableActions;
  
-        this._combineSubcategoryWithCategory(result, this.i18n('PF2E.InventoryWeaponsHeader'), weapons);
-        this._combineSubcategoryWithCategory(result, this.i18n('PF2E.InventoryArmorHeader'), armour);
-        this._combineSubcategoryWithCategory(result, this.i18n('PF2E.InventoryEquipmentHeader'), equipment);
-        this._combineSubcategoryWithCategory(result, this.i18n('PF2E.InventoryConsumablesHeader'), consumables);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.weapons'), weapons);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.armour'), armour);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.equipment'), equipment);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.consumables'), consumables);
 
         return result;
     }
@@ -246,7 +246,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         
         let spelldc = spellbook.data.data.spelldc;
         let attackBonus = spelldc.value >= 0 ? `${this.i18n('tokenactionhud.atk')} +${spelldc.value}` : `${this.i18n('tokenactionhud.atk')} -${spelldc.value}`;
-        let dcInfo = `${this.i18n('PF2E.DCLabel')}${spellbook.data.data.spelldc.dc}`;
+        let dcInfo = `${this.i18n('tokenactionhud.dc')}${spellbook.data.data.spelldc.dc}`;
 
         result = `${attackBonus} ${dcInfo}`;
 
@@ -330,7 +330,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let saves = this.initializeEmptySubcategory();
         saves.actions = this._produceMap(tokenId, saveMap, 'save');
 
-        this._combineSubcategoryWithCategory(result, this.i18n('PF2E.SavesHeader'), saves);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.saves'), saves);
 
         return result;
     }
@@ -349,7 +349,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let abilities = this.initializeEmptySubcategory();
         abilities.actions = this._produceMap(tokenId, abilityMap, 'ability');
 
-        this._combineSubcategoryWithCategory(result, this.i18n('PF2E.AbilityTitle'), abilities);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.abilities'), abilities);
 
         return result;
     }

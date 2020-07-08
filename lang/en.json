@@ -3,6 +3,8 @@
     "tokenactionhud.handlerNotFound": "not found, reverting to core roller.",
 
     "tokenactionhud.abilities": "Abilities",
+    "tokenactionhud.starting": "Starting",
+    "tokenactionhud.advanced": "Advanced",
     "tokenactionhud.active": "Active",
     "tokenactionhud.atk": "Atk",
     "tokenactionhud.book": "Book",
@@ -13,6 +15,8 @@
     "tokenactionhud.checks": "Checks",
     "tokenactionhud.dmg": "Dmg",
     "tokenactionhud.damage": "Damage",
+    
+    "tokenactionhud.equipment": "Equipment",
     "tokenactionhud.feats": "Feats",
     "tokenactionhud.inconsumables": "Inconsumables",
     "tokenactionhud.instinct": "Instinct",
@@ -22,6 +26,7 @@
     "tokenactionhud.level": "Level",
     "tokenactionhud.magic": "Magic",
     "tokenactionhud.monsterMoves": "Monster Moves",
+    "tokenactionhud.moves": "Moves",
     "tokenactionhud.passive": "Passive",
     "tokenactionhud.powers": "Powers",
     "tokenactionhud.recharge": "Recharge",
@@ -31,6 +36,13 @@
     "tokenactionhud.skills": "Skills",
     "tokenactionhud.spells": "Spells",
     "tokenactionhud.talents": "Talents",
+    "tokenactionhud.tags": "Tags",
+    "tokenactionhud.armour": "Armour",
+    "tokenactionhud.dc": "DC",
+    "tokenactionhud.petty": "Petty",
+    "tokenactionhud.blessing": "Blessing",
+    "tokenactionhud.specialQualities": "Special Qualities",
+
     "tokenactionhud.traits": "Traits",
     "tokenactionhud.treasure": "Treasure",
     "tokenactionhud.unrollable": "Unrollable",
@@ -39,7 +51,9 @@
     "tokenactionhud.free": "Free",    
     "tokenactionhud.reactions": "Reactions",    
     "tokenactionhud.actions": "Actions",    
-    
+    "tokenactionhud.consumables": "Consumables",    
+    "tokenactionhud.other": "Other",    
+
     "tokenactionhud.settings.rollHandler.name": "HUD roll handler",
     "tokenactionhud.settings.rollHandler.hint": "Choose which module will receive the HUD's actions.",
     "tokenactionhud.settings.enabledForUser.name": "Enable HUD for current user",
