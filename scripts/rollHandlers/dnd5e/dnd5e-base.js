@@ -11,14 +11,13 @@ export class RollHandlerBase5e extends RollHandler {
         settings.Logger.debug(encodedValue);
         let payload = encodedValue.split('|');
         
-        if (payload.length != 4) {
+        if (payload.length != 3) {
             super.throwInvalidValueErr();
         }
         
-        let actorType = payload[0];
-        let macroType = payload[1];
-        let tokenId = payload[2];
-        let actionId = payload[3];
+        let macroType = payload[0];
+        let tokenId = payload[1];
+        let actionId = payload[2];
 
         if (this.handleCompendiums(macroType, event, tokenId, actionId))
             return;

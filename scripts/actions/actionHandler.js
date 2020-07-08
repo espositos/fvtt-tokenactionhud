@@ -41,7 +41,7 @@ export class ActionHandler {
             return [];
     }
 
-    initializeEmptyCategory(categoryId, canFilter) {
+    initializeEmptyCategory(categoryId, canFilter = false) {
         if (this.registeredCategories.find(x => x === categoryId))
             settings.Logger.error(`Category ${categoryId} already registered. Check for duplicate categories.`)
 
