@@ -64,7 +64,7 @@ export class FilterManager {
         return filter.getFilteredIds();
     }
 
-    setFilteredElementsElements(filterId, elements, isBlocklist) {
+    setFilteredElements(filterId, elements, isBlocklist) {
         let filter = this._getFilter(filterId);
 
         let flag = {isBlocklist: isBlocklist, elements: elements}

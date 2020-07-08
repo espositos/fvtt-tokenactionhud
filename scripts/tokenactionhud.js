@@ -114,11 +114,11 @@ export class TokenActionHUD extends Application {
 
         })
 
-        let content = `<input name='tokenactionhud-tagfilter' class='some_class_name' placeholder='hide (split with semi-colon)' value=''/>
-        <select id='isBlocklist' name='blocklist' size='1'>
-        <option value='true'>Blocklist</option>
-        <option value='false'>Allowlist</option>
-      </select>`
+        let content = ` <input name='tokenactionhud-tagfilter' class='some_class_name' placeholder='hide (split with semi-colon)' value=''/>
+                        <select id='isBlocklist' name='blocklist' size='1'>
+                            <option value='true'>Blocklist</option>
+                            <option value='false'>Allowlist</option>
+                        </select>`
         let d = new TagDialog({
             title: 'Enter values to hide',
             content: content,
@@ -145,7 +145,7 @@ export class TokenActionHUD extends Application {
     }
 
     async submitFilter(categoryId, elements, isBlocklist) {
-        this.filterManager.setFilteredElementsElements(categoryId, elements, isBlocklist);
+        this.filterManager.setFilteredElements(categoryId, elements, isBlocklist);
         this.update();
     }
 
