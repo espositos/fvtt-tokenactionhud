@@ -61,6 +61,8 @@ export class ActionHandler {
         if (!category)
             return;
 
+        category.name = categoryName;
+
         if (category.subcategories.length > 0)
             result.categories.push(category);
     }

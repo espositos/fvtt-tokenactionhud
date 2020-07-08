@@ -348,7 +348,7 @@ export class ActionHandler5e extends ActionHandler {
     }
 
     /** @private */
-    _getSkillsList(tokenId, actor, actorType) {
+    _getSkillsList(actor, tokenId, actorType) {
         let result = this.initializeEmptyCategory('skills', false);
         let macroType = 'skill';
         
