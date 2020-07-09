@@ -1,10 +1,12 @@
 export class RollHandler {
+    i18n = (toTranslate) => game.i18n.localize(toTranslate);
+    
     getActor(tokenId) {
         return canvas.tokens.placeables.find(t => t.data._id === tokenId)?.actor;
     }
 
-    throwInvalidValueErr() {
-        throw new Error("invalid button value received.");
+    throwInvalidValueErr(err) {
+        throw new Error(`Error handling button click: unexpected button value/payload`);
     }
 
     handleActionEvent(event, encodedValue) {}
@@ -17,7 +19,7 @@ export class RollHandler {
             case 'compendium':
                 this.handleCompendium(macroType, event, tokenId, actionId);
                 break;
-            case 'macrocompendium':
+            case 'macros':
                 this.handleMacroCompendium(macroType, event, tokenId, actionId);
                 break;
         }   

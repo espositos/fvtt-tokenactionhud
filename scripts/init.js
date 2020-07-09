@@ -1,6 +1,7 @@
 import * as settings from './settings.js';
 import { HandlersManager } from './handlersManager.js';
 import { TokenActionHUD } from './tokenactionhud.js';
+import { FilterManager } from './actions/filter/filterManager.js';
 
 Hooks.on('init', () => {
     Handlebars.registerHelper('cap', function(string) {
@@ -25,7 +26,10 @@ Hooks.on('canvasReady', () => {
 
     if (!game.tokenActionHUD) {
         let system = game.data.system.id;
-        let actionHandler = HandlersManager.getActionHandler(system);
+        let user = game.user;
+        let filterManager = new FilterManager(user);
+        let actionHandler = HandlersManager.getActionHandler(system, filterManager);
+        
         let handlerId = settings.get('rollHandler');
         
         if (! (handlerId === 'core' || game.modules.get(handlerId).active) ) {
@@ -36,7 +40,7 @@ Hooks.on('canvasReady', () => {
 
         let rollHandler = HandlersManager.getRollHandler(system, handlerId);
         
-        game.tokenActionHUD = new TokenActionHUD(actionHandler, rollHandler);
+        game.tokenActionHUD = new TokenActionHUD(actionHandler, rollHandler, filterManager);
     }
     
     game.tokenActionHUD.setTokensReference(canvas.tokens);
@@ -47,11 +51,14 @@ Hooks.on('canvasReady', () => {
     });
     
     Hooks.on('updateToken', (scene, token, diff, options, idUser) => {
+        // If it's an X or Y change assume the token is just moving.
+        if (diff.hasOwnProperty('y') || diff.hasOwnProperty('x'))
+            return;
         if (game.tokenActionHUD.validTokenChange())
             game.tokenActionHUD.update();
     });
     
-    Hooks.on('deleteToken', (scene, token, empty, userId) => {
+    Hooks.on('deleteToken', (scene, token, change, userId) => {
         if (game.tokenActionHUD.validTokenChange())
             game.tokenActionHUD.update();
     });

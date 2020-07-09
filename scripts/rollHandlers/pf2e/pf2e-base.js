@@ -7,92 +7,90 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
     
     handleActionEvent(event, encodedValue) {
-        let payload = encodedValue.split('.');
+        let payload = encodedValue.split('|');
         settings.Logger.debug(encodedValue);
-        if (payload.length != 4) {
+        if (payload.length != 3) {
             super.throwInvalidValueErr();
         }
-        
-        let charType = payload[0];
-        let macroType = payload[1];
-        let tokenId = payload[2];
-        let actionId = payload[3];
+
+        let macroType = payload[0];
+        let tokenId = payload[1];
+        let actionId = payload[2];
+
+        let actor = super.getActor(tokenId);
+        let charType = actor.data.type;
 
         let sharedActions = ['ability', 'spell', 'item', 'skill', 'lore']
 
         if (!sharedActions.includes(macroType)) {
             switch (charType) {
                 case 'npc':
-                    this._handleUniqueActionsNpc(macroType, event, tokenId, actionId);
+                    this._handleUniqueActionsNpc(macroType, event, actor, actionId);
                     break;
                 case 'character':
-                    this._handleUniqueActionsChar(macroType, event, tokenId, actionId);
+                    this._handleUniqueActionsChar(macroType, event, actor, actionId);
                     break;
             }
         }
 
         switch (macroType) {
             case 'ability':
-                this._rollAbility(event, tokenId, actionId);
+                this._rollAbility(event, actor, actionId);
                 break;
             case 'skill':
-                this._rollSkill(event, tokenId, actionId);
+                this._rollSkill(event, actor, actionId);
                 break;  
             case 'lore':
-                this._rollLoreSkill(event, tokenId, actionId);
+                this._rollLoreSkill(event, actor, actionId);
                 break;
             case 'action':
             case 'feat':
             case 'item':
-                this._rollItem(event, tokenId, actionId);
+                this._rollItem(event, actor, actionId);
                 break;
             case 'spell':
-                this._rollSpell(event, tokenId, actionId);
+                this._rollSpell(event, actor, actionId);
         }
         
     }
 
     /** @private */
-    _handleUniqueActionsChar(macroType, event, tokenId, actionId) {
+    _handleUniqueActionsChar(macroType, event, actor, actionId) {
         switch (macroType) {
             case 'save':
-                this._rollSaveChar(event, tokenId, actionId);
+                this._rollSaveChar(event, actor, actionId);
                 break;
             case 'strike':
-                this._rollStrikeChar(event, tokenId, actionId);
+                this._rollStrikeChar(event, actor, actionId);
                 break;  
             case 'attribute':
-                this._rollAttributeChar(event, tokenId, actionId);
+                this._rollAttributeChar(event, actor, actionId);
                 break;
         }
     }
 
     /** @private */
-    _handleUniqueActionsNpc(macroType, event, tokenId, actionId) {
+    _handleUniqueActionsNpc(macroType, event, actor, actionId) {
         switch (macroType) {
             case 'save':
-                this._rollSaveNpc(event, tokenId, actionId);
+                this._rollSaveNpc(event, actor, actionId);
                 break;
             case 'strike':
-                this._rollStrikeNpc(event, tokenId, actionId);
+                this._rollStrikeNpc(event, actor, actionId);
                 break;  
             case 'attribute':
-                this._rollAttributeNpc(event, tokenId, actionId);
+                this._rollAttributeNpc(event, actor, actionId);
                 break;
         }
     }
 
     /** @private */
-    _rollAbility(event, tokenId, actionId) {
-        let actor = super.getActor(tokenId);
-
+    _rollAbility(event, actor, actionId) {
         actor.rollAbility(event, actionId);
     }
 
     /** @private */
-    _rollAttributeChar(event, tokenId, actionId) {
-        let actor = super.getActor(tokenId);
-
+    _rollAttributeChar(event, actor, actionId) {
         let attribute = actor.data.data.attributes[actionId];
         if (!attribute) {
             actor.rollAttribute(event, actionId);
@@ -104,16 +102,12 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
 
     /** @private */
-    _rollAttributeNpc(event, tokenId, actionId) {
-        let actor = super.getActor(tokenId);
-
+    _rollAttributeNpc(event, actor, actionId) {
         actor.rollAttribute(event, actionId);
     }
 
     /** @private */
-    _rollSaveChar(event, tokenId, actionId) {
-        let actor = super.getActor(tokenId);
-
+    _rollSaveChar(event, actor, actionId) {
         let save = actor.data.data.saves[actionId];
         if (!save) {
             actor.rollSave(event, actionId);
@@ -127,24 +121,19 @@ export class RollHandlerBasePf2e extends RollHandler {
     
 
     /** @private */
-    _rollSaveNpc(event, tokenId, actionId) {
-        let actor = super.getActor(tokenId);
-
+    _rollSaveNpc(event, actor, actionId) {
         actor.rollSave(event, actionId);
     }
 
     /** @private */
-    _rollLoreSkill(event, tokenId, actionId) {
-        let actor = super.getActor(tokenId);
+    _rollLoreSkill(event, actor, actionId) {
         let item = actor.items.find(i => i._id === actionId);
 
         actor.rollLoreSkill(event, item);
     }
 
     /** @private */
-    _rollSkill(event, tokenId, actionId) {
-        let actor = super.getActor(tokenId);
-
+    _rollSkill(event, actor, actionId) {
         let skill = actor.data.data.skills[actionId];
         if (!skill) {
             actor.rollSkill(event, actionId);
@@ -156,9 +145,7 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
 
     /** @private */
-    _rollStrikeChar(event, tokenId, actionId) {
-        let actor = super.getActor(tokenId);
-
+    _rollStrikeChar(event, actor, actionId) {
         let actionParts = decodeURIComponent(actionId).split('>');
 
         let strikeName = actionParts[0];
@@ -184,9 +171,7 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
 
     /** @private */
-    _rollStrikeNpc(event, tokenId, actionId) {
-        let actor = super.getActor(tokenId);
-
+    _rollStrikeNpc(event, actor, actionId) {
         let actionParts = decodeURIComponent(actionId).split('>');
 
         let strikeId = actionParts[0];
@@ -220,16 +205,14 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
 
     /** @private */
-    _rollItem(event, tokenId, actionId) {
-        let actor = super.getActor(tokenId);
+    _rollItem(event, actor, actionId) {
         let item = actor.items.find(i => i._id === actionId);
 
         item.roll();
     }
 
     /** @private */
-    _rollSpell(event, tokenId, actionId) {
-        let actor = super.getActor(tokenId);
+    _rollSpell(event, actor, actionId) {
         let spell = actor.items.find(i => i._id === actionId);
 
         if (settings.get('printSpellCard')) {

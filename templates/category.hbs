@@ -1,6 +1,6 @@
 
 <div class="tah-category">
-    <button class="tah-title-button">{{cap @key}}</button>
+    <button class="tah-title-button"{{#if this.canFilter}} value="{{this.id}}"{{/if}}>{{cap this.name}}</button>
     <div class="tah-content">
         {{#each subcategories}}
         {{>"modules/token-action-hud/templates/subcategory.hbs"}}
