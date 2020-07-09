@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.4.0] 2020-07-10
+### Bugfix
+- PF2e: NPC strike MAP was undefined when added
+
+### Added
+- Probably a few bugs.
+- Beginnings of localization for Korean, Brazilian Portuguese, and Spanish.
+- a filter manager should categories require filtering
+- WFRP: filter manager implemented for skills (right-click on skills to bring up dialog)
+
+### Changed
+- Internally quite a bit, so please report any bugs and I'm sorry in advance.
+
 ## [0.3.5] 2020-07-04
 ### Added
 - Added support for internationalization
