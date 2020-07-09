@@ -44,20 +44,20 @@
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "GM 컴펜디움 보기",
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "활성화 했을 때 사용자가 GM인 경우 HUD바에 GM 이동, 전리품 굴림표, 차트가 포함된다.",
 
-    "tokenactionhud.dnd5e.feats": "피트",
-    "tokenactionhud.dnd5e.inconsumables": "비소모품",
-    "tokenactionhud.dnd5e.rechargeHint": "재충전",
-    "tokenactionhud.dnd5e.checks": "판정",
-    "tokenactionhud.dnd5e.skills": "기술",
+    "tokenactionhud.feats": "피트",
+    "tokenactionhud.inconsumables": "비소모품",
+    "tokenactionhud.recharge": "재충전",
+    "tokenactionhud.checks": "판정",
+    "tokenactionhud.skills": "기술",
 
-    "tokenactionhud.dungeonworld.abilities": "능력치",
-    "tokenactionhud.dungeonworld.charts": "차트",
-    "tokenactionhud.dungeonworld.treasure": "전리품",
-    "tokenactionhud.dungeonworld.instinct": "본능",
-    "tokenactionhud.dungeonworld.monsterMoves": "괴물 이동",
-    "tokenactionhud.dungeonworld.book": "책",
+    "tokenactionhud.abilities": "능력치",
+    "tokenactionhud.charts": "차트",
+    "tokenactionhud.treasure": "전리품",
+    "tokenactionhud.instinct": "본능",
+    "tokenactionhud.monsterMoves": "괴물 이동",
+    "tokenactionhud.book": "책",
 
-    "tokenactionhud.pf2e.active": "활성화",
-    "tokenactionhud.pf2e.atk": "공격",
-    "tokenactionhud.pf2e.dmg": "피해"
+    "tokenactionhud.active": "활성화",
+    "tokenactionhud.atk": "공격",
+    "tokenactionhud.dmg": "피해"
 }

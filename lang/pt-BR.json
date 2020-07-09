@@ -44,20 +44,20 @@
   "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "Exibir os Compêndios do MJ",
   "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Se ativado, e se o usuário for um MJ, a barra HUD incluirá movimentos do GM, tabelas de rolagem do tesouro e gráficos.",
 
-  "tokenactionhud.dnd5e.feats": "Talento",
-  "tokenactionhud.dnd5e.inconsumables": "Não consumivel",
-  "tokenactionhud.dnd5e.rechargeHint": "Recarga",
-  "tokenactionhud.dnd5e.checks": "Checagens",
-  "tokenactionhud.dnd5e.skills": "Pericias",
+  "tokenactionhud.feats": "Talento",
+  "tokenactionhud.inconsumables": "Não consumivel",
+  "tokenactionhud.recharge": "Recarga",
+  "tokenactionhud.checks": "Checagens",
+  "tokenactionhud.skills": "Pericias",
 
-  "tokenactionhud.dungeonworld.abilities": "Habilidades",
-  "tokenactionhud.dungeonworld.charts": "Estatisticas",
-  "tokenactionhud.dungeonworld.treasure": "Tesouro",
-  "tokenactionhud.dungeonworld.instinct": "Instinto",
-  "tokenactionhud.dungeonworld.monsterMoves": "Movimento dos Monstros",
-  "tokenactionhud.dungeonworld.book": "Livro",
+  "tokenactionhud.abilities": "Habilidades",
+  "tokenactionhud.charts": "Estatisticas",
+  "tokenactionhud.treasure": "Tesouro",
+  "tokenactionhud.instinct": "Instinto",
+  "tokenactionhud.monsterMoves": "Movimento dos Monstros",
+  "tokenactionhud.book": "Livro",
 
-  "tokenactionhud.pf2e.active": "Ativo",
-  "tokenactionhud.pf2e.atk": "Ataque",
-  "tokenactionhud.pf2e.dmg": "Dano"
+  "tokenactionhud.active": "Ativo",
+  "tokenactionhud.atk": "Ataque",
+  "tokenactionhud.dmg": "Dano"
 }
