@@ -9,7 +9,7 @@
         "./scripts/init.js"
     ],
     "styles": [
-        "./templates/token-action-hud.css"
+        "./styles/token-action-hud.css"
     ],
     "systems": [
         "dnd5e",
