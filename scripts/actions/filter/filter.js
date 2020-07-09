@@ -25,12 +25,12 @@ export class Filter {
 
     getFilteredNames() {
         let result = this.filteredElements.map(f => f.value)
-        return this.filteredElements;
+        return result;
     }
 
     getFilteredIds() {
         let result = this.filteredElements.map(f => f.id)
-        return this.filteredElements;
+        return result;
     }
 
     setSuggestions(choices) {

@@ -2,7 +2,6 @@ import { ActionHandler5e } from './actions/dnd5e/dnd5e-actions.js';
 import { ActionHandlerWfrp } from './actions/wfrp4e/wfrp4e-actions.js';
 import { ActionHandlerPf2e } from './actions/pf2e/pf2e-actions.js';
 import { ActionHandlerDw } from './actions/dungeonworld/dw-actions.js';
-import { FilterManager } from './actions/filter/filterManager.js';
 import * as roll5e from './rollHandlers/dnd5e/dnd5e-factory.js';
 import * as rollWfrp from './rollHandlers/wfrp4e/wfrp4e-factory.js';
 import * as rollPf2e from './rollHandlers/pf2e/pf2e-factory.js';

@@ -31,22 +31,23 @@ export class ActionHandlerWfrp extends ActionHandler {
 
         let filteredNames = this.filterManager.getFilteredNames('skills');
         let skills = this._getSkills(actor, tokenId, filteredNames);
-        let spells = this._getSpells(actor, tokenId);
+        
+        let magic = this._getSpells(actor, tokenId);
         let prayers = this._getPrayers(actor, tokenId);
         let talents = this._getTalents(actor, tokenId);
         let traits = this._getTraits(actor, tokenId);
+
+        [filteredNames, skills, magic, prayers, talents, traits].forEach(c => this.filterManager.setCanFilter(c));
         
         this._combineCategoryWithList(result, this.i18n('tokenactionhud.weapons'), weapons);
         this._combineCategoryWithList(result, this.i18n('tokenactionhud.characteristics'), characteristics);
         this._combineCategoryWithList(result, this.i18n('tokenactionhud.skills'), skills);
-        this._combineCategoryWithList(result, this.i18n('tokenactionhud.magic'), spells);
+        this._combineCategoryWithList(result, this.i18n('tokenactionhud.magic'), magic);
         this._combineCategoryWithList(result, this.i18n('tokenactionhud.religion'), prayers);
         this._combineCategoryWithList(result, this.i18n('tokenactionhud.talents'), talents);
         this._combineCategoryWithList(result, this.i18n('tokenactionhud.traits'), traits);
 
         this._setFilterSuggestions(actor);
-        this.filterManager.setCanFilter(result);
-
         return result;
     }
 
@@ -93,10 +94,10 @@ export class ActionHandlerWfrp extends ActionHandler {
         let skills = actor.items.filter(i => i.type === macroType && i._id);
         if (filteredNames.length > 0) {
             if (this.filterManager.isBlocklist(categoryId)) {
-                skills = skills.filter(i => !filteredNames.includes(s.name));
+                skills = skills.filter(s => !filteredNames.includes(s.name));
             }
             else {
-                skills = skills.filter(i => filteredNames.includes(s.name));
+                skills = skills.filter(s => filteredNames.includes(s.name));
             }
         }        
 

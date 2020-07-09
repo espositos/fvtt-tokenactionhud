@@ -27,11 +27,9 @@ export class FilterManager {
         return this;
     }
 
-    setCanFilter(actionList) {
-        for (let category of actionList.categories) {
-            if (this.filters.some(f => f.id === category.id))
-                category.canFilter = true;
-        }
+    setCanFilter(category) {
+        if (this.filters.some(f => f.id === category.id))
+            category.canFilter = true;
     }
 
     getSuggestions(filterId) {
@@ -67,10 +65,12 @@ export class FilterManager {
     setFilteredElements(filterId, elements, isBlocklist) {
         let filter = this._getFilter(filterId);
 
-        let flag = {isBlocklist: isBlocklist, elements: elements}
+        let blocklist = isBlocklist === 1 ? true : false;
+
+        let flag = {isBlocklist: blocklist, elements: elements}
         this.user.setFlag('token-action-hud', `filters.${filterId}`, flag)
         
-        filter.setFilterElements(elements, isBlocklist);
+        filter.setFilteredElements(elements, isBlocklist);
     }
 
     isBlocklist(filterId) {
