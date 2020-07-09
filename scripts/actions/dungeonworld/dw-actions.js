@@ -37,7 +37,7 @@ export class ActionHandlerDw extends ActionHandler {
             let specialQualities = this._getSpecialQualities(actor, tokenId);
             this.moves = this._getMovesNpc(actor, tokenId);
 
-            this._combineCategoryWithList(result, this.i18n('tokenactionud.damage'), damage);
+            this._combineCategoryWithList(result, this.i18n('tokenactionhud.damage'), damage);
             this._combineCategoryWithList(result, this.i18n('tokenactionhud.tags'), tags);
             this._combineCategoryWithList(result, this.i18n('tokenactionhud.specialQualities'), specialQualities);
         } else if (actorType === 'character') {

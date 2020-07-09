@@ -1,4 +1,5 @@
 import {Filter} from './filter.js';
+import * as settings from '../../settings.js';
 
 export class FilterManager {
     filters = [];
@@ -8,8 +9,10 @@ export class FilterManager {
         this.user = user;
 
         let savedFilters = user.getFlag('token-action-hud', 'filters');
+        if (!savedFilters)
+            return;
 
-        console.log(savedFilters);
+        settings.Logger.debug('saved filters:', savedFilters);
 
         Object.entries(savedFilters).forEach(f => {
             let filter = new Filter(f[0]);
