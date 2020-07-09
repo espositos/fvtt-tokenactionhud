@@ -1,7 +1,22 @@
 {
     "tokenactionhud.title": "HUD Token Action",
     "tokenactionhud.handlerNotFound": "no encontrado, revirtiendo al lanzador nativo.",
+
+    "tokenactionhud.abilities": "Habilidades",
+    "tokenactionhud.active": "Activo",
+    "tokenactionhud.atk": "Atq",
+    "tokenactionhud.book": "Libro",
+    "tokenactionhud.charts": "Cartas",
+    "tokenactionhud.checks": "Pruebas de habilidad",
+    "tokenactionhud.dmg": "Dañ",
+    "tokenactionhud.feats": "Dotes",
+    "tokenactionhud.inconsumables": "Consumibles",
+    "tokenactionhud.instinct": "Instinto",
+    "tokenactionhud.monsterMoves": "Movimientos de Monstruo",
+    "tokenactionhud.recharge": "Recarga",
     "tokenactionhud.rollable": "Lanzable",
+    "tokenactionhud.skills": "Habilidades",
+    "tokenactionhud.treasure": "Tesoro",
     "tokenactionhud.unrollable": "No lanzable",
 
     "tokenactionhud.settings.rollHandler.name": "Manejador de tiradas",
@@ -42,22 +57,5 @@
     "tokenactionhud.settings.pf2e.abbreviateSkills.hint": "Si está activo, las habilidades serán abreviadas a 3 caracteres.",
 
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "Mostrar los compendios del DJ",
-    "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Si está activo, y el usuario es un DJ, el HUD incluirá los movimientos del DJ, las tablas aleatorias de tesoro y las cartas.",
-
-    "tokenactionhud.dnd5e.feats": "Dotes",
-    "tokenactionhud.dnd5e.inconsumables": "Consumibles",
-    "tokenactionhud.dnd5e.rechargeHint": "Recarga",
-    "tokenactionhud.dnd5e.checks": "Pruebas de habilidad",
-    "tokenactionhud.dnd5e.skills": "Habilidades",
-
-    "tokenactionhud.dungeonworld.abilities": "Habilidades",
-    "tokenactionhud.dungeonworld.charts": "Cartas",
-    "tokenactionhud.dungeonworld.treasure": "Tesoro",
-    "tokenactionhud.dungeonworld.instinct": "Instinto",
-    "tokenactionhud.dungeonworld.monsterMoves": "Movimientos de Monstruo",
-    "tokenactionhud.dungeonworld.book": "Libro",
-
-    "tokenactionhud.pf2e.active": "Activo",
-    "tokenactionhud.pf2e.atk": "Atq",
-    "tokenactionhud.pf2e.dmg": "Dañ"
+    "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Si está activo, y el usuario es un DJ, el HUD incluirá los movimientos del DJ, las tablas aleatorias de tesoro y las cartas."
 }

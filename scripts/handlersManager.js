@@ -9,16 +9,16 @@ import * as rollDw from './rollHandlers/dungeonworld/dw-factory.js';
 
 export class HandlersManager {
     // Currently only planning for one kind of action handler for each system
-    static getActionHandler(system) {
+    static getActionHandler(system, filterManager) {
         switch (system) {
             case 'dnd5e':
-                return new ActionHandler5e();
+                return new ActionHandler5e(filterManager);
             case 'pf2e':
-                return new ActionHandlerPf2e();
+                return new ActionHandlerPf2e(filterManager);
             case 'wfrp4e':
-                return new ActionHandlerWfrp();
+                return new ActionHandlerWfrp(filterManager);
             case 'dungeonworld':
-                return new ActionHandlerDw();
+                return new ActionHandlerDw(filterManager);
         }
         throw new Error('System not supported by Token Action HUD');
     }

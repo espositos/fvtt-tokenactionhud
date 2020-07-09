@@ -9,52 +9,52 @@ export class RollHandlerBaseDw extends RollHandler {
     handleActionEvent(event, encodedValue) {
         let payload = encodedValue.split('|');
         settings.Logger.debug(encodedValue);
-        if (payload.length != 4) {
+        if (payload.length != 3) {
             super.throwInvalidValueErr();
         }
-        
-        let charType = payload[0];
-        let macroType = payload[1];
-        let tokenId = payload[2];
-        let actionId = payload[3];
+
+        let macroType = payload[0];
+        let tokenId = payload[1];
+        let actionId = payload[2];
 
         if (this.handleCompendiums(macroType, event, tokenId, actionId))
             return;
 
+        let actor = super.getActor(tokenId);
+        let charType = actor.data.type;
+
         if (charType === 'character') {
             switch (macroType) {
                 case 'damage':
-                    this._handleDamage(macroType, event, tokenId, actionId);
+                    this._handleDamage(macroType, event, actor, actionId);
                     break;
                 case 'move':
                 case 'spell':
                 case 'equipment':
-                    this._handleMove(macroType, event, tokenId, actionId);
+                    this._handleMove(macroType, event, actor, actionId);
                     break;
                 case 'ability':
-                    this._handleAbility(macroType, event, tokenId, actionId);
+                    this._handleAbility(macroType, event, actor, actionId);
                     break;
             }
         } else if (charType === 'npc') {
             switch (macroType) {
                 case 'damage':
-                    this._handleDamage(macroType, event, tokenId, actionId);
+                    this._handleDamage(macroType, event, actor, actionId);
                     break;
                 case 'move':
-                    this._handleMoveNpc(macroType, event, tokenId, actionId);
+                    this._handleMoveNpc(macroType, event, actor, actionId);
                     break;
                 case 'tag':
                 case 'quality':
                 case 'instinct':
-                    this._handleTextNpc(macroType, event, tokenId, actionId);
+                    this._handleTextNpc(macroType, event, actor, actionId);
                     break;
             }
         }   
     }
 
-    _handleDamage(macroType, event, tokenId, actionId) {
-        let actor = super.getActor(tokenId);
-
+    _handleDamage(macroType, event, actor, actionId) {
         let damage = actor.data.data.attributes.damage;
         let damageDie = `${damage.value}`;
         let damageMod = damage.misc.length > 0 ? damage.misc.length : 0;
@@ -62,37 +62,38 @@ export class RollHandlerBaseDw extends RollHandler {
         let flavour = damage.piercing;
 
         let formula = damageMod > 0 ? `${damageDie}+${damageMod}` : damageDie;
+        let title = this.i18n('tokenactionhud.damage');
 
         let templateData = {
-            title: `Damage`,
+            title: title,
             flavor: `${flavour}`,
         };
-        canvas.tokens.controlled[0].actor.rollMove(formula, actor, {}, templateData);
+        actor.rollMove(formula, actor, {}, templateData);
     }
 
-    _handleMove(macroType, event, tokenId, actionId) {
-        let actor = super.getActor(tokenId);
+    _handleMove(macroType, event, actor, actionId) {
         let move = actor.getOwnedItem(actionId);
 
         move.roll();
     }
 
-    _handleAbility(macroType, event, tokenId, actionId) {
-        let actor = super.getActor(tokenId);
+    _handleAbility(macroType, event, actor, actionId) {
         let ability = actor.data.data.abilities[actionId];
 
         let mod = ability.mod;
         let formula = `2d6+${mod}`
 
+        let title = `${ability.label} ${game.i18n.localize('tokenactionhud.roll')}`;
+        let abilityText = ability.label.toLowerCase();
+
         let templateData = {
-            title: `${ability.label} Roll`,
-            flavor: 'Made a move using strength!',
+            title: title,
+            flavor: `Made a move using ${abilityText}!`,
         };
-        canvas.tokens.controlled[0].actor.rollMove(formula, actor, {}, templateData);
+        actor.rollMove(formula, actor, {}, templateData);
     }
 
-    _handleTextNpc(macroType, event, tokenId, actionId) {
-        let actor = super.getActor(tokenId);
+    _handleTextNpc(macroType, event, actor, actionId) {
         let action = decodeURIComponent(actionId);
 
         let title = macroType.charAt(0).toUpperCase() + macroType.slice(1);
@@ -100,6 +101,6 @@ export class RollHandlerBaseDw extends RollHandler {
             title: title,
             details: action,
         };
-        canvas.tokens.controlled[0].actor.rollMove(null, actor, {}, templateData);
+        actor.rollMove(null, actor, {}, templateData);
     }
 }

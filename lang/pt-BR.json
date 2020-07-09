@@ -1,7 +1,22 @@
 {
   "tokenactionhud.title": "HUD de Ações de Token",
   "tokenactionhud.handlerNotFound": "não encontrado, revertendo as rolagens padrões.",
+
+  "tokenactionhud.abilities": "Habilidades",
+  "tokenactionhud.active": "Ativo",
+  "tokenactionhud.atk": "Ataque",
+  "tokenactionhud.book": "Livro",
+  "tokenactionhud.charts": "Estatisticas",
+  "tokenactionhud.checks": "Checagens",
+  "tokenactionhud.dmg": "Dano",
+  "tokenactionhud.feats": "Talento",
+  "tokenactionhud.inconsumables": "Não consumivel",
+  "tokenactionhud.instinct": "Instinto",
+  "tokenactionhud.monsterMoves": "Movimento dos Monstros",
+  "tokenactionhud.recharge": "Recarga",
   "tokenactionhud.rollable": "Rolavél",
+  "tokenactionhud.skills": "Pericias",
+  "tokenactionhud.treasure": "Tesouro",
   "tokenactionhud.unrollable": "Não rolavél",
 
   "tokenactionhud.settings.rollHandler.name": "HUD de Manipulação de rolganes",
@@ -42,22 +57,5 @@
   "tokenactionhud.settings.pf2e.abbreviateSkills.hint": "Se ativado, as pericias e atributos usarão abreviação de três caracteres.",
 
   "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "Exibir os Compêndios do MJ",
-  "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Se ativado, e se o usuário for um MJ, a barra HUD incluirá movimentos do GM, tabelas de rolagem do tesouro e gráficos.",
-
-  "tokenactionhud.dnd5e.feats": "Talento",
-  "tokenactionhud.dnd5e.inconsumables": "Não consumivel",
-  "tokenactionhud.dnd5e.rechargeHint": "Recarga",
-  "tokenactionhud.dnd5e.checks": "Checagens",
-  "tokenactionhud.dnd5e.skills": "Pericias",
-
-  "tokenactionhud.dungeonworld.abilities": "Habilidades",
-  "tokenactionhud.dungeonworld.charts": "Estatisticas",
-  "tokenactionhud.dungeonworld.treasure": "Tesouro",
-  "tokenactionhud.dungeonworld.instinct": "Instinto",
-  "tokenactionhud.dungeonworld.monsterMoves": "Movimento dos Monstros",
-  "tokenactionhud.dungeonworld.book": "Livro",
-
-  "tokenactionhud.pf2e.active": "Ativo",
-  "tokenactionhud.pf2e.atk": "Ataque",
-  "tokenactionhud.pf2e.dmg": "Dano"
+  "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Se ativado, e se o usuário for um MJ, a barra HUD incluirá movimentos do GM, tabelas de rolagem do tesouro e gráficos."
 }
