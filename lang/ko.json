@@ -55,6 +55,14 @@
     "tokenactionhud.talents": "Talents",
     "tokenactionhud.traits": "Traits",
     "tokenactionhud.weapons": "Weapons",
+    
+    "tokenactionhud.blocklistLabel": "blocklist: hide / allowlist: show",
+    "tokenactionhud.filterPlaceholder": "Choices (split with semi-colon)",
+    "tokenactionhud.filterTitle": "Filter",
+    "tokenactionhud.accept": "Accept",
+    "tokenactionhud.cancel": "Cancel",
+    "tokenactionhud.blocklist": "Blocklist",
+    "tokenactionhud.allowlist": "Allowlist",
 
     "tokenactionhud.settings.rollHandler.name": "HUD 굴림 처리기",
     "tokenactionhud.settings.rollHandler.hint": "HUD의 작업을 받을 모듈을 선택한다.",

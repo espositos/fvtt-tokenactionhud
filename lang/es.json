@@ -18,7 +18,7 @@
     "tokenactionhud.skills": "Habilidades",
     "tokenactionhud.treasure": "Tesoro",
     "tokenactionhud.unrollable": "No lanzable",
-    
+
     "tokenactionhud.actions": "Actions",
     "tokenactionhud.advanced": "Advanced",
     "tokenactionhud.armour": "Armour",
@@ -55,6 +55,14 @@
     "tokenactionhud.talents": "Talents",
     "tokenactionhud.traits": "Traits",
     "tokenactionhud.weapons": "Weapons",
+    
+    "tokenactionhud.blocklistLabel": "blocklist: hide / allowlist: show",
+    "tokenactionhud.filterPlaceholder": "Choices (split with semi-colon)",
+    "tokenactionhud.filterTitle": "Filter",
+    "tokenactionhud.accept": "Accept",
+    "tokenactionhud.cancel": "Cancel",
+    "tokenactionhud.blocklist": "Blocklist",
+    "tokenactionhud.allowlist": "Allowlist",
 
     "tokenactionhud.settings.rollHandler.name": "Manejador de tiradas",
     "tokenactionhud.settings.rollHandler.hint": "Elige que módulo recibirá las acciones de la barra.",
