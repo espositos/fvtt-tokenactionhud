@@ -56,7 +56,7 @@
     "tokenactionhud.weapons": "Weapons",
     
     "tokenactionhud.blocklistLabel": "blocklist: hide / allowlist: show",
-    "tokenactionhud.filterPlaceholder": "choices (split with semi-colon)",
+    "tokenactionhud.filterPlaceholder": "Choices (split with semi-colon)",
     "tokenactionhud.filterTitle": "Filter",
     "tokenactionhud.accept": "Accept",
     "tokenactionhud.cancel": "Cancel",

@@ -21,8 +21,12 @@ export class TagDialog extends Dialog {
             var $tagFilter = html.find('input[name="tokenactionhud-tagfilter"]');
             
             if ($tagFilter.length > 0) {
+                let filterPlaceholder = game.i18n.localize('tokenactionhud.filterPlaceholder');
+
                 tagify = new Tagify($tagFilter[0], {
                 whitelist: choices,
+                value: filters,
+                placeholder: filterPlaceholder,
                 delimiters: ';',
                 maxTags: 'Infinity',
                 dropdown: {
@@ -45,10 +49,11 @@ export class TagDialog extends Dialog {
 
         })
 
-        let blocklistLabel = game.i18n.localize('tokenactionhud.blocklistLabel');
         let filterPlaceholder = game.i18n.localize('tokenactionhud.filterPlaceholder');
+        let blocklistLabel = game.i18n.localize('tokenactionhud.blocklistLabel');
         let filterTitle = game.i18n.localize('tokenactionhud.filterTitle');
-        let content = ` <div><input name='tokenactionhud-tagfilter' class='some_class_name' placeholder='${filterPlaceholder}' value=''/></div>
+        let content = ` <div><label>${filterPlaceholder}</label></div>
+                        <div><input name='tokenactionhud-tagfilter' class='some_class_name'/></div>
                         <div><button class="tags--removeAllBtn">Clear</button></div>
                         <select id='isBlocklist' name='blocklist' size='1'>
                             <option value="1">${game.i18n.localize('tokenactionhud.blocklist')}</option>

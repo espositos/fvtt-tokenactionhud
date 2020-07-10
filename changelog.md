@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.4.5] 2020-07-10
+### Changed
+- Add some missing keys to localizations, just in English until translations are provided
+- Update tagify
+
 ## [0.4.4] 2020-07-10
 ### Changed
 - Make filter icon less intrusive when used
