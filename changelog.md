@@ -1,8 +1,12 @@
 # Changelog
 
-## [0.4.1] 2020-07-10
+## [0.4.3] 2020-07-10
 ### Bugfix
 - PF2E - fix rolling damage from PCs' strikes
+
+## [0.4.2] 2020-07-10
+### Added
+- Merged improved pt-BR localization
 
 ## [0.4.1] 2020-07-10
 ### Bugfix
