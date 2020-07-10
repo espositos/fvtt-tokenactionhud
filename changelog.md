@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.4.4] 2020-07-10
+### Changed
+- Make filter icon less intrusive when used
+
 ## [0.4.3] 2020-07-10
 ### Bugfix
 - PF2E - fix rolling damage from PCs' strikes
