@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.1] 2020-07-10
+### Bugfix
+- PF2E - fix rolling damage from PCs' strikes
+
+## [0.4.1] 2020-07-10
+### Bugfix
+- Correct CSS
+
 ## [0.4.0] 2020-07-10
 ### Bugfix
 - PF2e: NPC strike MAP was undefined when added

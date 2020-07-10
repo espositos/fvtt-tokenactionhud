@@ -60,6 +60,7 @@
     width: auto;
     height: auto;
     color: #fff;
+    text-align: center;
     background: rgba(52, 52, 52, 0.95);
     padding: 3px;
     margin: 3px;
@@ -72,6 +73,20 @@
     color: #fff;
     border-bottom: 1px solid #ff6400;
     box-shadow: 0 0 10px #ff6400;
+}
+
+.tah-title-button > .fa, .tah-title-button > .fas {
+    color: #fff;
+    font-size: x-small;
+    padding: 1px;
+    margin: 1px;
+    text-shadow: 0px 0px 3px rgba(52, 52, 52, 1);
+    text-align: center;
+    pointer-events: none;
+}
+
+.tah-title-button:hover > i {
+    text-shadow: 0 0 10px #ff6400;
 }
 
 /* Dropdown Content (Hidden by Default) */

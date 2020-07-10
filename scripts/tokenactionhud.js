@@ -28,6 +28,10 @@ export class TokenActionHUD extends Application {
     setTokensReference(tokens) {
         this.tokens = tokens;
     }
+    
+    showFilterDialog(categoryId) {
+        TagDialog.showTagDialog(this.filterManager, categoryId);
+    }
 
     trySetPos() {
         if (!(this.targetActions && this.targetActions.tokenId))
@@ -86,81 +90,6 @@ export class TokenActionHUD extends Application {
 
     static path(filepath) {
         return this._modDir + filepath;
-    }
-    
-    showFilterDialog(categoryId) {
-        let choices = this.filterManager.getSuggestions(categoryId);
-        let filters = this.filterManager.getFilteredElements(categoryId);
-        let tagify;
-        Hooks.once('renderTagDialog', (app, html, options) => {
-
-            html.css('height', 'auto');
-
-            var $blocklist = html.find('select[id="isBlocklist"]')
-            let blocklistChoice = this.filterManager.isBlocklist(categoryId) ? "1" : "0";
-            $blocklist.val(blocklistChoice);
-            $blocklist.css('background', '#fff')
-            $blocklist.css('color', '#000')
-
-            var $tagFilter = html.find('input[name="tokenactionhud-tagfilter"]');
-            
-            if ($tagFilter.length > 0) {
-                tagify = new Tagify($tagFilter[0], {
-                whitelist: choices,
-                delimiters: ';',
-                maxTags: 'Infinity',
-                dropdown: {
-                    maxItems: 20,           // <- maxumum allowed rendered suggestions
-                    classname: 'tags-look', // <- custom classname for this dropdown, so it could be targeted
-                    enabled: 0,             // <- show suggestions on focus
-                    closeOnSelect: false    // <- do not hide the suggestions dropdown once an item has been selected
-                }
-                });
-
-                tagify.addTags(filters);
-
-                // "remove all tags" button event listener
-                let clearBtn = html.find('button[class="tags--removeAllBtn"]');
-                clearBtn.on('click', tagify.removeAllTags.bind(tagify))
-                clearBtn.css('float', 'right');
-                clearBtn.css('width', 'auto');
-
-            }
-
-        })
-
-        let blocklistLabel = this.i18n('tokenactionhud.blocklistLabel');
-        let filterPlaceholder = this.i18n('tokenactionhud.filterPlaceholder');
-        let filterTitle = this.i18n('tokenactionhud.filterTitle');
-        let content = ` <div><input name='tokenactionhud-tagfilter' class='some_class_name' placeholder='${filterPlaceholder}' value=''/></div>
-                        <div><button class="tags--removeAllBtn">Clear</button></div>
-                        <select id='isBlocklist' name='blocklist' size='1'>
-                            <option value="1">${this.i18n('tokenactionhud.blocklist')}</option>
-                            <option value="0">${this.i18n('tokenactionhud.allowlist')}</option>
-                        </select><label> ${blocklistLabel}</label>`
-        let d = new TagDialog({
-            title: filterTitle,
-            content: content,
-            buttons: {
-             accept: {
-              icon: '<i class="fas fa-check"></i>',
-              label: this.i18n("tokenactionhud.accept"),
-              callback: async (html) => {
-                  console.log(html);
-                  let choices = tagify.value;
-                  let isBlocklist = html.find('select[id="isBlocklist"]')[0].value
-                  game.tokenActionHUD.submitFilter(categoryId, choices, isBlocklist);
-              }
-             },
-             cancel: {
-              icon: '<i class="fas fa-times"></i>',
-              label: this.i18n("tokenactionhud.cancel")
-             }
-            },
-            default: 'cancel',
-           });
-
-           d.render(true);
     }
 
     async submitFilter(categoryId, elements, isBlocklist) {

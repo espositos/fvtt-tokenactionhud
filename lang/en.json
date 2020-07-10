@@ -55,7 +55,7 @@
     "tokenactionhud.unrollable": "Unrollable",
     "tokenactionhud.weapons": "Weapons",
     
-    "tokenactionhud.blocklistLabel": "Blocklist (Hide only) or Allowlist (Show only)",
+    "tokenactionhud.blocklistLabel": "blocklist: hide / allowlist: show",
     "tokenactionhud.filterPlaceholder": "choices (split with semi-colon)",
     "tokenactionhud.filterTitle": "Filter",
     "tokenactionhud.accept": "Accept",

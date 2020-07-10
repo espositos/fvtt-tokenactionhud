@@ -92,6 +92,9 @@ export class ActionHandlerWfrp extends ActionHandler {
         let result = this.initializeEmptyCategory(categoryId);
         
         let skills = actor.items.filter(i => i.type === macroType && i._id);
+
+        result.choices = skills.length;
+
         if (filteredNames.length > 0) {
             if (this.filterManager.isBlocklist(categoryId)) {
                 skills = skills.filter(s => !filteredNames.includes(s.name));
