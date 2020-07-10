@@ -57,7 +57,7 @@ export class ActionHandler {
 
         category.name = categoryName;
 
-        if (category.subcategories.length > 0 || category.canFilter)
+        if (category.subcategories.length > 0 || category.choices > 0)
             result.categories.push(category);
     }
 

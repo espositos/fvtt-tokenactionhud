@@ -63,8 +63,8 @@ export class PcActionHandlerPf2e {
 
             subcategory.actions = this.baseHandler._produceMap(tokenId, variantsMap, macroType);
             
-            let damageEncodedValue = [macroType, tokenId, encodeURIComponent(s._id+'>damage')].join(this.baseHandler.delimiter);
-            let critEncodedValue = [macroType, tokenId, encodeURIComponent(s._id+'>critical')].join(this.baseHandler.delimiter);
+            let damageEncodedValue = [macroType, tokenId, encodeURIComponent(s.name+'>damage')].join(this.baseHandler.delimiter);
+            let critEncodedValue = [macroType, tokenId, encodeURIComponent(s.name+'>critical')].join(this.baseHandler.delimiter);
             subcategory.actions.push({name: 'Damage', encodedValue: damageEncodedValue, id: encodeURIComponent(s.name+'>damage')})
             subcategory.actions.push({name: 'Critical', encodedValue: critEncodedValue, id: encodeURIComponent(s.name+'>critical')})
 
