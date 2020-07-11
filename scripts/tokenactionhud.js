@@ -62,7 +62,7 @@ export class TokenActionHUD extends Application {
             return;
         }
 
-        if(!(game.user.data.flags.tokenactionhud && game.user.data.flags.tokenactionhud.hudPos))
+        if(!(game.user.data.flags['token-action-hud'] && game.user.data.flags['token-action-hud'].hudPos))
             return;
 
             let userPos = function (pos) {
@@ -84,7 +84,7 @@ export class TokenActionHUD extends Application {
             });
         }
         
-        let pos = game.user.data.flags.tokenactionhud.hudPos;
+        let pos = game.user.data.flags['token-action-hud'].hudPos;
         userPos(pos);
     }
 
