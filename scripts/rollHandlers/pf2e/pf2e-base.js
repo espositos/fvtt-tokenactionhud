@@ -274,7 +274,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         let spell = actor.items.find(i => i._id === spellId);
 
         if (settings.get('printSpellCard')) {
-            this._rollHeightenedSpell(actor, spell, castLevel); 
+            this._rollHeightenedSpell(actor, spell, level); 
             return;
         }
 
@@ -286,7 +286,7 @@ export class RollHandlerBasePf2e extends RollHandler {
             else if (spell.data.data.spellType.value === 'attack') {
                 spell.rollSpellAttack(event);
             } else {
-                this._rollHeightenedSpell(actor, spell, castLevel); 
+                this._rollHeightenedSpell(actor, spell, level); 
             }
         } else {
             if (spell.data.data.spellType.value === 'attack') {
@@ -294,7 +294,7 @@ export class RollHandlerBasePf2e extends RollHandler {
             } else if (spell.data.data.damage.value) {
                 spell.rollSpellDamage(event);
             } else {
-                this._rollHeightenedSpell(actor, spell, castLevel); 
+                this._rollHeightenedSpell(actor, spell, level); 
             }
         }
     }

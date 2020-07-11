@@ -171,7 +171,7 @@ export class ActionHandlerPf2e extends ActionHandler {
                 items.forEach(s => {
                     let encodedValue = [macroType, tokenId, `${spellbook.data._id}>${level}>${s.data._id}`].join(this.delimiter);
                     let spell = { name: s.name, encodedValue: encodedValue, id: s.data._id };
-                    let spellExpend = { name: '-', encodedValue: encodedValue+'>expend', id: s.data._id, shrink: true};
+                    let spellExpend = { name: '-', encodedValue: encodedValue+'>expend', id: s.data._id, cssClass: 'stickLeft'};
                     this._addSpellInfo(s, spell);
                     levelSubcategory.actions.push(spell, spellExpend);
                 });
@@ -279,11 +279,11 @@ export class ActionHandlerPf2e extends ActionHandler {
 
                 increaseId = `${spellbook._id}>focus>slotIncrease`;
                 let increaseEncodedValue = ['spellSlot', tokenId, increaseId].join(this.delimiter);
-                category.actions.unshift({id: increaseId, name: '+', encodedValue: increaseEncodedValue, shrink:true})
+                category.actions.unshift({id: increaseId, name: '+', encodedValue: increaseEncodedValue, cssClass:'shrink'})
         
                 decreaseId = `${spellbook._id}>focus>slotDecrease`;
                 let decreaseEncodedValue = ['spellSlot', tokenId, decreaseId].join(this.delimiter);
-                category.actions.unshift({id: decreaseId, encodedValue: decreaseEncodedValue, name: '-', shrink:true})
+                category.actions.unshift({id: decreaseId, encodedValue: decreaseEncodedValue, name: '-', cssClass:'shrink'})
             }
         }
         
@@ -298,11 +298,11 @@ export class ActionHandlerPf2e extends ActionHandler {
 
                 increaseId = `${spellbook._id}>${slotLevel}>slotIncrease`;
                 let increaseEncodedValue = ['spellSlot', tokenId, increaseId].join(this.delimiter);
-                category.actions.unshift({encodedValue: increaseEncodedValue, name: '+', id: increaseId, shrink:true})
+                category.actions.unshift({encodedValue: increaseEncodedValue, name: '+', id: increaseId, cssClass:'shrink'})
     
                 decreaseId = `${spellbook._id}>${slotLevel}>slotDecrease`;
                 let decreaseEncodedValue = ['spellSlot', tokenId, decreaseId].join(this.delimiter);
-                category.actions.unshift({encodedValue: decreaseEncodedValue, name: '-', id: increaseId, shrink:true})
+                category.actions.unshift({encodedValue: decreaseEncodedValue, name: '-', id: increaseId, cssClass:'shrink'})
             }
         }
     }
