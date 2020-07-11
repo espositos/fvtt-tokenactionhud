@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.4.6] 2020-07-10
+## [0.4.6] 2020-07-11
 ### Bugfix
 - User repositioning fix
 
