@@ -142,7 +142,7 @@
 .tah-action {
     flex-grow: 0;
     flex-basis: auto;
-    padding: 3px;
+    padding: 3px 0px 3px 0px;
     margin: 3px;
     background: none;
 }
@@ -198,6 +198,14 @@
 
 .tah-info3:after {
     content: "}";
+}
+
+.tah-action .tah-action-button-shrink {
+    width: auto;
+    min-width:20px;
+    padding: 0px;
+    margin: 0px;
+    font-size: smaller;
 }
  
 .tah-action button {
