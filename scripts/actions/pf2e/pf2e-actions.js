@@ -137,12 +137,12 @@ export class ActionHandlerPf2e extends ActionHandler {
         let spellbooks = actor.items.filter(i => i.data.type === 'spellcastingEntry');
         
         // get prepared spellbooks first, get spells from those, then turn to other spells
-        spellbooks.forEach(s => {
-            if (s.data.data.prepared.value !== 'prepared')
+        spellbooks.forEach(spellbook => {
+            if (spellbook.data.data.prepared.value !== 'prepared')
                 return;
 
-            let bookName = s.data.name;
-            Object.entries(s.data.data.slots).forEach(slot => {
+            let bookName = spellbook.data.name;
+            Object.entries(spellbook.data.data.slots).forEach(slot => {
                 if (slot[1].prepared.length === 0 || slot[1].prepared.max <= 0)
                     return;
                 
@@ -155,28 +155,36 @@ export class ActionHandlerPf2e extends ActionHandler {
                 let items = Object.values(slot[1].prepared).map(spell => { if (!spell.expended) return spells.find(sp => sp.data._id === spell.id) });
                 items = items.filter(i => !!i);
 
-                if (items.length > 0) {
-                    let bookCategory;
-                    if (!result.subcategories.some(s => s.name === bookName)) {
-                        bookCategory = this.initializeEmptySubcategory(bookName);
-                        result.subcategories.push(bookCategory);
-                    } else {
-                        bookCategory = result.subcategories.find(b => b.name === bookName);
-                    }
-                    
-                    let levelSubcategory = this.initializeEmptySubcategory();
-                    levelSubcategory.actions = this._produceMap(tokenId, items, 'spell');
-
-                    if (result.subcategories.find(s => s.name === bookName)?.subcategories.length === 0) {
-                        levelName = `${bookName} - ${levelName}`;
-                        if (actor.data.type === 'character')
-                            levelSubcategory.info1 = this._getSpellSlotInfo(s, level, true);
-
-                        levelSubcategory.info2 = this._getSpellDcInfo(s);
-                    }
-
-                    this._combineSubcategoryWithCategory(bookCategory, levelName, levelSubcategory);
+                if (items.length === 0)
+                    return;
+                
+                let bookCategory;
+                if (!result.subcategories.some(s => s.name === bookName)) {
+                    bookCategory = this.initializeEmptySubcategory(bookName);
+                    result.subcategories.push(bookCategory);
+                } else {
+                    bookCategory = result.subcategories.find(b => b.name === bookName);
                 }
+                
+                let levelSubcategory = this.initializeEmptySubcategory();
+
+                items.forEach(s => {
+                    let encodedValue = [macroType, tokenId, `${spellbook.data._id}>${level}>${s.data._id}`].join(this.delimiter);
+                    let spell = { name: s.name, encodedValue: encodedValue, id: s.data._id };
+                    let spellExpend = { name: '-', encodedValue: encodedValue+'>expend', id: s.data._id, cssClass: 'stickLeft'};
+                    this._addSpellInfo(s, spell);
+                    levelSubcategory.actions.push(spell, spellExpend);
+                });
+
+                if (result.subcategories.find(s => s.name === bookName)?.subcategories.length === 0) {
+                    levelName = `${bookName} - ${levelName}`;
+                    if (actor.data.type === 'character')
+                        this._setSpellSlotInfo(tokenId, levelSubcategory, spellbook, level, true);
+
+                    levelSubcategory.info2 = this._getSpellDcInfo(spellbook);
+                }
+
+                this._combineSubcategoryWithCategory(bookCategory, levelName, levelSubcategory);
             });
         })
 
@@ -207,12 +215,12 @@ export class ActionHandlerPf2e extends ActionHandler {
 
             // On first subcategory, include bookName, attack bonus, and spell DC.
             let levelCategory;
-            if (category.subcategories.length === 0) {                
+            if (category.subcategories.length === 0) {
                 levelCategory = this.initializeEmptySubcategory(levelNameWithBook);
                 category.subcategories.push(levelCategory);
                 
                 if (actor.data.type === 'character')
-                    levelCategory.info1 = this._getSpellSlotInfo(spellbook, level, true);
+                    this._setSpellSlotInfo(tokenId, levelCategory, spellbook, level, true);
 
                 levelCategory.info2 = this._getSpellDcInfo(spellbook);
             }
@@ -224,13 +232,13 @@ export class ActionHandlerPf2e extends ActionHandler {
                 levelCategory = this.initializeEmptySubcategory(levelName);
                 category.subcategories.push(levelCategory);
                 if (actor.data.type === 'character')
-                levelCategory.info1 = this._getSpellSlotInfo(spellbook, level, false);
+                this._setSpellSlotInfo(tokenId, levelCategory, spellbook, level, false);
             }
             
             let categoryName = stillFirstSubcategory ? levelNameWithBook : levelName;
             levelCategory = category.subcategories.find(s => s.name === categoryName);
 
-            let encodedValue = [macroType, tokenId, s.data._id].join(this.delimiter);
+            let encodedValue = [macroType, tokenId, `${spellbook.data._id}>${level}>${s.data._id}`].join(this.delimiter);
             let spell = { name: s.name, encodedValue: encodedValue, id: s.data._id };
             this._addSpellInfo(s, spell);
             levelCategory.actions.push(spell);     
@@ -254,25 +262,49 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
-    _getSpellSlotInfo(spellbook, level, firstSubcategory) {
+    _setSpellSlotInfo(tokenId, category, spellbook, level, firstSubcategory) {
         let tradition = spellbook.data.data.tradition.value;
         let prepType = spellbook.data.data.prepared.value;
 
         let slotInfo = !['prepared', 'focus'].includes(prepType);
 
-        let slots = spellbook.data.data.slots;
-        let maxSlots = slots[`slot${level}`].max;
-        let valueSlots = slots[`slot${level}`].value;
-
+        let maxSlots, valueSlots, increaseId, decreaseId;
         if (firstSubcategory && tradition === 'focus') {
             let focus = spellbook.data.data.focus;
             maxSlots = focus.pool;
             valueSlots = focus.points;
-            return `${valueSlots}/${maxSlots}`;
+            
+            if (maxSlots > 0) {          
+                category.info1 = `${valueSlots}/${maxSlots}`;
+
+                increaseId = `${spellbook._id}>focus>slotIncrease`;
+                let increaseEncodedValue = ['spellSlot', tokenId, increaseId].join(this.delimiter);
+                category.actions.unshift({id: increaseId, name: '+', encodedValue: increaseEncodedValue, cssClass:'shrink'})
+        
+                decreaseId = `${spellbook._id}>focus>slotDecrease`;
+                let decreaseEncodedValue = ['spellSlot', tokenId, decreaseId].join(this.delimiter);
+                category.actions.unshift({id: decreaseId, encodedValue: decreaseEncodedValue, name: '-', cssClass:'shrink'})
+            }
         }
         
-        if (slotInfo && level > 0)
-            return `${valueSlots}/${maxSlots}`;
+        if (slotInfo && level > 0 && tradition !== 'focus') {
+            let slots = spellbook.data.data.slots;
+            let slotLevel = `slot${level}`
+            maxSlots = slots[slotLevel].max;
+            valueSlots = slots[slotLevel].value;
+
+            if (maxSlots > 0) {
+                category.info1 = `${valueSlots}/${maxSlots}`;
+
+                increaseId = `${spellbook._id}>${slotLevel}>slotIncrease`;
+                let increaseEncodedValue = ['spellSlot', tokenId, increaseId].join(this.delimiter);
+                category.actions.unshift({encodedValue: increaseEncodedValue, name: '+', id: increaseId, cssClass:'shrink'})
+    
+                decreaseId = `${spellbook._id}>${slotLevel}>slotDecrease`;
+                let decreaseEncodedValue = ['spellSlot', tokenId, decreaseId].join(this.delimiter);
+                category.actions.unshift({encodedValue: decreaseEncodedValue, name: '-', id: increaseId, cssClass:'shrink'})
+            }
+        }
     }
 
     /** @private */

@@ -44,7 +44,10 @@ export class NpcActionHandlerPf2e {
 
             let variantsMap = [];
             let map = (s.data.data.traits.value || []).includes('agile') || s.data.isAgile ? 4 : 5;
-            let attackMod = s.data.data.bonus.total ?? 0;
+            let attackMod = s.data.data.bonus.total;
+
+            if (!attackMod)
+                attackMod = s.data.data.bonus.value ?? 0;
             
             let currentMap = 0;
             let currentBonus = attackMod;

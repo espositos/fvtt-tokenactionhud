@@ -6,7 +6,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         super();
     }
     
-    handleActionEvent(event, encodedValue) {
+    async handleActionEvent(event, encodedValue) {
         let payload = encodedValue.split('|');
         settings.Logger.debug(encodedValue);
         if (payload.length != 3) {
@@ -18,7 +18,9 @@ export class RollHandlerBasePf2e extends RollHandler {
         let actionId = payload[2];
 
         let actor = super.getActor(tokenId);
-        let charType = actor.data.type;
+        let charType;
+        if (actor)
+            charType = actor.data.type;
 
         let sharedActions = ['ability', 'spell', 'item', 'skill', 'lore']
 
@@ -28,7 +30,7 @@ export class RollHandlerBasePf2e extends RollHandler {
                     this._handleUniqueActionsNpc(macroType, event, actor, actionId);
                     break;
                 case 'character':
-                    this._handleUniqueActionsChar(macroType, event, actor, actionId);
+                    await this._handleUniqueActionsChar(macroType, event, actor, actionId);
                     break;
             }
         }
@@ -51,11 +53,10 @@ export class RollHandlerBasePf2e extends RollHandler {
             case 'spell':
                 this._rollSpell(event, actor, actionId);
         }
-        
     }
 
     /** @private */
-    _handleUniqueActionsChar(macroType, event, actor, actionId) {
+    async _handleUniqueActionsChar(macroType, event, actor, actionId) {
         switch (macroType) {
             case 'save':
                 this._rollSaveChar(event, actor, actionId);
@@ -65,6 +66,9 @@ export class RollHandlerBasePf2e extends RollHandler {
                 break;  
             case 'attribute':
                 this._rollAttributeChar(event, actor, actionId);
+                break;
+            case 'spellSlot':
+                await this._adjustSpellSlot(event, actor, actionId);
                 break;
         }
     }
@@ -116,6 +120,48 @@ export class RollHandlerBasePf2e extends RollHandler {
             const opts = actor.getRollOptions(['all', 'saving-throw', save]);
             save.roll(event, opts);
         }
+    }
+
+    async _adjustSpellSlot(event, actor, actionId) {
+        let actionParts = decodeURIComponent(actionId).split('>');
+
+        let spellbookId = actionParts[0];
+        let slot = actionParts[1];
+        let effect = actionParts[2];
+
+        let spellbook = actor.getOwnedItem(spellbookId);
+
+        let value, max;
+        if (slot === 'focus') {
+            value = spellbook.data.data.focus.points;
+            max = spellbook.data.data.focus.pool;
+        } else {
+            let slots = spellbook.data.data.slots;
+            value = slots[slot].value;
+            max = slots[slot].max;
+        }
+
+        switch (effect) {
+            case 'slotIncrease':
+                if (value >= max)
+                    break;
+                
+                value++;
+                break;
+            case 'slotDecrease':
+                if (value <= 0)
+                    break;
+                    
+                value--;
+        }
+
+        let update;
+        if (slot === 'focus')
+            update = {_id: spellbook._id, data: { focus: {points: value}}};
+        else
+            update = {_id: spellbook._id, data: {slots: {[slot]: {value: value}}}};
+
+        await actor.updateEmbeddedEntity("OwnedItem", update);
     }
 
     
@@ -207,16 +253,28 @@ export class RollHandlerBasePf2e extends RollHandler {
     /** @private */
     _rollItem(event, actor, actionId) {
         let item = actor.items.find(i => i._id === actionId);
-
+        
         item.roll();
     }
 
     /** @private */
     _rollSpell(event, actor, actionId) {
-        let spell = actor.items.find(i => i._id === actionId);
+        let actionParts = decodeURIComponent(actionId).split('>');
+
+        let spellbookId = actionParts[0];
+        let level = actionParts[1];
+        let spellId = actionParts[2];
+        let expend = actionParts[3] ?? false;
+
+        if (expend) {
+            this._expendSpell(actor, spellbookId, level, spellId);
+            return;
+        }
+
+        let spell = actor.items.find(i => i._id === spellId);
 
         if (settings.get('printSpellCard')) {
-            spell.roll(); 
+            this._rollHeightenedSpell(actor, spell, level); 
             return;
         }
 
@@ -228,7 +286,7 @@ export class RollHandlerBasePf2e extends RollHandler {
             else if (spell.data.data.spellType.value === 'attack') {
                 spell.rollSpellAttack(event);
             } else {
-                spell.roll();
+                this._rollHeightenedSpell(actor, spell, level); 
             }
         } else {
             if (spell.data.data.spellType.value === 'attack') {
@@ -236,8 +294,69 @@ export class RollHandlerBasePf2e extends RollHandler {
             } else if (spell.data.data.damage.value) {
                 spell.rollSpellDamage(event);
             } else {
-                spell.roll();
+                this._rollHeightenedSpell(actor, spell, level); 
             }
         }
+    }
+    
+    _expendSpell(actor, spellbookId, level, spellId) {    
+        let spellbook = actor.getOwnedItem(spellbookId);
+        let spellSlot = Object.entries(spellbook.data.data.slots[`slot${level}`].prepared)
+            .find(s => s[1].id === spellId && (s[1].expended === false || !s[1].expended))[0];
+
+        if (spellSlot === -1)
+            return;
+
+        const key = `data.slots.slot${level}.prepared.${spellSlot}`;
+        const options = {
+          _id: spellbookId,
+        };
+        options[key] = {
+          expended: true,
+        };
+        actor.updateEmbeddedEntity('OwnedItem', options);
+    
+    }
+
+    async _rollHeightenedSpell(actor, item, spellLevel) {
+        let data = item.getChatData();
+        let token = canvas.tokens.placeables.find(p => p.actor?._id === actor._id);
+        let castLevel = parseInt(spellLevel);
+        if (item.data.data.level.value < castLevel) {
+            data.properties.push(`Heightened: +${castLevel - item.data.data.level.value}`);
+            if (!item.data.hasOwnProperty('contextualData'))
+                item.data.contextualData = {};
+            item.data.contextualData.spellLvl = castLevel;
+        }
+
+        const template = `systems/pf2e/templates/chat/${item.data.type}-card.html`;
+        const templateData = {
+            actor: actor,
+            tokenId: token ? `${token.scene._id}.${token.id}` : null,
+            item: item.data,
+            data: data,
+          };
+      
+          // Basic chat message data
+          const chatData = {
+            user: game.user._id,
+            speaker: {
+              actor: actor._id,
+              token: actor.token,
+              alias: actor.name,
+            },
+            type: CONST.CHAT_MESSAGE_TYPES.OTHER,
+          };
+      
+          // Toggle default roll mode
+          const rollMode = game.settings.get('core', 'rollMode');
+          if (['gmroll', 'blindroll'].includes(rollMode)) chatData.whisper = ChatMessage.getWhisperRecipients('GM').map(u => u._id);
+          if (rollMode === 'blindroll') chatData.blind = true;
+      
+          // Render the template
+          chatData.content = await renderTemplate(template, templateData);
+      
+          // Create the chat message
+          return ChatMessage.create(chatData, { displaySheet: false });
     }
 }

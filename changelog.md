@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.4.7] 2020-07-11
+### Added
+- PF2E: ability to expend prepared spells from HUD
+- PF2E: ability to increase or decrease focus points and spell slots from HUD.
+
+### Bugfix
+- PF2e: Heightened spells now cast correctly from HUD generated spell cards
+- PF2e: NPC strikes sometimes had wrong attack bonus displayed
+
 ## [0.4.6] 2020-07-11
 ### Bugfix
 - User repositioning fix
