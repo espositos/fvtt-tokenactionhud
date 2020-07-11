@@ -1,5 +1,5 @@
 # Token Action HUD
-This is a FoundryVTT module which populates a floating HUD showing actions for a selected token. The information displayed depends on the system. For DND5e, for example, it currently shows items and equipment, feats, abilities, skills, and spells.
+This module populates a repositionable HUD showing actions for a selected token. Currently the HUD supports DND5e, WFRP4e, Dungeon World, and Pathfinder 2E.
 
 # Installation
 1. Inside Foundry's Configuration and Setup screen, go to **Add-on Modules**

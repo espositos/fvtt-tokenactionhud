@@ -18,27 +18,32 @@ The action handler has one public method, buildActionList(token), which takes a 
 {
     "tokenId": "Normally token._id"
     "actionId": "Normally token.actor._id"
-    "categories": {}
+    "categories": []
 }
 ```
 
 ## A category:
 ```
-key: {
-    "subcategories": {}
+{
+    "id": 'Used for filtering',
+    "name": 'Category title',
+    "subcategories": []
+    "canFilter": boolean - categories can be provided a list of choices (a whitelist or suggestions) and then filter actions based on an allow or block policy.
 }
 ```
 
 ## A subcategory:
 ```
-key: {
-    info: "Extra information to display alongside the category";
+{
+    id: 'Not used currently',
+    name: 'Subcategory title',
+    info1: 'Extra information to display alongside the category',
     actions: [],
-    subcategories: {}
+    subcategories: []
 }
 ```
 
-(note: subcategories can currently contain further subcategories)
+(note: subcategories can currently contain further subcategories, but only rendered if it also contains actions)
 
 ## An action:
 ```
@@ -46,11 +51,12 @@ key: {
         name: "The name of the item",
         info1: "",
         info2: "",
+        cssClass: "",
         encodedValue: "";
     }
 ```
 
-The encoded value is the data passed to the roll handler. For DND5e it uses the format "type.tokenId.actorId", which along with the click event should provide enough information for the roll handler.
+The encoded value is the data passed to the roll handler. For DND5e it uses the format "type|tokenId|actionId", which along with the click event should provide enough information for the roll handler. 
 
 The DND5e action handler also adds categories for skill checks and ability scores based on the DND5e config.
 
