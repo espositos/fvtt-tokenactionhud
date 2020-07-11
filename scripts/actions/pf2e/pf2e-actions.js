@@ -171,7 +171,7 @@ export class ActionHandlerPf2e extends ActionHandler {
                 items.forEach(s => {
                     let encodedValue = [macroType, tokenId, `${spellbook.data._id}>${level}>${s.data._id}`].join(this.delimiter);
                     let spell = { name: s.name, encodedValue: encodedValue, id: s.data._id };
-                    let spellExpend = { name: 'X', encodedValue: encodedValue+'>expend', id: s.data._id, shrink: true};
+                    let spellExpend = { name: '-', encodedValue: encodedValue+'>expend', id: s.data._id, shrink: true};
                     this._addSpellInfo(s, spell);
                     levelSubcategory.actions.push(spell, spellExpend);
                 });
