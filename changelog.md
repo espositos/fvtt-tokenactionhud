@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.4.6] 2020-07-11
+### Bugfix
+- User repositioning fix
+
 ## [0.4.5] 2020-07-10
 ### Changed
 - Add some missing keys to localizations, just in English until translations are provided
