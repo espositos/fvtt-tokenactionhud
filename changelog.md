@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.4.9] 2020-07-12
+### Bugfix
+- DND5e: Incorrect comparison for spell uses caused spells with uses not to show.
+
 ## [0.4.8] 2020-07-12
 ### Added
 - DND5e: Extended functionality of recharging '(recharge)' item on click to BetterRolls and MinorQOL roll handlers.
