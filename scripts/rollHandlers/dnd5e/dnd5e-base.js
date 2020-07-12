@@ -64,13 +64,20 @@ export class RollHandlerBase5e extends RollHandler {
     rollItemMacro(event, tokenId, itemId) {
         let actor = super.getActor(tokenId);
         let item = actor.getOwnedItem(itemId);
+
+        if (this.needsRecharge(item)) {
+            item.rollRecharge();
+            return;
+        }
+
         
         if (item.data.type === "spell")
             return actor.useSpell(item);
-    
-        if (item.data.data.recharge && !item.data.data.recharge.charged && item.data.data.recharge.value)
-            return item.rollRecharge();
             
         return item.roll();
+    }
+
+    needsRecharge(item) {
+        return (item.data.data.recharge && !item.data.data.recharge.charged && item.data.data.recharge.value);
     }
 }
