@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.4.8] 2020-07-12
+### Added
+- DND5e: Extended functionality of recharging '(recharge)' item on click to BetterRolls and MinorQOL roll handlers.
+
 ## [0.4.7] 2020-07-11
 ### Added
 - PF2E: ability to expend prepared spells from HUD
