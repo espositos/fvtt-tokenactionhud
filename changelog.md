@@ -2,6 +2,10 @@
 
 ## [0.4.9] 2020-07-12
 ### Bugfix
+- DND5e: Incorrectly named variable causing HUD to fail when abilities and saves combined.
+
+## [0.4.9] 2020-07-12
+### Bugfix
 - DND5e: Incorrect comparison for spell uses caused spells with uses not to show.
 
 ## [0.4.8] 2020-07-12

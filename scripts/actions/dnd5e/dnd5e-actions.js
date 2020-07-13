@@ -48,7 +48,7 @@ export class ActionHandler5e extends ActionHandler {
             this._combineCategoryWithList(result, checksTitle, checks);
         } else {
             let abilitiesTitle = this.i18n('tokenactionhud.abilities');
-            let abilities = this._getAbilityList(tokenId, 'abilities', abilitisTitle, 'ability');
+            let abilities = this._getAbilityList(tokenId, 'abilities', abilitiesTitle, 'ability');
 
             this._combineCategoryWithListWithList(result, abilitiesTitle, abilities);
         }
