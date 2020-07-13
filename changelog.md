@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.4.9] 2020-07-12
+## [0.4.10] 2020-07-12
 ### Bugfix
 - DND5e: Incorrectly named variable causing HUD to fail when abilities and saves combined.
 
