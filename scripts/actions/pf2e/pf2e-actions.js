@@ -150,7 +150,7 @@ export class ActionHandlerPf2e extends ActionHandler {
                 let level = levelKey.substr(4);
                 let levelName =  `${this.i18n('tokenactionhud.level')} ${level}`;
 
-                levelName = level === 0 ? this.i18n('tokenactionhud.cantrips') : levelName;
+                levelName = level == 0 ? this.i18n('tokenactionhud.cantrips') : levelName;
                 
                 let items = Object.values(slot[1].prepared).map(spell => { if (!spell.expended) return spells.find(sp => sp.data._id === spell.id) });
                 items = items.filter(i => !!i);
@@ -171,9 +171,14 @@ export class ActionHandlerPf2e extends ActionHandler {
                 items.forEach(s => {
                     let encodedValue = [macroType, tokenId, `${spellbook.data._id}>${level}>${s.data._id}`].join(this.delimiter);
                     let spell = { name: s.name, encodedValue: encodedValue, id: s.data._id };
-                    let spellExpend = { name: '-', encodedValue: encodedValue+'>expend', id: s.data._id, cssClass: 'stickLeft'};
+
                     this._addSpellInfo(s, spell);
-                    levelSubcategory.actions.push(spell, spellExpend);
+                    levelSubcategory.actions.push(spell);
+
+                    if (level > 0) {
+                        let spellExpend = { name: '-', encodedValue: encodedValue+'>expend', id: s.data._id, cssClass: 'stickLeft'};
+                        levelSubcategory.actions.push(spellExpend);
+                    }
                 });
 
                 if (result.subcategories.find(s => s.name === bookName)?.subcategories.length === 0) {
