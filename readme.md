@@ -1,5 +1,6 @@
 # Token Action HUD
-This module populates a repositionable HUD showing actions for a selected token. Currently the HUD supports DND5e, WFRP4e, Dungeon World, and Pathfinder 2E.
+This module populates a repositionable HUD showing the most common basic actions for a selected token. Currently the HUD supports DND5e, WFRP4e, Dungeon World, and Pathfinder 2E.
+![Easy action access](.github/readme/tah-dnd5e.gif)
 
 # Installation
 1. Inside Foundry's Configuration and Setup screen, go to **Add-on Modules**
@@ -8,19 +9,19 @@ This module populates a repositionable HUD showing actions for a selected token.
 4. Within the game, click on **Settings** -> **Manage Modules** and make sure the Token Action Hud is enabled.
 
 # Usage
-Once activated, selecting a token that has an actor/character sheet associated with it and that you have permission to control should display an an action bar that is populated with the actions and abilities available for that token.
+Once activated, selecting a token that has an actor/character sheet associated with it and that you have permission to control should display an an action bar that is populated with the actions and abilities available for that token. The HUD can be disabled on a per-user basis if so desired.
 
-The HUD provides easy access to the most frequent actions carried out by a token.
-![Easy action access](.github/readme/token_action_hud_eg1.gif)
+Offers a variety of settings including support for third-party roll handlers (Please contact me if you'd like to add yours, or improve the functionality of those offered), and can be repositioned.
+![Customizable settings](.github/readme/tah-settings_and_repositioning.gif)
 
-Offers a variety of settings including support for third-party roll handlers (Please contact me if you'd like to add yours, or improve the functionality of those offered).
-![Customizable settings](.github/readme/token_action_hud_eg2.gif)
+## Support for WFRP
+![Warhammer Fantasy Roleplay 4E](.github/readme/tah-wfrp.gif)
 
-Can be repositioned.
-![Draggable](.github/readme/token_action_hud_eg4.gif)
+## Dungeon World
+![Dungeon World](.github/readme/tah-dungeonworld.gif)
 
-Should be able to support most systems, although currently limited to DND5e, PF2E, and extremely basic WFRP4e support. Please contact me if you would like to help.
-![Modular support for multiple systems](.github/readme/token_action_hud_eg3.gif)
+## Pathfinder 2E
+![Pathfinder 2E](.github/readme/tah-pf2e.gif)
 
 # Supported systems
 * DND5e (including BetterRolls and MinorQol)
