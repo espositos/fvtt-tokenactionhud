@@ -89,7 +89,7 @@ export class ActionHandler5e extends ActionHandler {
     
         let allConsumables = sortedItems.filter(i => i.type == 'consumable');
         
-        let consumable = allConsumables.filter(c => c.data.uses.value && c.data.uses.value > 0)
+        let consumable = this._filterExpendedItems(allConsumables);
         let consumableActions = consumable.map(c => this._buildItem(tokenId, actor, macroType, c));
         let consumablesCat = this.initializeEmptySubcategory();
         consumablesCat.actions = consumableActions;
@@ -139,7 +139,8 @@ export class ActionHandler5e extends ActionHandler {
     
     /** @private */
     _getSpellsList(actor, tokenId) {
-        let validSpells = this._filterLongerActions(actor.data.items.filter(i => i.type === 'spell' && i.data.uses.value <= i.data.uses.max));
+        let validSpells = this._filterLongerActions(actor.data.items.filter(i => i.type === 'spell'));
+        validSpells = this._filterExpendedItems(validSpells);
         validSpells = this._filterNonpreparedSpells(validSpells);
         let spellsSorted = this._sortSpellsByLevel(validSpells);
         let spells = this._categoriseSpells(actor, tokenId, spellsSorted);
@@ -241,7 +242,8 @@ export class ActionHandler5e extends ActionHandler {
             if (settings.get('showSpellInfo'))
                 this._addSpellInfo(s, spell);
 
-            if (!max || levelInfo?.slotsAvailable) {
+            let ignoreSlotsAvailable = settings.get('showEmptyItems');
+            if (!max || (levelInfo?.slotsAvailable || ignoreSlotsAvailable)) {
                 if (power) {
                     powers.subcategories.find(s => s.name === prepType).actions.push(spell);
                 } else {
@@ -419,12 +421,18 @@ export class ActionHandler5e extends ActionHandler {
     /** @private */
     _getUsesData(item) {
         let result = '';
-        if (item.data.uses?.value) {
-            result = item.data.uses.value;
 
-            if (item.data.uses.max) {
-                result += `/${item.data.uses.max}`
-            }
+        let uses = item.data.uses;
+        if (!uses)
+            return result;
+
+        if (uses.max === 0 && uses.value === 0)
+            return result;
+
+        result = uses.value;
+
+        if (uses.max > 0) {
+            result += `/${uses.max}`
         }
 
         return result;
@@ -444,7 +452,7 @@ export class ActionHandler5e extends ActionHandler {
                 if (target) {
                     let parent = getProperty(actor, `data.data.${parentId}`)
                     result = target;
-                    if (parent.max)
+                    if (!!parent.max)
                         result += `/${parent.max}`
                 }
             }
@@ -495,6 +503,23 @@ export class ActionHandler5e extends ActionHandler {
         }
 
         return result;
+    }
+
+    _filterExpendedItems(items) {
+        if (settings.get('showEmptyItems'))
+            return items;
+
+        return items.filter(i => {
+            let uses = i.data.uses;
+            // Assume something with no uses is unlimited in its use.
+            if (!uses) return true;
+
+            // if it has a max but value is 0, don't return.
+            if (uses.max > 0 && uses.value == 0)
+                return false;
+
+            return true;
+        });
     }
 
     /** @private */

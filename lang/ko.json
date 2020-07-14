@@ -89,6 +89,8 @@
     "tokenactionhud.settings.dnd5e.splitAbilities.hint": "활성화할 경우 능력치가 판정과 내성굴림으로 구분된다.",
     "tokenactionhud.settings.dnd5e.showAllNpcItems.name": "모든 NPC 아이템 표시",
     "tokenactionhud.settings.dnd5e.showAllNpcItems.hint": "활성화할 경우 NPC가 장비한 아이템 뿐만이 아닌, 모든 아이템이 표시된다.",
+    "tokenactionhud.settings.dnd5e.showEmptyItems.name": "Show empty items (includes items and spells)",
+    "tokenactionhud.settings.dnd5e.showEmptyItems.hint": "If enabled, items are shown in the HUD even if they have no remaining charges.",
 
     "tokenactionhud.settings.pf2e.showPcAbilities.name": "PC 능력치 보기",
     "tokenactionhud.settings.pf2e.showPcAbilities.hint": "활성화된 경우 PC의 HUD에 능력치 카테고리가 표기된다.",

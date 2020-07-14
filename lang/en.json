@@ -88,6 +88,8 @@
     "tokenactionhud.settings.dnd5e.splitAbilities.hint": "If enabled, abilities will be separated into checks and saves.",
     "tokenactionhud.settings.dnd5e.showAllNpcItems.name": "Show all NPC items",
     "tokenactionhud.settings.dnd5e.showAllNpcItems.hint": "If enabled, all items are shown for NPCs, not just equipped items.",
+    "tokenactionhud.settings.dnd5e.showEmptyItems.name": "Show empty items (includes items and spells)",
+    "tokenactionhud.settings.dnd5e.showEmptyItems.hint": "If enabled, items are shown in the HUD even if they have no remaining charges.",
     
     "tokenactionhud.settings.pf2e.showPcAbilities.name": "Show PC abilities",
     "tokenactionhud.settings.pf2e.showPcAbilities.hint": "If enabled, PCs will also have an Abilities category on their HUD.",
