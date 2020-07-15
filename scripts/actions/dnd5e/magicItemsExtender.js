@@ -12,7 +12,7 @@ export class MagicItemActionListExtender extends ActionListExtender {
         let magicItems = MagicItemActor.get(actorId).items;
         
         if (magicItems.length === 0)
-        return;
+            return;
 
         let magicItemsIds = magicItems.map(items => items._id);
         
