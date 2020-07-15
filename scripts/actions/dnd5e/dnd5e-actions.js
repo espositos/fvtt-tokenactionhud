@@ -188,6 +188,9 @@ export class ActionHandler5e extends ActionHandler {
     
                 s[1].slotsAvailable = slotsAvailable;
             } else {
+                if (!s[1])
+                    s[1] = {}
+
                 s[1].slotsAvailable = !s[1].max || s[1].value > 0;
             }
         })
