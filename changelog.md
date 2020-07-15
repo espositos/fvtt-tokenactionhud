@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.4.12] 2020-07-15
+### Bugfix
+- DND5e/BetterRolls - chose a better method to use on the BetterRoll API to roll Items
+
 ## [0.4.11] 2020-07-14
 ### Added
 - DND5e - option to show empty items and spells
