@@ -51,15 +51,25 @@ export class RollHandlerBetterRolls5e extends RollHandlerBase5e {
             return;
         }
 
+        let params = {
+            adv: 0,
+            disadv: 0,
+        }
+
+		if (event.shiftKey) { params.adv = 1; }
+        if (keyboard.isCtrl(event)) { params.disadv = 1; }
+
         var versatile = false;
         if (item.data.data.properties?.ver)
             versatile = event.originalEvent.button === 2;
 
         if (item.type === 'weapon' && versatile) {
-            BetterRolls.rollItem(item, null, [["attack"], ["damage", {index: "all", versatile: versatile}]]).toMessage();
+            BetterRolls.rollItem(item, params, [["attack"], ["damage", {index: "all", versatile: versatile}]]).toMessage();
             return;
         }
 
-        BetterRolls.quickRollById(actor._id, item._id);
+        params.preset = 1;
+
+        BetterRolls.rollItem(item, params).toMessage();
     }
 }
