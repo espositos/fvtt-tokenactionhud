@@ -1,9 +1,11 @@
 import * as settings from '../settings.js';
+import {ActionListExtender} from './actionListExtender.js';
 
 export class ActionHandler {
     i18n = (toTranslate) => game.i18n.localize(toTranslate);
     linkedCompendiumsGm = [];
     linkedCompendiumsPlayer = [];
+    furtherActionHandlers = [];
     delimiter = '|';
 
     emptyActionList = {
@@ -33,7 +35,22 @@ export class ActionHandler {
         this.filterManager = filterManager;
     }
 
-    async buildActionList(token, filters) {};
+    async buildActionList(token, filters) {
+        let actionList = await this.doBuildActionList(token, filters);
+        this._doBuildFurtherActions(token, filters, actionList);
+        return actionList;
+    }
+
+    async doBuildActionList(token, filters) {};
+
+    _doBuildFurtherActions(token, filters, actionList) {
+        this.furtherActionHandlers.forEach(handler => handler.extendActionList(actionList))
+    }
+
+    addFurtherActionHandler(handler) {
+        if (typeof handler === ActionListExtender)
+            this.furtherActionHandlers.push(handler);
+    }
 
     initializeEmptyActionList() {
         return JSON.parse(JSON.stringify(this.emptyActionList));
