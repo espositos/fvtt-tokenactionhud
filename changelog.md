@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.4.13] 2020-07-15
+### Bugfix
+- DND5e: in some cases it seems spell slot information was null and it was causing the HUD to break
+
 ## [0.4.12] 2020-07-15
 ### Bugfix
 - DND5e/BetterRolls - chose a better method to use on the BetterRoll API to roll Items
