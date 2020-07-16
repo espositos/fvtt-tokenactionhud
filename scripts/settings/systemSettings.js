@@ -17,6 +17,8 @@ export function setSettings(system, app, updateSettings) {
             break;
         case "wfrp4e":
             wfrp4eSettings.registerSettings(app, updateSettings);
+        case "sfrpg":
+            dnd5eSettings.registerSettings(app, updateSettings);
             break;
                 default:
             throw new Error(`Unknown system: ${system}`);
