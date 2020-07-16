@@ -25,18 +25,19 @@ export class ActionHandlerSfrpg extends ActionHandler {
 
         actionList.actorId = actor._id;
 
-        actionList = this._buildItemCategory(actor, token, actionList);
-        actionList = this._buildSpellsCategory(actor, token, actionList);
-        actionList = this._buildFeatsCategory(actor, token, actionList);
+        actionList = this._buildItemCategory(token, actionList);
+        actionList = this._buildSpellsCategory(token, actionList);
+        actionList = this._buildFeatsCategory(token, actionList);
 
         console.log(actionList);
 
         return actionList;
     }
 
-    _buildItemCategory(actor, token, actionList){
+    _buildItemCategory(token, actionList){
 
-        var itemList = token.data.actorData.items;
+
+        var itemList = token.actor.data.items;
         let tokenId = token.data._id;
 
         var itemsCategoryName = "Equipment";
@@ -51,9 +52,9 @@ export class ActionHandlerSfrpg extends ActionHandler {
         return actionList;
     }
 
-    _buildFeatsCategory(actor, token, actionList){
+    _buildFeatsCategory(token, actionList){
 
-        var itemList = token.data.actorData.items.filter(item => item.type == "feat");
+        var itemList = token.actor.data.items.filter(item => item.type == "feat");
         let tokenId = token.data._id;
 
         var itemsCategoryName = "Features";
@@ -76,9 +77,9 @@ export class ActionHandlerSfrpg extends ActionHandler {
 
     }
   
-    _buildSpellsCategory(actor, token, actionList){
+    _buildSpellsCategory(token, actionList){
 
-        var itemList = token.data.actorData.items.filter(item => item.type == "spell");
+        var itemList = token.actor.data.items.filter(item => item.type == "spell");
         let tokenId = token.data._id;
 
         var categoryName = "Spellbook";
@@ -98,6 +99,7 @@ export class ActionHandlerSfrpg extends ActionHandler {
     }
 
     _addSubCategoryByActionType(subCategoryName, actionType, macroType, itemList, tokenId, category){
+        
         
         let subCategory = this.initializeEmptySubcategory(subCategoryName);    
 
@@ -132,6 +134,13 @@ export class ActionHandlerSfrpg extends ActionHandler {
         this._combineSubcategoryWithCategory(category, subCategoryName, subCategory);
         
         return category;
+    }
+
+    _buildItemAction(tokenId, macroType, item) {
+        let encodedValue = [macroType, tokenId, item._id].join(this.delimiter);
+        let result = { name: item.name, id: item._id, encodedValue: encodedValue }
+        
+        return result;
     }
 
 }
