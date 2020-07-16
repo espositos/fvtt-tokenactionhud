@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.4.14] 2020-07-16
+### Bugfix
+- Fix bug where HUD wouldn't appear for default token ownership, only explicit ownership.
+
 ## [0.4.13] 2020-07-15
 ### Bugfix
 - DND5e: in some cases it seems spell slot information was null and it was causing the HUD to break

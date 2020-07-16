@@ -314,6 +314,8 @@ export class TokenActionHUD extends Application {
 
     /** @private */
     _userHasPermission(token = '') {
-        return game.user.isGM || token.actor.data.permission[game.userId] === 3;
+        let actor = token.actor;
+        let user = game.user;
+        return game.user.isGM || actor.hasPerm(user, "OWNER");
     }
 }
