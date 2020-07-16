@@ -3,6 +3,7 @@ import * as dnd5eSettings from "./dnd5e-settings.js"
 import * as dwSettings from "./dungeonworld-settings.js"
 import * as pf2esettings from "./pf2e-settings.js"
 import * as wfrp4eSettings from "./wfrp4e-settings.js"
+import * as sfrpgSettings from "./sfrpg-settings.js"
 
 export function setSettings(system, app, updateSettings) {
     switch (system) {
@@ -18,9 +19,9 @@ export function setSettings(system, app, updateSettings) {
         case "wfrp4e":
             wfrp4eSettings.registerSettings(app, updateSettings);
         case "sfrpg":
-            dnd5eSettings.registerSettings(app, updateSettings);
+            sfrpgSettings.registerSettings(app, updateSettings);
             break;
-                default:
+        default:
             throw new Error(`Unknown system: ${system}`);
     }
 }

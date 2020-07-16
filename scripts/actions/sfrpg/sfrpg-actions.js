@@ -19,9 +19,8 @@ export class ActionHandlerSfrpg extends ActionHandler {
 
         let actor = token.actor;
 
-        if (!actor){
+        if (!actor)
             return actionList;
-        }
 
         actionList.actorId = actor._id;
 
@@ -29,8 +28,8 @@ export class ActionHandlerSfrpg extends ActionHandler {
         actionList = this._buildSpellsCategory(token, actionList);
         actionList = this._buildFeatsCategory(token, actionList);
 
-        console.log(actionList);
-
+        settings.Logger.debug('SFRPG ActionList:', actionList);
+        
         return actionList;
     }
 
