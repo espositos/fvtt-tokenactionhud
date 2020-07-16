@@ -13,10 +13,7 @@
 - DND5e - option to show empty items and spells
 - PF2e - correctly label level 0 spells as cantrips, and remove [-] expend option from prepared cantrips
 
-## [0.4.10] 2020-07-13
-- ??? Not sure, I've forgotten what I changed, maybe it was 0.4.9.
-
-## [0.4.9] 2020-07-12
+## [0.4.10] 2020-07-12
 ### Bugfix
 - DND5e: Incorrectly named variable causing HUD to fail when abilities and saves combined.
 
