@@ -36,16 +36,15 @@ export class ActionHandlerSfrpg extends ActionHandler {
 
     _buildItemCategory(token, actionList){
 
-
         var itemList = token.actor.data.items;
         let tokenId = token.data._id;
 
-        var itemsCategoryName = "Equipment";
+        var itemsCategoryName = this.i18n('tokenactionhud.equipment');
         var itemsMacroType = "item";
         let itemsCategory = this.initializeEmptyCategory(itemsCategoryName);
         
-        itemsCategory = this._addSubCategoryByType("Consumables", "consumable",itemsMacroType, itemList, tokenId, itemsCategory);
-        itemsCategory = this._addSubCategoryByType("Weapons", "weapon",itemsMacroType, itemList, tokenId, itemsCategory);
+        itemsCategory = this._addSubcategoryByType(this.i18n('tokenactionhud.consumables'), "consumable",itemsMacroType, itemList, tokenId, itemsCategory);
+        itemsCategory = this._addSubcategoryByType(this.i18n('tokenactionhud.weapons'), "weapon",itemsMacroType, itemList, tokenId, itemsCategory);
 
         this._combineCategoryWithList(actionList, itemsCategoryName, itemsCategory);
     
@@ -57,17 +56,17 @@ export class ActionHandlerSfrpg extends ActionHandler {
         var itemList = token.actor.data.items.filter(item => item.type == "feat");
         let tokenId = token.data._id;
 
-        var itemsCategoryName = "Features";
+        var itemsCategoryName = this.i18n('tokenactionhud.features');
         var itemsMacroType = "feat";
         let itemsCategory = this.initializeEmptyCategory(itemsCategoryName);
         
         console.log(itemList.map(item => item.data.actionType));
 
-        itemsCategory = this._addSubCategoryByActionType("Meele Weapon Attacks", "mwak", itemsMacroType, itemList, tokenId, itemsCategory);
-        itemsCategory = this._addSubCategoryByActionType("Ranged Weapon Attacks", "rwak", itemsMacroType, itemList, tokenId, itemsCategory);
-        itemsCategory = this._addSubCategoryByActionType("Melle Spell Attacks", "msak", itemsMacroType, itemList, tokenId, itemsCategory);
-        itemsCategory = this._addSubCategoryByActionType("Ranged Spell Attacks", "rsak", itemsMacroType, itemList, tokenId, itemsCategory);
-        itemsCategory = this._addSubCategoryByActionType("Healing", "heal", itemsMacroType, itemList, tokenId, itemsCategory);
+        itemsCategory = this._addSubcategoryByActionType(this.i18n('tokenactionhud.mwa'), "mwak", itemsMacroType, itemList, tokenId, itemsCategory);
+        itemsCategory = this._addSubcategoryByActionType(this.i18n('tokenactionhud.rwa'), "rwak", itemsMacroType, itemList, tokenId, itemsCategory);
+        itemsCategory = this._addSubcategoryByActionType(this.i18n('tokenactionhud.msa'), "msak", itemsMacroType, itemList, tokenId, itemsCategory);
+        itemsCategory = this._addSubcategoryByActionType(this.i18n('tokenactionhud.rsa'), "rsak", itemsMacroType, itemList, tokenId, itemsCategory);
+        itemsCategory = this._addSubcategoryByActionType(this.i18n('tokenactionhud.healing'), "heal", itemsMacroType, itemList, tokenId, itemsCategory);
 
 
         this._combineCategoryWithList(actionList, itemsCategoryName, itemsCategory);
@@ -82,14 +81,14 @@ export class ActionHandlerSfrpg extends ActionHandler {
         var itemList = token.actor.data.items.filter(item => item.type == "spell");
         let tokenId = token.data._id;
 
-        var categoryName = "Spellbook";
+        var categoryName = this.i18n('tokenactionhud.spellbook');
         var macroType = "spell";
         let category = this.initializeEmptyCategory(categoryName);
 
         var maxLevel = 6;
         
         for (let level = 0; level < maxLevel; level++) {
-            category = this._addSubCategoryByLevel("Level " + level, level, macroType, itemList, tokenId, category);
+            category = this._addSubcategoryByLevel(`${this.i18n('tokenactionhud.level')} ` + level, level, macroType, itemList, tokenId, category);
             
         }
 
@@ -98,7 +97,7 @@ export class ActionHandlerSfrpg extends ActionHandler {
         return actionList;
     }
 
-    _addSubCategoryByActionType(subCategoryName, actionType, macroType, itemList, tokenId, category){
+    _addSubcategoryByActionType(subCategoryName, actionType, macroType, itemList, tokenId, category){
         
         
         let subCategory = this.initializeEmptySubcategory(subCategoryName);    
@@ -112,7 +111,7 @@ export class ActionHandlerSfrpg extends ActionHandler {
     }
 
     
-    _addSubCategoryByType(subCategoryName, type, macroType, itemList, tokenId, category){
+    _addSubcategoryByType(subCategoryName, type, macroType, itemList, tokenId, category){
         
         let subCategory = this.initializeEmptySubcategory(subCategoryName);    
 
@@ -124,7 +123,7 @@ export class ActionHandlerSfrpg extends ActionHandler {
         return category;
     }
 
-    _addSubCategoryByLevel(subCategoryName, level, macroType, itemList, tokenId, category){
+    _addSubcategoryByLevel(subCategoryName, level, macroType, itemList, tokenId, category){
         
         let subCategory = this.initializeEmptySubcategory(subCategoryName);    
 

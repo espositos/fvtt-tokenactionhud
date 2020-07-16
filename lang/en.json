@@ -22,6 +22,7 @@
     "tokenactionhud.dmg": "Dmg",
     "tokenactionhud.equipment": "Equipment",
     "tokenactionhud.feats": "Feats",
+    "tokenactionhud.features": "Features",
     "tokenactionhud.free": "Free",
     "tokenactionhud.inconsumables": "Inconsumables",
     "tokenactionhud.instinct": "Instinct",
@@ -47,6 +48,7 @@
     "tokenactionhud.skills": "Skills",
     "tokenactionhud.specialQualities": "Special Qualities",
     "tokenactionhud.spells": "Spells",
+    "tokenactionhud.spellbook": "Spellbook",
     "tokenactionhud.starting": "Starting",
     "tokenactionhud.tags": "Tags",
     "tokenactionhud.talents": "Talents",
@@ -54,6 +56,12 @@
     "tokenactionhud.treasure": "Treasure",
     "tokenactionhud.unrollable": "Unrollable",
     "tokenactionhud.weapons": "Weapons",
+
+    "tokenactionhud.mwa": "Melee Weapon Attacks",
+    "tokenactionhud.rwa": "Ranged Weapon Attacks",
+    "tokenactionhud.msa": "Melee Spell Attacks",
+    "tokenactionhud.rsa": "Ranged Spell Attacks",
+    "tokenactionhud.healing": "Healing",
     
     "tokenactionhud.blocklistLabel": "blocklist: hide / allowlist: show",
     "tokenactionhud.filterPlaceholder": "Choices (split with semi-colon)",
