@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.15] 2020-07-17
+### Bugfix
+- DND5e: Bug in showing combined ability/save checks
+- Typo in Spanish localization
+
+### Added
+- SFRPG support: Thanks to Rainer#5041
+
 ## [0.4.14] 2020-07-16
 ### Bugfix
 - Fix bug where HUD wouldn't appear for default token ownership, only explicit ownership.
