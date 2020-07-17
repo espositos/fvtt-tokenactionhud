@@ -1,4 +1,4 @@
-import {ActionListExtender} from '../ActionListExtender.js';
+import {ActionListExtender} from '../actionListExtender.js';
 
 export class MagicItemActionListExtender extends ActionListExtender {
     constructor() { super(); }

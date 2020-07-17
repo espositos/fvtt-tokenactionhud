@@ -48,7 +48,7 @@ export class ActionHandler {
     }
 
     addFurtherActionHandler(handler) {
-        if (typeof handler === ActionListExtender)
+        if (handler instanceof ActionListExtender)
             this.furtherActionHandlers.push(handler);
     }
 
