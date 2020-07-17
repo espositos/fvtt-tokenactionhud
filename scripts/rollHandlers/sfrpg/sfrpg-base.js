@@ -29,6 +29,9 @@ export class RollHandlerBaseSfrpg extends RollHandler {
             case "skill":
                 this.rollSkillMacro(event, tokenId, actionId);
                 break;
+            case "save":
+                this.rollSaveMacro(event, tokenId, actionId);
+                break;
             case "abilitySave":
                 this.rollAbilitySaveMacro(event, tokenId, actionId);
                 break;
@@ -55,6 +58,10 @@ export class RollHandlerBaseSfrpg extends RollHandler {
 
     rollAbilitySaveMacro(event, tokenId, checkId) {
         super.getActor(tokenId).rollAbilitySave(checkId, {event: event});
+    }
+    
+    rollSaveMacro(event, tokenId, checkId) {
+        super.getActor(tokenId).rollSave(checkId, {event: event});
     }
     
     rollSkillMacro(event, tokenId, checkId) {

@@ -27,6 +27,9 @@ export class ActionHandlerSfrpg extends ActionHandler {
         actionList = this._buildItemCategory(token, actionList);
         actionList = this._buildSpellsCategory(token, actionList);
         actionList = this._buildFeatsCategory(token, actionList);
+        actionList = this._buildSkillCategory(token, actionList);
+        actionList = this._buildAbilitiesCategory(token, actionList);
+        actionList = this._buildSavesCategory(token, actionList);
 
         settings.Logger.debug('SFRPG ActionList:', actionList);
         
@@ -93,6 +96,66 @@ export class ActionHandlerSfrpg extends ActionHandler {
 
         this._combineCategoryWithList(actionList, categoryName, category);
     
+        return actionList;
+    }        
+
+    /** @private */
+    _buildSkillCategory(token, actionList) {
+        let category = this.initializeEmptyCategory('skills');
+        let macroType = 'skill';
+        
+        let skillsActions = Object.entries(CONFIG.SFRPG.skills).map(e => {
+            let name = e[1];
+            let encodedValue = [macroType, token.data._id, e[0]].join(this.delimiter);
+            return { name: name, id: e[0], encodedValue: encodedValue }; 
+        });
+        let skillsCategory = this.initializeEmptySubcategory();
+        skillsCategory.actions = skillsActions;
+
+        let skillsTitle = this.i18n('tokenactionhud.skills');
+        this._combineSubcategoryWithCategory(category, skillsTitle, skillsCategory);
+        this._combineCategoryWithList(actionList, skillsTitle, category);
+
+        return actionList;
+    }      
+
+    /** @private */
+    _buildAbilitiesCategory(token, actionList) {
+        let category = this.initializeEmptyCategory('abilities');
+        let macroType = 'ability';
+        
+        let abilitiesActions = Object.entries(CONFIG.SFRPG.abilities).map(e => {
+            let name = e[1];
+            let encodedValue = [macroType, token.data._id, e[0]].join(this.delimiter);
+            return { name: name, id: e[0], encodedValue: encodedValue }; 
+        });
+        let abilitiesCategory = this.initializeEmptySubcategory();
+        abilitiesCategory.actions = abilitiesActions;
+
+        let abilitiesTitle = this.i18n('tokenactionhud.abilities');
+        this._combineSubcategoryWithCategory(category, abilitiesTitle, abilitiesCategory);
+        this._combineCategoryWithList(actionList, abilitiesTitle, category);
+
+        return actionList;
+    }      
+
+    /** @private */
+    _buildSavesCategory(token, actionList) {
+        let category = this.initializeEmptyCategory('saves');
+        let macroType = 'save';
+        
+        let saveActions = Object.entries(CONFIG.SFRPG.saves).map(e => {
+            let name = e[1];
+            let encodedValue = [macroType, token.data._id, e[0]].join(this.delimiter);
+            return { name: name, id: e[0], encodedValue: encodedValue }; 
+        });
+        let savesCategory = this.initializeEmptySubcategory();
+        savesCategory.actions = saveActions;
+
+        let savesTitle = this.i18n('tokenactionhud.saves');
+        this._combineSubcategoryWithCategory(category, savesTitle, savesCategory);
+        this._combineCategoryWithList(actionList, savesTitle, category);
+
         return actionList;
     }
 
