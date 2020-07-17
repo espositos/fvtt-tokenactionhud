@@ -50,7 +50,7 @@ export class ActionHandler5e extends ActionHandler {
             let abilitiesTitle = this.i18n('tokenactionhud.abilities');
             let abilities = this._getAbilityList(tokenId, 'abilities', abilitiesTitle, 'ability');
 
-            this._combineCategoryWithListWithList(result, abilitiesTitle, abilities);
+            this._combineCategoryWithList(result, abilitiesTitle, abilities);
         }
 
         return result;
