@@ -225,6 +225,7 @@ export class TokenActionHUD extends Application {
     }
 
     resetPosition() {
+        settings.Logger.info(`Resetting HUD position to x: 80px, y: 150px, and saving in user flags. \nIf HUD is still not visible, something else may be wrong.\nFeel free to contact ^ and stick#0520 on Discord`)
         game.user.update({flags: {'token-action-hud': {hudPos: { top: 80, left: 150 }}}})
         this.update();
     }
@@ -314,6 +315,8 @@ export class TokenActionHUD extends Application {
 
     /** @private */
     _userHasPermission(token = '') {
-        return game.user.isGM || token.actor.data.permission[game.userId] === 3;
+        let actor = token.actor;
+        let user = game.user;
+        return game.user.isGM || actor.hasPerm(user, "OWNER");
     }
 }

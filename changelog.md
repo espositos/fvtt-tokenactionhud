@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.15] 2020-07-17
+### Bugfix
+- DND5e: Bug in showing combined ability/save checks
+- Typo in Spanish localization
+
+### Added
+- SFRPG support: Thanks to Rainer#5041
+
+## [0.4.14] 2020-07-16
+### Bugfix
+- Fix bug where HUD wouldn't appear for default token ownership, only explicit ownership.
+
 ## [0.4.13] 2020-07-15
 ### Bugfix
 - DND5e: in some cases it seems spell slot information was null and it was causing the HUD to break
@@ -13,10 +25,7 @@
 - DND5e - option to show empty items and spells
 - PF2e - correctly label level 0 spells as cantrips, and remove [-] expend option from prepared cantrips
 
-## [0.4.10] 2020-07-13
-- ??? Not sure, I've forgotten what I changed, maybe it was 0.4.9.
-
-## [0.4.9] 2020-07-12
+## [0.4.10] 2020-07-12
 ### Bugfix
 - DND5e: Incorrectly named variable causing HUD to fail when abilities and saves combined.
 

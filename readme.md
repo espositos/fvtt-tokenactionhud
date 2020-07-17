@@ -23,11 +23,15 @@ Offers a variety of settings including support for third-party roll handlers (Pl
 ## Pathfinder 2E
 ![Pathfinder 2E](.github/readme/tah-pf2e.gif)
 
+## Starfinder RPG
+![Starfinder RPG](.github/readme/tah-sfrpg.gif)
+
 # Supported systems
 * DND5e (including BetterRolls and MinorQol)
 * Dungeon World
 * PF2E
 * WFRP4e
+* SFRPG
 * Any other system? I believe the HUD is modular enough that anyone who understands what the players of their system want and how actions in their system are handled could quickly build it into the HUD. Please contact me if you'd like to add support for your favourite system.
 
 [Developing for your system or module](adding_systems.md)
