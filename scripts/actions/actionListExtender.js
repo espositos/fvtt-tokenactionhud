@@ -1,6 +1,5 @@
-export class ActionListExtender {
-    i18n = (toTranslate) => game.i18n.localize(toTranslate);
-    
+import {ActionHandler} from './actionHandler'
+export class ActionListExtender extends ActionHandler {
     constructor() {}
 
     extendActionList(actionList) {}

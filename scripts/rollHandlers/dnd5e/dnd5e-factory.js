@@ -2,7 +2,7 @@ import {RollHandlerBase5e as Core} from "./dnd5e-base.js"
 import {RollHandlerBetterRolls5e as BetterRolls5e} from "./dnd5e-betterrolls5e.js"
 import {RollHandlerMinorQol5e as MinorQol5e} from "./dnd5e-minorqol.js"
 import { HandlersManager } from "../../handlersManager.js";
-import { MagicItemsPreRollHandler } from "./magicItemsPreRollHandler.js";
+import { MagicItemsPreRollHandler } from "./pre-magicItems.js";
 
 export function getRollHandler(rollHandler = "") {
     let handler;

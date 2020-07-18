@@ -49,8 +49,7 @@ export class ActionHandler {
     }
 
     addFurtherActionHandler(handler) {
-        if (handler instanceof ActionListExtender)
-            this.furtherActionHandlers.push(handler);
+        this.furtherActionHandlers.push(handler);
     }
 
     initializeEmptyActionList() {

@@ -17,6 +17,8 @@ export class MagicItemActionListExtender extends ActionListExtender {
         if (magicItems.length === 0)
             return;
 
+        let magicItemsCategory = this.initializeEmptyCategory('magicitems');
+
         let magicItemsIds = magicItems.map(item => item.id);
         
         itemCategories.subcategories.forEach(s => {
@@ -26,25 +28,26 @@ export class MagicItemActionListExtender extends ActionListExtender {
                 if (!magicItemsIds.includes(action.id))
                     return;
 
-                magicItemActions.push({id:action.id, actions: []});
-                let actionsArray = magicItemActions.find(a => a.id === action.id).actions;
-                let item = magicItems.find(item => item.id === action.id);
+                let magicItem = magicItems.find(item => item.id === action.id);
 
-                item.ownedEntries.forEach(entry => {
+                let subcategory = this.initializeEmptySubcategory();
+                subcategory.info1 = `${magicItem.uses}/${magicItem.charges}`;
+
+                magicItem.ownedEntries.forEach(entry => {
                     let spell = entry.item;
                     let encodedValue = ['magicItem', tokenId, `${action.id}>${spell.id}`].join('|');
                     let magicItemAction = {name: spell.name, id:spell.id, encodedValue: encodedValue};
                     magicItemAction.info1 = spell.consumption;
-                    magicItemAction.info2 = `${this.i18n('tokenactionhud.level')} ${spell.baseLevel}`;
-                    magicItemAction.info3 = `${item.uses}/${item.charges}`;
-                    actionsArray.push(magicItemAction);
+                    magicItemAction.info2 = `${this.i18n('tokenactionhud.levelAbbreviation')} ${spell.baseLevel}`;
+                    subcategory.actions.push(magicItemAction);
                 });
-            });
 
-            magicItemActions.forEach(m => {
-                let index = s.actions.findIndex(a => a.id === m.id) + 1;
-                s.actions.splice(index, 0, ...m.actions)
-            })
+                subcategory.actions.unshift(action);
+
+                this._combineSubcategoryWithCategory(magicItemsCategory, action.name, subcategory);
+            });
         });
+
+        actionList.categories.unshift(magicItemsCategory);
     }
 }
