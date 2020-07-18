@@ -76,7 +76,7 @@
     "tokenactionhud.settings.enabledForUser.name": "Enable HUD for current user",
     "tokenactionhud.settings.enabledForUser.hint": "If enabled, the HUD is active for the user. Does not override the player permission setting.",
     "tokenactionhud.settings.onTokenHover.name": "Enable hovering",
-    "tokenactionhud.settings.onTokenHover.hint": "If enabled, the HUD will appear when hovering over a controllable token.\nWarning: Due to the unpredictable position of a token on the canvas, some actiosn may fall off the screen.",
+    "tokenactionhud.settings.onTokenHover.hint": "If enabled, the HUD will appear when hovering over a controllable token.\nWarning: Due to the unpredictable position of a token on the canvas, some actions may fall off the screen.",
     "tokenactionhud.settings.playerPermission.name": "Enable HUD for players",
     "tokenactionhud.settings.playerPermission.hint": "If enabled, players will be able to use the HUD.",
     "tokenactionhud.settings.debug.name": "Enable debugging",
