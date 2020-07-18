@@ -8,32 +8,41 @@ export class MagicItemActionListExtender extends ActionListExtender {
         let tokenId = actionList.tokenId;
         let actorId = actionList.actorId;
 
-        let itemCategories = actionList.categories.find(c => c.id === 'items');
-        let magicItems = MagicItemActor.get(actorId).items;
+        if (!actorId)
+            return;
+
+        let itemCategories = actionList.categories.find(c => c.id === 'inventory');
+        let magicItems = MagicItems.actor(actorId).items;
         
         if (magicItems.length === 0)
             return;
 
-        let magicItemsIds = magicItems.map(items => items._id);
+        let magicItemsIds = magicItems.map(item => item.id);
         
         itemCategories.subcategories.forEach(s => {
             let magicItemActions = [];
+            
             s.actions.forEach(action => {
                 if (!magicItemsIds.includes(action.id))
                     return;
 
                 magicItemActions.push({id:action.id, actions: []});
                 let actionsArray = magicItemActions.find(a => a.id === action.id).actions;
-                let item = magicItems.find(item => item._id === action.id);
+                let item = magicItems.find(item => item.id === action.id);
 
-                item.ownedEntries.forEach(spell => {
-                    let encodedValue = ['magicItem', tokenId, `${spell.pack}>${spell._id}`].join('|');
-                    actionsArray.push({name: spell.name, id:spell._id, encodedValue: encodedValue});
+                item.ownedEntries.forEach(entry => {
+                    let spell = entry.item;
+                    let encodedValue = ['magicItem', tokenId, `${action.id}>${spell.id}`].join('|');
+                    let magicItemAction = {name: spell.name, id:spell.id, encodedValue: encodedValue};
+                    magicItemAction.info1 = spell.consumption;
+                    magicItemAction.info2 = `${this.i18n('tokenactionhud.level')} ${spell.baseLevel}`;
+                    magicItemAction.info3 = `${item.uses}/${item.charges}`;
+                    actionsArray.push(magicItemAction);
                 });
             });
 
-            magicItemsActions.forEach(m => {
-                let index = s.actions.findIndex(a => a.id === m.id);
+            magicItemActions.forEach(m => {
+                let index = s.actions.findIndex(a => a.id === m.id) + 1;
                 s.actions.splice(index, 0, ...m.actions)
             })
         });

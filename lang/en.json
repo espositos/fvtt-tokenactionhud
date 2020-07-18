@@ -30,6 +30,7 @@
     "tokenactionhud.lair": "Lair",
     "tokenactionhud.legendary": "Legendary",
     "tokenactionhud.level": "Level",
+    "tokenactionhud.levelAbbreviation": "Lv",
     "tokenactionhud.magic": "Magic",
     "tokenactionhud.melee": "Melee",
     "tokenactionhud.monsterMoves": "Monster Moves",

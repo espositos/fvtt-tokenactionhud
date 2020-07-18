@@ -7,8 +7,7 @@ export class RollHandlerBaseSfrpg extends RollHandler {
     }
 
     /** @override */
-    handleActionEvent(event, encodedValue) {
-        settings.Logger.debug(encodedValue);
+    doHandleActionEvent(event, encodedValue) {
         let payload = encodedValue.split('|');
         
         if (payload.length != 3) {

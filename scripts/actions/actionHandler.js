@@ -1,4 +1,5 @@
 import * as settings from '../settings.js';
+
 import {ActionListExtender} from './actionListExtender.js';
 
 export class ActionHandler {
