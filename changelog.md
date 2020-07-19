@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.1] 2020-07-18
+### Bugfix, naturally
+- Fixed bug where third-party modules were not appearing because I was looking in the wrong place for the title
+
 ## [0.5.0] 2020-07-18
 ### Bugfix
 - BetterRolls - alt key should now perform alt roll

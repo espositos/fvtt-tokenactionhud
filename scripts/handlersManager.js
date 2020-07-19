@@ -74,7 +74,7 @@ export class HandlersManager {
             case 'dungeonworld':
                 choices = {'core': 'Core DungeonWorld'};
             case 'sfrpg':
-                    choices = {'core': 'Core sfrpg'};
+                choices = {'core': 'Core sfrpg'};
                 break;
         }
 
