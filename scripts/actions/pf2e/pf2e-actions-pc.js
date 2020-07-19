@@ -2,6 +2,8 @@ import {ActionHandlerPf2e} from './pf2e-actions.js';
 import * as settings from '../../settings.js';
 
 export class PcActionHandlerPf2e {
+    i18n = (toTranslate) => game.i18n.localize(toTranslate);
+
     constructor(actionHandlerpf2e) {
         this.baseHandler = actionHandlerpf2e;
     }
@@ -16,18 +18,18 @@ export class PcActionHandlerPf2e {
         let saves = this.baseHandler._getSaveList(actor, tokenId);
         let attributes = this._getAttributeList(actor, tokenId);        
         
-        this.baseHandler._combineCategoryWithList(result, 'strikes', strikes);
-        this.baseHandler._combineCategoryWithList(result, 'actions', actions);
-        this.baseHandler._combineCategoryWithList(result, 'items', items);
-        this.baseHandler._combineCategoryWithList(result, 'spells', spells);
-        this.baseHandler._combineCategoryWithList(result, 'feats', feats);
-        this.baseHandler._combineCategoryWithList(result, 'skills', skills);
-        this.baseHandler._combineCategoryWithList(result, 'saves', saves);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.strikes'), strikes);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.actions'), actions);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.inventory'), items);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.spells'), spells);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.features'), feats);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.skills'), skills);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.saves'), saves);
         if (settings.get('showPcAbilities')) {
             let abilities = this.baseHandler._getAbilityList(actor, tokenId);
-            this.baseHandler._combineCategoryWithList(result, 'abilities', abilities);
+            this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.abilities'), abilities);
         }
-        this.baseHandler._combineCategoryWithList(result, 'attributes', attributes);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.attributes'), attributes);
     }
 
     /** @private */
@@ -65,8 +67,8 @@ export class PcActionHandlerPf2e {
             
             let damageEncodedValue = [macroType, tokenId, encodeURIComponent(s.name+'>damage')].join(this.baseHandler.delimiter);
             let critEncodedValue = [macroType, tokenId, encodeURIComponent(s.name+'>critical')].join(this.baseHandler.delimiter);
-            subcategory.actions.push({name: 'Damage', encodedValue: damageEncodedValue, id: encodeURIComponent(s.name+'>damage')})
-            subcategory.actions.push({name: 'Critical', encodedValue: critEncodedValue, id: encodeURIComponent(s.name+'>critical')})
+            subcategory.actions.push({name: this.i18n('tokenactionhud.damage'), encodedValue: damageEncodedValue, id: encodeURIComponent(s.name+'>damage')})
+            subcategory.actions.push({name: this.i18n('tokenactionhud.critical'), encodedValue: critEncodedValue, id: encodeURIComponent(s.name+'>critical')})
 
             this.baseHandler._combineSubcategoryWithCategory(result, s.name, subcategory);
         });
@@ -93,8 +95,8 @@ export class PcActionHandlerPf2e {
         let lore = this.baseHandler.initializeEmptySubcategory();
         lore.actions = this.baseHandler._produceMap(tokenId, loreItems, 'lore');
 
-        this.baseHandler._combineSubcategoryWithCategory(result, 'skills', skills);
-        this.baseHandler._combineSubcategoryWithCategory(result, 'lore', lore);
+        this.baseHandler._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.skills'), skills);
+        this.baseHandler._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.lore'), lore);
 
         return result;
     }
@@ -113,7 +115,7 @@ export class PcActionHandlerPf2e {
         
         attributes.actions = this.baseHandler._produceMap(tokenId, attributesMap, macroType);
         
-        this.baseHandler._combineSubcategoryWithCategory(result, 'attributes', attributes);
+        this.baseHandler._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.attributes'), attributes);
 
         return result;
     }

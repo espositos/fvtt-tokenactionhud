@@ -3,6 +3,7 @@
     "tokenactionhud.handlerNotFound": "not found, reverting to core roller.",
     
     "tokenactionhud.abilities": "Abilities",
+    "tokenactionhud.attributes": "Attributes",
     "tokenactionhud.actions": "Actions",    
     "tokenactionhud.active": "Active",
     "tokenactionhud.advanced": "Advanced",
@@ -18,6 +19,7 @@
     "tokenactionhud.checks": "Checks",
     "tokenactionhud.consumables": "Consumables",    
     "tokenactionhud.damage": "Damage",
+    "tokenactionhud.critical": "Critical",
     "tokenactionhud.dc": "DC",
     "tokenactionhud.dmg": "Dmg",
     "tokenactionhud.equipment": "Equipment",
