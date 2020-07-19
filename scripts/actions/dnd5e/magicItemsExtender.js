@@ -35,11 +35,12 @@ export class MagicItemActionListExtender extends ActionListExtender {
                 subcategory.info1 = `${magicItem.uses}/${magicItem.charges}`;
 
                 magicItem.ownedEntries.forEach(entry => {
-                    let spell = entry.item;
-                    let encodedValue = ['magicItem', tokenId, `${action.id}>${spell.id}`].join('|');
-                    let magicItemAction = {name: spell.name, id:spell.id, encodedValue: encodedValue};
-                    magicItemAction.info1 = spell.consumption;
-                    magicItemAction.info2 = `${this.i18n('tokenactionhud.levelAbbreviation')} ${spell.baseLevel}`;
+                    let effect = entry.item;
+                    let encodedValue = ['magicItem', tokenId, `${action.id}>${effect.id}`].join('|');
+                    let magicItemAction = {name: effect.name, id:effect.id, encodedValue: encodedValue};
+                    magicItemAction.info1 = effect.consumption;
+                    if (effect.baseLevel)
+                        magicItemAction.info2 = `${this.i18n('tokenactionhud.levelAbbreviation')} ${effect.baseLevel}`;
                     subcategory.actions.push(magicItemAction);
                 });
 
