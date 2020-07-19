@@ -10,7 +10,7 @@ export class ActionHandlerDw extends ActionHandler {
     }
 
     /** @override */
-    async dobuildActionList(token) {
+    async doBuildActionList(token, filters) {
         let result = this.initializeEmptyActionList();
 
         if (settings.get('showGmCompendiums'))

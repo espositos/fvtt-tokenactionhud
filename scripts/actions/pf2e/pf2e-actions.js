@@ -11,7 +11,7 @@ export class ActionHandlerPf2e extends ActionHandler {
     }    
 
     /** @override */
-    async dobuildActionList(token) {
+    async doBuildActionList(token, filters) {
         let result = this.initializeEmptyActionList();
 
         if (!token)

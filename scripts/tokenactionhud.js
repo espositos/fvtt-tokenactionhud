@@ -37,55 +37,57 @@ export class TokenActionHUD extends Application {
         if (!(this.targetActions && this.targetActions.tokenId))
             return;
 
-        if (settings.get('onTokenHover')) {
-            function hoverPos(token) {
-                return new Promise(resolve => {
-                    function check(token) {
-                        let elmnt = $('#token-action-hud');
-                        if (elmnt) {
-                            elmnt.css('bottom', null);
-                            elmnt.css('left', (token.worldTransform.tx + (((token.data.width * canvas.dimensions.size) + 55) * canvas.scene._viewPosition.scale)) + 'px');
-                            elmnt.css('top', (token.worldTransform.ty + 0) + 'px');
-                            elmnt.css('position', 'fixed');
-                            elmnt.css('zIndex', 100);
-                            resolve();
-                        } else {
-                            setTimeout(check, 30);
-                        }
-                    }
-                    check(token);
-                });
-            }
-            
+        if (settings.get('onTokenHover')) {           
             let token = canvas.tokens.placeables.find(t => t.data._id === this.targetActions.tokenId);
-            hoverPos(token);
-            return;
+            this.setHoverPos(token);
+        } else {
+            this.setUserPos();
         }
+    }
 
+    setUserPos() {
         if(!(game.user.data.flags['token-action-hud'] && game.user.data.flags['token-action-hud'].hudPos))
             return;
 
-            let userPos = function (pos) {
-                return new Promise(resolve => {
-                    function check() {
-                        let elmnt = document.getElementById('token-action-hud')
-                        if (elmnt) {
-                            elmnt.style.bottom = null;
-                            elmnt.style.top = (pos.top) + 'px';
-                            elmnt.style.left = (pos.left) + 'px';
-                        elmnt.style.position = 'fixed';
-                        elmnt.style.zIndex = 100;
-                        resolve();
-                    } else {
-                        setTimeout(check, 30);
-                    }
-                }
-                check();
-            });
-        }
-        
         let pos = game.user.data.flags['token-action-hud'].hudPos;
-        userPos(pos);
+
+        return new Promise(resolve => {
+            function check() {
+                let elmnt = document.getElementById('token-action-hud')
+                if (elmnt) {
+                    elmnt.style.bottom = null;
+                    elmnt.style.top = (pos.top) + 'px';
+                    elmnt.style.left = (pos.left) + 'px';
+                    elmnt.style.position = 'fixed';
+                    elmnt.style.zIndex = 100;
+                resolve();
+                } else {
+                    setTimeout(check, 30);
+                }
+            }
+
+            check();
+        });
+    }
+
+    setHoverPos(token) { 
+        return new Promise(resolve => {
+            function check(token) {
+                let elmnt = $('#token-action-hud');
+                if (elmnt) {
+                    elmnt.css('bottom', null);
+                    elmnt.css('left', (token.worldTransform.tx + (((token.data.width * canvas.dimensions.size) + 55) * canvas.scene._viewPosition.scale)) + 'px');
+                    elmnt.css('top', (token.worldTransform.ty + 0) + 'px');
+                    elmnt.css('position', 'fixed');
+                    elmnt.css('zIndex', 100);
+                    resolve();
+                } else {
+                    setTimeout(check, 30);
+                }
+            }
+
+            check(token);
+        });
     }
 
     static path(filepath) {
@@ -164,6 +166,8 @@ export class TokenActionHUD extends Application {
             if(target.value.length > 0)
                 game.tokenActionHUD.showFilterDialog(target.value);
         });
+
+        html.find('.tah-category')
 
         html.find(repositionIcon).mousedown(ev => {
             ev.preventDefault();
