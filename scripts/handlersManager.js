@@ -83,7 +83,7 @@ export class HandlersManager {
 
     static addModule(choices, id) {
         if (HandlersManager.isModuleActive(id)) {
-            let title = game.modules.get(id).title;
+            let title = game.modules.get(id).data.title;
             mergeObject(choices, { [id]: title })
         }
     }
