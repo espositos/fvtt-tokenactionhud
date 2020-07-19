@@ -1,4 +1,5 @@
 import { ActionHandler5e } from './actions/dnd5e/dnd5e-actions.js';
+import { MagicItemActionListExtender } from './actions/dnd5e/magicItemsExtender.js';
 import { ActionHandlerWfrp } from './actions/wfrp4e/wfrp4e-actions.js';
 import { ActionHandlerPf2e } from './actions/pf2e/pf2e-actions.js';
 import { ActionHandlerDw } from './actions/dungeonworld/dw-actions.js';
@@ -16,7 +17,7 @@ export class HandlersManager {
     static getActionHandler(system, filterManager) {
         switch (system) {
             case 'dnd5e':
-                return new ActionHandler5e(filterManager);
+                return HandlersManager.getActionHandler5e(filterManager);
             case 'pf2e':
                 return new ActionHandlerPf2e(filterManager);
             case 'wfrp4e':
@@ -27,6 +28,13 @@ export class HandlersManager {
                 return new ActionHandlerSfrpg(filterManager);
         }
         throw new Error('System not supported by Token Action HUD');
+    }
+
+    static getActionHandler5e(filterManager) {
+        let actionHandler = new ActionHandler5e(filterManager);
+        if (HandlersManager.isModuleActive('magicitems'))
+            actionHandler.addFurtherActionHandler(new MagicItemActionListExtender())
+        return actionHandler;
     }
 
     // Possibility for several types of rollers (e.g. BetterRolls, MinorQOL for DND5e),
@@ -54,8 +62,8 @@ export class HandlersManager {
         switch (system) {
             case 'dnd5e':
                 choices = {'core': 'Core 5e'};
-                this.testForModule(choices, 'betterrolls5e');
-                this.testForModule(choices, 'minor-qol');
+                this.addModule(choices, 'betterrolls5e');
+                this.addModule(choices, 'minor-qol');
                 break;
             case 'pf2e':
                 choices = {'core': 'Core PF2E'};
@@ -73,12 +81,15 @@ export class HandlersManager {
         return choices;
     }
 
-    static testForModule(choices, id) {
-        let module = game.modules.get(id);
-        if (module && module.active) {
-            let id = module.id;
-            let title = module.data.title;
+    static addModule(choices, id) {
+        if (HandlersManager.isModuleActive(id)) {
+            let title = game.modules.get(id).title;
             mergeObject(choices, { [id]: title })
         }
+    }
+
+    static isModuleActive(id) {
+        let module = game.modules.get(id);
+        return module && module.active;
     }
 }

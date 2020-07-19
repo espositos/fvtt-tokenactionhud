@@ -6,9 +6,8 @@ export class RollHandlerBaseDw extends RollHandler {
         super();
     }
     
-    handleActionEvent(event, encodedValue) {
+    doHandleActionEvent(event, encodedValue) {
         let payload = encodedValue.split('|');
-        settings.Logger.debug(encodedValue);
         if (payload.length != 3) {
             super.throwInvalidValueErr();
         }
