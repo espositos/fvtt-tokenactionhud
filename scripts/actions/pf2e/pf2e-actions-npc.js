@@ -2,6 +2,8 @@ import {ActionHandlerPf2e} from './pf2e-actions.js';
 import * as settings from '../../settings.js';
 
 export class NpcActionHandlerPf2e {
+    i18n = (toTranslate) => game.i18n.localize(toTranslate);
+    
     constructor(actionHandlerpf2e) {
         this.baseHandler = actionHandlerpf2e;
     }
