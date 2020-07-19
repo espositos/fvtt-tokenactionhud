@@ -1,4 +1,8 @@
+import * as settings from '../settings.js';
+
 export class RollHandler {
+    preRollHandlers = [];
+
     i18n = (toTranslate) => game.i18n.localize(toTranslate);
     
     getActor(tokenId) {
@@ -9,7 +13,26 @@ export class RollHandler {
         throw new Error(`Error handling button click: unexpected button value/payload`);
     }
 
-    handleActionEvent(event, encodedValue) {}
+    handleActionEvent(event, encodedValue) {
+        settings.Logger.debug(encodedValue);
+
+        let handled = false;
+        this.preRollHandlers.forEach(handler => {
+            if (handled)
+                return;
+
+            handled = handler.prehandleActionEvent(event, encodedValue);
+        })
+
+        if (!handled)
+            this.doHandleActionEvent(event, encodedValue);
+    }
+
+    doHandleActionEvent(event, encodedValue) {}
+
+    addPreRollHandler(handler) {
+        this.preRollHandlers.push(handler);
+    }
 
     handleCompendiums(macroType, event, tokenId, actionId) {
         if (!macroType.endsWith('compendium'))

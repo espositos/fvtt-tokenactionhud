@@ -68,7 +68,7 @@ export class RollHandlerBetterRolls5e extends RollHandlerBase5e {
             return;
         }
 
-        params.preset = 1;
+        params.preset = event.altKey ? 1 : 0;
 
         BetterRolls.rollItem(item, params).toMessage();
     }

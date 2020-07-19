@@ -16,18 +16,18 @@ export class NpcActionHandlerPf2e {
         let saves = this.baseHandler._getSaveList(actor, tokenId);
         let attributes = this._getAttributeListNpc(actor, tokenId);     
         
-        this.baseHandler._combineCategoryWithList(result, 'strikes', strikes);
-        this.baseHandler._combineCategoryWithList(result, 'actions', actions);
-        this.baseHandler._combineCategoryWithList(result, 'items', items);
-        this.baseHandler._combineCategoryWithList(result, 'spells', spells);
-        this.baseHandler._combineCategoryWithList(result, 'feats', feats);
-        this.baseHandler._combineCategoryWithList(result, 'skills', skills);
-        this.baseHandler._combineCategoryWithList(result, 'saves', saves);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.strikes'), strikes);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.actions'), actions);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.inventory'), items);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.spells'), spells);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.features'), feats);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.skills'), skills);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.saves'), saves);
         if (settings.get('showNpcAbilities')) {
             let abilities = this.baseHandler._getAbilityList(actor, tokenId);
-            this.baseHandler._combineCategoryWithList(result, 'abilities', abilities);
+            this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.abilities'), abilities);
         }
-        this.baseHandler._combineCategoryWithList(result, 'attributes', attributes);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.attributes'), attributes);
     }
 
     /** @private */
@@ -69,8 +69,8 @@ export class NpcActionHandlerPf2e {
             
             let damageEncodedValue = [macroType, tokenId, encodeURIComponent(s.data._id+'>damage')].join(this.baseHandler.delimiter);
             let critEncodedValue = [macroType, tokenId, encodeURIComponent(s.data._id+'>critical')].join(this.baseHandler.delimiter);
-            subcategory.actions.push({name: 'Damage', encodedValue: damageEncodedValue, id: encodeURIComponent(s.data._id+'>damage')})
-            subcategory.actions.push({name: 'Critical', encodedValue: critEncodedValue, id: encodeURIComponent(s.data._id+'>critical')})
+            subcategory.actions.push({name: this.i18n('tokenactionhud.damage'), encodedValue: damageEncodedValue, id: encodeURIComponent(s.data._id+'>damage')})
+            subcategory.actions.push({name: this.i18n('tokenactionhud.critical'), encodedValue: critEncodedValue, id: encodeURIComponent(s.data._id+'>critical')})
 
             let attackEffects = s.data.data.attackEffects?.value;
             if (attackEffects.length > 0) {}
@@ -100,7 +100,7 @@ export class NpcActionHandlerPf2e {
                 l.name = l.name.substr(0,3)
             });
 
-        this.baseHandler._combineSubcategoryWithCategory(result, 'skills', lore);
+        this.baseHandler._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.skills'), lore);
 
         return result;
     }
@@ -115,7 +115,7 @@ export class NpcActionHandlerPf2e {
         
         attributes.actions = this.baseHandler._produceMap(tokenId, attributesMap, macroType);
         
-        this.baseHandler._combineSubcategoryWithCategory(result, 'attributes', attributes);
+        this.baseHandler._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.attributes'), attributes);
 
         return result;
     }
