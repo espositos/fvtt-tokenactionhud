@@ -21,6 +21,7 @@
     "tokenactionhud.dc": "DC",
     "tokenactionhud.dmg": "Dmg",
     "tokenactionhud.equipment": "Equipment",
+    "tokenactionhud.magicItems": "Magic Items",
     "tokenactionhud.feats": "Feats",
     "tokenactionhud.features": "Features",
     "tokenactionhud.free": "Free",
