@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.0] 2020-07-18
+### Added 
+- Add support for Simone's Magic Items module
+
 ## [0.4.15] 2020-07-17
 ### Bugfix
 - DND5e: Bug in showing combined ability/save checks

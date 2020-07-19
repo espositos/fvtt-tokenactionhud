@@ -1,5 +1,5 @@
 # Token Action HUD
-This module populates a repositionable HUD showing the most common basic actions for a selected token. Currently the HUD supports DND5e, WFRP4e, Dungeon World, and Pathfinder 2E.
+This module populates a repositionable HUD showing the most common basic actions for a selected token. Currently the HUD supports DND5e, WFRP4e, Dungeon World, Pathfinder 2E, and SFRPG.
 ![Easy action access](.github/readme/tah-dnd5e.gif)
 
 # Installation
@@ -27,7 +27,7 @@ Offers a variety of settings including support for third-party roll handlers (Pl
 ![Starfinder RPG](.github/readme/tah-sfrpg.gif)
 
 # Supported systems
-* DND5e (including BetterRolls and MinorQol)
+* DND5e (including [BetterRolls](https://github.com/RedReign/FoundryVTT-BetterRolls5e), [MinorQol](https://gitlab.com/tposney/minor-qol), and [Magic Items](https://gitlab.com/riccisi/foundryvtt-magic-items/)
 * Dungeon World
 * PF2E
 * WFRP4e
