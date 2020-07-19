@@ -1,8 +1,14 @@
 # Changelog
 
 ## [0.5.0] 2020-07-18
+### Bugfix
+- BetterRolls - alt key should now perform alt roll
+
 ### Added 
 - Add support for Simone's Magic Items module
+
+### Changed
+- PF2E - renamed feats to features
 
 ## [0.4.15] 2020-07-17
 ### Bugfix

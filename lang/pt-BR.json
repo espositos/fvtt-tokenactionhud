@@ -55,6 +55,21 @@
   "tokenactionhud.unrollable": "Não jogavél",
   "tokenactionhud.weapons": "Armas",
 
+  "tokenactionhud.attributes": "Attributes",
+  "tokenactionhud.critical": "Critical",
+  "tokenactionhud.magicItems": "Magic Items",
+  "tokenactionhud.features": "Features",
+  "tokenactionhud.levelAbbreviation": "Lvl",
+  "tokenactionhud.strikes": "Strikes",
+  "tokenactionhud.lore": "Lore",
+  "tokenactionhud.spellbook": "Spellbook",
+
+  "tokenactionhud.mwa": "Melee Weapon Attacks",
+  "tokenactionhud.rwa": "Ranged Weapon Attacks",
+  "tokenactionhud.msa": "Melee Spell Attacks",
+  "tokenactionhud.rsa": "Ranged Spell Attacks",
+  "tokenactionhud.healing": "Healing",
+  
   "tokenactionhud.blocklistLabel": "Lista Bloquiada (somente esconder) ou Lista Permitida (somente exibir)",
   "tokenactionhud.filterPlaceholder": "escolhas (separar com ponto e virgula)",
   "tokenactionhud.filterTitle": "Filtros",

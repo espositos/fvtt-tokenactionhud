@@ -56,6 +56,13 @@
     "tokenactionhud.treasure": "전리품",
     "tokenactionhud.unrollable": "굴림 불가능",
     "tokenactionhud.weapons": "무기",
+
+    "tokenactionhud.attributes": "Attributes",
+    "tokenactionhud.critical": "Critical",
+    "tokenactionhud.magicItems": "Magic Items",
+    "tokenactionhud.levelAbbreviation": "Lvl",
+    "tokenactionhud.strikes": "Strikes",
+    "tokenactionhud.lore": "Lore",
     
     "tokenactionhud.mwa": "근거리 무기 공격",
     "tokenactionhud.rwa": "원거리 무기 공격",
@@ -111,5 +118,5 @@
     "tokenactionhud.settings.pf2e.abbreviateSkills.hint": "활성화할 경우 기술 및 능력치는 3 글자 약어로 표시된다.",
 
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "GM 컴펜디움 보기",
-    "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "활성화 했을 때 사용자가 GM인 경우 HUD바에 GM 이동, 전리품 굴림표, 차트가 포함된다."
+    "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "활성화 했을 때 사용자가 GM인 경우 HUD바에 GM 이동, 전리품 굴림표, 차트가 포함된다."    
 }
