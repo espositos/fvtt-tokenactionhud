@@ -30,7 +30,7 @@ export class ActionHandler5e extends ActionHandler {
 
         let itemsTitle = this.i18n('tokenactionhud.inventory');
         let spellsTitle = this.i18n('tokenactionhud.spells');
-        let featsTitle = this.i18n('tokenactionhud.feats');
+        let featsTitle = this.i18n('tokenactionhud.features');
         let skillsTitle = this.i18n('tokenactionhud.skills');
 
         this._combineCategoryWithList(result, itemsTitle, items);
