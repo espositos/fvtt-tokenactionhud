@@ -56,6 +56,16 @@
     "tokenactionhud.treasure": "전리품",
     "tokenactionhud.unrollable": "굴림 불가능",
     "tokenactionhud.weapons": "무기",
+    
+    "tokenactionhud.utility": "Utility",
+    "tokenactionhud.toggleCombatState": "Toggle Combat State",
+    "tokenactionhud.toggleVisibility": "Toggle Visibility",
+    "tokenactionhud.shortRest": "Short rest",
+    "tokenactionhud.longRest": "Long rest",
+    "tokenactionhud.deathSave": "Death Save",
+    "tokenactionhud.rests": "Rests",
+    "tokenactionhud.inspiration": "Inspiration",    
+    "tokenactionhud.gm": "GM",    
 
     "tokenactionhud.attributes": "Attributes",
     "tokenactionhud.critical": "Critical",

@@ -39,6 +39,8 @@ export class RollHandlerBase5e extends RollHandler {
             case "feat":
                 this.rollItemMacro(event, tokenId, actionId);
                 break;
+            case "utility":
+                this.performUtilityMacro(event, tokenId, actionId);
             default:
                 break;
         }
@@ -78,5 +80,33 @@ export class RollHandlerBase5e extends RollHandler {
 
     needsRecharge(item) {
         return (item.data.data.recharge && !item.data.data.recharge.charged && item.data.data.recharge.value);
+    }
+    
+    performUtilityMacro(event, tokenId, actionId) {
+        let actor = super.getActor(tokenId);
+        let token = super.getToken(tokenId);
+
+        switch(actionId) {
+            case 'shortRest':
+                actor.shortRest();
+                break;
+            case 'longRest':
+                actor.longRest();
+                break;
+            case 'inspiration':
+                let update = !actor.data.data.attributes.inspiration;
+                actor.update({"data.attributes.inspiration": update});
+                break;
+            case 'toggleCombat':
+                token.toggleCombat();
+                Hooks.callAll('forceUpdateTokenActionHUD')
+                break;
+            case 'toggleVisibility':
+                token.toggleVisibility();
+                break;
+            case 'deathSave':
+                actor.rollDeathSave();
+                break;
+        }
     }
 }

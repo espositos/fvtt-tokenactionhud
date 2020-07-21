@@ -63,6 +63,16 @@
     "tokenactionhud.strikes": "Strikes",
     "tokenactionhud.lore": "Lore",
     "tokenactionhud.spellbook": "Spellbook",
+    
+    "tokenactionhud.utility": "Utility",
+    "tokenactionhud.toggleCombatState": "Toggle Combat State",
+    "tokenactionhud.toggleVisibility": "Toggle Visibility",
+    "tokenactionhud.shortRest": "Short rest",
+    "tokenactionhud.longRest": "Long rest",
+    "tokenactionhud.deathSave": "Death Save",
+    "tokenactionhud.rests": "Rests",
+    "tokenactionhud.inspiration": "Inspiration",    
+    "tokenactionhud.gm": "GM",    
 
     "tokenactionhud.mwa": "Melee Weapon Attacks",
     "tokenactionhud.rwa": "Ranged Weapon Attacks",
