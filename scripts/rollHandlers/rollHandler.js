@@ -8,6 +8,10 @@ export class RollHandler {
     getActor(tokenId) {
         return canvas.tokens.placeables.find(t => t.data._id === tokenId)?.actor;
     }
+    
+    getToken(tokenId) {
+        return canvas.tokens.placeables.find(t => t.data._id === tokenId);
+    }
 
     throwInvalidValueErr(err) {
         throw new Error(`Error handling button click: unexpected button value/payload`);

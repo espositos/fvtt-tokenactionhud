@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.5.4] 2021-07-19
+### Added
+- DND5e: Added a utility category (rests, death saves, toggles)
+
+## [0.5.3] 2020-07-19
+### Bugfix
+- PF2E: Managed to break NPC actions
+
+## [0.5.2] 2020-07-18
+### Bugfix
+- Misnamed method during update.
+
 ## [0.5.1] 2020-07-18
 ### Bugfix, naturally
 - Fixed bug where third-party modules were not appearing because I was looking in the wrong place for the title

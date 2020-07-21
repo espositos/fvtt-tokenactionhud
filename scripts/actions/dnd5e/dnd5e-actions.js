@@ -27,12 +27,13 @@ export class ActionHandler5e extends ActionHandler {
         let spells = this._getSpellsList(actor, tokenId);
         let feats = this._getFeatsList(actor, tokenId);
         let skills = this._getSkillsList(tokenId);
+        let utility = this._getUtilityList(actor, tokenId);
 
         let itemsTitle = this.i18n('tokenactionhud.inventory');
         let spellsTitle = this.i18n('tokenactionhud.spells');
-        let featsTitle = this.i18n('tokenactionhud.feats');
+        let featsTitle = this.i18n('tokenactionhud.features');
         let skillsTitle = this.i18n('tokenactionhud.skills');
-
+        
         this._combineCategoryWithList(result, itemsTitle, items);
         this._combineCategoryWithList(result, spellsTitle, spells);
         this._combineCategoryWithList(result, featsTitle, feats);
@@ -49,10 +50,13 @@ export class ActionHandler5e extends ActionHandler {
         } else {
             let abilitiesTitle = this.i18n('tokenactionhud.abilities');
             let abilities = this._getAbilityList(tokenId, 'abilities', abilitiesTitle, 'ability');
-
+            
             this._combineCategoryWithList(result, abilitiesTitle, abilities);
         }
-
+        
+        let utilityTitle = this.i18n('tokenactionhud.utility');
+        this._combineCategoryWithList(result, utilityTitle, utility);
+        
         return result;
     }
     
@@ -124,12 +128,7 @@ export class ActionHandler5e extends ActionHandler {
             if (!e.data.activation)
                 return false;
     
-            for (let key of activationTypes) {
-                if (e.data.activation.type === key)
-                    return true;
-            }
-            
-            return false;
+            return activationTypes.includes(e.data.activation.type)
         });
     
         return activeEquipment;
@@ -307,7 +306,6 @@ export class ActionHandler5e extends ActionHandler {
         let legendary = this.initializeEmptySubcategory();
 
         let dispose = feats.reduce(function (dispose, f) {
-            const activationTypes = game.dnd5e.config.abilityActivationTypes;
             const activationType = f.data.activation.type;
             const macroType = 'feat';
 
@@ -392,6 +390,53 @@ export class ActionHandler5e extends ActionHandler {
 
         return result;
     }
+
+    /** @private */
+    _getUtilityList(actor, tokenId) {
+        let result = this.initializeEmptyCategory('utility');
+        let macroType = 'utility';
+        
+        let rests = this.initializeEmptySubcategory('rests')
+        let utility = this.initializeEmptySubcategory('utility');
+
+        if (actor.data.type === 'character') {          
+            let shortRestValue = [macroType, tokenId, 'shortRest'].join(this.delimiter);
+            rests.actions.push({id:'shortRest', encodedValue: shortRestValue, name: this.i18n('tokenactionhud.shortRest')})
+            let longRestValue = [macroType, tokenId, 'longRest'].join(this.delimiter);
+            rests.actions.push({id:'longRest', encodedValue: longRestValue, name: this.i18n('tokenactionhud.longRest')})
+            
+            if (actor.data.data.attributes.hp.value <= 0) {
+                let deathSaveValue = [macroType, tokenId, 'deathSave'].join(this.delimiter);
+                let deathSaveAction = {id:'deathSave', encodedValue: deathSaveValue, name: this.i18n('tokenactionhud.deathSave')};
+                utility.actions.push(deathSaveAction)
+            }
+            
+            let inspirationValue = [macroType, tokenId, 'inspiration'].join(this.delimiter);
+            let inspirationAction = {id:'inspiration', encodedValue: inspirationValue, name: this.i18n('tokenactionhud.inspiration')};
+            inspirationAction.cssClass = actor.data.data.attributes?.inspiration ? 'active' : '';
+            utility.actions.push(inspirationAction)
+        }
+            
+        let combatStateValue = [macroType, tokenId, 'toggleCombat'].join(this.delimiter);
+        let combatAction = {id:'toggleCombat', encodedValue: combatStateValue, name: this.i18n('tokenactionhud.toggleCombatState')};
+        combatAction.cssClass = canvas.tokens.placeables.find(t => t.data._id === tokenId).inCombat ? 'active' : '';
+        utility.actions.push(combatAction);    
+        
+        if (game.user.isGM) {
+            let gm = this.initializeEmptySubcategory('gm');
+            let visbilityValue = [macroType, tokenId, 'toggleVisibility'].join(this.delimiter);
+            let visibilityAction = {id:'toggleVisibility', encodedValue: visbilityValue, name: this.i18n('tokenactionhud.toggleVisibility')};
+            visibilityAction.cssClass = !canvas.tokens.placeables.find(t => t.data._id === tokenId).data.hidden ? 'active' : '';
+            gm.actions.push(visibilityAction);
+            this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.gm'), gm);
+        }
+        
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.rests'), rests);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.utility'), utility);
+        
+        return result;
+    }
+
 
     /** @private */
     _buildItem(tokenId, actor, macroType, item) {
