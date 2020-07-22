@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.5] 2021-07-22
+### Bugfix
+- WFRP had misnamed method which was preventing loading of action list
+
+### Added
+- DND5e: added tools to inventory
+
 ## [0.5.4] 2021-07-19
 ### Added
 - DND5e: Added a utility category (rests, death saves, toggles)
