@@ -12,6 +12,8 @@ export class TokenActionHUD extends Application {
         this.actions = actions;
         this.rollHandler = rollHandler;
         this.filterManager = filterManager;
+        this.rendering = false;
+        this.categoryHovered = '';
     }
 
     updateSettings() {
@@ -43,6 +45,9 @@ export class TokenActionHUD extends Application {
         } else {
             this.setUserPos();
         }
+
+        this.restoreCategoryHoverState();
+        this.rendering = false;
     }
 
     setUserPos() {
@@ -167,7 +172,25 @@ export class TokenActionHUD extends Application {
                 game.tokenActionHUD.showFilterDialog(target.value);
         });
 
-        html.find('.tah-category')
+        html.find('.tah-category').hover(
+            // mouseenter    
+            function() {
+                let category = $(this)[0];
+                $(category).addClass('hover');
+                let id = category.id;
+                game.tokenActionHUD.setHoveredCategory(id);
+                game.tokenActionHUD.resizeHoveredCategory(id);
+            },
+            // mouseleave
+            function() {
+                if (game.tokenActionHUD.rendering)
+                    return;
+                let category = $(this)[0];
+                $(category).removeClass('hover');
+                let id = category.id;
+                game.tokenActionHUD.clearHoveredCategory(id);
+            }
+        );
 
         html.find(repositionIcon).mousedown(ev => {
             ev.preventDefault();
@@ -228,6 +251,87 @@ export class TokenActionHUD extends Application {
         });
     }
 
+    setHoveredCategory(catId) {
+        this.categoryHovered = catId;
+    }
+
+    clearHoveredCategory(catId) {            
+        if (this.categoryHovered === catId)
+            this.categoryHovered = '';
+    }
+
+    restoreCategoryHoverState() {
+        if (this.categoryHovered === '')
+            return;
+
+        let id = `#${this.categoryHovered}`
+        let category = $(id);
+        
+        if (!category[0])
+            return;
+
+        category.mouseenter();
+    }
+
+    resizeHoveredCategory(catId) {
+        let id = `#${catId}`
+        let category = $(id);
+        
+        if (!category[0])
+            return;
+
+        let windowBottomLimit = window.innerHeight - 100;
+        let windowRightLimit = window.innerWidth - 300;
+        
+        let contentMinWidth = 400;
+
+        let content = category.find('.tah-content');
+        let contentBottom = content[0].getBoundingClientRect().bottom;
+
+        let actions = category.find(".tah-actions");
+        let actionsRect = actions[0].getBoundingClientRect();
+        let contentWidth = actionsRect.width;
+        let contentRight = actionsRect.right;
+
+        let changeStep = Maths.abs(contentRight - windowRightLimit) > 50 ? 50 : Maths.abs(contentRight - windowRightLimit);        
+        if (contentBottom < windowBottomLimit && contentWidth > contentMinWidth)
+            changeStep = Math.abs(contentWidth - contentMinWidth) > 50 ? -50 : -(Math.abs(contentWidth - contentMinWidth));
+
+        let canResize = false;
+        if (changeStep > 0)
+            canResize = contentRight < windowRightLimit;
+
+        if (changeStep < 0)
+            canResize = contentWidth > contentMinWidth;
+
+        while (canResize) {
+            let oldBottom = contentBottom;
+            let newWidth = actions[0].getBoundingClientRect().width + changeStep;
+            
+            this.resizeActions(actions, newWidth);
+
+            // Only increase or decrease the width as far as the expanded-sidebar border or minimum width.
+            actionsRect = actions[0].getBoundingClientRect();
+            contentRight = actionsRect.right;
+            contentWidth = actionsRect.width;
+            if (contentRight > windowRightLimit || contentWidth < contentMinWidth)
+                canResize = false;
+            
+            // check if bottom actually changed, because at some point changing width won't change height
+            contentBottom = content[0].getBoundingClientRect().bottom;
+            if (oldBottom === contentBottom)
+                canResize = false;
+        }
+    }
+
+    resizeActions(actions, newWidth) {
+        // resize each action with new width
+        actions.map(function() {
+            $(this).css({"width": newWidth + 'px',
+            "min-width" : newWidth + 'px'});
+        })
+    }
+
     resetPosition() {
         settings.Logger.info(`Resetting HUD position to x: 80px, y: 150px, and saving in user flags. \nIf HUD is still not visible, something else may be wrong.\nFeel free to contact ^ and stick#0520 on Discord`)
         game.user.update({flags: {'token-action-hud': {hudPos: { top: 80, left: 150 }}}})
@@ -262,6 +366,7 @@ export class TokenActionHUD extends Application {
             return;
         }
 
+        this.rendering = true;
         this.render(true);
     }
 
