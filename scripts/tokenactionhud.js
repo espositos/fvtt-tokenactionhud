@@ -278,50 +278,127 @@ export class TokenActionHUD extends Application {
         let category = $(id);
         
         if (!category[0])
+            return;        
+        
+        let content = category.find('.tah-content');
+        let actions = category.find('.tah-actions');
+        
+        if (actions.length === 0)
             return;
+        
+        // reset content to original width
+        let contentDefaultWidth = 300;
+        let minPossibleWidth = 200;
+        this.resizeActions(actions, contentDefaultWidth);
 
+        let changeStep = 30;
+
+        let maxRequiredWidth = this.calculateMaxRequiredWidth(actions);
+        while (this.shouldIncreaseWidth(content, actions, maxRequiredWidth)) {
+            let actionRect = actions[0].getBoundingClientRect();
+            let actionWidth = actionRect.width;
+            
+            let newWidth = actionWidth + changeStep;
+            
+            this.resizeActions(actions, newWidth);          
+        }
+
+        while (this.shouldShrinkWidth(content, actions, minPossibleWidth)) {
+            let actionRect = actions[0].getBoundingClientRect();
+            let actionWidth = actionRect.width;
+
+            if (actionWidth < minPossibleWidth)
+                return;
+
+            let newWidth = actionWidth - changeStep;
+            
+            this.resizeActions(actions, newWidth); 
+        }
+    }
+
+    calculateMaxRequiredWidth(actions) {
+        let maxWidth = 0;
+
+        actions.each(function() {
+            let totalWidth = 0;
+            Array.from($(this).children()).forEach(c => {
+                let child = $(c);
+                let childWidth = child.width();
+                let marginWidth = parseInt(child.css('marginLeft')) + parseInt(child.css('marginRight'));
+                
+                totalWidth += childWidth + marginWidth;
+            });
+
+            if (totalWidth > maxWidth)
+                maxWidth = totalWidth;
+        });
+
+        return maxWidth;
+    }
+
+    shouldIncreaseWidth(content, actions, maxRequiredWidth) {
         let windowBottomLimit = window.innerHeight - 100;
         let windowRightLimit = window.innerWidth - 300;
-        
-        let contentMinWidth = 400;
 
-        let content = category.find('.tah-content');
-        let contentBottom = content[0].getBoundingClientRect().bottom;
-
-        let actions = category.find(".tah-actions");
+        let contentRect = content[0].getBoundingClientRect();
         let actionsRect = actions[0].getBoundingClientRect();
-        let contentWidth = actionsRect.width;
-        let contentRight = actionsRect.right;
 
-        let changeStep = Maths.abs(contentRight - windowRightLimit) > 50 ? 50 : Maths.abs(contentRight - windowRightLimit);        
-        if (contentBottom < windowBottomLimit && contentWidth > contentMinWidth)
-            changeStep = Math.abs(contentWidth - contentMinWidth) > 50 ? -50 : -(Math.abs(contentWidth - contentMinWidth));
+        if (actionsRect.right >= windowRightLimit)
+            return false;
 
-        let canResize = false;
-        if (changeStep > 0)
-            canResize = contentRight < windowRightLimit;
+        if (actionsRect.width >= maxRequiredWidth)
+            return false;
 
-        if (changeStep < 0)
-            canResize = contentWidth > contentMinWidth;
+        if (contentRect.bottom <= windowBottomLimit && actionsRect.width/contentRect.height > 2.7)
+            return false;
+        
+        return true;
+    }
 
-        while (canResize) {
-            let oldBottom = contentBottom;
-            let newWidth = actions[0].getBoundingClientRect().width + changeStep;
-            
-            this.resizeActions(actions, newWidth);
+    shouldShrinkWidth(content, actions, actionsMinWidth) {
+        let windowBottomLimit = window.innerHeight - 100;
+        let windowRightLimit = window.innerWidth - 300;
 
-            // Only increase or decrease the width as far as the expanded-sidebar border or minimum width.
-            actionsRect = actions[0].getBoundingClientRect();
-            contentRight = actionsRect.right;
-            contentWidth = actionsRect.width;
-            if (contentRight > windowRightLimit || contentWidth < contentMinWidth)
-                canResize = false;
-            
-            // check if bottom actually changed, because at some point changing width won't change height
-            contentBottom = content[0].getBoundingClientRect().bottom;
-            if (oldBottom === contentBottom)
-                canResize = false;
-        }
+        let contentRect = content[0].getBoundingClientRect();
+        let actionsRect = actions[0].getBoundingClientRect();
+
+        if (contentRect.bottom >= windowBottomLimit)
+            return false;
+
+        if (actionsRect.width <= actionsMinWidth)
+            return false;
+
+        //let rows = this.calculateRows(content);
+        //let columns = this.calculateColumns(content);
+        if (actionsRect.right <= windowRightLimit && actionsRect.width/contentRect.height < 2.7)
+            return false;
+
+        return true;
+    }
+
+    calculateRows(content) {
+        var rows = [];
+
+        Array.from(content.find('.tah-action'))
+            .forEach(a => {
+                let closeRange = 5;
+                let offset = $(a).offset().top
+                let close = false;
+                if (rows.length === 0) {
+                    rows.push(offset);
+                    return;
+                }
+                for (let r of rows) {
+                    if (close)
+                        return;
+                    if (Math.abs(r - offset) <= closeRange)
+                        close = true;
+                }
+                if (!close)
+                    rows.push(offset);
+        });
+
+        return rows.length;
     }
 
     resizeActions(actions, newWidth) {
