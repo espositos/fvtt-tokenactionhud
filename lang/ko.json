@@ -56,6 +56,7 @@
     "tokenactionhud.treasure": "전리품",
     "tokenactionhud.unrollable": "굴림 불가능",
     "tokenactionhud.weapons": "무기",
+    "tokenactionhud.tools": "Tools",
     
     "tokenactionhud.utility": "Utility",
     "tokenactionhud.toggleCombatState": "Toggle Combat State",
