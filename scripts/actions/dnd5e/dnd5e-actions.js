@@ -102,12 +102,18 @@ export class ActionHandler5e extends ActionHandler {
         let incomsumableActions = inconsumable.map(i => this._buildItem(tokenId, actor, macroType, i));
         let inconsumablesCat = this.initializeEmptySubcategory();
         inconsumablesCat.actions = incomsumableActions;
+
+        let tools = validItems.filter(t => t.type === 'tool');
+        let toolsActions = tools.map(i => this._buildItem(tokenId, actor, macroType, i));
+        let toolsCat = this.initializeEmptySubcategory();
+        toolsCat.actions = toolsActions;
         
         let weaponsTitle = this.i18n('tokenactionhud.weapons');
         let equipmentTitle = this.i18n('tokenactionhud.equipment');
         let otherTitle = this.i18n('tokenactionhud.other');
         let consumablesTitle = this.i18n('tokenactionhud.consumables');
         let incomsumablesTitle = this.i18n('tokenactionhud.inconsumables');
+        let toolsTitle = this.i18n('tokenactionhud.tools');
 
         let result = this.initializeEmptyCategory('inventory');
 
@@ -116,6 +122,7 @@ export class ActionHandler5e extends ActionHandler {
         this._combineSubcategoryWithCategory(result, otherTitle, otherCat);
         this._combineSubcategoryWithCategory(result, consumablesTitle, consumablesCat);
         this._combineSubcategoryWithCategory(result, incomsumablesTitle, inconsumablesCat);
+        this._combineSubcategoryWithCategory(result, toolsTitle, toolsCat);
         
         return result;
     }

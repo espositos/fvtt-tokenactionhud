@@ -63,6 +63,7 @@
     "tokenactionhud.strikes": "Strikes",
     "tokenactionhud.lore": "Lore",
     "tokenactionhud.spellbook": "Spellbook",
+    "tokenactionhud.tools": "Tools",
     
     "tokenactionhud.utility": "Utility",
     "tokenactionhud.toggleCombatState": "Toggle Combat State",
