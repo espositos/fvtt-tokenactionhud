@@ -17,7 +17,8 @@ export class ActionHandler {
         id: '',
         name: '',
         canFilter: false,
-        subcategories: []
+        subcategories: [],
+        cssClass: ''
     }
 
     emptySubcategory = {
@@ -119,7 +120,7 @@ export class ActionHandler {
         if (!pack)
             return;
 
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory(compendiumKey);
 
         let macroType = isMacros ? 'macros' : 'compendium';            
 

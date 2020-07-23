@@ -103,7 +103,7 @@
 }
 
 /* Show the dropdown menu on hover */
-.tah-category:hover .tah-content {
+.tah-category.hover .tah-content {
     display: block;
     padding: 2px;
     position: absolute;

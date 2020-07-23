@@ -36,6 +36,7 @@ export class NpcActionHandlerPf2e {
     _getStrikesListNpc(actor, tokenId) {
         let macroType = 'strike';
         let result = this.baseHandler.initializeEmptyCategory('strikes');
+        result.cssClass = 'oneLine';
 
         let strikes = actor.items.filter(a => a.type === 'melee');
 
