@@ -22,7 +22,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         if (actor)
             charType = actor.data.type;
 
-        let sharedActions = ['ability', 'spell', 'item', 'skill', 'lore']
+        let sharedActions = ['ability', 'spell', 'item', 'skill', 'lore', 'utility']
 
         if (!sharedActions.includes(macroType)) {
             switch (charType) {
@@ -52,6 +52,10 @@ export class RollHandlerBasePf2e extends RollHandler {
                 break;
             case 'spell':
                 this._rollSpell(event, actor, actionId);
+                break;
+            case 'utility':
+                this._performUtilityMacro(event, tokenId, actionId);
+                break;
         }
     }
 
@@ -69,6 +73,9 @@ export class RollHandlerBasePf2e extends RollHandler {
                 break;
             case 'spellSlot':
                 await this._adjustSpellSlot(event, actor, actionId);
+                break;
+            case 'heroPoint':
+                await this._adjustHeroPoints(event, actor, actionId);
                 break;
         }
     }
@@ -358,5 +365,58 @@ export class RollHandlerBasePf2e extends RollHandler {
       
           // Create the chat message
           return ChatMessage.create(chatData, { displaySheet: false });
+    }
+
+    _performUtilityMacro(event, tokenId, actionId) {
+        let actor = super.getActor(tokenId);
+        let token = super.getToken(tokenId);
+
+        switch(actionId) {
+            case 'shortRest':
+                this._executeMacroByName('Treat Wounds Macro');
+                break;
+            case 'longRest':
+                this._executeMacroByName('Rest for the Night');
+                break;
+            case 'toggleCombat':
+                token.toggleCombat();
+                Hooks.callAll('forceUpdateTokenActionHUD')
+                break;
+            case 'toggleVisibility':
+                token.toggleVisibility();
+                break;
+        }
+    }
+
+    async _executeMacroByName(name) {
+        let pack = game.packs.get('pf2e.pf2e-macros');
+        pack.getIndex().then(index => {
+            let id = index.find(e => e.name === name)?._id;
+
+            if (id)
+                pack.getEntity(id).then(e => e.execute()
+        )});
+    }
+
+    async _adjustHeroPoints(event, actor, actionId) {
+        let value = actor.data.data.attributes.heroPoints.rank;
+        let max = actor.data.data.attributes.heroPoints.max;
+        switch (actionId) {
+            case 'increase':
+                if (value >= max)
+                    break;
+                
+                value++;
+                break;
+            case 'decrease':
+                if (value <= 0)
+                    break;
+                    
+                value--;
+        }
+
+        let update = {data: {attributes: {heroPoints: {rank: value}}}};
+
+        await actor.update(update);
     }
 }

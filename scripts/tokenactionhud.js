@@ -363,7 +363,7 @@ export class TokenActionHUD extends Application {
         let contentRect = content[0].getBoundingClientRect();
         let actionsRect = actions[0].getBoundingClientRect();
 
-        if (contentRect.bottom >= windowBottomLimit)
+        if (contentRect.bottom >= bottomLimit)
             return false;
 
         if (actionsRect.width <= actionsMinWidth)
@@ -373,7 +373,7 @@ export class TokenActionHUD extends Application {
         let rows = this.calculateRows(actionArray);
         let columns = this.calculateMaxRowButtons(actionArray);
 
-        if (actionsRect.right <= windowRightLimit && rows >= columns - 1 && isOneLineFit)
+        if (actionsRect.right <= rightLimit && (rows >= columns - 1 || isOneLineFit))
             return false;
 
         return true;

@@ -392,6 +392,69 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
+    _getUtilityList(actor, tokenId) {
+        let result = this.initializeEmptyCategory('utility');
+        let macroType = 'utility';
+        
+        if (actor.data.type === 'character') {
+            
+            let rests = this.initializeEmptySubcategory();
+
+            let restActions = [];
+            let shortRestValue = ['utility', tokenId, 'shortRest'].join(this.delimiter);
+            let shortRestAction = {id: 'shortRest', name: this.i18n('tokenactionhud.treatWounds'), encodedValue: shortRestValue}
+            restActions.push(shortRestAction)
+    
+            let longRestValue = ['utility', tokenId, 'longRest'].join(this.delimiter);
+            let longRestAction = {id: 'longRest', name: this.i18n('tokenactionhud.restNight'), encodedValue: longRestValue}
+            restActions.push(longRestAction)
+            rests.actions = restActions;
+            
+            this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.rests'), rests);
+
+
+            let heroPoints = this.initializeEmptySubcategory();
+            let heroPointsActions = [];
+            let increasePointValue = ['heroPoint', tokenId, 'increase'].join(this.delimiter);
+            let increasePointAction = {id: 'increaseHeroPoints', name: '+', encodedValue: increasePointValue, cssClass:'shrink'}
+            heroPointsActions.unshift(increasePointAction)
+    
+            let decreasePointValue = ['heroPoint', tokenId, 'decrease'].join(this.delimiter);
+            let decreasePointAction = {id: 'decreaseHeroPoints', name: '-', encodedValue: decreasePointValue, cssClass:'shrink'}
+            heroPointsActions.unshift(decreasePointAction)
+            heroPoints.actions = heroPointsActions;
+
+            let hp = actor.data.data.attributes?.heroPoints;
+            if (hp)
+                heroPoints.info1 = `${hp.rank}/${hp.max}`;
+
+            this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.heroPoints'), heroPoints);
+        }
+
+        let utility = this.initializeEmptySubcategory();
+            
+        let combatStateValue = [macroType, tokenId, 'toggleCombat'].join(this.delimiter);
+        let combatAction = {id:'toggleCombat', encodedValue: combatStateValue, name: this.i18n('tokenactionhud.toggleCombatState')};
+        combatAction.cssClass = canvas.tokens.placeables.find(t => t.data._id === tokenId).inCombat ? 'active' : '';
+        utility.actions.push(combatAction);
+
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.utility'), utility);
+        
+        if (game.user.isGM) {
+            let gm = this.initializeEmptySubcategory('gm');
+
+            let visbilityValue = [macroType, tokenId, 'toggleVisibility'].join(this.delimiter);
+            let visibilityAction = {id:'toggleVisibility', encodedValue: visbilityValue, name: this.i18n('tokenactionhud.toggleVisibility')};
+            visibilityAction.cssClass = !canvas.tokens.placeables.find(t => t.data._id === tokenId).data.hidden ? 'active' : '';
+            gm.actions.push(visibilityAction);
+            
+            this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.gm'), gm);
+        }
+
+        return result;
+    }
+
+    /** @private */
     _buildItemActions(tokenId, macroType, itemList) {
         let result = this._produceMap(tokenId, itemList, macroType);
 
