@@ -147,7 +147,10 @@ export class ActionHandler5e extends ActionHandler {
     _getSpellsList(actor, tokenId) {
         let validSpells = this._filterLongerActions(actor.data.items.filter(i => i.type === 'spell'));
         validSpells = this._filterExpendedItems(validSpells);
-        validSpells = this._filterNonpreparedSpells(validSpells);
+        
+        if (actor.data.type === 'character' || !settings.get('showAllNpcItems'))
+            validSpells = this._filterNonpreparedSpells(validSpells);
+
         let spellsSorted = this._sortSpellsByLevel(validSpells);
         let spells = this._categoriseSpells(actor, tokenId, spellsSorted);
     
