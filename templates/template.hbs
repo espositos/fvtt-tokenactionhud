@@ -7,5 +7,8 @@
     {{#each actions.categories}}
     {{>"modules/token-action-hud/templates/category.hbs"}}
     {{/each}}
+    {{#unless hovering}}
+    <div id="tah-compendiums"><i class="fa fa-book"></i></div>
+    {{/unless}}
     {{/if}}
 </div>

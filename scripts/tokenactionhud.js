@@ -35,6 +35,15 @@ export class TokenActionHUD extends Application {
         TagDialog.showTagDialog(this.filterManager, categoryId);
     }
 
+    showCompendiumsDialog() {
+        TagDialog.showCompendiumDialog(this.filterManager);
+    }
+
+    submitCompendiums(choices) {
+        this.actions.submitCompendiums(choices);
+        this.update()
+    }
+
     trySetPos() {
         if (!(this.targetActions && this.targetActions.tokenId))
             return;
@@ -142,6 +151,7 @@ export class TokenActionHUD extends Application {
     activateListeners(html) {
         const tokenactionhud = '#token-action-hud';
         const repositionIcon = '#tah-reposition';
+        const compendiumsIcon = '#tah-compendiums';
         const action = '.tah-action';   
 
         const handleClick = e => {
@@ -191,6 +201,13 @@ export class TokenActionHUD extends Application {
                 game.tokenActionHUD.clearHoveredCategory(id);
             }
         );
+
+        html.find(compendiumsIcon).mousedown(ev => {
+            ev.preventDefault();
+            ev = ev || window.event;
+
+            game.tokenActionHUD.showCompendiumsDialog()
+        })
 
         html.find(repositionIcon).mousedown(ev => {
             ev.preventDefault();

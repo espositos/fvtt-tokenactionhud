@@ -82,6 +82,78 @@ export class TagDialog extends Dialog {
 
            d.render(true);
     }
+    
+    static showCompendiumDialog(filterManager) {
+        let choices = Object.entries(game.packs).filter(p => {
+            let types = ['Journal', 'Macro', 'RollTable'];
+            return types.includes(p[1].metadata.entity)
+        }).map(p => { return { id: p[0], value:p[1].metadata.label } });
+
+        let filters = filterManager.getCompendiums();
+        let tagify;
+
+        Hooks.once('renderTagDialog', (app, html, options) => {
+
+            html.css('height', 'auto');
+
+            var $tagFilter = html.find('input[name="tokenactionhud-tagfilter"]');
+            
+            if ($tagFilter.length > 0) {
+                let filterPlaceholder = game.i18n.localize('tokenactionhud.filterPlaceholder');
+
+                tagify = new Tagify($tagFilter[0], {
+                whitelist: choices,
+                value: filters,
+                placeholder: filterPlaceholder,
+                delimiters: ';',
+                maxTags: 'Infinity',
+                dropdown: {
+                    maxItems: 20,           // <- maxumum allowed rendered suggestions
+                    classname: 'tags-look', // <- custom classname for this dropdown, so it could be targeted
+                    enabled: 0,             // <- show suggestions on focus
+                    closeOnSelect: false    // <- do not hide the suggestions dropdown once an item has been selected
+                }
+                });
+
+                tagify.addTags(filters);
+
+                // "remove all tags" button event listener
+                let clearBtn = html.find('button[class="tags--removeAllBtn"]');
+                clearBtn.on('click', tagify.removeAllTags.bind(tagify))
+                clearBtn.css('float', 'right');
+                clearBtn.css('width', 'auto');
+
+            }
+
+        })
+
+        let filterPlaceholder = game.i18n.localize('tokenactionhud.filterPlaceholder');
+        let filterTitle = game.i18n.localize('tokenactionhud.filterTitle');
+        let content = ` <div><label>${filterPlaceholder}</label></div>
+                        <div><input name='tokenactionhud-tagfilter' class='some_class_name'/></div>
+                        <div><button class="tags--removeAllBtn">Clear</button></div>`
+        let d = new TagDialog({
+            title: filterTitle,
+            content: content,
+            buttons: {
+                accept: {
+                icon: '<i class="fas fa-check"></i>',
+                label: game.i18n.localize("tokenactionhud.accept"),
+                callback: (html) => {
+                    let choices = tagify.value;
+                    game.tokenActionHUD.submitCompendiums(choices);
+                }
+                },
+                cancel: {
+                icon: '<i class="fas fa-times"></i>',
+                label: game.i18n.localize("tokenactionhud.cancel")
+                }
+            },
+            default: 'accept',
+            });
+
+            d.render(true);
+    }
 
     /** @override */
     _onKeyDown(event) {
