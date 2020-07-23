@@ -358,7 +358,7 @@ export class TokenActionHUD extends Application {
         return true;
     }
 
-    shouldShrinkWidth(content, actions, actionsMinWidth, minRows) {
+    shouldShrinkWidth(content, actions, actionsMinWidth) {
         let windowBottomLimit = window.innerHeight - 100;
         let windowRightLimit = window.innerWidth - 300;
 
