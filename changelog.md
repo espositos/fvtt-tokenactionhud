@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.6] 2021-07-23
+### Added
+- HUD should now try to resize itself if it has too many rows or columns, or hits the edge of the screen.
+
 ## [0.5.5] 2021-07-22
 ### Bugfix
 - WFRP had misnamed method which was preventing loading of action list

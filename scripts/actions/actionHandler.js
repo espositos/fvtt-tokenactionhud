@@ -71,7 +71,6 @@ export class ActionHandler {
             return;
 
         category.name = categoryName;
-        category.id = categoryName;
 
         if (category.subcategories.length > 0 || category.choices > 0)
             result.categories.push(category);
@@ -120,7 +119,7 @@ export class ActionHandler {
         if (!pack)
             return;
 
-        let result = this.initializeEmptyCategory();
+        let result = this.initializeEmptyCategory(compendiumKey);
 
         let macroType = isMacros ? 'macros' : 'compendium';            
 

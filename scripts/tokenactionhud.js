@@ -292,9 +292,12 @@ export class TokenActionHUD extends Application {
         this.resizeActions(actions, contentDefaultWidth);
 
         let changeStep = 30;
+        
+        let bottomLimit = $(document).find('#hotbar').offset().top - 20;
+        let rightLimit = $(document).find('#sidebar').offset().left - 20;
 
         let maxRequiredWidth = this.calculateMaxRequiredWidth(actions);
-        while (this.shouldIncreaseWidth(content, actions, maxRequiredWidth)) {
+        while (this.shouldIncreaseWidth(content, actions, maxRequiredWidth, bottomLimit, rightLimit)) {
             let actionRect = actions[0].getBoundingClientRect();
             let actionWidth = actionRect.width;
             
@@ -303,7 +306,7 @@ export class TokenActionHUD extends Application {
             this.resizeActions(actions, newWidth);          
         }
 
-        while (this.shouldShrinkWidth(content, actions, minPossibleWidth)) {
+        while (this.shouldShrinkWidth(content, actions, minPossibleWidth, bottomLimit, rightLimit)) {
             let actionRect = actions[0].getBoundingClientRect();
             let actionWidth = actionRect.width;
 
@@ -336,14 +339,11 @@ export class TokenActionHUD extends Application {
         return maxWidth;
     }
 
-    shouldIncreaseWidth(content, actions, maxRequiredWidth) {
-        let windowBottomLimit = window.innerHeight - 100;
-        let windowRightLimit = window.innerWidth - 300;
-
+    shouldIncreaseWidth(content, actions, maxRequiredWidth, bottomLimit, rightLimit) {
         let contentRect = content[0].getBoundingClientRect();
         let actionsRect = actions[0].getBoundingClientRect();
 
-        if (actionsRect.right >= windowRightLimit)
+        if (actionsRect.right >= rightLimit)
             return false;
 
         if (actionsRect.width >= maxRequiredWidth)
@@ -352,16 +352,13 @@ export class TokenActionHUD extends Application {
         let actionArray = Array.from(content.find('.tah-action')).sort((a, b) => $(a).offset().top - $(b).offset().top);
         let rows = this.calculateRows(actionArray);
         let columns = this.calculateMaxRowButtons(actionArray);
-        if (contentRect.bottom <= windowBottomLimit && columns >= rows)
+        if (contentRect.bottom <= bottomLimit && columns >= rows)
             return false;
         
         return true;
     }
 
-    shouldShrinkWidth(content, actions, actionsMinWidth) {
-        let windowBottomLimit = window.innerHeight - 100;
-        let windowRightLimit = window.innerWidth - 300;
-
+    shouldShrinkWidth(content, actions, actionsMinWidth, bottomLimit, rightLimit) {
         let contentRect = content[0].getBoundingClientRect();
         let actionsRect = actions[0].getBoundingClientRect();
 
