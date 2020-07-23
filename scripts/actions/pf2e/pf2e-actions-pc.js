@@ -1,4 +1,3 @@
-import {ActionHandlerPf2e} from './pf2e-actions.js';
 import * as settings from '../../settings.js';
 
 export class PcActionHandlerPf2e {
@@ -16,7 +15,8 @@ export class PcActionHandlerPf2e {
         let feats = this.baseHandler._getFeatsList(actor, tokenId);
         let skills = this._getSkillsList(actor, tokenId);
         let saves = this.baseHandler._getSaveList(actor, tokenId);
-        let attributes = this._getAttributeList(actor, tokenId);        
+        let attributes = this._getAttributeList(actor, tokenId);
+        let utilities = this.baseHandler._getUtilityList(actor, tokenId);
         
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.strikes'), strikes);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.actions'), actions);
@@ -25,11 +25,14 @@ export class PcActionHandlerPf2e {
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.features'), feats);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.skills'), skills);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.saves'), saves);
+
         if (settings.get('showPcAbilities')) {
             let abilities = this.baseHandler._getAbilityList(actor, tokenId);
             this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.abilities'), abilities);
         }
+
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.attributes'), attributes);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.utility'), utilities)
     }
 
     /** @private */

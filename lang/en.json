@@ -63,6 +63,9 @@
     "tokenactionhud.treasure": "Treasure",
     "tokenactionhud.unrollable": "Unrollable",
     "tokenactionhud.weapons": "Weapons",
+    "tokenactionhud.restNight": "Rest for the Night",
+    "tokenactionhud.treatWounds": "Treat Wounds",
+    "tokenactionhud.heroPoints": "Hero Points",
     
     "tokenactionhud.utility": "Utility",
     "tokenactionhud.toggleCombatState": "Toggle Combat State",

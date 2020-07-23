@@ -16,7 +16,8 @@ export class NpcActionHandlerPf2e {
         let feats = this.baseHandler._getFeatsList(actor, tokenId);
         let skills = this._getSkillsListNpc(actor, tokenId);
         let saves = this.baseHandler._getSaveList(actor, tokenId);
-        let attributes = this._getAttributeListNpc(actor, tokenId);     
+        let attributes = this._getAttributeListNpc(actor, tokenId); 
+        let utilities = this.baseHandler._getUtilityList(actor, tokenId); 
         
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.strikes'), strikes);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.actions'), actions);
@@ -30,6 +31,7 @@ export class NpcActionHandlerPf2e {
             this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.abilities'), abilities);
         }
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.attributes'), attributes);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.utility'), utilities)
     }
 
     /** @private */
