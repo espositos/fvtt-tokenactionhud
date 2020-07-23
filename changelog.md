@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.9] 2021-07-23
+### Added
+- French localization thanks to LeRatierBretonnien
+
 ## [0.5.8] 2021-07-23
 ### Changed
 - PF2E moved hero points to top of utility category
