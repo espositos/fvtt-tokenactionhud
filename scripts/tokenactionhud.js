@@ -349,13 +349,16 @@ export class TokenActionHUD extends Application {
         if (actionsRect.width >= maxRequiredWidth)
             return false;
 
-        if (contentRect.bottom <= windowBottomLimit && actionsRect.width/contentRect.height > 2.7)
+        let actionArray = Array.from(content.find('.tah-action')).sort((a, b) => $(a).offset().top - $(b).offset().top);
+        let rows = this.calculateRows(actionArray);
+        let columns = this.calculateMaxRowButtons(actionArray);
+        if (contentRect.bottom <= windowBottomLimit && columns >= rows)
             return false;
         
         return true;
     }
 
-    shouldShrinkWidth(content, actions, actionsMinWidth) {
+    shouldShrinkWidth(content, actions, actionsMinWidth, minRows) {
         let windowBottomLimit = window.innerHeight - 100;
         let windowRightLimit = window.innerWidth - 300;
 
@@ -368,37 +371,61 @@ export class TokenActionHUD extends Application {
         if (actionsRect.width <= actionsMinWidth)
             return false;
 
-        //let rows = this.calculateRows(content);
-        //let columns = this.calculateColumns(content);
-        if (actionsRect.right <= windowRightLimit && actionsRect.width/contentRect.height < 2.7)
+        let actionArray = Array.from(content.find('.tah-action')).sort((a, b) => $(a).offset().top - $(b).offset().top);
+        let rows = this.calculateRows(actionArray);
+        let columns = this.calculateMaxRowButtons(actionArray);
+
+        if (actionsRect.right <= windowRightLimit && rows >= columns - 1)
             return false;
 
         return true;
     }
 
-    calculateRows(content) {
-        var rows = [];
+    calculateRows(actionArray) {
+        var rows = 0;
+        let currentTopOffset = 0;
+        let closeRange = 5;
 
-        Array.from(content.find('.tah-action'))
-            .forEach(a => {
-                let closeRange = 5;
-                let offset = $(a).offset().top
-                let close = false;
-                if (rows.length === 0) {
-                    rows.push(offset);
-                    return;
-                }
-                for (let r of rows) {
-                    if (close)
-                        return;
-                    if (Math.abs(r - offset) <= closeRange)
-                        close = true;
-                }
-                if (!close)
-                    rows.push(offset);
+        actionArray.forEach(a => {
+            let offset = $(a).offset().top
+
+            if (Math.abs(currentTopOffset - offset) >= closeRange) {
+                rows++;
+                currentTopOffset = offset;
+            }
         });
 
-        return rows.length;
+        return rows;
+    }
+
+    calculateMaxRowButtons(actionArray) {
+        if (actionArray.length < 2)
+            return actionArray.length;
+
+        var rowButtons = [];
+        let currentTopOffset = 0;
+        let rowButtonCounter = 0;
+        let closeRange = 5;
+
+        actionArray.forEach(a => {
+            let offset = $(a).offset().top;
+
+            if (Math.abs(currentTopOffset - offset) >= closeRange) {
+                if (rowButtonCounter >= 1)
+                    rowButtons.push(rowButtonCounter);
+
+                currentTopOffset = offset;
+                rowButtonCounter = 1;
+            } else {
+                rowButtonCounter++;
+            }
+
+            // if it's the final object, add counter anyway in case it was missed.
+            if (rowButtonCounter >= 1 && actionArray.indexOf(a) === actionArray.length - 1)
+                rowButtons.push(rowButtonCounter);
+        });
+
+        return Math.max(...rowButtons);
     }
 
     resizeActions(actions, newWidth) {
