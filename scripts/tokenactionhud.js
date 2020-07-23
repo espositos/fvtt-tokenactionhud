@@ -281,6 +281,7 @@ export class TokenActionHUD extends Application {
             return;        
         
         let content = category.find('.tah-content');
+        let isOneLineFit = category.hasClass('oneLine');
         let actions = category.find('.tah-actions');
         
         if (actions.length === 0)
@@ -297,7 +298,7 @@ export class TokenActionHUD extends Application {
         let rightLimit = $(document).find('#sidebar').offset().left - 20;
 
         let maxRequiredWidth = this.calculateMaxRequiredWidth(actions);
-        while (this.shouldIncreaseWidth(content, actions, maxRequiredWidth, bottomLimit, rightLimit)) {
+        while (this.shouldIncreaseWidth(content, actions, maxRequiredWidth, bottomLimit, rightLimit, isOneLineFit)) {
             let actionRect = actions[0].getBoundingClientRect();
             let actionWidth = actionRect.width;
             
@@ -306,7 +307,7 @@ export class TokenActionHUD extends Application {
             this.resizeActions(actions, newWidth);          
         }
 
-        while (this.shouldShrinkWidth(content, actions, minPossibleWidth, bottomLimit, rightLimit)) {
+        while (this.shouldShrinkWidth(content, actions, minPossibleWidth, bottomLimit, rightLimit, isOneLineFit)) {
             let actionRect = actions[0].getBoundingClientRect();
             let actionWidth = actionRect.width;
 
@@ -339,7 +340,7 @@ export class TokenActionHUD extends Application {
         return maxWidth;
     }
 
-    shouldIncreaseWidth(content, actions, maxRequiredWidth, bottomLimit, rightLimit) {
+    shouldIncreaseWidth(content, actions, maxRequiredWidth, bottomLimit, rightLimit, isOneLineFit) {
         let contentRect = content[0].getBoundingClientRect();
         let actionsRect = actions[0].getBoundingClientRect();
 
@@ -352,13 +353,13 @@ export class TokenActionHUD extends Application {
         let actionArray = Array.from(content.find('.tah-action')).sort((a, b) => $(a).offset().top - $(b).offset().top);
         let rows = this.calculateRows(actionArray);
         let columns = this.calculateMaxRowButtons(actionArray);
-        if (contentRect.bottom <= bottomLimit && columns >= rows)
+        if (contentRect.bottom <= bottomLimit && columns >= rows && !isOneLineFit)
             return false;
         
         return true;
     }
 
-    shouldShrinkWidth(content, actions, actionsMinWidth, bottomLimit, rightLimit) {
+    shouldShrinkWidth(content, actions, actionsMinWidth, bottomLimit, rightLimit, isOneLineFit) {
         let contentRect = content[0].getBoundingClientRect();
         let actionsRect = actions[0].getBoundingClientRect();
 
@@ -372,7 +373,7 @@ export class TokenActionHUD extends Application {
         let rows = this.calculateRows(actionArray);
         let columns = this.calculateMaxRowButtons(actionArray);
 
-        if (actionsRect.right <= windowRightLimit && rows >= columns - 1)
+        if (actionsRect.right <= windowRightLimit && rows >= columns - 1 && isOneLineFit)
             return false;
 
         return true;

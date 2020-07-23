@@ -36,6 +36,7 @@ export class PcActionHandlerPf2e {
     _getStrikesList(actor, tokenId) {
         let macroType = 'strike';
         let result = this.baseHandler.initializeEmptyCategory('strikes');
+        result.cssClass = 'oneLine';
 
         let strikes = actor.data.data.actions.filter(a => a.type === macroType);
         

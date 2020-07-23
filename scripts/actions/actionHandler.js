@@ -17,7 +17,8 @@ export class ActionHandler {
         id: '',
         name: '',
         canFilter: false,
-        subcategories: []
+        subcategories: [],
+        cssClass: ''
     }
 
     emptySubcategory = {

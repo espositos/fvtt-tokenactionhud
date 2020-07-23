@@ -1,5 +1,5 @@
 
-<div class="tah-category" {{#if this.id}}id="tah-category-{{this.id}}"{{/if}}>
+<div class="tah-category{{#if cssClass}} {{cssClass}}{{/if}}" {{#if this.id}}id="tah-category-{{this.id}}"{{/if}}>
     <button class="tah-title-button"{{#if this.canFilter}} value="{{this.id}}"{{/if}}>{{cap this.name}} {{#if this.canFilter}}<i class="fa fa-filter" aria-hidden="true"></i>{{/if}}</button>
     <div class="tah-content">
         {{#each subcategories}}
