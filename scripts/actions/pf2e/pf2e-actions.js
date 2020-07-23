@@ -397,21 +397,6 @@ export class ActionHandlerPf2e extends ActionHandler {
         let macroType = 'utility';
         
         if (actor.data.type === 'character') {
-            
-            let rests = this.initializeEmptySubcategory();
-
-            let restActions = [];
-            let shortRestValue = ['utility', tokenId, 'shortRest'].join(this.delimiter);
-            let shortRestAction = {id: 'shortRest', name: this.i18n('tokenactionhud.treatWounds'), encodedValue: shortRestValue}
-            restActions.push(shortRestAction)
-    
-            let longRestValue = ['utility', tokenId, 'longRest'].join(this.delimiter);
-            let longRestAction = {id: 'longRest', name: this.i18n('tokenactionhud.restNight'), encodedValue: longRestValue}
-            restActions.push(longRestAction)
-            rests.actions = restActions;
-            
-            this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.rests'), rests);
-
 
             let heroPoints = this.initializeEmptySubcategory();
             let heroPointsActions = [];
@@ -429,6 +414,20 @@ export class ActionHandlerPf2e extends ActionHandler {
                 heroPoints.info1 = `${hp.rank}/${hp.max}`;
 
             this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.heroPoints'), heroPoints);
+            
+            let rests = this.initializeEmptySubcategory();
+
+            let restActions = [];
+            let shortRestValue = ['utility', tokenId, 'shortRest'].join(this.delimiter);
+            let shortRestAction = {id: 'shortRest', name: this.i18n('tokenactionhud.treatWounds'), encodedValue: shortRestValue}
+            restActions.push(shortRestAction)
+    
+            let longRestValue = ['utility', tokenId, 'longRest'].join(this.delimiter);
+            let longRestAction = {id: 'longRest', name: this.i18n('tokenactionhud.restNight'), encodedValue: longRestValue}
+            restActions.push(longRestAction)
+            rests.actions = restActions;
+            
+            this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.rests'), rests);
         }
 
         let utility = this.initializeEmptySubcategory();
