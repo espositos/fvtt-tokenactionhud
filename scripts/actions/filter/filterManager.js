@@ -83,27 +83,31 @@ export class FilterManager {
     }
 
     _getFilter(filterId) {
-        return this.filters.find(f => f.id === filterId) ?? this.createFilter(c.id);
+        return this.filters.find(f => f.id === filterId) ?? this.createFilter(filterId);
     }
 
     getCompendiumChoices() {
-        return game.packs.entries.filter(p => {
+        let choices = game.packs.entries.filter(p => {
             let packTypes = ['JournalEntry', 'Macro', 'RollTable'];
             return packTypes.includes(p.metadata.entity);
-        }).map(p => {return {id: p.key, value: p.metadata.label} });
+        }).map(p => {return {id: `${p.metadata.package}.${p.metadata.name}`, value: p.metadata.label} });
+
+        return choices;
     }
 
     getChosenCompendiums() {
-        return [];
+        let compendiums = this.getCompendiumChoices();
+        let filterIds = this.filters.map(f => f.id);
+        return compendiums.filter(c => filterIds.includes(c.id))
     }
 
     async setCompendiums(compendiums) {
-        for (let c in compendiums) {
+        for (let c of compendiums) {
             let filter = this._getFilter(c.id);
             let pack = game.packs.get(c.id);
-            let index = pack.index.length > 0 ? c.index : await c.getIndex();
+            let index = pack.index.length > 0 ? pack.index : await pack.getIndex();
             let suggestions = index.map(e => {return {id: e.id, value: e.name}})
-            this._setSuggestions(filter.id, suggestions);
+            this.setSuggestions(filter.id, suggestions);
         }
     }
 }
