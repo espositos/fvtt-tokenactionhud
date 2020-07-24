@@ -132,6 +132,7 @@ export class ActionHandler {
             return;
 
         let result = this.initializeEmptyCategory(compendiumKey);
+        this.filterManager.setCanFilter(result);
 
         let macroType = isMacros ? 'macros' : 'compendium';            
 
