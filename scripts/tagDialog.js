@@ -84,14 +84,10 @@ export class TagDialog extends Dialog {
     }
     
     static showCompendiumDialog(filterManager) {
-        let choices = Object.entries(game.packs).filter(p => {
-            let types = ['Journal', 'Macro', 'RollTable'];
-            return types.includes(p[1].metadata.entity)
-        }).map(p => { return { id: p[0], value:p[1].metadata.label } });
+        let choices = filterManager.getCompendiumChoices();
+        let filters = filterManager.getChosenCompendiums();
 
-        let filters = filterManager.getCompendiums();
         let tagify;
-
         Hooks.once('renderTagDialog', (app, html, options) => {
 
             html.css('height', 'auto');
@@ -122,7 +118,6 @@ export class TagDialog extends Dialog {
                 clearBtn.on('click', tagify.removeAllTags.bind(tagify))
                 clearBtn.css('float', 'right');
                 clearBtn.css('width', 'auto');
-
             }
 
         })

@@ -40,7 +40,7 @@ export class TokenActionHUD extends Application {
     }
 
     submitCompendiums(choices) {
-        this.actions.submitCompendiums(choices);
+        this.filterManager.setCompendiums(choices);
         this.update()
     }
 
