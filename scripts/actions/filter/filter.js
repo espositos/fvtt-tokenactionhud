@@ -2,7 +2,7 @@ export class Filter {
     id = '';
     isBlocklist = false;
     filteredElements = [];
-    choices = [];
+    possibleChoices = [];
 
     constructor(id) {
         this.id = id;
@@ -16,7 +16,7 @@ export class Filter {
     }
 
     getSuggestions() {
-        return this.choices;
+        return this.possibleChoices;
     }
 
     getFilteredElements() {
@@ -35,6 +35,6 @@ export class Filter {
 
     setSuggestions(choices) {
         if (Array.isArray(choices))
-            this.choices = choices;
+            this.possibleChoices = choices;
     }
 }

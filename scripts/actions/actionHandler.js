@@ -35,15 +35,16 @@ export class ActionHandler {
         this.filterManager = filterManager;
     }
 
-    async buildActionList(token, filters) {
-        let actionList = await this.doBuildActionList(token, filters);
-        this._doBuildFurtherActions(token, filters, actionList);
+    async buildActionList(token) {
+        let actionList = await this.doBuildActionList(token);
+        this._doBuildFurtherActions(token, actionList);
+        this._addFilteredCompendiums(actionList);
         return actionList;
     }
 
-    async doBuildActionList(token, filters) {};
+    async doBuildActionList(token) {};
 
-    _doBuildFurtherActions(token, filters, actionList) {
+    _doBuildFurtherActions(token, actionList) {
         this.furtherActionHandlers.forEach(handler => handler.extendActionList(actionList))
     }
 
@@ -89,8 +90,17 @@ export class ActionHandler {
     }
 
     /** Compendiums */
+    _addFilteredCompendiums(actionList) {
+        let compendiums = this.filterManager.getChosenCompendiums().map(c => {
+            let isMacro = game.packs.get(key)?.metadata.entity === 'Macro';
+            return {name: name, key: key, isMacro: isMacro};
+        });
 
-    _addGmSystemCompendium(name, key, isMacro) {
+        this._combineCompendiums(actionList, compendiums);
+    }
+
+    _addGmSystemCompendium(name, key) {
+        let isMacro = game.packs.get(key)?.metadata.entity === 'Macro';
         this.linkedCompendiumsGm.push( {name: name, key: key, isMacro: isMacro} );
     }
 

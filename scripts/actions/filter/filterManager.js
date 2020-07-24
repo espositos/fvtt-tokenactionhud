@@ -22,12 +22,12 @@ export class FilterManager {
     }
 
     createFilter(filterId) {
-        if (!this.filters.some(f => f.id === filterId)) {
-            let filter = new Filter(filterId);
-            this.filters.push(filter);
-        }
+        if (this.filters.some(f => f.id === filterId))
+            return this.filters.find(f => f.id);
 
-        return this;
+        let filter = new Filter(filterId);
+        this.filters.push(filter);
+        return filter;
     }
 
     setCanFilter(category) {
@@ -83,6 +83,27 @@ export class FilterManager {
     }
 
     _getFilter(filterId) {
-        return this.filters.find(f => f.id === filterId) ?? new Filter();
+        return this.filters.find(f => f.id === filterId) ?? this.createFilter(c.id);
+    }
+
+    getCompendiumChoices() {
+        return game.packs.entries.filter(p => {
+            let packTypes = ['JournalEntry', 'Macro', 'RollTable'];
+            return packTypes.includes(p.metadata.entity);
+        }).map(p => {return {id: p.key, value: p.metadata.label} });
+    }
+
+    getChosenCompendiums() {
+        return [];
+    }
+
+    async setCompendiums(compendiums) {
+        for (let c in compendiums) {
+            let filter = this._getFilter(c.id);
+            let pack = game.packs.get(c.id);
+            let index = pack.index.length > 0 ? c.index : await c.getIndex();
+            let suggestions = index.map(e => {return {id: e.id, value: e.name}})
+            this._setSuggestions(filter.id, suggestions);
+        }
     }
 }

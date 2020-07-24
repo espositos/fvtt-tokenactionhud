@@ -4,13 +4,13 @@ import * as settings from '../../settings.js';
 export class ActionHandlerDw extends ActionHandler {
     constructor (filterManager) {
         super(filterManager);
-        this._addGmSystemCompendium(this.i18n('tokenactionhud.moves'), 'dungeonworld.gm-movesprincipals', false);
-        this._addGmSystemCompendium(this.i18n('tokenactionhud.charts'), 'dungeonworld.charts', false);
-        this._addGmSystemCompendium(this.i18n('tokenactionhud.treasure'), 'dungeonworld.rollable-tables', false);
+        this._addGmSystemCompendium(this.i18n('tokenactionhud.moves'), 'dungeonworld.gm-movesprincipals');
+        this._addGmSystemCompendium(this.i18n('tokenactionhud.charts'), 'dungeonworld.charts');
+        this._addGmSystemCompendium(this.i18n('tokenactionhud.treasure'), 'dungeonworld.rollable-tables');
     }
 
     /** @override */
-    async doBuildActionList(token, filters) {
+    async doBuildActionList(token) {
         let result = this.initializeEmptyActionList();
 
         if (settings.get('showGmCompendiums'))
