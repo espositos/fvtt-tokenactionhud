@@ -182,6 +182,12 @@ export class TokenActionHUD extends Application {
                 game.tokenActionHUD.showFilterDialog(target.value);
         });
 
+        html.find('.tah-subtitle').contextmenu('click', e => {
+            let target = e.target;
+            if(target.value.length > 0)
+                game.tokenActionHUD.showFilterDialog(target.value);
+        });
+
         html.find('.tah-category').hover(
             // mouseenter    
             function() {

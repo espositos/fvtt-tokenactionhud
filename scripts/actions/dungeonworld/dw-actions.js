@@ -69,7 +69,7 @@ export class ActionHandlerDw extends ActionHandler {
         let encodedValue = ['damage', tokenId, 'damage'].join(this.delimiter);
         damageCategory.actions.push({name: this.i18n('DW.Damage'), encodedValue: encodedValue, id: 'damage' })
 
-        this._combineSubcategoryWithCategory(result, 'damage', damageCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('DW.Damage'), damageCategory);
 
         return result;
     }

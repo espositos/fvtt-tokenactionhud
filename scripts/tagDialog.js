@@ -4,6 +4,7 @@ export class TagDialog extends Dialog {
         this.data = dialogData;
     }
     
+    // Currently only used for WFRP skill filter
     static showTagDialog(filterManager, categoryId) {
         let choices = filterManager.getSuggestions(categoryId);
         let filters = filterManager.getFilteredElements(categoryId);
@@ -82,6 +83,10 @@ export class TagDialog extends Dialog {
 
            d.render(true);
     }
+
+    showCategoryDialog(categoryManager) {
+        let existingCategories = categoryManager.getExistingCategories();
+    }
     
     static showCompendiumDialog(filterManager) {
         let choices = filterManager.getCompendiumChoices();
@@ -137,6 +142,79 @@ export class TagDialog extends Dialog {
                 callback: (html) => {
                     let choices = tagify.value;
                     game.tokenActionHUD.submitCompendiums(choices);
+                }
+                },
+                cancel: {
+                icon: '<i class="fas fa-times"></i>',
+                label: game.i18n.localize("tokenactionhud.cancel")
+                }
+            },
+            default: 'accept',
+            });
+
+            d.render(true);
+    }
+
+    static createCategoryDialog(categoryManager) {
+        let selected = categoryManager.getSelectedCategories();
+        let suggestions = categoryManager.getAvailableCategories();
+
+        let prompt = game.i18n.localize('tokenactionhud.filterPlaceholder');
+        let title = game.i18n.localize('tokenactionhud.filterTitle');
+        let content = ` <div><label>${prompt}</label></div>
+                        <div><input name='tokenactionhud-taginput' class='some_class_name'/></div>
+                        <div><button class="tags--removeAllBtn">Clear</button></div>`
+
+        TagDialog.showDialog(suggestions, selected, title, content, prompt)
+    }
+    
+    static showDialog(suggestions, selected, title, content, prompt) {
+        let tagify;
+        Hooks.once('renderTagDialog', (app, html, options) => {
+
+            html.css('height', 'auto');
+
+            var $taglist = html.find('input[name="tokenactionhud-taginput"]');
+            
+            if ($taglist.length > 0) {
+                let options = {
+                    placeholder: prompt,
+                    delimiters: ';',
+                    maxTags: 'Infinity',
+                    dropdown: {
+                        maxItems: 20,           // <- maxumum allowed rendered suggestions
+                        classname: 'tags-look', // <- custom classname for this dropdown, so it could be targeted
+                        enabled: 0,             // <- show suggestions on focus
+                        closeOnSelect: false    // <- do not hide the suggestions dropdown once an item has been selected
+                    }
+                }
+
+                if (suggestions)
+                    options.whitelist = suggestions;
+
+                if (selected)
+                    options.selected = selected;
+
+                tagify = new Tagify($taglist[0], options);
+
+                // "remove all tags" button event listener
+                let clearBtn = html.find('button[class="tags--removeAllBtn"]');
+                clearBtn.on('click', tagify.removeAllTags.bind(tagify))
+                clearBtn.css('float', 'right');
+                clearBtn.css('width', 'auto');
+            }
+        })
+        
+        let d = new TagDialog({
+            title: title,
+            content: content,
+            buttons: {
+                accept: {
+                icon: '<i class="fas fa-check"></i>',
+                label: game.i18n.localize("tokenactionhud.accept"),
+                callback: (html) => {
+                    let selection = tagify.value;
+                    game.tokenActionHud.submitCategories(selection);
                 }
                 },
                 cancel: {

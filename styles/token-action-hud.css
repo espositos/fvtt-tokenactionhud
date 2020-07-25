@@ -132,6 +132,28 @@
     line-height: 1em;
 }
 
+.tah-subtitle > .fa, .tah-subtitle > .fas {
+    visibility:hidden;
+    width: auto;
+    height: auto;
+    color: #fff;
+    text-align: center;
+    font-size: xx-small;
+    padding: 1px;
+    margin: 1px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    pointer-events: none;
+    position: absolute;
+    z-index: 1;
+    top: 2px;
+    right: 2px; 
+}
+
+.tah-subtitle:hover > .fa, .tah-subtitle:hover > .fas {
+    visibility:visible;
+}
+
 .tah-actions {
     grid-column: 2;
     display: flex;
