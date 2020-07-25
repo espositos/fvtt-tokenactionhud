@@ -92,8 +92,9 @@ export class ActionHandler {
     /** Compendiums */
     _addFilteredCompendiums(actionList) {
         let compendiums = this.filterManager.getChosenCompendiums().map(c => {
-            let isMacro = game.packs.get(key)?.metadata.entity === 'Macro';
-            return {name: name, key: key, isMacro: isMacro};
+            let pack = game.packs.get(c.id);
+            let isMacro = pack.metadata.entity === 'Macro';
+            return {name: pack.metadata.label, key: `${pack.metadata.package}.${pack.metadata.name}`, isMacro: isMacro};
         });
 
         this._combineCompendiums(actionList, compendiums);
@@ -131,6 +132,7 @@ export class ActionHandler {
             return;
 
         let result = this.initializeEmptyCategory(compendiumKey);
+        this.filterManager.setCanFilter(result);
 
         let macroType = isMacros ? 'macros' : 'compendium';            
 
