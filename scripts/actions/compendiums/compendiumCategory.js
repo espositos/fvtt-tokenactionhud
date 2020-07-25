@@ -1,6 +1,6 @@
 import {HudCompendium} from './hudCompendium.js';
 
-export class HudCategory {
+export class CompendiumCategory {
     compendiums = [];
     id = '';
     title = '';
@@ -11,14 +11,14 @@ export class HudCategory {
         this.title = title;
     }
 
-    addToList(actionList) {
+    addToActionList(actionList) {
         let result = this.actionHandler.initializeEmptyCategory(this.id);
         this.compendiums.forEach(c => c.addToCategory(result));
         this.actionHandler._combineCategoryWithList(actionList, this.title, result);
         return actionList;
     }
 
-    setCompendiums(compendiums) {
+    selectCompendiums(compendiums) {
         for (let c of compendiums) {
             this.addCompendium(c);
         }
@@ -27,6 +27,8 @@ export class HudCategory {
             if (!idMap.includes(this.compendiums[i].id))
                 this.compendiums.splice(i, 1);
         }
+
+        this.updateFlag();
     }
 
     addCompendium(compendium) {
@@ -36,5 +38,15 @@ export class HudCategory {
         let hudCompendium = new HudCompendium(this.actionHandler, this.filterManager, compendium.id, compendium.value);
 
         this.compendiums.push(hudCompendium);
+    }
+
+    unsetFlag() {
+        game.user.unsetFlag('token-action-hud', `categories.${this.id}`);
+    }
+
+    updateFlag() {
+        let compendiums = this.compendiums.map(c => {return {id: c.id, title: c.title }});
+        let contents = {title: this.title, compendiums: compendiums};
+        game.user.setFlag('token-action-hud', `categories.${this.id}`, contents);
     }
 }

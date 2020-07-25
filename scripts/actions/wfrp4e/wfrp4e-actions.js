@@ -5,7 +5,7 @@ export class ActionHandlerWfrp extends ActionHandler {
         super();
 
         this.filterManager = filterManager;
-        filterManager.createFilter('skills');
+        filterManager.createOrGetFilter('skills');
     }    
 
     /** @override */

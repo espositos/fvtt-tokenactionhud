@@ -12,7 +12,7 @@ export class HudCompendium {
     }
 
     createFilter() {
-        this.filterManager.createFilter(this.id);
+        this.filterManager.createOrGetFilter(this.id);
     }
 
     async submitFilterSuggestions() {
@@ -28,8 +28,7 @@ export class HudCompendium {
     async addToCategory(category) {
         let subcategory = this.actionHandler.initializeEmptySubcategory(this.id);
         subcategory.actions = await this._createCompendiumActions();
-
-        this.filterManager.setCanFilter(subcategory);
+        subcategory.canFilter = true;
         this.actionHandler._combineSubcategoryWithCategory(category, this.title, subcategory);
     }
 

@@ -21,7 +21,7 @@ export class FilterManager {
         })
     }
 
-    createFilter(filterId) {
+    createOrGetFilter(filterId) {
         if (this.filters.some(f => f.id === filterId))
             return this.filters.find(f => f.id);
 
@@ -83,7 +83,7 @@ export class FilterManager {
     }
 
     _getFilter(filterId) {
-        return this.filters.find(f => f.id === filterId) ?? this.createFilter(filterId);
+        return this.filters.find(f => f.id === filterId) ?? this.createOrGetFilter(filterId);
     }
 
     getCompendiumChoices() {
