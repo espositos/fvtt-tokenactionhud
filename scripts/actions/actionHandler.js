@@ -2,6 +2,7 @@ import * as settings from '../settings.js';
 
 export class ActionHandler {
     i18n = (toTranslate) => game.i18n.localize(toTranslate);
+    
     linkedCompendiumsGm = [];
     linkedCompendiumsPlayer = [];
     furtherActionHandlers = [];

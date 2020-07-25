@@ -28,6 +28,8 @@ Hooks.on('canvasReady', () => {
         let system = game.data.system.id;
         let user = game.user;
         let filterManager = new FilterManager(user);
+        let categoryManager = new CategoryManager(user);
+        let compendiumManager = new CompendiumManager(filterManager)
         let actionHandler = HandlersManager.getActionHandler(system, filterManager);
         
         let handlerId = settings.get('rollHandler');

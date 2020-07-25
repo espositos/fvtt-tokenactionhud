@@ -1,9 +1,8 @@
-import {CompendiumManager} from './compendiumManager.js';
+import { CompendiumHelper } from './compendiumHelper.js';
 
 export class HudCompendium {
     constructor(actionHandler, filterManager, id, title) {
         this.actionHandler = actionHandler;
-        this.compendiumManager = compendiumManager;
         this.filterManager = filterManager;
         this.id = id;
         this.title = title;
@@ -17,7 +16,7 @@ export class HudCompendium {
     }
 
     async submitFilterSuggestions() {
-        let suggestions = await CompendiumManager.getCompendiumEntriesForFilter(this.id);
+        let suggestions = await CompendiumHelper.getCompendiumEntriesForFilter(this.id);
         this.filterManager.setSuggestions(this.id, suggestions);
     }
 
@@ -35,7 +34,7 @@ export class HudCompendium {
     }
 
     async _createCompendiumActions() {
-        let packEntries = await CompendiumManager.getEntriesForActions(this.id);
+        let packEntries = await CompendiumHelper.getEntriesForActions(this.id);
 
         let filters = this.filterManager.getFilteredIds(this.id);
         let isBlocklist = this.filterManager.isBlocklist(this.id);
