@@ -42,4 +42,8 @@ export class HudCompendium {
         
         return actions;
     }
+
+    asTagifyEntry() {
+        return {id: this.id, value: this.title}
+    }
 }

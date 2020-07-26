@@ -13,6 +13,7 @@ export class CompendiumCategory {
     addToActionList(actionHandler, actionList) {
         let result = actionHandler.initializeEmptyCategory(this.id);
         this.compendiums.forEach(c => c.addToCategory(result));
+        result.holdsCompendiums = true;
         actionHandler._combineCategoryWithList(actionList, this.title, result);
         return actionList;
     }
@@ -28,7 +29,7 @@ export class CompendiumCategory {
         for (var i = this.compendiums.length - 1; i >= 0; i--) {
             let compendium = this.compendiums[i];
             if (!idMap.includes(compendium.id))
-                this.compendiums = this.compendiums.splice(i, 1);
+                this.compendiums.splice(i, 1);
         }
 
         this.updateFlag();
@@ -50,10 +51,15 @@ export class CompendiumCategory {
     updateFlag() {
         let compendiums = this.compendiums.map(c => {return {id: c.id, title: c.title }});
         let contents = {title: this.title, compendiums: compendiums};
+        this.unsetFlag();
         game.user.setFlag('token-action-hud', `compendiumCategories.${this.id}`, contents);
     }
 
     asTagifyEntry() {
         return {id: this.id, value: this.title}
+    }
+
+    getCompendiumsAsTagifyEntries() {
+        return this.compendiums.map(c => c.asTagifyEntry())
     }
 }

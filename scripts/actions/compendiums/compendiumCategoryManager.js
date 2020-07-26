@@ -15,7 +15,7 @@ export class CompendiumCategoryManager {
             Object.entries(savedCategories).forEach(f => {
                 let category = new CompendiumCategory(f[0], f[1].title);
                 category.selectCompendiums(f[1].compendiums);
-                this.categories.push(category.as);
+                this.categories.push(category);
             })
         }
             
@@ -54,10 +54,28 @@ export class CompendiumCategoryManager {
     deleteCategory(index) {
         let category = this.categories[index];
         category.unsetFlag();
-        this.categories = this.categories.splice(index, 1);
+        this.categories.splice(index, 1);
     }
 
     getExistingCategories() {
         return this.categories.map(c => c.asTagifyEntry());
+    }
+
+    submitCompendiums(categoryId, choices) {
+        let category = this.categories.find(c => c.id === categoryId);
+
+        if (category)
+            return;
+
+        category.selectCompendiums(choices);
+    }
+
+    getCategoryCompendiumsAsTagifyEntries(categoryId) {
+        let category = this.categories.find(c => c.id === categoryId);
+
+        if (!category)
+            return;
+
+        return category.getCompendiumsAsTagifyEntries();
     }
 }

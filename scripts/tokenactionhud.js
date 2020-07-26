@@ -36,6 +36,10 @@ export class TokenActionHUD extends Application {
         TagDialog.showTagDialog(this.filterManager, categoryId);
     }
 
+    showCompendiumDialog(categoryId) {
+        TagDialog.showCompendiumDialog(categoryId, this.compendiumManager);
+    }
+
     showCategoryDialog() {
         TagDialog.showCategoryDialog(this.compendiumManager);
     }
@@ -43,6 +47,11 @@ export class TokenActionHUD extends Application {
     async submitCategories(choices) {
         this.compendiumManager.submitCategories(choices);
         this.update()
+    }
+
+    async submitCompendiums(categoryId, choices) {
+        this.compendiumManager.submitCompendiums(categoryId, choices);
+        this.update();
     }
 
     async submitFilter(categoryId, elements, isBlocklist) {
@@ -115,14 +124,21 @@ export class TokenActionHUD extends Application {
 
         html.find('.tah-title-button').contextmenu('click', e => {
             let target = e.target;
-            if(target.value.length > 0)
-                game.tokenActionHUD.showFilterDialog(target.value);
-        });
+            if(target.value.length === 0)
+                return;
 
-        html.find('.tah-subtitle').contextmenu('click', e => {
-            let target = e.target;
-            if(target.value.length > 0)
-                game.tokenActionHUD.showFilterDialog(target.value);
+            let id = '';
+            if (target.value.startsWith('filter-')) {
+                let id = target.value.replace('filter-', '');
+                game.tokenActionHUD.showFilterDialog(id);
+                return;
+            }
+
+            if (target.value.startsWith('compendiums-')) {
+                let id = target.value.replace('compendiums-', '');
+                game.tokenActionHUD.showCompendiumDialog(id);
+                return;
+            }
         });
 
         html.find('.tah-category').hover(
