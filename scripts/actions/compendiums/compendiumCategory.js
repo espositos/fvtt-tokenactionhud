@@ -5,16 +5,15 @@ export class CompendiumCategory {
     id = '';
     title = '';
 
-    constructor(actionHandler, id, title) {
-        this.actionHandler = actionHandler;
+    constructor(id, title) {
         this.id = id;
         this.title = title;
     }
 
-    addToActionList(actionList) {
-        let result = this.actionHandler.initializeEmptyCategory(this.id);
+    addToActionList(actionHandler, actionList) {
+        let result = actionHandler.initializeEmptyCategory(this.id);
         this.compendiums.forEach(c => c.addToCategory(result));
-        this.actionHandler._combineCategoryWithList(actionList, this.title, result);
+        actionHandler._combineCategoryWithList(actionList, this.title, result);
         return actionList;
     }
 
@@ -23,9 +22,13 @@ export class CompendiumCategory {
             this.addCompendium(c);
         }
 
+        if (this.compendiums.length === 0)
+            return;
+
         for (var i = this.compendiums.length - 1; i >= 0; i--) {
-            if (!idMap.includes(this.compendiums[i].id))
-                this.compendiums.splice(i, 1);
+            let compendium = this.compendiums[i];
+            if (!idMap.includes(compendium.id))
+                this.compendiums = this.compendiums.splice(i, 1);
         }
 
         this.updateFlag();
@@ -41,12 +44,16 @@ export class CompendiumCategory {
     }
 
     unsetFlag() {
-        game.user.unsetFlag('token-action-hud', `categories.${this.id}`);
+        game.user.setFlag('token-action-hud', 'compendiumCategories', {[`-=${this.id}`]: null});
     }
 
     updateFlag() {
         let compendiums = this.compendiums.map(c => {return {id: c.id, title: c.title }});
         let contents = {title: this.title, compendiums: compendiums};
-        game.user.setFlag('token-action-hud', `categories.${this.id}`, contents);
+        game.user.setFlag('token-action-hud', `compendiumCategories.${this.id}`, contents);
+    }
+
+    asTagifyEntry() {
+        return {id: this.id, value: this.title}
     }
 }

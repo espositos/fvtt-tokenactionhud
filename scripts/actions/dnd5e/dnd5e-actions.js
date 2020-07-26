@@ -2,8 +2,8 @@ import {ActionHandler} from '../actionHandler.js';
 import * as settings from '../../settings.js';
 
 export class ActionHandler5e extends ActionHandler {
-    constructor (filterManager) {
-        super(filterManager);
+    constructor (filterManager, compendiumManager) {
+        super(filterManager, compendiumManager);
     }
 
     /** @override */
@@ -233,16 +233,16 @@ export class ActionHandler5e extends ActionHandler {
             // Initialise subcategory if non-existant.
             if (power) {
                 if (!powers.subcategories.hasOwnProperty(prepType)) {
-                    let prepTypeCat = this.initializeEmptySubcategory(prepType);
-                    powers.subcategories.push(prepTypeCat);
+                    let prepTypeCat = this.initializeEmptySubcategory();
+                    this._combineSubcategoryWithCategory(powers, prepType, prepTypeCat);
                     if (max > 0) {
                         prepTypeCat.info1 = `${slots}/${max}`;
                     }
                 }
             } else {                                
                 if (!book.subcategories.hasOwnProperty(levelName)) {
-                    let levelCat = this.initializeEmptySubcategory(levelName);
-                    book.subcategories.push(levelCat);
+                    let levelCat = this.initializeEmptySubcategory();
+                    this._combineSubcategoryWithCategory(book, levelName, levelCat);
                     if (max > 0) {
                         levelCat.info1 = `${slots}/${max}`;
                     }
@@ -406,8 +406,8 @@ export class ActionHandler5e extends ActionHandler {
         let result = this.initializeEmptyCategory('utility');
         let macroType = 'utility';
         
-        let rests = this.initializeEmptySubcategory('rests')
-        let utility = this.initializeEmptySubcategory('utility');
+        let rests = this.initializeEmptySubcategory()
+        let utility = this.initializeEmptySubcategory();
 
         if (actor.data.type === 'character') {          
             let shortRestValue = [macroType, tokenId, 'shortRest'].join(this.delimiter);
@@ -433,7 +433,7 @@ export class ActionHandler5e extends ActionHandler {
         utility.actions.push(combatAction);    
         
         if (game.user.isGM) {
-            let gm = this.initializeEmptySubcategory('gm');
+            let gm = this.initializeEmptySubcategory();
             let visbilityValue = [macroType, tokenId, 'toggleVisibility'].join(this.delimiter);
             let visibilityAction = {id:'toggleVisibility', encodedValue: visbilityValue, name: this.i18n('tokenactionhud.toggleVisibility')};
             visibilityAction.cssClass = !canvas.tokens.placeables.find(t => t.data._id === tokenId).data.hidden ? 'active' : '';

@@ -1,4 +1,6 @@
 export class TagDialog extends Dialog {
+    i18n = (toTranslate) => game.i18n.localize(toTranslate);
+
     constructor(dialogData, options){
         super(options);
         this.data = dialogData;
@@ -83,12 +85,8 @@ export class TagDialog extends Dialog {
 
            d.render(true);
     }
-
-    showCategoryDialog(categoryManager) {
-        let existingCategories = categoryManager.getExistingCategories();
-    }
     
-    static showCompendiumDialog(filterManager) {
+    static showCompendiumDialog(compendiumManager) {
         let choices = filterManager.getCompendiumChoices();
         let filters = filterManager.getChosenCompendiums();
 
@@ -167,8 +165,21 @@ export class TagDialog extends Dialog {
 
         TagDialog.showDialog(suggestions, selected, title, content, prompt)
     }
+
+    static showCategoryDialog(compendiumManager) {
+        let existingCategories = compendiumManager.getExistingCategories();
+        let prompt = game.i18n.localize('tokenactionhud.filterPlaceholder');
+        let title = game.i18n.localize('tokenactionhud.filterTitle');
+        let content = ` <div><label>${prompt}</label></div>
+                        <div><input name='tokenactionhud-taginput' class='some_class_name'/></div>
+                        <div><button class="tags--removeAllBtn">Clear</button></div>`
+        let submitFunc = (choices) => {
+            game.tokenActionHUD.submitCategories(choices);
+        }
+        this.showDialog(null, existingCategories, title, content, prompt, submitFunc)
+    }
     
-    static showDialog(suggestions, selected, title, content, prompt) {
+    static showDialog(suggestions, selected, title, content, prompt, submitFunc) {
         let tagify;
         Hooks.once('renderTagDialog', (app, html, options) => {
 
@@ -192,10 +203,10 @@ export class TagDialog extends Dialog {
                 if (suggestions)
                     options.whitelist = suggestions;
 
-                if (selected)
-                    options.selected = selected;
-
                 tagify = new Tagify($taglist[0], options);
+
+                if (selected)
+                    tagify.addTags(selected);
 
                 // "remove all tags" button event listener
                 let clearBtn = html.find('button[class="tags--removeAllBtn"]');
@@ -214,7 +225,7 @@ export class TagDialog extends Dialog {
                 label: game.i18n.localize("tokenactionhud.accept"),
                 callback: (html) => {
                     let selection = tagify.value;
-                    game.tokenActionHud.submitCategories(selection);
+                    submitFunc(selection);
                 }
                 },
                 cancel: {

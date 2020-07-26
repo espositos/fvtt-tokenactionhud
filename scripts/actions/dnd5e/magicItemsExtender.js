@@ -17,7 +17,7 @@ export class MagicItemActionListExtender extends ActionListExtender {
         if (magicItems.length === 0)
             return;
 
-        let magicItemsCategory = this.initializeEmptyCategory('magicitems');
+        let magicItemsCategory = this.initializeEmptyCategory('magicItemsModule');
         magicItemsCategory.name = this.i18n('tokenactionhud.magicItems');
 
         let magicItemsIds = magicItems.map(item => item.id);

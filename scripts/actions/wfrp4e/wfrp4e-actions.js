@@ -1,11 +1,9 @@
 import {ActionHandler} from '../actionHandler.js';
 
 export class ActionHandlerWfrp extends ActionHandler {
-    constructor(filterManager) {
-        super();
-
-        this.filterManager = filterManager;
-        filterManager.createOrGetFilter('skills');
+    constructor(filterManager, compendiumManager) {
+        super(filterManager, compendiumManager);
+        this.filterManager.createOrGetFilter('skills');
     }    
 
     /** @override */

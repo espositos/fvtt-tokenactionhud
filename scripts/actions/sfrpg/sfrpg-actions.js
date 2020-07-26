@@ -2,8 +2,8 @@ import {ActionHandler} from '../actionHandler.js';
 import * as settings from '../../settings.js';
 
 export class ActionHandlerSfrpg extends ActionHandler {
-    constructor (filterManager) {
-        super(filterManager);
+    constructor (filterManager, compendiumManager) {
+        super(filterManager, compendiumManager);
     }
 
     /** @override */
@@ -162,7 +162,7 @@ export class ActionHandlerSfrpg extends ActionHandler {
     _addSubcategoryByActionType(subCategoryName, actionType, macroType, itemList, tokenId, category){
         
         
-        let subCategory = this.initializeEmptySubcategory(subCategoryName);    
+        let subCategory = this.initializeEmptySubcategory();    
 
         let itemsOfType = itemList.filter(item => item.data.actionType == actionType);
         subCategory.actions = itemsOfType.map(item => this._buildItemAction(tokenId, macroType, item));
@@ -175,7 +175,7 @@ export class ActionHandlerSfrpg extends ActionHandler {
     
     _addSubcategoryByType(subCategoryName, type, macroType, itemList, tokenId, category){
         
-        let subCategory = this.initializeEmptySubcategory(subCategoryName);    
+        let subCategory = this.initializeEmptySubcategory();    
 
         let itemsOfType = itemList.filter(item => item.type == type);
         subCategory.actions = itemsOfType.map(item => this._buildItemAction(tokenId, macroType, item));
@@ -187,7 +187,7 @@ export class ActionHandlerSfrpg extends ActionHandler {
 
     _addSubcategoryByLevel(subCategoryName, level, macroType, itemList, tokenId, category){
         
-        let subCategory = this.initializeEmptySubcategory(subCategoryName);    
+        let subCategory = this.initializeEmptySubcategory();    
 
         let itemsOfType = itemList.filter(item => item.data.level == level);
         subCategory.actions = itemsOfType.map(item => this._buildItemAction(tokenId, macroType, item));

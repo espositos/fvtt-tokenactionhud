@@ -11,44 +11,53 @@ export class CompendiumCategoryManager {
         let savedCategories = user.getFlag('token-action-hud', 'compendiumCategories');
         if (savedCategories) {
             settings.Logger.debug('saved categories:', savedCategories);
+            
+            Object.entries(savedCategories).forEach(f => {
+                let category = new CompendiumCategory(f[0], f[1].title);
+                category.selectCompendiums(f[1].compendiums);
+                this.categories.push(category.as);
+            })
         }
-
-        Object.entries(savedCategories).forEach(f => {
-            let category = new CompendiumCategory(this.actionHandler, f[0], f[1].title);
-            category.addCompendiums(f[1].compendiums);
-            this.categories.push(category);
-        })
-
+            
         this.filterManager = filterManager;
     }
 
-    addCategoriesToActionList(actionList) {
-        this.categories.forEach(c => c.addToActionList(actionList));
+    addCategoriesToActionList(actionHandler, actionList) {
+        this.categories.forEach(c => c.addToActionList(actionHandler, actionList));
     }
 
-    submitCategories(actionHandler, selections) {
+    submitCategories(selections) {
+        selections = selections.map(s => { return {id: s.value.slugify({strict: true}), value: s.value}})
         for (let choice of selections) {
             if (!this.categories.some(c => c.id === choice.id))
-                this.createCategory(actionHandler, choice);
+                this.createCategory(choice);
         }
 
         let idMap = selections.map(s => s.id);
 
+        if (this.categories.length === 0)
+            return;
+
         for (var i = this.categories.length - 1; i >= 0; i--) {
-            if (!idMap.includes(this.categories[i].id))
+            let category = this.categories[i];
+            if (!idMap.includes(category.id))
                 this.deleteCategory(i);
         }
     }
 
-    createCategory(actionHandler, category) {
-        let category = new CompendiumCategory(actionHandler, category.id, category.value);
-        category.setFlag();
+    createCategory(category) {
+        let newCategory = new CompendiumCategory(category.id, category.value);
+        newCategory.updateFlag();
         this.categories.push(newCategory);
     }
 
     deleteCategory(index) {
         let category = this.categories[index];
         category.unsetFlag();
-        this.categories.splice(i, 1);
+        this.categories = this.categories.splice(index, 1);
+    }
+
+    getExistingCategories() {
+        return this.categories.map(c => c.asTagifyEntry());
     }
 }

@@ -4,8 +4,8 @@ import { PcActionHandlerPf2e } from './pf2e-actions-pc.js';
 import { NpcActionHandlerPf2e } from './pf2e-actions-npc.js';
 
 export class ActionHandlerPf2e extends ActionHandler {
-    constructor(filterManager) {
-        super(filterManager);
+    constructor(filterManager, compendiumManager) {
+        super(filterManager, compendiumManager);
         this.pcActionHandler = new PcActionHandlerPf2e(this);
         this.npcActionHandler = new NpcActionHandlerPf2e(this);
     }    
@@ -160,8 +160,8 @@ export class ActionHandlerPf2e extends ActionHandler {
                 
                 let bookCategory;
                 if (!result.subcategories.some(s => s.name === bookName)) {
-                    bookCategory = this.initializeEmptySubcategory(bookName);
-                    result.subcategories.push(bookCategory);
+                    bookCategory = this.initializeEmptySubcategory();
+                    this._combineSubcategoryWithCategory(result, bookName, bookCategory);
                 } else {
                     bookCategory = result.subcategories.find(b => b.name === bookName);
                 }
@@ -210,7 +210,7 @@ export class ActionHandlerPf2e extends ActionHandler {
             let category;
             if (!result.subcategories.some(b => b.name === bookName)) {
                 category = this.initializeEmptySubcategory(bookName);
-                result.subcategories.push(category);
+                this._combineSubcategoryWithCategory(result, bookName, category);
             } else {
                 category = result.subcategories.find(b => b.name === bookName);
             }
@@ -221,8 +221,8 @@ export class ActionHandlerPf2e extends ActionHandler {
             // On first subcategory, include bookName, attack bonus, and spell DC.
             let levelCategory;
             if (category.subcategories.length === 0) {
-                levelCategory = this.initializeEmptySubcategory(levelNameWithBook);
-                category.subcategories.push(levelCategory);
+                levelCategory = this.initializeEmptySubcategory();
+                this._combineSubcategoryWithCategory(category, levelName, levelCategory);
                 
                 if (actor.data.type === 'character')
                     this._setSpellSlotInfo(tokenId, levelCategory, spellbook, level, true);
@@ -235,7 +235,7 @@ export class ActionHandlerPf2e extends ActionHandler {
             
             if (!(stillFirstSubcategory || category.subcategories.some(s => s.name === levelName))) {
                 levelCategory = this.initializeEmptySubcategory(levelName);
-                category.subcategories.push(levelCategory);
+                this._combineSubcategoryWithCategory(category, levelName, levelCategory);
                 if (actor.data.type === 'character')
                 this._setSpellSlotInfo(tokenId, levelCategory, spellbook, level, false);
             }

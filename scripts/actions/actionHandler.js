@@ -1,4 +1,7 @@
 import * as settings from '../settings.js';
+import {ActionList} from './entities/actionList.js';
+import {Category} from './entities/category.js';
+import {Subcategory} from './entities/subcategory.js';
 
 export class ActionHandler {
     i18n = (toTranslate) => game.i18n.localize(toTranslate);
@@ -8,38 +11,17 @@ export class ActionHandler {
     furtherActionHandlers = [];
     delimiter = '|';
 
-    emptyActionList = {
-        tokenId: '',
-        actorId: '',
-        categories: []
-    }
-
-    emptyCategory = {
-        id: '',
-        name: '',
-        canFilter: false,
-        subcategories: [],
-        cssClass: ''
-    }
-
-    emptySubcategory = {
-        id: '',
-        name: '',
-        info1: '',
-        actions: [],
-        subcategories: []
-    }
-
     filterManager = null;
 
-    constructor(filterManager) {
+    constructor(filterManager, compendiumManager) {
         this.filterManager = filterManager;
+        this.compendiumManager = compendiumManager;
     }
 
     async buildActionList(token) {
         let actionList = await this.doBuildActionList(token);
         this._doBuildFurtherActions(token, actionList);
-        this._addFilteredCompendiums(actionList);
+        this.compendiumManager.addCategoriesToActionList(this, actionList);
         return actionList;
     }
 
@@ -54,18 +36,18 @@ export class ActionHandler {
     }
 
     initializeEmptyActionList() {
-        return JSON.parse(JSON.stringify(this.emptyActionList));
+        return new ActionList();
     }
 
     initializeEmptyCategory(categoryId) {
-        let category = JSON.parse(JSON.stringify(this.emptyCategory));
+        let category = new Category();
         category.id = categoryId;
         return category;
     }
 
-    initializeEmptySubcategory(subcategoryName = '') {
-        let subcategory = JSON.parse(JSON.stringify(this.emptySubcategory));
-        subcategory.name = subcategoryName;
+    initializeEmptySubcategory(id = '') {
+        let subcategory = new Subcategory();
+        subcategory.id = id;
         return subcategory;
     }
 
@@ -73,10 +55,10 @@ export class ActionHandler {
         if (!category)
             return;
 
-        category.name = categoryName;
+        if (categoryName?.length > 0)
+            category.name = categoryName;
 
-        if (category.subcategories.length > 0 || category.choices > 0)
-            result.categories.push(category);
+        result.categories.push(category);
     }
 
     _combineSubcategoryWithCategory(category, subcategoryName, subcategory) {
@@ -85,71 +67,7 @@ export class ActionHandler {
             
         if (subcategoryName?.length > 0)
             subcategory.name = subcategoryName;
-
-        if (subcategory.actions.length > 0 || subcategory.subcategories.length > 0)
-            category.subcategories.push(subcategory);
-    }
-
-    /** Compendiums */
-    _addFilteredCompendiums(actionList) {
-        let compendiums = this.filterManager.getChosenCompendiums().map(c => {
-            let pack = game.packs.get(c.id);
-            let isMacro = pack.metadata.entity === 'Macro';
-            return {name: pack.metadata.label, key: `${pack.metadata.package}.${pack.metadata.name}`, isMacro: isMacro};
-        });
-
-        this._combineCompendiums(actionList, compendiums);
-    }
-
-    _addGmSystemCompendium(name, key) {
-        let isMacro = game.packs.get(key)?.metadata.entity === 'Macro';
-        this.linkedCompendiumsGm.push( {name: name, key: key, isMacro: isMacro} );
-    }
-
-    _addPlayerSystemCompendium(name, key, isMacro) {
-        this.linkedCompendiumsPlayer.push( {name: name, key: key, isMacro: isMacro} );
-    }
-
-    async _addCompendiumsToList(actionList) {
-        let actorType = game.user.isGM ? 'gm' : 'player';
-        let systemCompendiums = game.user.isGM ? this.linkedCompendiumsGm : this.linkedCompendiumsPlayer;
-
-        actionList.tokenId = actorType;
-        actionList.actorId = actorType;
-
-        await this._combineCompendiums(actionList, systemCompendiums);
-    }
-
-    async _combineCompendiums(actionList, compendiums) {
-        for (let c of compendiums) {
-            let entries = await this._getCompendiumEntries(c.name, c.key, c.isMacros);
-            this._combineCategoryWithList(actionList, c.name, entries);
-        }
-    }
-    
-    async _getCompendiumEntries(categoryName, compendiumKey, isMacros) {
-        let pack = game?.packs?.get(compendiumKey);
-        if (!pack)
-            return;
-
-        let result = this.initializeEmptyCategory(compendiumKey);
-        this.filterManager.setCanFilter(result);
-
-        let macroType = isMacros ? 'macros' : 'compendium';            
-
-        let packEntries = pack.index.length > 0 ? pack.index : await pack.getIndex();
         
-        let entriesMap = packEntries.map(e => { 
-            let encodedValue = [macroType, compendiumKey, e._id].join(this.delimiter);    
-            return {name: e.name, encodedValue: encodedValue, id: e._id }
-        });
-        
-        let entries = this.initializeEmptySubcategory();
-        entries.actions = entriesMap;
-
-        this._combineSubcategoryWithCategory(result, categoryName, entries);
-
-        return result;
+        category.subcategories.push(subcategory);
     }
 }
-

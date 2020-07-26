@@ -5,13 +5,14 @@ import { TagDialog } from './tagDialog.js';
 export class TokenActionHUD extends Application {
     i18n = (toTranslate) => game.i18n.localize(toTranslate);
 
-    constructor(actions, rollHandler, filterManager) {
+    constructor(actions, rollHandler, filterManager, compendiumManager) {
         super();
         this.refresh_timeout = null;
         this.tokens = null;
         this.actions = actions;
         this.rollHandler = rollHandler;
         this.filterManager = filterManager;
+        this.compendiumManager = compendiumManager;
         this.rendering = false;
         this.categoryHovered = '';
     }
@@ -35,12 +36,12 @@ export class TokenActionHUD extends Application {
         TagDialog.showTagDialog(this.filterManager, categoryId);
     }
 
-    showCompendiumsDialog() {
-        TagDialog.showCompendiumDialog(this.filterManager);
+    showCategoryDialog() {
+        TagDialog.showCategoryDialog(this.compendiumManager);
     }
 
-    async submitCompendiums(choices) {
-        await this.filterManager.setCompendiums(choices);
+    async submitCategories(choices) {
+        this.compendiumManager.submitCategories(choices);
         this.update()
     }
 
@@ -148,7 +149,7 @@ export class TokenActionHUD extends Application {
             ev.preventDefault();
             ev = ev || window.event;
 
-            game.tokenActionHUD.showCompendiumsDialog()
+            game.tokenActionHUD.showCategoryDialog()
         })
 
         html.find(repositionIcon).mousedown(ev => {

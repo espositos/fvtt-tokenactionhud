@@ -14,24 +14,24 @@ import * as rollSf from './rollHandlers/sfrpg/sfrpg-factory.js';
 
 export class HandlersManager {
     // Currently only planning for one kind of action handler for each system
-    static getActionHandler(system, filterManager) {
+    static getActionHandler(system, filterManager, compendiumManager) {
         switch (system) {
             case 'dnd5e':
-                return HandlersManager.getActionHandler5e(filterManager);
+                return HandlersManager.getActionHandler5e(filterManager, compendiumManager);
             case 'pf2e':
-                return new ActionHandlerPf2e(filterManager);
+                return new ActionHandlerPf2e(filterManager, compendiumManager);
             case 'wfrp4e':
-                return new ActionHandlerWfrp(filterManager);
+                return new ActionHandlerWfrp(filterManager, compendiumManager);
             case 'dungeonworld':
-                return new ActionHandlerDw(filterManager);
+                return new ActionHandlerDw(filterManager, compendiumManager);
             case 'sfrpg':
-                return new ActionHandlerSfrpg(filterManager);
+                return new ActionHandlerSfrpg(filterManager, compendiumManager);
         }
         throw new Error('System not supported by Token Action HUD');
     }
 
-    static getActionHandler5e(filterManager) {
-        let actionHandler = new ActionHandler5e(filterManager);
+    static getActionHandler5e(filterManager, compendiumManager) {
+        let actionHandler = new ActionHandler5e(filterManager, compendiumManager);
         if (HandlersManager.isModuleActive('magicitems'))
             actionHandler.addFurtherActionHandler(new MagicItemActionListExtender())
         return actionHandler;
