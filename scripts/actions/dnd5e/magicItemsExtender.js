@@ -12,7 +12,12 @@ export class MagicItemActionListExtender extends ActionListExtender {
             return;
 
         let itemCategories = actionList.categories.find(c => c.id === 'inventory');
-        let magicItems = MagicItems.actor(actorId).items;
+        let actor = MagicItems.actor(actorId);
+
+        if (!actor)
+            return;
+
+        let magicItems = MagicItems.actor(actorId).items ?? [];
         
         if (magicItems.length === 0)
             return;
