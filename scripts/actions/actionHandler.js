@@ -41,6 +41,11 @@ export class ActionHandler {
         return actionList;
     }
 
+    isLinkedCompendium(key) {
+        return false;
+        //TODO: Link compendiums
+    }
+
     async doBuildActionList(token, filters) {};
 
     _doBuildFurtherActions(token, filters, actionList) {
