@@ -3,7 +3,7 @@ export class CompendiumHelper {
 
     static getCompendiumChoicesForFilter() {
         return game.packs.entries.filter(p => {
-            let packTypes = ['JournalEntry', 'Macro', 'RollTable'];
+            let packTypes = ['JournalEntry', 'Macro', 'RollTable', 'Playlist'];
             return packTypes.includes(p.metadata.entity);
         }).map(p => {
             let key = `${p.metadata.package}.${p.metadata.name}`
@@ -28,7 +28,7 @@ export class CompendiumHelper {
         if (!pack)
             return '';
 
-        return pack.metadata.entity === 'Macro' ? 'macro': 'compendium';
+        return pack.metadata.entity === 'Macro' ? 'compendiumMacro': 'compendiumEntry';
     }
 
     static async getCompendiumEntriesForFilter(key) {

@@ -62,7 +62,7 @@ export class ActionHandlerDw extends ActionHandler {
         return result;
     }
 
-    _addGmCompendiums(actionList) {
+    addGmCompendiumsToList(actionList) {
         let category = this.initializeEmptyCategory('gm');
         
         let movesSubcategory = this.initializeEmptySubcategory();

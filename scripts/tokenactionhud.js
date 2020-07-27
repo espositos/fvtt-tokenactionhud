@@ -122,29 +122,34 @@ export class TokenActionHUD extends Application {
             handleClick(e);
         });
 
-        html.find('.tah-title-button').contextmenu('click', e => {
+        function handlePossibleFilterButtonClick(e) {
             let target = e.target;
             if(target.value.length === 0)
                 return;
 
             let id = target.value;
 
-            if (this.compendiumManager.isCompendiumCategory(id))
+            if (game.tokenActionHUD.compendiumManager.isCompendiumCategory(id))
                 game.tokenActionHUD.showCompendiumDialog(id);
             else
                 game.tokenActionHUD.showFilterDialog(id);
+        }     
 
-        });      
-
-        html.find('.tah-subtitle').contextmenu('click', e => {
+        function handlePossibleFilterSubtitleClick(e) {
             let target = e.target;
-            if(target.id === 0)
+            if(target.id.length === 0)
                 return;
 
             let id = target.id;
 
             game.tokenActionHUD.showFilterDialog(id);
-        });
+        }
+
+        html.find('.tah-title-button').click('click', e => handlePossibleFilterButtonClick(e));
+        html.find('.tah-title-button').contextmenu('click', e => handlePossibleFilterButtonClick(e));      
+        
+        html.find('.tah-subtitle').click('click', e => handlePossibleFilterSubtitleClick(e));
+        html.find('.tah-subtitle').contextmenu('click', e => handlePossibleFilterSubtitleClick(e));
 
         html.find('.tah-category').hover(
             // mouseenter    

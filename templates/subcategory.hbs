@@ -1,5 +1,4 @@
-
-{{#if this.actions}}
+{{#if (or this.actions this.canFilter)}}
 <div class="tah-subcategory">
 <div class="tah-subtitle" {{#if this.canFilter}}id="{{this.id}}"{{/if}}>
     {{#if this.canFilter}}<i class="fa fa-filter" aria-hidden="true"></i>{{/if}}

@@ -39,15 +39,19 @@ export class RollHandler {
     }
 
     handleCompendiums(macroType, event, tokenId, actionId) {
-        if (!macroType.endsWith('compendium'))
+        let types = ['compendiumEntry', 'compendiumMacro', 'compendiumPlaylist'];
+        if (!types.includes(macroType))
             return false;
 
         switch (macroType) {
-            case 'compendium':
+            case 'compendiumEntry':
                 this.handleCompendium(macroType, event, tokenId, actionId);
                 break;
-            case 'macros':
+            case 'compendiumMacro':
                 this.handleMacroCompendium(macroType, event, tokenId, actionId);
+                break;
+            case 'compendiumPlaylist':
+                this.handlePlaylistCompendium(macroType, event, tokenId, actionId);
                 break;
         }   
 
