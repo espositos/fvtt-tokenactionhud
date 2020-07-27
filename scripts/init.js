@@ -23,7 +23,7 @@ Hooks.on('init', () => {
     settings.registerSettings(system, rollHandlers);
 });
 
-Hooks.on('canvasReady', () => {
+Hooks.on('canvasReady', async () => {
 
     if (!game.tokenActionHUD) {
         let system = game.data.system.id;
@@ -31,6 +31,7 @@ Hooks.on('canvasReady', () => {
 
         let filterManager = new FilterManager(user);
         let compendiumManager = new CompendiumCategoryManager(user, filterManager);
+        await compendiumManager.init();
 
         let actionHandler = HandlersManager.getActionHandler(system, filterManager, compendiumManager);
         

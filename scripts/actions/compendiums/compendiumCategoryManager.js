@@ -5,10 +5,12 @@ export class CompendiumCategoryManager {
     categories = [];
     user = null;
 
-    constructor(user, filterManager) {    
+    constructor(user, filterManager) {
         this.user = user;
         this.filterManager = filterManager;
+    }
 
+    async init() {
         let savedCategories = user.getFlag('token-action-hud', 'compendiumCategories');
         if (savedCategories) {
             settings.Logger.debug('saved categories:', savedCategories);
@@ -17,7 +19,7 @@ export class CompendiumCategoryManager {
                 let category = new CompendiumCategory(this.filterManager, f[1].id, f[1].title);
                 if (f[1].compendiums) {
                     let compendiums = Object.values(f[1].compendiums);
-                    category.selectCompendiums(compendiums);
+                    await category.selectCompendiums(compendiums);
                 }
                 this.categories.push(category);
             })
