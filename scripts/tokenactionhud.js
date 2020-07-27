@@ -1,6 +1,7 @@
 import * as settings from './settings.js';
 import { HandlersManager } from './handlersManager.js';
 import { TagDialog } from './tagDialog.js';
+import { CategoryResizer } from './utilities/categoryResizer.js';
 
 export class TokenActionHUD extends Application {
     i18n = (toTranslate) => game.i18n.localize(toTranslate);
@@ -55,7 +56,7 @@ export class TokenActionHUD extends Application {
     }
 
     async submitFilter(categoryId, elements, isBlocklist) {
-        await this.filterManager.setFilteredElements(categoryId, elements, blocklist);
+        await this.filterManager.setFilteredElements(categoryId, elements, isBlocklist);
         this.update();
     }
 
@@ -156,7 +157,7 @@ export class TokenActionHUD extends Application {
                 $(category).addClass('hover');
                 let id = category.id;
                 game.tokenActionHUD.setHoveredCategory(id);
-                game.tokenActionHUD.resizeHoveredCategory(id);
+                CategoryResizer.resizeHoveredCategory(id);
             },
             // mouseleave
             function() {

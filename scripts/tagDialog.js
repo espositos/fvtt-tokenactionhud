@@ -70,7 +70,7 @@ export class TagDialog extends Dialog {
               icon: '<i class="fas fa-check"></i>',
               label: game.i18n.localize("tokenactionhud.accept"),
               callback: (html) => {
-                let choices = tagify.value;
+                let choices = tagify.value.map(c => {return {value: c.value, id: c.id}});
                 let blocklistIndex = html.find('select[id="isBlocklist"]')[0].value
                 let isBlocklist = parseInt(blocklistIndex) != 0 ? true : false;
                 game.tokenActionHUD.submitFilter(categoryId, choices, isBlocklist);
@@ -125,7 +125,7 @@ export class TagDialog extends Dialog {
         })
 
         let filterPlaceholder = game.i18n.localize('tokenactionhud.filterPlaceholder');
-        let filterTitle = game.i18n.localize('tokenactionhud.filterTitle');
+        let filterTitle = game.i18n.localize('tokenactionhud.compendiumTagTitle');
         let content = ` <div><label>${filterPlaceholder}</label></div>
                         <div><input name='tokenactionhud-taginput' class='some_class_name'/></div>
                         <div><button class="tags--removeAllBtn">Clear</button></div>`
@@ -155,8 +155,8 @@ export class TagDialog extends Dialog {
 
     static showCategoryDialog(compendiumManager) {
         let existingCategories = compendiumManager.getExistingCategories();
+        let title = game.i18n.localize('tokenactionhud.categoryTagTitle');
         let prompt = game.i18n.localize('tokenactionhud.filterPlaceholder');
-        let title = game.i18n.localize('tokenactionhud.filterTitle');
         let content = ` <div><label>${prompt}</label></div>
                         <div><input name='tokenactionhud-taginput' class='some_class_name'/></div>
                         <div><button class="tags--removeAllBtn">Clear</button></div>`
@@ -169,11 +169,9 @@ export class TagDialog extends Dialog {
     static showDialog(suggestions, selected, title, content, prompt, submitFunc) {
         let tagify;
         Hooks.once('renderTagDialog', (app, html, options) => {
-
             html.css('height', 'auto');
 
             var $taglist = html.find('input[name="tokenactionhud-taginput"]');
-            
             if ($taglist.length > 0) {
                 let options = {
                     placeholder: prompt,

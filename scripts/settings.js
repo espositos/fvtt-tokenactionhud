@@ -27,6 +27,26 @@ export const registerSettings = function(system, rollHandlers) {
         onChange: value => { updateSettings(value); }
     });
 
+    game.settings.register(app,'pushCompendiumCategories', {
+        name : game.i18n.localize('tokenactionhud.settings.pushCompendiumCategories.name'),
+        hint : game.i18n.localize('tokenactionhud.settings.pushCompendiumCategories.hint'),
+        scope : 'client',
+        config : true,
+        type : Boolean,
+        default : false,
+        onChange: value => { updateSettings(value); }
+    });
+
+    game.settings.register(app,'alwaysShowCompendiumCategories', {
+        name : game.i18n.localize('tokenactionhud.settings.alwaysShowCompendiumCategories.name'),
+        hint : game.i18n.localize('tokenactionhud.settings.alwaysShowCompendiumCategories.hint'),
+        scope : 'client',
+        config : true,
+        type : Boolean,
+        default : false,
+        onChange: value => { updateSettings(value); }
+    });
+
     game.settings.register(app,'onTokenHover', {
         name : game.i18n.localize('tokenactionhud.settings.onTokenHover.name'),
         hint : game.i18n.localize('tokenactionhud.settings.onTokenHover.hint'),

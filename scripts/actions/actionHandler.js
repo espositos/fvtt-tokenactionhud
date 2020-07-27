@@ -50,14 +50,17 @@ export class ActionHandler {
         return subcategory;
     }
 
-    _combineCategoryWithList(result, categoryName, category) {
+    _combineCategoryWithList(result, categoryName, category, push = true) {
         if (!category)
             return;
 
         if (categoryName?.length > 0)
             category.name = categoryName;
 
-        result.categories.push(category);
+        if (push)
+            result.categories.push(category);
+        else
+            result.categories.unshift(category);
     }
 
     _combineSubcategoryWithCategory(category, subcategoryName, subcategory) {

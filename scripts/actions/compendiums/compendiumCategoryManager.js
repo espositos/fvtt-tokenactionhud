@@ -14,19 +14,27 @@ export class CompendiumCategoryManager {
             settings.Logger.debug('saved categories:', savedCategories);
             
             Object.entries(savedCategories).forEach(f => {
-                let category = new CompendiumCategory(this.filterManager, f[0], f[1].title);
-                let compendiums = Object.values(f[1].compendiums);
-                category.selectCompendiums(compendiums);
+                let category = new CompendiumCategory(this.filterManager, f[1].id, f[1].title);
+                if (f[1].compendiums) {
+                    let compendiums = Object.values(f[1].compendiums);
+                    category.selectCompendiums(compendiums);
+                }
                 this.categories.push(category);
             })
         }
     }
 
     async addCategoriesToActionList(actionHandler, actionList) {
+        let alwaysShow = settings.get('alwaysShowCompendiumCategories');
+        if (alwaysShow){
+            if (!actionList.tokenId)
+                actionList.tokenId = 'compendiums';
+            if (!actionList.actorId)
+                actionList.actorId = 'compendiums'
+        }
+
         if (!actionList.tokenId)
-            actionList.tokenId = 'compendiums';
-        if (!actionList.actorId)
-            actionList.actorId = 'compendiums'
+            return;
 
         for (let category of this.categories) {
             await category.addToActionList(actionHandler, actionList)

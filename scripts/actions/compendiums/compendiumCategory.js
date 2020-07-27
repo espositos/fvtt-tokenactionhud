@@ -1,5 +1,6 @@
 import {HudCompendium} from './hudCompendium.js';
 import {CompendiumHelper} from './compendiumHelper.js';
+import * as settings from '../../settings.js';
 
 export class CompendiumCategory {
     compendiums = [];
@@ -9,6 +10,7 @@ export class CompendiumCategory {
     constructor(filterManager, id, title) {
         this.filterManager = filterManager;
         this.id = id;
+        this.key = id.slugify({strict:true})
         this.title = title;
     }
 
@@ -20,16 +22,15 @@ export class CompendiumCategory {
             await compendium.addToCategory(actionHandler, result);
         }
 
-        actionHandler._combineCategoryWithList(actionList, this.title, result);
+        let push = settings.get('pushCompendiumCategories');
+
+        actionHandler._combineCategoryWithList(actionList, this.title, result, push);
 
         return actionList;
     }
 
     async selectCompendiums(compendiums) {
         compendiums = compendiums.filter(c => !!c.id)
-
-        if (compendiums.length === 0)
-            return;
 
         for (let comp of compendiums) {
             await this.addCompendium(comp);
@@ -55,7 +56,7 @@ export class CompendiumCategory {
         if (!CompendiumHelper.exists(compendium.id))
             return;
 
-        let hudCompendium = new HudCompendium(this.filterManager, this.id, compendium.id, compendium.title);
+        let hudCompendium = new HudCompendium(this.filterManager, this.key, compendium.id, compendium.title);
 
         hudCompendium.createFilter();
         await hudCompendium.submitFilterSuggestions();
@@ -85,9 +86,8 @@ export class CompendiumCategory {
     }
 
     async updateFlag() {
-        await this.unsetFlag();
-        let contents = {title: this.title};
-        await game.user.setFlag('token-action-hud', `compendiumCategories.${this.id}`, contents);
+        game.user.setFlag('token-action-hud', `compendiumCategories.${this.key}.title`, this.title);
+        game.user.setFlag('token-action-hud', `compendiumCategories.${this.key}.id`, this.id);
 
         this.compendiums.map(c => c.updateFlag(this.id));
     }
