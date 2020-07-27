@@ -22,20 +22,22 @@ export class CompendiumCategoryManager {
         }
     }
 
-    addCategoriesToActionList(actionHandler, actionList) {
+    async addCategoriesToActionList(actionHandler, actionList) {
         if (!actionList.tokenId)
             actionList.tokenId = 'compendiums';
         if (!actionList.actorId)
             actionList.actorId = 'compendiums'
 
-        this.categories.forEach(c => c.addToActionList(actionHandler, actionList));
+        for (let category of this.categories) {
+            await category.addToActionList(actionHandler, actionList)
+        }
     }
 
     async submitCategories(selections) {
         selections = selections.map(s => { return {id: s.value.slugify({strict: true}), value: s.value}})
         for (let choice of selections) {
             if (!this.categories.some(c => c.id === choice.id))
-                this.createCategory(choice);
+                await this.createCategory(choice);
         }
 
         let idMap = selections.map(s => s.id);
@@ -50,9 +52,9 @@ export class CompendiumCategoryManager {
         }
     }
 
-    createCategory(tagifyCategory) {
+    async createCategory(tagifyCategory) {
         let newCategory = new CompendiumCategory(this.filterManager, tagifyCategory.id, tagifyCategory.value);
-        newCategory.updateFlag();
+        await newCategory.updateFlag();
         this.categories.push(newCategory);
     }
 
@@ -60,6 +62,15 @@ export class CompendiumCategoryManager {
         let category = this.categories[index];
         await category.prepareForDelete();
         this.categories.splice(index, 1);
+    }
+
+    async submitCompendiums(categoryId, choices) {
+        let category = this.categories.find(c => c.id === categoryId);
+
+        if (!category)
+            return;
+
+        await category.selectCompendiums(choices);
     }
 
     getExistingCategories() {
@@ -70,13 +81,8 @@ export class CompendiumCategoryManager {
         return this.categories.some(c => c.id === id);
     }
 
-    submitCompendiums(categoryId, choices) {
-        let category = this.categories.find(c => c.id === categoryId);
-
-        if (!category)
-            return;
-
-        category.selectCompendiums(choices);
+    isLinkedCompendium(id) {
+        return this.categories.some(c => c.compendiums.some(c => c.id === id));
     }
 
     getCategoryCompendiumsAsTagifyEntries(categoryId) {

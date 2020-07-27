@@ -45,12 +45,12 @@ export class TokenActionHUD extends Application {
     }
 
     async submitCategories(choices) {
-        this.compendiumManager.submitCategories(choices);
+        await this.compendiumManager.submitCategories(choices);
         this.update()
     }
 
     async submitCompendiums(categoryId, choices) {
-        this.compendiumManager.submitCompendiums(categoryId, choices);
+        await this.compendiumManager.submitCompendiums(categoryId, choices);
         this.update();
     }
 
@@ -318,171 +318,6 @@ export class TokenActionHUD extends Application {
         category.mouseenter();
     }
 
-    resizeHoveredCategory(catId) {
-        function jq( myid ) {
-            return "#" + myid.replace( /(:|\.|\[|\]|,|=|@)/g, "\\$1" );
-        }
-
-        let id = jq(catId);
-        let category = $(id);
-        
-        if (!category[0])
-            return;        
-        
-        let content = category.find('.tah-content');
-        let isOneLineFit = category.hasClass('oneLine');
-        let actions = category.find('.tah-actions');
-        
-        if (actions.length === 0)
-            return;
-        
-        // reset content to original width
-        let contentDefaultWidth = 300;
-        let minPossibleWidth = 200;
-        this.resizeActions(actions, contentDefaultWidth);
-
-        let changeStep = 30;
-        
-        let bottomLimit = $(document).find('#hotbar').offset().top - 20;
-        let rightLimit = $(document).find('#sidebar').offset().left - 20;
-
-        let maxRequiredWidth = this.calculateMaxRequiredWidth(actions);
-        while (this.shouldIncreaseWidth(content, actions, maxRequiredWidth, bottomLimit, rightLimit, isOneLineFit)) {
-            let actionRect = actions[0].getBoundingClientRect();
-            let actionWidth = actionRect.width;
-            
-            let newWidth = actionWidth + changeStep;
-            
-            this.resizeActions(actions, newWidth);          
-        }
-
-        while (this.shouldShrinkWidth(content, actions, minPossibleWidth, bottomLimit, rightLimit, isOneLineFit)) {
-            let actionRect = actions[0].getBoundingClientRect();
-            let actionWidth = actionRect.width;
-
-            if (actionWidth < minPossibleWidth)
-                return;
-
-            let newWidth = actionWidth - changeStep;
-            
-            this.resizeActions(actions, newWidth); 
-        }
-    }
-
-    calculateMaxRequiredWidth(actions) {
-        let maxWidth = 0;
-
-        actions.each(function() {
-            let totalWidth = 0;
-            Array.from($(this).children()).forEach(c => {
-                let child = $(c);
-                let childWidth = child.width();
-                let marginWidth = parseInt(child.css('marginLeft')) + parseInt(child.css('marginRight'));
-                
-                totalWidth += childWidth + marginWidth;
-            });
-
-            if (totalWidth > maxWidth)
-                maxWidth = totalWidth;
-        });
-
-        return maxWidth;
-    }
-
-    shouldIncreaseWidth(content, actions, maxRequiredWidth, bottomLimit, rightLimit, isOneLineFit) {
-        let contentRect = content[0].getBoundingClientRect();
-        let actionsRect = actions[0].getBoundingClientRect();
-
-        if (actionsRect.right >= rightLimit)
-            return false;
-
-        if (actionsRect.width >= maxRequiredWidth)
-            return false;
-
-        let actionArray = Array.from(content.find('.tah-action')).sort((a, b) => $(a).offset().top - $(b).offset().top);
-        let rows = this.calculateRows(actionArray);
-        let columns = this.calculateMaxRowButtons(actionArray);
-        if (contentRect.bottom <= bottomLimit && columns >= rows && !isOneLineFit)
-            return false;
-        
-        return true;
-    }
-
-    shouldShrinkWidth(content, actions, actionsMinWidth, bottomLimit, rightLimit, isOneLineFit) {
-        let contentRect = content[0].getBoundingClientRect();
-        let actionsRect = actions[0].getBoundingClientRect();
-
-        if (contentRect.bottom >= bottomLimit)
-            return false;
-
-        if (actionsRect.width <= actionsMinWidth)
-            return false;
-
-        let actionArray = Array.from(content.find('.tah-action')).sort((a, b) => $(a).offset().top - $(b).offset().top);
-        let rows = this.calculateRows(actionArray);
-        let columns = this.calculateMaxRowButtons(actionArray);
-
-        if (actionsRect.right <= rightLimit && (rows >= columns - 1 || isOneLineFit))
-            return false;
-
-        return true;
-    }
-
-    calculateRows(actionArray) {
-        var rows = 0;
-        let currentTopOffset = 0;
-        let closeRange = 5;
-
-        actionArray.forEach(a => {
-            let offset = $(a).offset().top
-
-            if (Math.abs(currentTopOffset - offset) >= closeRange) {
-                rows++;
-                currentTopOffset = offset;
-            }
-        });
-
-        return rows;
-    }
-
-    calculateMaxRowButtons(actionArray) {
-        if (actionArray.length < 2)
-            return actionArray.length;
-
-        var rowButtons = [];
-        let currentTopOffset = 0;
-        let rowButtonCounter = 0;
-        let closeRange = 5;
-
-        actionArray.forEach(a => {
-            let offset = $(a).offset().top;
-
-            if (Math.abs(currentTopOffset - offset) >= closeRange) {
-                if (rowButtonCounter >= 1)
-                    rowButtons.push(rowButtonCounter);
-
-                currentTopOffset = offset;
-                rowButtonCounter = 1;
-            } else {
-                rowButtonCounter++;
-            }
-
-            // if it's the final object, add counter anyway in case it was missed.
-            if (rowButtonCounter >= 1 && actionArray.indexOf(a) === actionArray.length - 1)
-                rowButtons.push(rowButtonCounter);
-        });
-
-        return Math.max(...rowButtons);
-    }
-
-    resizeActions(actions, newWidth) {
-        // resize each action with new width
-        actions.map(function() {
-            $(this).css({"width": newWidth + 'px',
-            "min-width" : newWidth + 'px'});
-        })
-    }
-
     resetPosition() {
         settings.Logger.info(`Resetting HUD position to x: 80px, y: 150px, and saving in user flags. \nIf HUD is still not visible, something else may be wrong.\nFeel free to contact ^ and stick#0520 on Discord`)
         game.user.update({flags: {'token-action-hud': {hudPos: { top: 80, left: 150 }}}})
@@ -554,7 +389,7 @@ export class TokenActionHUD extends Application {
 
     isLinkedCompendium(compendiumKey) {
         settings.Logger.debug('Compendium hook triggered. Checking if compendium is linked.')
-        return this.actions.isLinkedCompendium(compendiumKey);
+        return this.compendiumManager.isLinkedCompendium(compendiumKey);
     }
 
     /** @private */

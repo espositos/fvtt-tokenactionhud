@@ -21,7 +21,7 @@ export class ActionHandler {
     async buildActionList(token) {
         let actionList = await this.doBuildActionList(token);
         this._doBuildFurtherActions(token, actionList);
-        this.compendiumManager.addCategoriesToActionList(this, actionList);
+        await this.compendiumManager.addCategoriesToActionList(this, actionList);
         return actionList;
     }
 

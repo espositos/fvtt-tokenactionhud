@@ -12,19 +12,27 @@ export class CompendiumCategory {
         this.title = title;
     }
 
-    addToActionList(actionHandler, actionList) {
+    async addToActionList(actionHandler, actionList) {
         let result = actionHandler.initializeEmptyCategory(this.id);
-        this.compendiums.forEach(c => c.addToCategory(actionHandler, result));
         result.canFilter = true;
+
+        for (let compendium of this.compendiums) {
+            await compendium.addToCategory(actionHandler, result);
+        }
+
         actionHandler._combineCategoryWithList(actionList, this.title, result);
+
         return actionList;
     }
 
-    selectCompendiums(compendiums) {
+    async selectCompendiums(compendiums) {
         compendiums = compendiums.filter(c => !!c.id)
 
+        if (compendiums.length === 0)
+            return;
+
         for (let comp of compendiums) {
-            this.addCompendium(comp);
+            await this.addCompendium(comp);
         }
 
         if (this.compendiums.length === 0)
@@ -34,13 +42,13 @@ export class CompendiumCategory {
         for (var i = this.compendiums.length - 1; i >= 0; i--) {
             let compendium = this.compendiums[i];
             if (!idMap.includes(compendium.id))
-                this.removeCompendium(i)
+               await this.removeCompendium(i)
         }
 
         this.updateFlag();
     }
 
-    addCompendium(compendium) {
+    async addCompendium(compendium) {
         if (this.compendiums.some(c => c.id === compendium.id))
             return;
 
@@ -48,6 +56,9 @@ export class CompendiumCategory {
             return;
 
         let hudCompendium = new HudCompendium(this.filterManager, this.id, compendium.id, compendium.title);
+
+        hudCompendium.createFilter();
+        await hudCompendium.submitFilterSuggestions();
 
         this.compendiums.push(hudCompendium);
     }

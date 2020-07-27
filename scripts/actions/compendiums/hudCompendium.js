@@ -9,9 +9,6 @@ export class HudCompendium {
         // used wherever the '.' will cause problems: as a key for flags, etc (also filters).
         let cleanId = id.slugify({strict:true});
         this.key = categoryId + cleanId;
-
-        this.createFilter();
-        this.submitFilterSuggestions();
     }
 
     createFilter() {
