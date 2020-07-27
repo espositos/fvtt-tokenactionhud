@@ -5,12 +5,13 @@ import * as settings from '../../settings.js';
 export class CompendiumCategory {
     compendiums = [];
     id = '';
+    key = '';
     title = '';
 
     constructor(filterManager, id, title) {
         this.filterManager = filterManager;
         this.id = id;
-        this.key = id.slugify({strict:true})
+        this.key = id.slugify({replacement: '_', strict:true})
         this.title = title;
     }
 
@@ -57,16 +58,25 @@ export class CompendiumCategory {
             return;
 
         let hudCompendium = new HudCompendium(this.filterManager, this.key, compendium.id, compendium.title);
-
         hudCompendium.createFilter();
         await hudCompendium.submitFilterSuggestions();
 
         this.compendiums.push(hudCompendium);
     }
 
+    async updateFlag() {
+        await game.user.setFlag('token-action-hud', `compendiumCategories.${this.key}.title`, this.title);
+        await game.user.setFlag('token-action-hud', `compendiumCategories.${this.key}.id`, this.id);
+
+        for (let comp of this.compendiums) {
+            comp.updateFlag(this.key);
+        }
+    }
+
     async removeCompendium(index) {
         let compendium = this.compendiums[index];
         await compendium.clearFilter();
+        await compendium.deleteFlag();
         this.compendiums.splice(index, 1);
     }
 
@@ -82,14 +92,7 @@ export class CompendiumCategory {
     }
 
     async unsetFlag() {
-        await game.user.setFlag('token-action-hud', 'compendiumCategories', {[`-=${this.id}`]: null});
-    }
-
-    async updateFlag() {
-        game.user.setFlag('token-action-hud', `compendiumCategories.${this.key}.title`, this.title);
-        game.user.setFlag('token-action-hud', `compendiumCategories.${this.key}.id`, this.id);
-
-        this.compendiums.map(c => c.updateFlag(this.id));
+        await game.user.setFlag('token-action-hud', 'compendiumCategories', {[`-=${this.key}`]: null});
     }
 
     asTagifyEntry() {

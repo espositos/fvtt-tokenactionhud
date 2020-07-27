@@ -44,7 +44,7 @@ export class CompendiumCategoryManager {
     }
 
     async submitCategories(selections) {
-        selections = selections.map(s => { return {id: s.value.slugify({strict: true}), value: s.value}})
+        selections = selections.map(s => { return {id: s.value.slugify({replacement: '_', strict: true}), value: s.value}})
         for (let choice of selections) {
             if (!this.categories.some(c => c.id === choice.id))
                 await this.createCategory(choice);
