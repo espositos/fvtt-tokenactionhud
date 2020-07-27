@@ -88,7 +88,6 @@
     cursor: pointer;
     pointer-events: none;
     position: absolute;
-    z-index: 1;
     top: 2px;
     right: 2px; 
 }
@@ -144,10 +143,8 @@
     border: 1px solid transparent;
     cursor: pointer;
     pointer-events: none;
-    position: absolute;
-    z-index: 1;
-    top: 2px;
-    right: 2px; 
+    position: relative;
+    top: -5px;
 }
 
 .tah-subtitle:hover > .fa, .tah-subtitle:hover > .fas {

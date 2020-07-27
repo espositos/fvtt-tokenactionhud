@@ -5,7 +5,13 @@ export class CompendiumHelper {
         return game.packs.entries.filter(p => {
             let packTypes = ['JournalEntry', 'Macro', 'RollTable'];
             return packTypes.includes(p.metadata.entity);
-        }).map(p => {return {id: p.key, value: p.metadata.label} });
+        }).map(p => {
+            let key = `${p.metadata.package}.${p.metadata.name}`
+            return {id: key, value: p.metadata.label} });
+    }
+
+    static exists(key) {
+        return !!game.packs.get(key);
     }
 
     static async getEntriesForActions(key, delimiter) {

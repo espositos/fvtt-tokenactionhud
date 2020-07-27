@@ -76,6 +76,16 @@ export class FilterManager {
         filter.setFilteredElements(elements, isBlocklist);
     }
 
+    async clearFilter(filterId) {
+        let filter = this.filters.find(f => f.id === filterId);
+
+        if (!filter)
+            return;
+
+        this.user.setFlag('token-action-hud', 'filters', {[`-=${filterId}`]: null})
+        this.filters.splice(this.filters.indexOf(filter), 1);
+    }
+
     isBlocklist(filterId) {
         let filter = this._getFilter(filterId);
 

@@ -1,3 +1,5 @@
+import { CompendiumHelper } from './actions/compendiums/compendiumHelper.js';
+
 export class TagDialog extends Dialog {
     i18n = (toTranslate) => game.i18n.localize(toTranslate);
 
@@ -7,7 +9,7 @@ export class TagDialog extends Dialog {
     }
     
     // Currently only used for WFRP skill filter
-    static showTagDialog(filterManager, categoryId) {
+    static showActionFilterDialog(filterManager, categoryId) {
         let choices = filterManager.getSuggestions(categoryId);
         let filters = filterManager.getFilteredElements(categoryId);
         let tagify;
@@ -21,14 +23,13 @@ export class TagDialog extends Dialog {
             $blocklist.css('background', '#fff')
             $blocklist.css('color', '#000')
 
-            var $tagFilter = html.find('input[name="tokenactionhud-tagfilter"]');
+            var $tagFilter = html.find('input[name="tokenactionhud-taginput"]');
             
             if ($tagFilter.length > 0) {
                 let filterPlaceholder = game.i18n.localize('tokenactionhud.filterPlaceholder');
 
                 tagify = new Tagify($tagFilter[0], {
                 whitelist: choices,
-                value: filters,
                 placeholder: filterPlaceholder,
                 delimiters: ';',
                 maxTags: 'Infinity',
@@ -49,14 +50,13 @@ export class TagDialog extends Dialog {
                 clearBtn.css('width', 'auto');
 
             }
-
         })
 
         let filterPlaceholder = game.i18n.localize('tokenactionhud.filterPlaceholder');
         let blocklistLabel = game.i18n.localize('tokenactionhud.blocklistLabel');
         let filterTitle = game.i18n.localize('tokenactionhud.filterTitle');
         let content = ` <div><label>${filterPlaceholder}</label></div>
-                        <div><input name='tokenactionhud-tagfilter' class='some_class_name'/></div>
+                        <div><input name='tokenactionhud-taginput' class='some_class_name'/></div>
                         <div><button class="tags--removeAllBtn">Clear</button></div>
                         <select id='isBlocklist' name='blocklist' size='1'>
                             <option value="1">${game.i18n.localize('tokenactionhud.blocklist')}</option>
@@ -86,23 +86,22 @@ export class TagDialog extends Dialog {
            d.render(true);
     }
     
-    static showCompendiumDialog(compendiumManager) {
-        let choices = filterManager.getCompendiumChoices();
-        let filters = filterManager.getChosenCompendiums();
+    static showCompendiumDialog(categoryId, compendiumManager) {
+        let choices = CompendiumHelper.getCompendiumChoicesForFilter();
+        let selection = compendiumManager.getCategoryCompendiumsAsTagifyEntries(categoryId);
 
         let tagify;
         Hooks.once('renderTagDialog', (app, html, options) => {
 
             html.css('height', 'auto');
 
-            var $tagFilter = html.find('input[name="tokenactionhud-tagfilter"]');
+            var $tagFilter = html.find('input[name="tokenactionhud-taginput"]');
             
             if ($tagFilter.length > 0) {
                 let filterPlaceholder = game.i18n.localize('tokenactionhud.filterPlaceholder');
 
                 tagify = new Tagify($tagFilter[0], {
                 whitelist: choices,
-                value: filters,
                 placeholder: filterPlaceholder,
                 delimiters: ';',
                 maxTags: 'Infinity',
@@ -114,7 +113,7 @@ export class TagDialog extends Dialog {
                 }
                 });
 
-                tagify.addTags(filters);
+                tagify.addTags(selection);
 
                 // "remove all tags" button event listener
                 let clearBtn = html.find('button[class="tags--removeAllBtn"]');
@@ -122,13 +121,12 @@ export class TagDialog extends Dialog {
                 clearBtn.css('float', 'right');
                 clearBtn.css('width', 'auto');
             }
-
         })
 
         let filterPlaceholder = game.i18n.localize('tokenactionhud.filterPlaceholder');
         let filterTitle = game.i18n.localize('tokenactionhud.filterTitle');
         let content = ` <div><label>${filterPlaceholder}</label></div>
-                        <div><input name='tokenactionhud-tagfilter' class='some_class_name'/></div>
+                        <div><input name='tokenactionhud-taginput' class='some_class_name'/></div>
                         <div><button class="tags--removeAllBtn">Clear</button></div>`
         let d = new TagDialog({
             title: filterTitle,
@@ -138,8 +136,9 @@ export class TagDialog extends Dialog {
                 icon: '<i class="fas fa-check"></i>',
                 label: game.i18n.localize("tokenactionhud.accept"),
                 callback: (html) => {
-                    let choices = tagify.value;
-                    game.tokenActionHUD.submitCompendiums(choices);
+                    let tagifyChoices = tagify.value;
+                    let choices = tagifyChoices.map(t => {return {id: t.id, title: t.value}});
+                    game.tokenActionHUD.submitCompendiums(categoryId, choices);
                 }
                 },
                 cancel: {
@@ -151,19 +150,6 @@ export class TagDialog extends Dialog {
             });
 
             d.render(true);
-    }
-
-    static createCategoryDialog(categoryManager) {
-        let selected = categoryManager.getSelectedCategories();
-        let suggestions = categoryManager.getAvailableCategories();
-
-        let prompt = game.i18n.localize('tokenactionhud.filterPlaceholder');
-        let title = game.i18n.localize('tokenactionhud.filterTitle');
-        let content = ` <div><label>${prompt}</label></div>
-                        <div><input name='tokenactionhud-taginput' class='some_class_name'/></div>
-                        <div><button class="tags--removeAllBtn">Clear</button></div>`
-
-        TagDialog.showDialog(suggestions, selected, title, content, prompt)
     }
 
     static showCategoryDialog(compendiumManager) {
