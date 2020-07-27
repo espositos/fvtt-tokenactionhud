@@ -8,7 +8,7 @@ export class Filter {
         this.id = id;
     }
 
-    setFilteredElements(elements, isBlocklist) {
+    async setFilteredElements(elements, isBlocklist) {
         if (Array.isArray(elements)) {
             this.filteredElements = elements;
             this.isBlocklist = isBlocklist;

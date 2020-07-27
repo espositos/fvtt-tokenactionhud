@@ -55,7 +55,7 @@ export class TokenActionHUD extends Application {
     }
 
     async submitFilter(categoryId, elements, isBlocklist) {
-        this.filterManager.setFilteredElements(categoryId, elements, blocklist);
+        await this.filterManager.setFilteredElements(categoryId, elements, blocklist);
         this.update();
     }
 
@@ -331,15 +331,6 @@ export class TokenActionHUD extends Application {
         this.refresh_timeout = setTimeout(this.updateHud.bind(this), 100)
     }
 
-    showHudEnabled() {
-        settings.Logger.debug('showHudEnabled()', `isGM: ${game.user.isGM}`, `enabledForUser: ${settings.get('enabledForUser')}`, `playerPermission: ${settings.get('playerPermission')}`);
-
-        if (!settings.get('enabledForUser'))            
-            return false;
-
-        return (settings.get('playerPermission') || game.user.isGM);
-    }
-
     async updateHud() {
         settings.Logger.debug('Updating HUD');
 
@@ -385,6 +376,15 @@ export class TokenActionHUD extends Application {
 
         settings.Logger.debug('Different actor, no need to update HUD.');
         return false;
+    }
+
+    showHudEnabled() {
+        settings.Logger.debug('showHudEnabled()', `isGM: ${game.user.isGM}`, `enabledForUser: ${settings.get('enabledForUser')}`, `playerPermission: ${settings.get('playerPermission')}`);
+
+        if (!settings.get('enabledForUser'))            
+            return false;
+
+        return (settings.get('playerPermission') || game.user.isGM);
     }
 
     isLinkedCompendium(compendiumKey) {

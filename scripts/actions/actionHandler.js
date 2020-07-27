@@ -1,4 +1,3 @@
-import * as settings from '../settings.js';
 import {ActionList} from './entities/actionList.js';
 import {Category} from './entities/category.js';
 import {Subcategory} from './entities/subcategory.js';
