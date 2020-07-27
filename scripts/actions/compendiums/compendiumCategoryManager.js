@@ -15,7 +15,8 @@ export class CompendiumCategoryManager {
             
             Object.entries(savedCategories).forEach(f => {
                 let category = new CompendiumCategory(this.filterManager, f[0], f[1].title);
-                category.selectCompendiums(f[1].compendiums);
+                let compendiums = Object.values(f[1].compendiums);
+                category.selectCompendiums(compendiums);
                 this.categories.push(category);
             })
         }

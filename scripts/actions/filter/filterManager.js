@@ -66,13 +66,7 @@ export class FilterManager {
     }
 
     setFilteredElements(filterId, elements, isBlocklist) {
-        let filter = this._getFilter(filterId);
-
-        let blocklist = isBlocklist === 1 ? true : false;
-
-        let flag = {isBlocklist: blocklist, elements: elements}
-        this.user.setFlag('token-action-hud', `filters.${filterId}`, flag)
-        
+        let filter = this._getFilter(filterId);        
         filter.setFilteredElements(elements, isBlocklist);
     }
 
@@ -82,7 +76,8 @@ export class FilterManager {
         if (!filter)
             return;
 
-        this.user.setFlag('token-action-hud', 'filters', {[`-=${filterId}`]: null})
+        filter.clearFlag();
+        
         this.filters.splice(this.filters.indexOf(filter), 1);
     }
 
@@ -94,30 +89,5 @@ export class FilterManager {
 
     _getFilter(filterId) {
         return this.filters.find(f => f.id === filterId) ?? this.createOrGetFilter(filterId);
-    }
-
-    getCompendiumChoices() {
-        let choices = game.packs.entries.filter(p => {
-            let packTypes = ['JournalEntry', 'Macro', 'RollTable'];
-            return packTypes.includes(p.metadata.entity);
-        }).map(p => {return {id: `${p.metadata.package}.${p.metadata.name}`, value: p.metadata.label} });
-
-        return choices;
-    }
-
-    getChosenCompendiums() {
-        let compendiums = this.getCompendiumChoices();
-        let filterIds = this.filters.map(f => f.id);
-        return compendiums.filter(c => filterIds.includes(c.id))
-    }
-
-    async setCompendiums(compendiums) {
-        for (let c of compendiums) {
-            let filter = this._getFilter(c.id);
-            let pack = game.packs.get(c.id);
-            let index = pack.index.length > 0 ? pack.index : await pack.getIndex();
-            let suggestions = index.map(e => {return {id: e.id, value: e.name}})
-            this.setSuggestions(filter.id, suggestions);
-        }
     }
 }

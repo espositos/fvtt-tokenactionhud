@@ -47,7 +47,7 @@ export class CompendiumCategory {
         if (!CompendiumHelper.exists(compendium.id))
             return;
 
-        let hudCompendium = new HudCompendium(this.filterManager, compendium.id, compendium.title);
+        let hudCompendium = new HudCompendium(this.filterManager, this.id, compendium.id, compendium.title);
 
         this.compendiums.push(hudCompendium);
     }
@@ -74,10 +74,11 @@ export class CompendiumCategory {
     }
 
     async updateFlag() {
-        let compendiums = this.compendiums.map(c => {return {id: c.id, title: c.title }});
-        let contents = {title: this.title, compendiums: compendiums};
         await this.unsetFlag();
+        let contents = {title: this.title};
         await game.user.setFlag('token-action-hud', `compendiumCategories.${this.id}`, contents);
+
+        this.compendiums.map(c => c.updateFlag(this.id));
     }
 
     asTagifyEntry() {

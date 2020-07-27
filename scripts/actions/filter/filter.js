@@ -13,6 +13,8 @@ export class Filter {
             this.filteredElements = elements;
             this.isBlocklist = isBlocklist;
         }
+
+        this.updateFlag();
     }
 
     getSuggestions() {
@@ -36,5 +38,14 @@ export class Filter {
     setSuggestions(choices) {
         if (Array.isArray(choices))
             this.possibleChoices = choices;
+    }
+
+    async updateFlag() {
+        let flag = {isBlocklist: this.isBlocklist, elements: this.filteredElements}
+        await game.user.setFlag('token-action-hud', `filters.${this.id}`, flag)
+    }
+
+    async clearFlag() {
+        await game.user.setFlag('token-action-hud', 'filters', {[`-=${this.id}`]: null})    
     }
 }

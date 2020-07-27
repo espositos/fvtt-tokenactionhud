@@ -1,35 +1,39 @@
 import { CompendiumHelper } from './compendiumHelper.js';
 
 export class HudCompendium {
-    constructor(filterManager, key, title) {
+    constructor(filterManager, categoryId, id, title) {
         this.filterManager = filterManager;
-        this.id = key;
+        this.id = id;
         this.title = title;
+
+        // used wherever the '.' will cause problems: as a key for flags, etc (also filters).
+        let cleanId = id.slugify({strict:true});
+        this.key = categoryId + cleanId;
 
         this.createFilter();
         this.submitFilterSuggestions();
     }
 
     createFilter() {
-        this.filterManager.createOrGetFilter(this.id);
+        this.filterManager.createOrGetFilter(this.key);
     }
 
     async clearFilter() {
-        await this.filterManager.clearFilter(this.id);
+        await this.filterManager.clearFilter(this.key);
     }
 
     async submitFilterSuggestions() {
         let suggestions = await CompendiumHelper.getCompendiumEntriesForFilter(this.id);
-        this.filterManager.setSuggestions(this.id, suggestions);
+        this.filterManager.setSuggestions(this.key, suggestions);
     }
 
     setFilteredElements(elements, isBlocklist)
     {
-        this.filterManager.setFilteredElements(this.id, elements, isBlocklist);
+        this.filterManager.setFilteredElements(this.key, elements, isBlocklist);
     }
 
     async addToCategory(actionHandler, category) {
-        let subcategory = actionHandler.initializeEmptySubcategory(this.id);
+        let subcategory = actionHandler.initializeEmptySubcategory(this.key);
         subcategory.actions = await this._createCompendiumActions(actionHandler.delimiter);
         subcategory.canFilter = true;
         actionHandler._combineSubcategoryWithCategory(category, this.title, subcategory);
@@ -38,8 +42,8 @@ export class HudCompendium {
     async _createCompendiumActions(delimiter) {
         let packEntries = await CompendiumHelper.getEntriesForActions(this.id, delimiter);
 
-        let filters = this.filterManager.getFilteredIds(this.id);
-        let isBlocklist = this.filterManager.isBlocklist(this.id);
+        let filters = this.filterManager.getFilteredIds(this.key);
+        let isBlocklist = this.filterManager.isBlocklist(this.key);
       
         let actions = packEntries;
 
@@ -47,6 +51,11 @@ export class HudCompendium {
             actions = packEntries.filter(p => filters.includes(p.id) !== isBlocklist)
         
         return actions;
+    }
+
+    async updateFlag(categoryId) {
+        let contents = {id: this.id, title: this.title}
+        await game.user.setFlag('token-action-hud', `compendiumCategories.${categoryId}.compendiums.${this.key}`, contents);
     }
 
     asTagifyEntry() {
