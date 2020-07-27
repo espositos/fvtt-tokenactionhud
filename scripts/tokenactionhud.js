@@ -55,8 +55,6 @@ export class TokenActionHUD extends Application {
     }
 
     async submitFilter(categoryId, elements, isBlocklist) {
-        let blocklist = parseInt(isBlocklist) != 0 ? true : false;
-
         this.filterManager.setFilteredElements(categoryId, elements, blocklist);
         this.update();
     }

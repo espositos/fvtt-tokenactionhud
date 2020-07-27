@@ -70,9 +70,10 @@ export class TagDialog extends Dialog {
               icon: '<i class="fas fa-check"></i>',
               label: game.i18n.localize("tokenactionhud.accept"),
               callback: (html) => {
-                  let choices = tagify.value;
-                  let isBlocklist = html.find('select[id="isBlocklist"]')[0].value
-                  game.tokenActionHUD.submitFilter(categoryId, choices, isBlocklist);
+                let choices = tagify.value;
+                let blocklistIndex = html.find('select[id="isBlocklist"]')[0].value
+                let isBlocklist = parseInt(blocklistIndex) != 0 ? true : false;
+                game.tokenActionHUD.submitFilter(categoryId, choices, isBlocklist);
               }
              },
              cancel: {
