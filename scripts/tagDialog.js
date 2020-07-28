@@ -227,7 +227,7 @@ export class TagDialog extends Dialog {
     /** @override */
     _onKeyDown(event) {
         // Close dialog
-        if ( event.key === "Escape" ) {
+        if ( event.key === "Escape" && !event.target.className.includes('tagify')) {
             event.preventDefault();
             event.stopPropagation();
             return this.close();

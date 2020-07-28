@@ -76,7 +76,7 @@ export class CompendiumCategory {
     async removeCompendium(index) {
         let compendium = this.compendiums[index];
         await compendium.clearFilter();
-        await compendium.deleteFlag();
+        await compendium.unsetFlag();
         this.compendiums.splice(index, 1);
     }
 

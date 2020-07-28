@@ -13,8 +13,9 @@ export class HudCompendium {
         await game.user.setFlag('token-action-hud', `compendiumCategories.${categoryId}.compendiums.${this.id}`, contents);
     }
 
-    async deleteFlag(categoryId) {
-        await game.user.setFlag('token-action-hud', `compendiumCategories.${categoryId}.compendiums`, {[`-=${this.id}`]: null})
+    async unsetFlag(categoryId) {
+        if (categoryId)
+            await game.user.setFlag('token-action-hud', `compendiumCategories.${categoryId}.compendiums`, {[`-=${this.id}`]: null})
     }
 
     createFilter() {
@@ -56,6 +57,6 @@ export class HudCompendium {
     }
 
     asTagifyEntry() {
-        return {id: this.id, value: this.title}
+        return {id: this.compendiumId, value: this.title}
     }
 }

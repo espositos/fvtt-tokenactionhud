@@ -15,10 +15,17 @@ export class CompendiumCategoryManager {
         if (savedCategories) {
             settings.Logger.debug('saved categories:', savedCategories);
             
-            for (let f of Object.entries(savedCategories)) {
-                let category = new CompendiumCategory(this.filterManager, f[1].id, f[1].title);
-                if (f[1].compendiums) {
-                    let compendiums = Object.values(f[1].compendiums);
+            for (let cat of Object.entries(savedCategories)) {
+                let id = cat[1].id;
+                let title = cat[1].title;
+                if (!(id || title))
+                    continue;
+
+                let category = new CompendiumCategory(this.filterManager, id, title);
+
+                let compendiums = cat[1].compendiums;
+                if (compendiums) {
+                    let compendiums = Object.values(cat[1].compendiums);
                     await category.selectCompendiums(compendiums);
                 }
                 this.categories.push(category);

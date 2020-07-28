@@ -33,7 +33,7 @@ export const registerSettings = function(system, rollHandlers) {
         scope : 'client',
         config : true,
         type : Boolean,
-        default : false,
+        default : true,
         onChange: value => { updateSettings(value); }
     });
 
@@ -43,7 +43,7 @@ export const registerSettings = function(system, rollHandlers) {
         scope : 'client',
         config : true,
         type : Boolean,
-        default : false,
+        default : true,
         onChange: value => { updateSettings(value); }
     });
 
