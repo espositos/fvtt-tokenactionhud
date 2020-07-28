@@ -31,7 +31,8 @@ export class MagicItemsPreRollHandler extends PreRollHandler {
 
         let magicItemActor = MagicItems.actor(actor._id);
 
-        magicItemActor.roll(itemId, magicEffectId).then(() => {this.preRollHandlers() });
+        magicItemActor.roll(itemId, magicEffectId);
+        
         Hooks.callAll('forceUpdateTokenActionHUD');
     }
 }

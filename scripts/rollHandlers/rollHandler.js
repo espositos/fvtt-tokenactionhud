@@ -20,7 +20,10 @@ export class RollHandler {
     handleActionEvent(event, encodedValue) {
         settings.Logger.debug(encodedValue);
 
-        let handled = false;
+        let handled = this.handleCompendiums(event, encodedValue);
+        if (handled)
+            return;
+
         this.preRollHandlers.forEach(handler => {
             if (handled)
                 return;
@@ -38,8 +41,19 @@ export class RollHandler {
         this.preRollHandlers.push(handler);
     }
 
-    handleCompendiums(macroType, event, tokenId, actionId) {
-        let types = ['compendiumEntry', 'compendiumMacro', 'compendiumPlaylist'];
+    handleCompendiums(event, encodedValue) {
+        let delimiter = game.tokenActionHUD.actions.delimiter;
+        
+        let payload = encodedValue.split(delimiter);
+        
+        if (payload.length != 3)
+            return false;
+        
+        let macroType = payload[0];
+        let tokenId = payload[1];
+        let actionId = payload[2];
+        
+        let types = ['compendiumEntry', 'compendiumMacro'];
         if (!types.includes(macroType))
             return false;
 
@@ -50,9 +64,8 @@ export class RollHandler {
             case 'compendiumMacro':
                 this.handleMacroCompendium(macroType, event, tokenId, actionId);
                 break;
-            case 'compendiumPlaylist':
-                this.handlePlaylistCompendium(macroType, event, tokenId, actionId);
-                break;
+            default:
+                return false;
         }   
 
         return true;

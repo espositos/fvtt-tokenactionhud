@@ -11,18 +11,18 @@ export class CompendiumCategoryManager {
     }
 
     async init() {
-        let savedCategories = user.getFlag('token-action-hud', 'compendiumCategories');
+        let savedCategories = this.user.getFlag('token-action-hud', 'compendiumCategories');
         if (savedCategories) {
             settings.Logger.debug('saved categories:', savedCategories);
             
-            Object.entries(savedCategories).forEach(f => {
+            for (let f of Object.entries(savedCategories)) {
                 let category = new CompendiumCategory(this.filterManager, f[1].id, f[1].title);
                 if (f[1].compendiums) {
                     let compendiums = Object.values(f[1].compendiums);
                     await category.selectCompendiums(compendiums);
                 }
                 this.categories.push(category);
-            })
+            }
         }
     }
 

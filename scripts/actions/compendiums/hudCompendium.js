@@ -1,15 +1,15 @@
 import { CompendiumHelper } from './compendiumHelper.js';
 
 export class HudCompendium {
-    constructor(filterManager, id, compendiumId, title) {
+    constructor(filterManager, categoryId, compendiumId, title) {
         this.filterManager = filterManager;
-        this.id = id;
+        this.id = `${categoryId}_${compendiumId}`.slugify({replacement: '_', strict:true});
         this.compendiumId = compendiumId;
         this.title = title;
     }
 
     async updateFlag(categoryId) {
-        let contents = {compendiumId: this.compendiumId, title: this.title}
+        let contents = {id: this.compendiumId, title: this.title}
         await game.user.setFlag('token-action-hud', `compendiumCategories.${categoryId}.compendiums.${this.id}`, contents);
     }
 

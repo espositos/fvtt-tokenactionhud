@@ -43,7 +43,7 @@ export class CompendiumCategory {
         let idMap = compendiums.map(c => c.id);
         for (var i = this.compendiums.length - 1; i >= 0; i--) {
             let compendium = this.compendiums[i];
-            if (!idMap.includes(compendium.id))
+            if (!idMap.includes(compendium.compendiumId))
                await this.removeCompendium(i)
         }
 
@@ -51,7 +51,7 @@ export class CompendiumCategory {
     }
 
     async addCompendium(compendium) {
-        if (this.compendiums.some(c => c.id === compendium.id))
+        if (this.compendiums.some(c => c.compendiumId === compendium.id))
             return;
 
         if (!CompendiumHelper.exists(compendium.id))
