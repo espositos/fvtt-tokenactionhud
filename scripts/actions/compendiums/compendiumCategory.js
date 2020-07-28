@@ -1,6 +1,5 @@
 import {HudCompendium} from './hudCompendium.js';
 import {CompendiumHelper} from './compendiumHelper.js';
-import * as settings from '../../settings.js';
 
 export class CompendiumCategory {
     compendiums = [];

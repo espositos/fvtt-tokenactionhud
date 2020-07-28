@@ -1,6 +1,6 @@
 import * as settings from './settings.js';
 import { HandlersManager } from './handlersManager.js';
-import { TagDialog } from './tagDialog.js';
+import { TagDialogHelper } from './utilities/tagDialogHelper.js';
 import { CategoryResizer } from './utilities/categoryResizer.js';
 
 export class TokenActionHUD extends Application {
@@ -31,33 +31,6 @@ export class TokenActionHUD extends Application {
 
     setTokensReference(tokens) {
         this.tokens = tokens;
-    }
-    
-    showFilterDialog(categoryId) {
-        TagDialog.showActionFilterDialog(this.filterManager, categoryId);
-    }
-
-    showCompendiumDialog(categoryId) {
-        TagDialog.showCompendiumDialog(categoryId, this.compendiumManager);
-    }
-
-    showCategoryDialog() {
-        TagDialog.showCategoryDialog(this.compendiumManager);
-    }
-
-    async submitCategories(choices, push) {
-        await this.compendiumManager.submitCategories(choices, push);
-        this.update()
-    }
-
-    async submitCompendiums(categoryId, choices) {
-        await this.compendiumManager.submitCompendiums(categoryId, choices);
-        this.update();
-    }
-
-    async submitFilter(categoryId, elements, isBlocklist) {
-        await this.filterManager.setFilteredElements(categoryId, elements, isBlocklist);
-        this.update();
     }
 
     /** @override */
@@ -129,9 +102,9 @@ export class TokenActionHUD extends Application {
             let id = target.value;
 
             if (game.tokenActionHUD.compendiumManager.isCompendiumCategory(id))
-                game.tokenActionHUD.showCompendiumDialog(id);
+                TagDialogHelper.showCompendiumDialog(this.compendiumManager, id)
             else
-                game.tokenActionHUD.showFilterDialog(id);
+                TagDialogHelper.showFilterDialog(this.filterManager, id);
         }     
 
         function handlePossibleFilterSubtitleClick(e) {
@@ -141,7 +114,7 @@ export class TokenActionHUD extends Application {
 
             let id = target.id;
 
-            game.tokenActionHUD.showFilterDialog(id);
+            TagDialogHelper.showFilterDialog(this.filterManager, id);
         }
 
         html.find('.tah-title-button').click('click', e => handlePossibleFilterButtonClick(e));
@@ -174,7 +147,7 @@ export class TokenActionHUD extends Application {
             ev.preventDefault();
             ev = ev || window.event;
 
-            game.tokenActionHUD.showCategoryDialog()
+            TagDialogHelper.showCategoryDialog(this.compendiumManager)
         })
 
         html.find(repositionIcon).mousedown(ev => {
