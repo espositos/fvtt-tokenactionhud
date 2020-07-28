@@ -18,10 +18,11 @@ export class CompendiumCategoryManager {
             for (let cat of Object.entries(savedCategories)) {
                 let id = cat[1].id;
                 let title = cat[1].title;
+                let push = cat[1].push;
                 if (!(id || title))
                     continue;
 
-                let category = new CompendiumCategory(this.filterManager, id, title);
+                let category = new CompendiumCategory(this.filterManager, id, title, push);
 
                 let compendiums = cat[1].compendiums;
                 if (compendiums) {
@@ -50,11 +51,11 @@ export class CompendiumCategoryManager {
         }
     }
 
-    async submitCategories(selections) {
+    async submitCategories(selections, push) {
         selections = selections.map(s => { return {id: s.value.slugify({replacement: '_', strict: true}), value: s.value}})
         for (let choice of selections) {
             if (!this.categories.some(c => c.id === choice.id))
-                await this.createCategory(choice);
+                await this.createCategory(choice, push);
         }
 
         let idMap = selections.map(s => s.id);
@@ -69,8 +70,8 @@ export class CompendiumCategoryManager {
         }
     }
 
-    async createCategory(tagifyCategory) {
-        let newCategory = new CompendiumCategory(this.filterManager, tagifyCategory.id, tagifyCategory.value);
+    async createCategory(tagifyCategory, push) {
+        let newCategory = new CompendiumCategory(this.filterManager, tagifyCategory.id, tagifyCategory.value, push);
         await newCategory.updateFlag();
         this.categories.push(newCategory);
     }

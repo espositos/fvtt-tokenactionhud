@@ -89,6 +89,9 @@
     "tokenactionhud.blocklist": "차단 목록",
     "tokenactionhud.allowlist": "허가 목록",
 
+    "tokenactionhud.categoryTagTitle": "Add/remove categories",
+    "tokenactionhud.compendiumTagTitle": "Add/remove compendiums",
+
     "tokenactionhud.settings.rollHandler.name": "HUD 굴림 처리기",
     "tokenactionhud.settings.rollHandler.hint": "HUD의 작업을 받을 모듈을 선택한다.",
     "tokenactionhud.settings.enabledForUser.name": "현재 유저에게 HUD를 활성화",
@@ -99,6 +102,10 @@
     "tokenactionhud.settings.playerPermission.hint": "활성화할 경우 플레이어가 HUD를 사용할 수 있다.",
     "tokenactionhud.settings.debug.name": "디버깅 활성화",
     "tokenactionhud.settings.debug.hint": "디버그 기록을 활성화한다.",
+    "tokenactionhud.settings.alwaysShowCompendiumCategories.name": "Always show compendium categories",
+    "tokenactionhud.settings.alwaysShowCompendiumCategories.hint": "If enabled, compendium categories will be shown even when no token is selected.",
+    "tokenactionhud.settings.showIcons.name": "Show icons next to buttons",
+    "tokenactionhud.settings.showIcons.hint": "If enabled, icons will be displayed on the HUD button where available.",
 
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.name": "패시브 피트 무시",
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.hint": "활성화된 경우 패시브 피트가 표시되지 않는다.",

@@ -8,11 +8,12 @@ export class CompendiumCategory {
     key = '';
     title = '';
 
-    constructor(filterManager, id, title) {
+    constructor(filterManager, id, title, push) {
         this.filterManager = filterManager;
         this.id = id;
         this.key = id.slugify({replacement: '_', strict:true})
         this.title = title;
+        this.push = push;
     }
 
     async addToActionList(actionHandler, actionList) {
@@ -23,9 +24,7 @@ export class CompendiumCategory {
             await compendium.addToCategory(actionHandler, result);
         }
 
-        let push = settings.get('pushCompendiumCategories');
-
-        actionHandler._combineCategoryWithList(actionList, this.title, result, push);
+        actionHandler._combineCategoryWithList(actionList, this.title, result, this.push);
 
         return actionList;
     }
@@ -67,6 +66,7 @@ export class CompendiumCategory {
     async updateFlag() {
         await game.user.setFlag('token-action-hud', `compendiumCategories.${this.key}.title`, this.title);
         await game.user.setFlag('token-action-hud', `compendiumCategories.${this.key}.id`, this.id);
+        await game.user.setFlag('token-action-hud', `compendiumCategories.${this.key}.push`, this.push);
 
         for (let comp of this.compendiums) {
             comp.updateFlag(this.key);

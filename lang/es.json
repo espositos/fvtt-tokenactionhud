@@ -89,6 +89,9 @@
     "tokenactionhud.blocklist": "Lista de bloqueados",
     "tokenactionhud.allowlist": "Lista de permitidos",
 
+    "tokenactionhud.categoryTagTitle": "Add/remove categories",
+    "tokenactionhud.compendiumTagTitle": "Add/remove compendiums",
+
     "tokenactionhud.settings.rollHandler.name": "Manejador de tiradas",
     "tokenactionhud.settings.rollHandler.hint": "Elige que módulo recibirá las acciones de la barra.",
     "tokenactionhud.settings.enabledForUser.name": "Activar el HUD para el usuario actual",
@@ -99,6 +102,10 @@
     "tokenactionhud.settings.playerPermission.hint": "Si está activo, los jugadores podrán usar el HUD.",
     "tokenactionhud.settings.debug.name": "Activar depuración",
     "tokenactionhud.settings.debug.hint": "Activar el registro de depuración.",
+    "tokenactionhud.settings.alwaysShowCompendiumCategories.name": "Always show compendium categories",
+    "tokenactionhud.settings.alwaysShowCompendiumCategories.hint": "If enabled, compendium categories will be shown even when no token is selected.",
+    "tokenactionhud.settings.showIcons.name": "Show icons next to buttons",
+    "tokenactionhud.settings.showIcons.hint": "If enabled, icons will be displayed on the HUD button where available.",
 
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.name": "Ignorar las dotes pasivas",
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.hint": "Si está activo, las dotes pasivas no se mostrarán.",

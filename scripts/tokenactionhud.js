@@ -45,8 +45,8 @@ export class TokenActionHUD extends Application {
         TagDialog.showCategoryDialog(this.compendiumManager);
     }
 
-    async submitCategories(choices) {
-        await this.compendiumManager.submitCategories(choices);
+    async submitCategories(choices, push) {
+        await this.compendiumManager.submitCategories(choices, push);
         this.update()
     }
 

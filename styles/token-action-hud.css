@@ -38,12 +38,19 @@
 
 #tah-reposition > .fa, #tah-reposition > .fas, #tah-compendiums > .fa, #tah-compendiums > .fas {
     color: #fff;
-    font-size: small;
     padding: 3px;
     margin: 3px;
     text-shadow: 0px 0px 3px rgba(52, 52, 52, 1);
     text-align: center;
     pointer-events: none;
+}
+
+#tah-reposition > .fa, #tah-reposition > .fas {
+    font-size: small;
+}
+
+#tah-compendiums > .fa, #tah-compendiums > .fas {
+    font-size: medium;
 }
 
 #tah-reposition:hover > i, #tah-compendiums:hover > i {

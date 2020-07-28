@@ -91,8 +91,8 @@
     "tokenactionhud.blocklist": "Blocklist",
     "tokenactionhud.allowlist": "Allowlist",
 
-    "tokenactionhud.categoryTagTitle": "Manage additional compendium categories",
-    "tokenactionhud.compendiumTagTitle": "Compendiums to show in category",
+    "tokenactionhud.categoryTagTitle": "Add/remove categories",
+    "tokenactionhud.compendiumTagTitle": "Add/remove compendiums",
 
     "tokenactionhud.settings.rollHandler.name": "HUD roll handler",
     "tokenactionhud.settings.rollHandler.hint": "Choose which module will receive the HUD's actions.",
@@ -104,10 +104,10 @@
     "tokenactionhud.settings.playerPermission.hint": "If enabled, players will be able to use the HUD.",
     "tokenactionhud.settings.debug.name": "Enable debugging",
     "tokenactionhud.settings.debug.hint": "Enable debug logging.",
-    "tokenactionhud.settings.pushCompendiumCategories.name": "Show compendium categories on left of HUD",
-    "tokenactionhud.settings.pushCompendiumCategories.hint": "If enabled, compendium categories will stick to the left-hand side of the HUD.",
     "tokenactionhud.settings.alwaysShowCompendiumCategories.name": "Always show compendium categories",
     "tokenactionhud.settings.alwaysShowCompendiumCategories.hint": "If enabled, compendium categories will be shown even when no token is selected.",
+    "tokenactionhud.settings.showIcons.name": "Show icons next to buttons",
+    "tokenactionhud.settings.showIcons.hint": "If enabled, icons will be displayed on the HUD button where available.",
 
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.name": "Ignore passive feats",
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.hint": "If enabled, passive feats are not shown.",

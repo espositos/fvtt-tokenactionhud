@@ -89,6 +89,9 @@
   "tokenactionhud.blocklist": "Lista Bloquiada",
   "tokenactionhud.allowlist": "Lista Permitida",
 
+  "tokenactionhud.categoryTagTitle": "Add/remove categories",
+  "tokenactionhud.compendiumTagTitle": "Add/remove compendiums",
+
   "tokenactionhud.settings.rollHandler.name": "HUD de Manipulação de rolganes",
   "tokenactionhud.settings.rollHandler.hint": "Escolha qual modulo será usado na HUD de ações.",
   "tokenactionhud.settings.enabledForUser.name": "Habilitar HUD para usuarios ativos",
@@ -99,6 +102,10 @@
   "tokenactionhud.settings.playerPermission.hint": "Se ativado, os jogadores poderão usar a HUD.",
   "tokenactionhud.settings.debug.name": "Ativar depuração",
   "tokenactionhud.settings.debug.hint": "Ativar registro de depuração.",
+  "tokenactionhud.settings.alwaysShowCompendiumCategories.name": "Always show compendium categories",
+  "tokenactionhud.settings.alwaysShowCompendiumCategories.hint": "If enabled, compendium categories will be shown even when no token is selected.",
+  "tokenactionhud.settings.showIcons.name": "Show icons next to buttons",
+  "tokenactionhud.settings.showIcons.hint": "If enabled, icons will be displayed on the HUD button where available.",
 
   "tokenactionhud.settings.dnd5e.ignorePassiveFeats.name": "Ignore talentos passivos",
   "tokenactionhud.settings.dnd5e.ignorePassiveFeats.hint": "Se ativado, talentos passivos não serão exibidos.",
