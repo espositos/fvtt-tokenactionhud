@@ -1,9 +1,15 @@
 # Changelog
 
+## [0.5.12] 2021-07-29
+### Changed
+- DND5e: removed right click for versatile ability in BetterRoll and Minor QoL handlers in favour of alt + right-click and ctrl + right-click to bring up damage and attack roll modals, respectively.
+
 ## [0.5.11] 2021-07-26
+### Added
 - Added further KO localization from drdwing
 
 ## [0.5.10] 2021-07-25
+### Added
 - Added missing method causing exception when checking compendiums
 
 ## [0.5.9] 2021-07-23
