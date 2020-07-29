@@ -51,24 +51,27 @@ export class RollHandlerBetterRolls5e extends RollHandlerBase5e {
             return;
         }
 
+        let rightClick = event.originalEvent.button === 2;
+        let ctrlKey = keyboard.isCtrl(event);
+        let altKey = event.altKey;
+        if (rightClick && ctrlKey) {
+            item.rollAttack();
+            return;
+        }
+        if (rightClick && altKey) {
+            item.rollDamage();
+            return;
+        }
+
         let params = {
             adv: 0,
             disadv: 0,
         }
 
-		if (event.shiftKey) { params.adv = 1; }
-        if (keyboard.isCtrl(event)) { params.disadv = 1; }
+		if (shiftKey) { params.adv = 1; }
+        if (ctrlKey) { params.disadv = 1; }
 
-        var versatile = false;
-        if (item.data.data.properties?.ver)
-            versatile = event.originalEvent.button === 2;
-
-        if (item.type === 'weapon' && versatile) {
-            BetterRolls.rollItem(item, params, [["attack"], ["damage", {index: "all", versatile: versatile}]]).toMessage();
-            return;
-        }
-
-        params.preset = event.altKey ? 1 : 0;
+        params.preset = altKey ? 1 : 0;
 
         BetterRolls.rollItem(item, params).toMessage();
     }
