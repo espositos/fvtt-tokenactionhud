@@ -216,6 +216,7 @@ export class ActionHandler5e extends ActionHandler {
 
             var level = s.data.level;
             let power = (prep === 'pact' || prep === 'atwill' || prep === 'innate')
+
             var max, slots, levelName, levelKey, levelInfo;
                       
             if (power) {
@@ -230,38 +231,36 @@ export class ActionHandler5e extends ActionHandler {
             slots = levelInfo?.value;
             max = levelInfo?.max;
 
-            // Initialise subcategory if non-existant.
-            if (power) {
-                if (!powers.subcategories.hasOwnProperty(prepType)) {
-                    let prepTypeCat = this.initializeEmptySubcategory();
-                    this._combineSubcategoryWithCategory(powers, prepType, prepTypeCat);
-                    if (max > 0) {
-                        prepTypeCat.info1 = `${slots}/${max}`;
-                    }
-                }
-            } else {                                
-                if (!book.subcategories.hasOwnProperty(levelName)) {
-                    let levelCat = this.initializeEmptySubcategory();
-                    this._combineSubcategoryWithCategory(book, levelName, levelCat);
-                    if (max > 0) {
-                        levelCat.info1 = `${slots}/${max}`;
-                    }
-                }
-            }
-            
+            let ignoreSlotsAvailable = settings.get('showEmptyItems');
+            if (max && !(levelInfo?.slotsAvailable || ignoreSlotsAvailable))
+                return;
+
             let spell = this._buildItem(tokenId, actor, macroType, s);
             
             if (settings.get('showSpellInfo'))
                 this._addSpellInfo(s, spell);
 
-            let ignoreSlotsAvailable = settings.get('showEmptyItems');
-            if (!max || (levelInfo?.slotsAvailable || ignoreSlotsAvailable)) {
-                if (power) {
-                    powers.subcategories.find(s => s.name === prepType).actions.push(spell);
-                } else {
-                    book.subcategories.find(s => s.name === levelName).actions.push(spell);
+            // Initialise subcategory if non-existant.
+            let subcategory;
+            if (power) {
+                subcategory = powers.subcategories.find(cat => cat.name === prepType);
+            } else {
+                subcategory = book.subcategories.find(cat => cat.name === levelName);
+            }
+
+            if (!subcategory) {
+                subcategory = this.initializeEmptySubcategory();
+                if (max > 0) {
+                    subcategory.info1 = `${slots}/${max}`;
                 }
             }
+            
+            subcategory.actions.push(spell);
+
+            if (power && powers.subcategories.indexOf(subcategory) < 0)
+                this._combineSubcategoryWithCategory(powers, prepType, subcategory);
+            else if (!power && book.subcategories.indexOf(subcategory) < 0)
+                this._combineSubcategoryWithCategory(book, levelName, subcategory);
             
             return dispose;
         }.bind(this), {});

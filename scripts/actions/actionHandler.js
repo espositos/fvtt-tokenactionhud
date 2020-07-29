@@ -1,6 +1,7 @@
 import {ActionList} from './entities/actionList.js';
 import {Category} from './entities/category.js';
 import {Subcategory} from './entities/subcategory.js';
+import * as settings from '../settings.js';
 
 export class ActionHandler {
     i18n = (toTranslate) => game.i18n.localize(toTranslate);
@@ -62,6 +63,8 @@ export class ActionHandler {
                 result.categories.push(category);
             else
                 result.categories.unshift(category);
+        } else {
+            settings.Logger.debug('category criteria not met, disposing of', categoryName)
         }
     }
 
@@ -74,5 +77,7 @@ export class ActionHandler {
         
         if (subcategory.subcategories.length > 0 || subcategory.actions.length > 0 || subcategory.canFilter)
             category.subcategories.push(subcategory);
+        else
+            settings.Logger.debug('subcategory criteria not met, disposing of', subcategoryName)
     }
 }

@@ -43,10 +43,10 @@ export class ActionHandlerDw extends ActionHandler {
             this._combineCategoryWithList(result, this.i18n('tokenactionhud.specialQualities'), specialQualities);
         } else if (actorType === 'character') {
             let damage = this._getDamage(actor, tokenId);
-            let startingMoves = this._getMovesByType(actor, tokenId, this.i18n('tokenactionhud.starting'));
-            let advancedMoves = this._getMovesByType(actor, tokenId, this.i18n('tokenactionhud.advanced'));
-            let basicMoves = this._getMovesByType(actor, tokenId, this.i18n('tokenactionhud.other'));
-            let spells = this._getSubcategoryByType(actor, tokenId, 'spells', this.i18n('tokenactionhud.spells'), 'spell');
+            let startingMoves = this._getMovesByType(actor, tokenId, 'starting');
+            let advancedMoves = this._getMovesByType(actor, tokenId, 'advanced');
+            let basicMoves = this._getMovesByType(actor, tokenId, 'basic');
+            let spells = this._getSpells(actor, tokenId, 'spells', this.i18n('tokenactionhud.spells'), 'spell');
             let equipment = this._getSubcategoryByType(actor, tokenId, 'equipment', this.i18n('tokenactionhud.equipment'), 'equipment');
             let abilities = this._getAbilities(actor, tokenId);
             
@@ -135,6 +135,37 @@ export class ActionHandlerDw extends ActionHandler {
         category.actions = actions;
 
         this._combineSubcategoryWithCategory(result, categoryName, category);
+
+        return result;
+    }
+
+    /** @private */
+    _getSpells(actor, tokenId, categoryId, categoryName, categoryType) {
+        let items = actor.itemTypes[categoryType];
+        let preparedSpells = items.filter(s => s.data.data.prepared).sort((a, b) => parseInt(a.data.data.spellLevel) - parseInt(b.data.data.spellLevel));
+        let spellsByLevel = preparedSpells.reduce((acc, s) => {
+            let spellLevel = s.data.data.spellLevel;
+            let levelName = spellLevel == 0 ? 'Rotes' : `${this.i18n('tokenactionhud.level')} ${spellLevel}`;
+            let levelCategory;
+            if (!acc.some(l => l.name === levelName)) {
+                levelCategory = this.initializeEmptySubcategory();
+                levelCategory.name = levelName;
+                acc.push(levelCategory);
+            } else {
+                levelCategory = acc.find(l => l.name === levelName);
+            }
+
+            let spellAction = this._produceMap(tokenId, [s], categoryType);
+
+            levelCategory.actions.push(...spellAction);
+
+            return acc;
+        }, []);
+
+        let result = this.initializeEmptyCategory(categoryId);
+        spellsByLevel.forEach(subcat => {
+            this._combineSubcategoryWithCategory(result, subcat.name, subcat);
+        })
 
         return result;
     }

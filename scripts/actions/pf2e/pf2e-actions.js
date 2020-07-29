@@ -210,7 +210,8 @@ export class ActionHandlerPf2e extends ActionHandler {
             let category;
             if (!result.subcategories.some(b => b.name === bookName)) {
                 category = this.initializeEmptySubcategory(bookName);
-                this._combineSubcategoryWithCategory(result, bookName, category);
+                category.name = bookName;
+                result.subcategories.push(category);
             } else {
                 category = result.subcategories.find(b => b.name === bookName);
             }
@@ -222,7 +223,8 @@ export class ActionHandlerPf2e extends ActionHandler {
             let levelCategory;
             if (category.subcategories.length === 0) {
                 levelCategory = this.initializeEmptySubcategory();
-                this._combineSubcategoryWithCategory(category, levelName, levelCategory);
+                levelCategory.name = levelName;
+                category.subcategories.push(levelCategory);
                 
                 if (actor.data.type === 'character')
                     this._setSpellSlotInfo(tokenId, levelCategory, spellbook, level, true);
@@ -235,9 +237,11 @@ export class ActionHandlerPf2e extends ActionHandler {
             
             if (!(stillFirstSubcategory || category.subcategories.some(s => s.name === levelName))) {
                 levelCategory = this.initializeEmptySubcategory(levelName);
-                this._combineSubcategoryWithCategory(category, levelName, levelCategory);
+                levelCategory.name = levelName;
+                category.subcategories.push(levelCategory);
+
                 if (actor.data.type === 'character')
-                this._setSpellSlotInfo(tokenId, levelCategory, spellbook, level, false);
+                    this._setSpellSlotInfo(tokenId, levelCategory, spellbook, level, false);
             }
             
             let categoryName = stillFirstSubcategory ? levelNameWithBook : levelName;
