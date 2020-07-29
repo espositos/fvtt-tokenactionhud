@@ -1,8 +1,12 @@
 # Changelog
 
-## [0.5.12] 2021-07-29
+## [0.5.13] 2021-07-29
 ### Changed
 - DND5e: removed right click for versatile ability in BetterRoll and Minor QoL handlers in favour of alt + right-click and ctrl + right-click to bring up damage and attack roll modals, respectively.
+
+## [0.5.12] 2021-07-27
+### Bugfix
+- DND5e: fixed error for actors with magic item mod enabled but no magic items.
 
 ## [0.5.11] 2021-07-26
 ### Added
