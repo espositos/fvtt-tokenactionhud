@@ -93,6 +93,10 @@
 
     "tokenactionhud.categoryTagTitle": "Add/remove categories",
     "tokenactionhud.compendiumTagTitle": "Add/remove compendiums",
+    "tokenactionhud.clearButton": "Clear",
+    "tokenactionhud.unshift": "Left",
+    "tokenactionhud.push": "Right",
+    "tokenactionhud.pushLabelExplanation": "Show categories on which side?",
 
     "tokenactionhud.settings.rollHandler.name": "HUD roll handler",
     "tokenactionhud.settings.rollHandler.hint": "Choose which module will receive the HUD's actions.",

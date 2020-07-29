@@ -57,10 +57,12 @@ export class ActionHandler {
         if (categoryName?.length > 0)
             category.name = categoryName;
 
-        if (push)
-            result.categories.push(category);
-        else
-            result.categories.unshift(category);
+        if (category.subcategories.length > 0 || category.canFilter) {
+            if (push)
+                result.categories.push(category);
+            else
+                result.categories.unshift(category);
+        }
     }
 
     _combineSubcategoryWithCategory(category, subcategoryName, subcategory) {
@@ -70,6 +72,7 @@ export class ActionHandler {
         if (subcategoryName?.length > 0)
             subcategory.name = subcategoryName;
         
-        category.subcategories.push(subcategory);
+        if (subcategory.subcategories.length > 0 || subcategory.actions.length > 0 || subcategory.canFilter)
+            category.subcategories.push(subcategory);
     }
 }

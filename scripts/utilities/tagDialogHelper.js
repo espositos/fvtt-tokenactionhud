@@ -1,16 +1,18 @@
 import {TagDialog} from '../tagDialog.js';
+import { CompendiumHelper } from '../actions/compendiums/compendiumHelper.js';
 
 export class TagDialogHelper {
+    
     static showFilterDialog(filterManager, categoryId) {
-        TagDialogHelper.showActionFilterDialog(filterManager, categoryId);
+        TagDialogHelper._showFilterDialog(filterManager, categoryId);
     }
 
     static showCompendiumDialog(compendiumManager, categoryId) {
-        TagDialogHelper.showCompendiumDialog(categoryId, compendiumManager);
+        TagDialogHelper._showCompendiumDialog(compendiumManager, categoryId);
     }
 
     static showCategoryDialog(compendiumManager) {
-        TagDialogHelper.showCategoryDialog(compendiumManager);
+        TagDialogHelper._showCategoryDialog(compendiumManager);
     }
 
     static async submitCategories(compendiumManager, choices, push) {
@@ -29,74 +31,76 @@ export class TagDialogHelper {
     }
     
     // Currently only used for WFRP skill filter
-    static showActionFilterDialog(filterManager, categoryId) {
+    static _showFilterDialog(filterManager, categoryId) {
         let suggestions = filterManager.getSuggestions(categoryId);
         let selected = filterManager.getFilteredElements(categoryId);
+        let indexChoice = filterManager.isBlocklist(categoryId) ? 1 : 0;
 
-        let title = this.i18n('tokenactionhud.filterTagTitle');
+        let title = game.i18n.localize('tokenactionhud.filterTagTitle');
         
         let hbsData = {
-            topLabel: this.i18n('tokenactionhud.categoryTagTitle'),
-            placeholder: this.i18n('tokenactionhud.tagifyPlaceholder'),
-            clearButtonText: this.i18n('tokenactionhud.filterPlaceholder'),
-            indexExplanationLabel: this.localize('tokenactionhud.blocklistLabel'),
+            topLabel: game.i18n.localize('tokenactionhud.categoryTagTitle'),
+            placeholder: game.i18n.localize('tokenactionhud.filterPlaceholder'),
+            clearButtonText: game.i18n.localize('tokenactionhud.clearButton'),
+            indexExplanationLabel: game.i18n.localize('tokenactionhud.blocklistLabel'),
             index: [
-                {value: 0, text: this.i18n('tokenactionhud.allowlist')},
-                {value: 1, text: this.i18n('tokenactionhud.blocklist')}
+                {value: 0, text: game.i18n.localize('tokenactionhud.allowlist')},
+                {value: 1, text: game.i18n.localize('tokenactionhud.blocklist')}
             ]
         }
 
         let submitFunc = (choices, indexValue) => {
             let isBlocklist = parseInt(indexValue) != 0 ? true : false;
-            game.tokenActionHUD.submitFilters(categoryId, categoryId, isBlocklist);
+            TagDialogHelper.submitFilters(categoryId, categoryId, isBlocklist);
         }
 
-        this.showDialog(suggestions, selected, title, hbsData, submitFunc);
+        TagDialog.showDialog(suggestions, selected, indexChoice, title, hbsData, submitFunc);
     }
     
-    static showCompendiumDialog(categoryId, compendiumManager) {
+    static _showCompendiumDialog(compendiumManager, categoryId) {
         let suggestions = CompendiumHelper.getCompendiumChoicesForFilter();
         let selected = compendiumManager.getCategoryCompendiumsAsTagifyEntries(categoryId);
 
-        let title = this.i18n('tokenactionhud.compendiumTagTitle');
+        let title = game.i18n.localize('tokenactionhud.compendiumTagTitle');
         
         let hbsData = {
-            topLabel: this.i18n('tokenactionhud.compendiumTagTitle'),
-            placeholder: this.i18n('tokenactionhud.tagifyPlaceholder'),
-            clearButtonText: this.i18n('tokenactionhud.filterPlaceholder'),
+            topLabel: game.i18n.localize('tokenactionhud.compendiumTagTitle'),
+            placeholder: game.i18n.localize('tokenactionhud.filterPlaceholder'),
+            clearButtonText: game.i18n.localize('tokenactionhud.clearButton'),
         }
 
         let submitFunc = (choices, indexValue) => {
-            game.tokenActionHUD.submitCompendiums(categoryId, choices);
+            let compendiums = choices.map(c => {return {id: c.id, title: c.value}})
+            TagDialogHelper.submitCompendiums(compendiumManager, categoryId, compendiums);
         }
 
-        this.showDialog(suggestions, selected, title, hbsData, submitFunc);
+        TagDialog.showDialog(suggestions, selected, null, title, hbsData, submitFunc);
     }
 
-    static showCategoryDialog(compendiumManager) {
+    static _showCategoryDialog(compendiumManager) {
         let selected = compendiumManager.getExistingCategories();
 
-        let title = this.i18n('tokenactionhud.categoryTagTitle');
+        let indexChoice = compendiumManager.arePush() ? 1 : 0;
+
+        let title = game.i18n.localize('tokenactionhud.categoryTagTitle');
         
         let hbsData = {
-            topLabel: this.i18n('tokenactionhud.categoryTagTitle'),
-            placeholder: this.i18n('tokenactionhud.tagifyPlaceholder'),
-            clearButtonText: this.i18n('tokenactionhud.filterPlaceholder'),
-            indexExplanationLabel: this.i18n('tokenactionhud.pushLabelExplanation'),
+            topLabel: game.i18n.localize('tokenactionhud.categoryTagTitle'),
+            placeholder: game.i18n.localize('tokenactionhud.filterPlaceholder'),
+            clearButtonText: game.i18n.localize('tokenactionhud.clearButton'),
+            indexExplanationLabel: game.i18n.localize('tokenactionhud.pushLabelExplanation'),
             index: [
-                {value: 0, text: this.i18n('tokenactionhud.unshift')},
-                {value: 1, text: this.i18n('tokenactionhud.push')}
+                {value: 0, text: game.i18n.localize('tokenactionhud.unshift')},
+                {value: 1, text: game.i18n.localize('tokenactionhud.push')}
             ]
         }
 
-        let template = Handlebars.dosomething(hbsData, template);
-
         let submitFunc = (choices, indexValue) => {
             let push = parseInt(indexValue) != 0 ? true : false;
-            game.tokenActionHUD.submitCategories(choices, push);
+            TagDialogHelper.submitCategories(compendiumManager, choices, push);
         }
 
-        this.showDialog(null, selected, title, hbsData, submitFunc);
+        TagDialog.showDialog(null, selected, indexChoice, title, hbsData, submitFunc);
     }
 
 

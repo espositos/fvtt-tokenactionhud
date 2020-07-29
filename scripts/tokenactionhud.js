@@ -102,9 +102,9 @@ export class TokenActionHUD extends Application {
             let id = target.value;
 
             if (game.tokenActionHUD.compendiumManager.isCompendiumCategory(id))
-                TagDialogHelper.showCompendiumDialog(this.compendiumManager, id)
+                TagDialogHelper.showCompendiumDialog(game.tokenActionHUD.compendiumManager, id)
             else
-                TagDialogHelper.showFilterDialog(this.filterManager, id);
+                TagDialogHelper.showFilterDialog(game.tokenActionHUD.filterManager, id);
         }     
 
         function handlePossibleFilterSubtitleClick(e) {
@@ -114,7 +114,7 @@ export class TokenActionHUD extends Application {
 
             let id = target.id;
 
-            TagDialogHelper.showFilterDialog(this.filterManager, id);
+            TagDialogHelper.showFilterDialog(game.tokenActionHUD.filterManager, id);
         }
 
         html.find('.tah-title-button').click('click', e => handlePossibleFilterButtonClick(e));
@@ -147,7 +147,7 @@ export class TokenActionHUD extends Application {
             ev.preventDefault();
             ev = ev || window.event;
 
-            TagDialogHelper.showCategoryDialog(this.compendiumManager)
+            TagDialogHelper._showCategoryDialog(this.compendiumManager)
         })
 
         html.find(repositionIcon).mousedown(ev => {

@@ -54,8 +54,11 @@ export class CompendiumCategoryManager {
     async submitCategories(selections, push) {
         selections = selections.map(s => { return {id: s.value.slugify({replacement: '_', strict: true}), value: s.value}})
         for (let choice of selections) {
-            if (!this.categories.some(c => c.id === choice.id))
+            let category = this.categories.find(c => c.id === choice.id);
+            if (!category)
                 await this.createCategory(choice, push);
+            else
+                await this.updateCategory(category, push);
         }
 
         let idMap = selections.map(s => s.id);
@@ -74,6 +77,11 @@ export class CompendiumCategoryManager {
         let newCategory = new CompendiumCategory(this.filterManager, tagifyCategory.id, tagifyCategory.value, push);
         await newCategory.updateFlag();
         this.categories.push(newCategory);
+    }
+
+    async updateCategory(compendiumCategory, push) {
+        compendiumCategory.push = push;
+        await compendiumCategory.updateFlag();
     }
 
     async deleteCategory(index) {
@@ -101,6 +109,10 @@ export class CompendiumCategoryManager {
 
     isLinkedCompendium(id) {
         return this.categories.some(c => c.compendiums.some(c => c.id === id));
+    }
+
+    arePush() {
+        return this.categories.filter(c => c.push).length >= this.categories.filter(c => !c.push).length;
     }
 
     getCategoryCompendiumsAsTagifyEntries(categoryId) {

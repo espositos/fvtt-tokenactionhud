@@ -53,7 +53,7 @@ export class RollHandler {
         let tokenId = payload[1];
         let actionId = payload[2];
         
-        let types = ['compendiumEntry', 'compendiumMacro'];
+        let types = ['compendiumEntry', 'compendiumMacro', 'compendiumPlaylist'];
         if (!types.includes(macroType))
             return false;
 
@@ -63,6 +63,9 @@ export class RollHandler {
                 break;
             case 'compendiumMacro':
                 this.handleMacroCompendium(macroType, event, tokenId, actionId);
+                break;
+            case 'compendiumPlaylist':
+                this.handlePlaylistCompendium(macroType, event, tokenId, actionId);
                 break;
             default:
                 return false;
@@ -81,5 +84,18 @@ export class RollHandler {
         let pack = game.packs.get(compendiumKey);
 
         pack.getEntity(entityId).then(e => e.execute());
+    }
+
+    async handlePlaylistCompendium(macroType, event, compendiumKey, actionId) {
+        let pack = game.packs.get(compendiumKey);
+
+        let actionPayload = actionId.split('>');
+        let playlistId = actionPayload[0];
+        let soundId = actionPayload[1];
+
+        let playlist = await pack.getEntity(playlistId);
+        let sound = playlist.sounds.find(s => s._id === soundId);
+
+        AudioHelper.play({src: sound.path}, {})
     }
 }

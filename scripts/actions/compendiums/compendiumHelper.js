@@ -3,7 +3,7 @@ export class CompendiumHelper {
 
     static getCompendiumChoicesForFilter() {
         return game.packs.entries.filter(p => {
-            let packTypes = ['JournalEntry', 'Macro', 'RollTable'];
+            let packTypes = ['JournalEntry', 'Macro', 'RollTable', 'Playlist'];
             return packTypes.includes(p.metadata.entity);
         }).map(p => {
             let key = `${p.metadata.package}.${p.metadata.name}`
@@ -27,8 +27,16 @@ export class CompendiumHelper {
         let pack = game?.packs?.get(key);
         if (!pack)
             return '';
+        let compendiumEntities = pack.metadata.entity;
 
-        return pack.metadata.entity === 'Macro' ? 'compendiumMacro': 'compendiumEntry';
+        switch (compendiumEntities) {
+            case 'Macro':
+                return 'compendiumMacro';
+            case 'Playlist':
+                return 'compendiumPlaylist';
+            default:
+                return 'compendiumEntry';
+        }
     }
 
     static async getCompendiumEntriesForFilter(key) {
@@ -44,6 +52,21 @@ export class CompendiumHelper {
 
         let packEntries = pack.index.length > 0 ? pack.index : await pack.getIndex();
 
+        if (pack.metadata.entity === 'Playlist') {
+            let entries = await CompendiumHelper._getPlaylistEntries(pack);
+            return entries;
+        }
+
         return packEntries;
+    }
+
+    static async _getPlaylistEntries(pack) {
+        let playlists = await pack.getContent();
+        return playlists.reduce((acc, playlist) => {
+            playlist.sounds.forEach(s => {
+                acc.push({_id: `${playlist._id}>${s._id}`, name: s.name});
+            })
+            return acc;
+        }, [])
     }
 }

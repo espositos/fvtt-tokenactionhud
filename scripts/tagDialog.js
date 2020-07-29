@@ -1,17 +1,17 @@
-import { CompendiumHelper } from './actions/compendiums/compendiumHelper.js';
-
 export class TagDialog extends Dialog {
     i18n = (toTranslate) => game.i18n.localize(toTranslate);
+    tagify = null;
 
     constructor(dialogData, options){
         super(options);
         this.data = dialogData;
     }
     
-    static showDialog(suggestions, selected, title, hbsData, submitFunc) {
-        let tagify = this._prepareHook(suggestions, selected, indexChoice);
+    static showDialog(suggestions, selected, indexChoice, title, hbsData, submitFunc) {
+        let tagify = TagDialog._prepareHook(suggestions, selected, indexChoice);
         
-        let content = Handlebars.dosomething(hbsData, template);
+        let template = Handlebars.compile('{{> modules/token-action-hud/templates/tagdialog.hbs}}');
+        let content = template(hbsData);
 
         let d = new TagDialog({
             title: title,
@@ -21,9 +21,11 @@ export class TagDialog extends Dialog {
                 icon: '<i class="fas fa-check"></i>',
                 label: game.i18n.localize("tokenactionhud.accept"),
                 callback: (html) => {
-                    let selection = tagify.value.map(c => {return {id: c.id, value: c.value}});
-                    let index = html.find('select[id="index"]')[0];
-                    let indexValue = index?.value;
+                    let selection = TagDialog.tagify.value.map(c => {return {id: c.id, value: c.value}});
+                    let index = html.find('select[id="token-action-hud-index"]');
+                    let indexValue;
+                    if (index.length > 0)
+                        indexValue = index[0]?.value;
                     submitFunc(selection, indexValue);
                 }
                 },
@@ -38,48 +40,51 @@ export class TagDialog extends Dialog {
         d.render(true);
     }
 
-    _prepareHook(choices, selection, placeholder, indexChoice) {
-        let tagify;
+    static _prepareHook(choices, selection, placeholder, indexChoice) {
         Hooks.once('renderTagDialog', (app, html, options) => {
 
             html.css('height', 'auto');
 
-            var $index = html.find('select[id="isBlocklist"]')
-            if ($index) {
-                $index.val(indexChoice);
+            var $index = html.find('select[id="token-action-hud-index"]')
+            if ($index.length > 0) {
+                if (indexChoice)
+                    $index.val(indexChoice);
+
                 $index.css('background', '#fff')
                 $index.css('color', '#000')
             }
 
-            var $tagFilter = html.find('input[name="tokenactionhud-taginput"]');
+            var $tagFilter = html.find('input[name="token-action-hud-taginput"]');
             
             if ($tagFilter.length > 0) {
 
-                tagify = new Tagify($tagFilter[0], {
-                whitelist: choices,
-                placeholder: placeholder,
-                delimiters: ';',
-                maxTags: 'Infinity',
-                dropdown: {
-                    maxItems: 20,           // <- maxumum allowed rendered suggestions
-                    classname: 'tags-look', // <- custom classname for this dropdown, so it could be targeted
-                    enabled: 0,             // <- show suggestions on focus
-                    closeOnSelect: false    // <- do not hide the suggestions dropdown once an item has been selected
+                let options = {
+                    placeholder: placeholder,
+                    delimiters: ';',
+                    maxTags: 'Infinity',
+                    dropdown: {
+                        maxItems: 20,           // <- maxumum allowed rendered suggestions
+                        classname: 'tags-look', // <- custom classname for this dropdown, so it could be targeted
+                        enabled: 0,             // <- show suggestions on focus
+                        closeOnSelect: false    // <- do not hide the suggestions dropdown once an item has been selected
+                    }
                 }
-                });
+
+                if (choices)
+                    options.whitelist = choices;
+
+                TagDialog.tagify = new Tagify($tagFilter[0], options);
 
                 if (selection)
-                    tagify.addTags(selection);
+                    TagDialog.tagify.addTags(selection);
 
                 // "remove all tags" button event listener
                 let clearBtn = html.find('button[class="tags--removeAllBtn"]');
-                clearBtn.on('click', tagify.removeAllTags.bind(tagify))
+                clearBtn.on('click', TagDialog.tagify.removeAllTags.bind(TagDialog.tagify))
                 clearBtn.css('float', 'right');
                 clearBtn.css('width', 'auto');
             }
         })
-
-        return tagify;
     }
 
     /** @override */
