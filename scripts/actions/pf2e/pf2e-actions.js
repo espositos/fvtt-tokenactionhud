@@ -161,7 +161,8 @@ export class ActionHandlerPf2e extends ActionHandler {
                 let bookCategory;
                 if (!result.subcategories.some(s => s.name === bookName)) {
                     bookCategory = this.initializeEmptySubcategory();
-                    this._combineSubcategoryWithCategory(result, bookName, bookCategory);
+                    bookCategory.name = bookName;
+                    result.subcategories.push(bookCategory);
                 } else {
                     bookCategory = result.subcategories.find(b => b.name === bookName);
                 }
@@ -223,7 +224,7 @@ export class ActionHandlerPf2e extends ActionHandler {
             let levelCategory;
             if (category.subcategories.length === 0) {
                 levelCategory = this.initializeEmptySubcategory();
-                levelCategory.name = levelName;
+                levelCategory.name = levelNameWithBook;
                 category.subcategories.push(levelCategory);
                 
                 if (actor.data.type === 'character')

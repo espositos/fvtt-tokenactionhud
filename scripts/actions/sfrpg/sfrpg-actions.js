@@ -45,8 +45,8 @@ export class ActionHandlerSfrpg extends ActionHandler {
         var itemsMacroType = "item";
         let itemsCategory = this.initializeEmptyCategory(itemsCategoryName);
         
-        itemsCategory = this._addSubcategoryByType(this.i18n('tokenactionhud.consumables'), "consumable",itemsMacroType, itemList, tokenId, itemsCategory);
         itemsCategory = this._addSubcategoryByType(this.i18n('tokenactionhud.weapons'), "weapon",itemsMacroType, itemList, tokenId, itemsCategory);
+        itemsCategory = this._addSubcategoryByType(this.i18n('tokenactionhud.consumables'), "consumable",itemsMacroType, itemList, tokenId, itemsCategory);
 
         this._combineCategoryWithList(actionList, itemsCategoryName, itemsCategory);
     
@@ -69,7 +69,6 @@ export class ActionHandlerSfrpg extends ActionHandler {
         itemsCategory = this._addSubcategoryByActionType(this.i18n('tokenactionhud.msa'), "msak", itemsMacroType, itemList, tokenId, itemsCategory);
         itemsCategory = this._addSubcategoryByActionType(this.i18n('tokenactionhud.rsa'), "rsak", itemsMacroType, itemList, tokenId, itemsCategory);
         itemsCategory = this._addSubcategoryByActionType(this.i18n('tokenactionhud.healing'), "heal", itemsMacroType, itemList, tokenId, itemsCategory);
-
 
         this._combineCategoryWithList(actionList, itemsCategoryName, itemsCategory);
     
