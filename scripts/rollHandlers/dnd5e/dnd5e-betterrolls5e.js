@@ -52,6 +52,7 @@ export class RollHandlerBetterRolls5e extends RollHandlerBase5e {
         }
 
         let rightClick = event.originalEvent.button === 2;
+        let shiftKey = event.shiftKey;
         let ctrlKey = keyboard.isCtrl(event);
         let altKey = event.altKey;
         if (rightClick && ctrlKey) {

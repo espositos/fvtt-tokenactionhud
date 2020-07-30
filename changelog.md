@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.14] 2021-07-30
+### Bugfix
+-DND5e forgot to include shfitkey check in betterrolls item roll, which was causing error.
+
 ## [0.5.13] 2021-07-29
 ### Changed
 - DND5e: removed right click for versatile ability in BetterRoll and Minor QoL handlers in favour of alt + right-click and ctrl + right-click to bring up damage and attack roll modals, respectively.
