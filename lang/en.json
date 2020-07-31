@@ -86,6 +86,7 @@
     "tokenactionhud.blocklistLabel": "blocklist: hide / allowlist: show",
     "tokenactionhud.filterPlaceholder": "Choices (split with semi-colon)",
     "tokenactionhud.filterTitle": "Filter",
+    "tokenactionhud.filterTagExplanation": "Add entries here to show or hide specific category entries.",
     "tokenactionhud.accept": "Accept",
     "tokenactionhud.cancel": "Cancel",
     "tokenactionhud.blocklist": "Blocklist",
@@ -93,6 +94,8 @@
 
     "tokenactionhud.categoryTagTitle": "Add/remove categories",
     "tokenactionhud.compendiumTagTitle": "Add/remove compendiums",
+    "tokenactionhud.categoryTagExplanation": "Categories added here will be shown as additional categories to the right or left of the HUD. They are able to hold compendiums as subcategories.",
+    "tokenactionhud.compendiumTagExplanation": "Compendiums added here will be shown as subcategories. Currently limited to journal entries, roll tables, playlists, and macros.",
     "tokenactionhud.clearButton": "Clear",
     "tokenactionhud.unshift": "Left",
     "tokenactionhud.push": "Right",

@@ -7,8 +7,8 @@ export class TagDialogHelper {
         TagDialogHelper._showFilterDialog(filterManager, categoryId);
     }
 
-    static showCompendiumDialog(compendiumManager, categoryId) {
-        TagDialogHelper._showCompendiumDialog(compendiumManager, categoryId);
+    static showCompendiumDialog(compendiumManager, categoryId, categoryName) {
+        TagDialogHelper._showCompendiumDialog(compendiumManager, categoryId, categoryName);
     }
 
     static showCategoryDialog(compendiumManager) {
@@ -36,10 +36,10 @@ export class TagDialogHelper {
         let selected = filterManager.getFilteredElements(categoryId);
         let indexChoice = filterManager.isBlocklist(categoryId) ? 1 : 0;
 
-        let title = game.i18n.localize('tokenactionhud.filterTagTitle');
+        let title = game.i18n.localize('tokenactionhud.filterTitle');
         
         let hbsData = {
-            topLabel: game.i18n.localize('tokenactionhud.categoryTagTitle'),
+            topLabel: game.i18n.localize('tokenactionhud.filterTagExplanation'),
             placeholder: game.i18n.localize('tokenactionhud.filterPlaceholder'),
             clearButtonText: game.i18n.localize('tokenactionhud.clearButton'),
             indexExplanationLabel: game.i18n.localize('tokenactionhud.blocklistLabel'),
@@ -57,14 +57,14 @@ export class TagDialogHelper {
         TagDialog.showDialog(suggestions, selected, indexChoice, title, hbsData, submitFunc);
     }
     
-    static _showCompendiumDialog(compendiumManager, categoryId) {
+    static _showCompendiumDialog(compendiumManager, categoryId, categoryName) {
         let suggestions = CompendiumHelper.getCompendiumChoicesForFilter();
         let selected = compendiumManager.getCategoryCompendiumsAsTagifyEntries(categoryId);
 
-        let title = game.i18n.localize('tokenactionhud.compendiumTagTitle');
+        let title = game.i18n.localize('tokenactionhud.compendiumTagTitle') + ` (${categoryName})`;
         
         let hbsData = {
-            topLabel: game.i18n.localize('tokenactionhud.compendiumTagTitle'),
+            topLabel: game.i18n.localize('tokenactionhud.compendiumTagExplanation'),
             placeholder: game.i18n.localize('tokenactionhud.filterPlaceholder'),
             clearButtonText: game.i18n.localize('tokenactionhud.clearButton'),
         }
@@ -85,7 +85,7 @@ export class TagDialogHelper {
         let title = game.i18n.localize('tokenactionhud.categoryTagTitle');
         
         let hbsData = {
-            topLabel: game.i18n.localize('tokenactionhud.categoryTagTitle'),
+            topLabel: game.i18n.localize('tokenactionhud.categoryTagExplanation'),
             placeholder: game.i18n.localize('tokenactionhud.filterPlaceholder'),
             clearButtonText: game.i18n.localize('tokenactionhud.clearButton'),
             indexExplanationLabel: game.i18n.localize('tokenactionhud.pushLabelExplanation'),

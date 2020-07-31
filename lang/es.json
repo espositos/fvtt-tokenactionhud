@@ -136,5 +136,13 @@
     "tokenactionhud.settings.pf2e.abbreviateSkills.hint": "Si está activo, las habilidades serán abreviadas a 3 caracteres.",
 
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "Mostrar los compendios del DJ",
-    "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Si está activo, y el usuario es un DJ, el HUD incluirá los movimientos del DJ, las tablas aleatorias de tesoro y las cartas."
+    "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Si está activo, y el usuario es un DJ, el HUD incluirá los movimientos del DJ, las tablas aleatorias de tesoro y las cartas.",    
+    
+    "tokenactionhud.filterTagExplanation": "Add entries here to show or hide specific category entries.",
+    "tokenactionhud.categoryTagExplanation": "Categories added here will be shown as additional categories to the right or left of the HUD. They are able to hold compendiums as subcategories.",
+    "tokenactionhud.compendiumTagExplanation": "Compendiums added here will be shown as subcategories. Currently limited to journal entries, roll tables, playlists, and macros.",
+    "tokenactionhud.clearButton": "Clear",
+    "tokenactionhud.unshift": "Left",
+    "tokenactionhud.push": "Right",
+    "tokenactionhud.pushLabelExplanation": "Show categories on which side?"
 }

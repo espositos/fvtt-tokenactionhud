@@ -26,6 +26,8 @@
 
 #tah-reposition, #tah-compendiums {
     display: none;
+    font-style: normal;
+    font-weight: normal;
 }
 
 #tah-reposition {
