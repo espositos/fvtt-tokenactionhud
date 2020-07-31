@@ -79,4 +79,15 @@ export function registerSettings(app, updateSettings) {
         default: false,
         onChange: value => { updateSettings(value); }
     });
+
+    if (game.modules.get('itemacro')?.active)
+        game.settings.register(app,'itemMacroReplace', {
+            name: game.i18n.localize('tokenactionhud.settings.dnd5e.itemMacroReplace.name'),
+            hint: game.i18n.localize('tokenactionhud.settings.dnd5e.itemMacroReplace.hint'),
+            scope: "client",
+            config: true,
+            type: Boolean,
+            default: false,
+            onChange: value => { updateSettings(value); }
+        });
 }
