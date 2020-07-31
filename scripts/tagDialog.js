@@ -54,7 +54,7 @@ export class TagDialog extends Dialog {
                 $index.css('color', '#000')
             }
 
-            var $tagFilter = html.find('input[name="token-action-hud-taginput"]');
+            var $tagFilter = html.find('input[class="token-action-hud-taginput"]');
             
             if ($tagFilter.length > 0) {
 
@@ -74,6 +74,11 @@ export class TagDialog extends Dialog {
                     options.whitelist = choices;
 
                 TagDialog.tagify = new Tagify($tagFilter[0], options);
+
+                var $tagifyBox = $(document).find('.tagify');
+
+                $tagifyBox.css('background', '#fff')
+                $tagifyBox.css('color', '#000')
 
                 if (selection)
                     TagDialog.tagify.addTags(selection);

@@ -33,7 +33,7 @@
 }
 
 #tah-compendiums {
-    right: -20px;
+    left: 100%;
 }
 
 #tah-reposition > .fa, #tah-reposition > .fas, #tah-compendiums > .fa, #tah-compendiums > .fas {
@@ -50,7 +50,7 @@
 }
 
 #tah-compendiums > .fa, #tah-compendiums > .fas {
-    font-size: medium;
+    font-size: large;
 }
 
 #tah-reposition:hover > i, #tah-compendiums:hover > i {
