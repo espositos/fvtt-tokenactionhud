@@ -56,7 +56,8 @@ export class ItemMacroActionListExtender extends ActionListExtender {
         let macroType = 'itemMacro';
         let newAction = replace ? action : {};
 
-        newAction.encodedValue = action.encodedValue.replace('item', macroType);
+        let keep = action.encodedValue.substr(action.encodedValue.indexOf(this.delimiter));
+        newAction.encodedValue = macroType + keep;
         newAction.name = replace ? action.name : `(M) ${action.name}`
         newAction.id = action.id;
 
