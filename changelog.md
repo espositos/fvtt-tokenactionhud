@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.15] 2021-08-01
+### Added
+- DND5e: support for [Kekilla's Item Macro module](https://github.com/Kekilla0/Item-Macro)
+
 ## [0.5.14] 2021-07-30
 ### Bugfix
 -DND5e forgot to include shfitkey check in betterrolls item roll, which was causing error.

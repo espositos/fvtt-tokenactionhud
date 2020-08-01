@@ -5,7 +5,7 @@ This module populates a repositionable HUD showing the most common basic actions
 # Installation
 1. Inside Foundry's Configuration and Setup screen, go to **Add-on Modules**
 2. Click "Install Module"
-3. In the Manifest URL field paste: `https://github.com/espositos/fvtt-tokenactionhud/raw/master/module.json`
+3. or in the Manifest URL field paste: `https://github.com/espositos/fvtt-tokenactionhud/raw/master/module.json`
 4. Within the game, click on **Settings** -> **Manage Modules** and make sure the Token Action Hud is enabled.
 
 # Usage
