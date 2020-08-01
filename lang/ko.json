@@ -141,8 +141,8 @@
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "활성화 했을 때 사용자가 GM인 경우 HUD바에 GM 이동, 전리품 굴림표, 차트가 포함된다.",
     
     "tokenactionhud.filterTagExplanation": "Add entries here to show or hide specific category entries.",
-    "tokenactionhud.categoryTagExplanation": "Categories added here will be shown as additional categories to the right or left of the HUD. They are able to hold compendiums as subcategories.",
-    "tokenactionhud.compendiumTagExplanation": "Compendiums added here will be shown as subcategories. Currently limited to journal entries, roll tables, playlists, and macros.",
+    "tokenactionhud.categoryTagExplanation": "Add (or remove) additional categories that are able to hold compendium entries.",
+    "tokenactionhud.compendiumTagExplanation": "Compendiums added here will be shown as subcategories, limited to journal entries, roll tables, playlists, and macros.",
     "tokenactionhud.clearButton": "Clear",
     "tokenactionhud.unshift": "Left",
     "tokenactionhud.push": "Right",
