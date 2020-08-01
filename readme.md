@@ -5,7 +5,7 @@ This module populates a repositionable HUD showing the most common basic actions
 # Installation
 1. Inside Foundry's Configuration and Setup screen, go to **Add-on Modules**
 2. Click "Install Module"
-3. In the Manifest URL field paste: `https://github.com/espositos/fvtt-tokenactionhud/raw/master/module.json`
+3. or in the Manifest URL field paste: `https://github.com/espositos/fvtt-tokenactionhud/raw/master/module.json`
 4. Within the game, click on **Settings** -> **Manage Modules** and make sure the Token Action Hud is enabled.
 
 # Usage
@@ -27,7 +27,7 @@ Offers a variety of settings including support for third-party roll handlers (Pl
 ![Starfinder RPG](.github/readme/tah-sfrpg.gif)
 
 # Supported systems
-* DND5e (including [BetterRolls](https://github.com/RedReign/FoundryVTT-BetterRolls5e), [MinorQol](https://gitlab.com/tposney/minor-qol), and [Magic Items](https://gitlab.com/riccisi/foundryvtt-magic-items/)
+* DND5e (including [BetterRolls](https://github.com/RedReign/FoundryVTT-BetterRolls5e), [MinorQol](https://gitlab.com/tposney/minor-qol), [Magic Items](https://gitlab.com/riccisi/foundryvtt-magic-items/), and [Item Macro](https://github.com/Kekilla0/Item-Macro).
 * Dungeon World
 * PF2E
 * WFRP4e

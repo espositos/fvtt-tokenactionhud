@@ -17,7 +17,7 @@ export class MagicItemActionListExtender extends ActionListExtender {
         if (!actor)
             return;
 
-        let magicItems = MagicItems.actor(actorId).items ?? [];
+        let magicItems = actor.items ?? [];
         
         if (magicItems.length === 0)
             return;

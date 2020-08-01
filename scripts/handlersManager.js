@@ -1,5 +1,6 @@
 import { ActionHandler5e } from './actions/dnd5e/dnd5e-actions.js';
 import { MagicItemActionListExtender } from './actions/dnd5e/magicItemsExtender.js';
+import { ItemMacroActionListExtender } from './actions/dnd5e/itemMacroExtender.js';
 import { ActionHandlerWfrp } from './actions/wfrp4e/wfrp4e-actions.js';
 import { ActionHandlerPf2e } from './actions/pf2e/pf2e-actions.js';
 import { ActionHandlerDw } from './actions/dungeonworld/dw-actions.js';
@@ -34,6 +35,8 @@ export class HandlersManager {
         let actionHandler = new ActionHandler5e(filterManager, compendiumManager);
         if (HandlersManager.isModuleActive('magicitems'))
             actionHandler.addFurtherActionHandler(new MagicItemActionListExtender())
+        if (HandlersManager.isModuleActive('itemacro'))
+            actionHandler.addFurtherActionHandler(new ItemMacroActionListExtender())
         return actionHandler;
     }
 
