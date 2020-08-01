@@ -22,6 +22,10 @@ export class RollHandlerBasePf2e extends RollHandler {
         if (actor)
             charType = actor.data.type;
 
+        let renderable = ['item', 'spell', 'lore'];
+        if (renderable.includes(macroType) && this.isRenderItem())
+            return this.doRenderItem(tokenId, actionId);
+
         let sharedActions = ['ability', 'spell', 'item', 'skill', 'lore', 'utility']
 
         if (!sharedActions.includes(macroType)) {
