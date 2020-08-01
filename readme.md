@@ -27,7 +27,7 @@ Offers a variety of settings including support for third-party roll handlers (Pl
 ![Starfinder RPG](.github/readme/tah-sfrpg.gif)
 
 # Supported systems
-* DND5e (including [BetterRolls](https://github.com/RedReign/FoundryVTT-BetterRolls5e), [MinorQol](https://gitlab.com/tposney/minor-qol), and [Magic Items](https://gitlab.com/riccisi/foundryvtt-magic-items/)
+* DND5e (including [BetterRolls](https://github.com/RedReign/FoundryVTT-BetterRolls5e), [MinorQol](https://gitlab.com/tposney/minor-qol), [Magic Items](https://gitlab.com/riccisi/foundryvtt-magic-items/), and [Item Macro](https://github.com/Kekilla0/Item-Macro).
 * Dungeon World
 * PF2E
 * WFRP4e
