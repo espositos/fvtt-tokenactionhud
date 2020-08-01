@@ -38,7 +38,7 @@ export class RollHandlerBase5e extends RollHandler {
             case "spell":
             case "feat": 
                 if (this.isRenderItem())
-                    this.renderItemSheet(event, tokenId, actionId);
+                    this.doRenderItem(tokenId, actionId);
                 else
                     this.rollItemMacro(event, tokenId, actionId);
                 break;
@@ -82,13 +82,6 @@ export class RollHandlerBase5e extends RollHandler {
 
     needsRecharge(item) {
         return (item.data.data.recharge && !item.data.data.recharge.charged && item.data.data.recharge.value);
-    }
-    
-    renderItemSheet(event, tokenId, actionId) {
-        let actor = super.getActor(tokenId);
-        let item = super.getItem(actor, actionId);
-
-        item.sheet.render(true);
     }
     
     performUtilityMacro(event, tokenId, actionId) {

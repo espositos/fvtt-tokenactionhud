@@ -180,10 +180,7 @@ export class RollHandlerBasePf2e extends RollHandler {
 
     /** @private */
     _rollLoreSkill(event, actor, actionId) {
-        let item = actor.items.find(i => i._id === actionId);
-
-        if (this.isRenderItem())
-            item.sheet.render(true);
+        let item = actor.getOwnedItem(actionId);
 
         actor.rollLoreSkill(event, item);
     }
@@ -262,10 +259,7 @@ export class RollHandlerBasePf2e extends RollHandler {
 
     /** @private */
     _rollItem(event, actor, actionId) {
-        let item = actor.items.find(i => i._id === actionId);
-
-        if (this.isRenderItem())
-            item.sheet.render(true);
+        let item = actor.getOwnedItem(actionId);
         
         item.roll();
     }
@@ -284,7 +278,7 @@ export class RollHandlerBasePf2e extends RollHandler {
             return;
         }
 
-        let spell = actor.items.find(i => i._id === spellId);
+        let spell = actor.getOwnedItem(spellId);
 
         if (settings.get('printSpellCard')) {
             this._rollHeightenedSpell(actor, spell, level); 
@@ -332,8 +326,6 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
 
     async _rollHeightenedSpell(actor, item, spellLevel) {
-        if (this.isRenderItem())
-            item.sheet.render(true);
 
         let data = item.getChatData();
         let token = canvas.tokens.placeables.find(p => p.actor?._id === actor._id);

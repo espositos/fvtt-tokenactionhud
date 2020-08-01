@@ -19,6 +19,9 @@ export class RollHandlerBaseDw extends RollHandler {
         if (this.handleCompendiums(macroType, event, tokenId, actionId))
             return;
 
+        if (this.isRenderItem())
+            return this.doRenderItem(tokenId, actionId);
+
         let actor = super.getActor(tokenId);
         let charType = actor.data.type;
 
@@ -72,9 +75,6 @@ export class RollHandlerBaseDw extends RollHandler {
 
     _handleMove(macroType, event, actor, actionId) {
         let move = actor.getOwnedItem(actionId);
-
-        if (this.isRenderItem())
-            move.sheet.render(true);
 
         move.roll();
     }

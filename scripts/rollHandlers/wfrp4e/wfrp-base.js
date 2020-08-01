@@ -22,12 +22,13 @@ export class RollHandlerBaseWfrp4e extends RollHandler {
         if (macroType === 'characteristic')
             return actor.setupCharacteristic(actionId, bypassData);
 
+        if (this.isRenderItem())
+            return this.doRenderItem(tokenId, actionId);
+
         let item = actor.getOwnedItem(actionId);
         let itemData = item.data;
-
-        if (this.isRenderItem())
-            return item.sheet.render(true);
-        else if (this.rightClick)
+        
+        if (this.rightClick)
             return item.postItem();
 
         switch (macroType) {

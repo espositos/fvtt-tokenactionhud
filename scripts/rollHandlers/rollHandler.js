@@ -95,6 +95,13 @@ export class RollHandler {
         this.shift = this.isShift(event);
     }
 
+    doRenderItem(tokenId, actionId) {
+         let actor = this.getActor(tokenId);
+         let item = this.getItem(actor);
+
+         item.sheet.render(true);
+    }
+
     isRenderItem() {
         return settings.get('renderItemOnRightClick') && this.rightClick && !(this.alt || this.ctrl || this.shift)
     }
