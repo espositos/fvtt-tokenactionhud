@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.16] 2021-08-01
+### Bugfix
+- Fixed bug where filename in the wrong case caused error on case-sensitive filesystems.
+
 ## [0.5.15] 2021-08-01
 ### Added
 - DND5e: support for [Kekilla's Item Macro module](https://github.com/Kekilla0/Item-Macro)
