@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.17] 2021-08-01
+### Bugfix
+- Fixed bug where feats and spells weren't being correctly sent to Item Macro.
+
 ## [0.5.16] 2021-08-01
 ### Bugfix
 - Fixed bug where filename in the wrong case caused error on case-sensitive filesystems.
