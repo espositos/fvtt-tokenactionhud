@@ -39,8 +39,11 @@ export class RollHandlerBaseSfrpg extends RollHandler {
                 break;
             case "item":
             case "spell":
-            case "feat":
-                this.rollItemMacro(event, tokenId, actionId);
+            case "feat": 
+                if (this.isRenderItem())
+                    this.renderItemSheet(event, tokenId, actionId);
+                else
+                    this.rollItemMacro(event, tokenId, actionId);
                 break;
             default:
                 break;
@@ -75,7 +78,6 @@ export class RollHandlerBaseSfrpg extends RollHandler {
             item.rollRecharge();
             return;
         }
-
         
         if (item.data.type === "spell")
             return actor.useSpell(item);
@@ -85,5 +87,12 @@ export class RollHandlerBaseSfrpg extends RollHandler {
 
     needsRecharge(item) {
         return (item.data.data.recharge && !item.data.data.recharge.charged && item.data.data.recharge.value);
+    }
+    
+    renderItemSheet(event, tokenId, actionId) {
+        let actor = super.getActor(tokenId);
+        let item = super.getItem(actor, actionId);
+
+        item.sheet.render(true);
     }
 }

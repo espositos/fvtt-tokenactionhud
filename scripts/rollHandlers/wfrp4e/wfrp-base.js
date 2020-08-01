@@ -25,8 +25,9 @@ export class RollHandlerBaseWfrp4e extends RollHandler {
         let item = actor.getOwnedItem(actionId);
         let itemData = item.data;
 
-        let postItem = event.originalEvent.button === 2;
-        if (postItem)
+        if (this.isRenderItem())
+            return item.sheet.render(true);
+        else if (this.rightClick)
             return item.postItem();
 
         switch (macroType) {

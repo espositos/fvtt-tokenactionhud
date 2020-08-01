@@ -182,6 +182,9 @@ export class RollHandlerBasePf2e extends RollHandler {
     _rollLoreSkill(event, actor, actionId) {
         let item = actor.items.find(i => i._id === actionId);
 
+        if (this.isRenderItem())
+            item.sheet.render(true);
+
         actor.rollLoreSkill(event, item);
     }
 
@@ -260,6 +263,9 @@ export class RollHandlerBasePf2e extends RollHandler {
     /** @private */
     _rollItem(event, actor, actionId) {
         let item = actor.items.find(i => i._id === actionId);
+
+        if (this.isRenderItem())
+            item.sheet.render(true);
         
         item.roll();
     }
@@ -285,7 +291,7 @@ export class RollHandlerBasePf2e extends RollHandler {
             return;
         }
 
-        let damageRoll = event.originalEvent.button === 2;
+        let damageRoll = this.rightClick;
 
         if (damageRoll) {
             if (spell.data.data.damage.value)
@@ -326,6 +332,9 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
 
     async _rollHeightenedSpell(actor, item, spellLevel) {
+        if (this.isRenderItem())
+            item.sheet.render(true);
+
         let data = item.getChatData();
         let token = canvas.tokens.placeables.find(p => p.actor?._id === actor._id);
         let castLevel = parseInt(spellLevel);

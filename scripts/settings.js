@@ -49,6 +49,16 @@ export const registerSettings = function(system, rollHandlers) {
         onChange: value => { updateSettings(value); }
     });
     
+    game.settings.register(app,'renderItemOnRightClick', {
+        name : game.i18n.localize('tokenactionhud.settings.renderItemOnRightClick.name'),
+        hint : game.i18n.localize('tokenactionhud.settings.renderItemOnRightClick.hint'),
+        scope : 'client',
+        config : true,
+        type : Boolean,
+        default : false,
+        onChange: value => { updateSettings(value); }
+    });
+    
     game.settings.register(app,'debug', {
         name : game.i18n.localize('tokenactionhud.settings.debug.name'),
         hint : game.i18n.localize('tokenactionhud.settings.debug.hint'),

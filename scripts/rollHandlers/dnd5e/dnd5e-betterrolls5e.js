@@ -51,15 +51,12 @@ export class RollHandlerBetterRolls5e extends RollHandlerBase5e {
             return;
         }
 
-        let rightClick = event.originalEvent.button === 2;
-        let shiftKey = event.shiftKey;
-        let ctrlKey = keyboard.isCtrl(event);
-        let altKey = event.altKey;
-        if (rightClick && ctrlKey) {
+        if (this.rightClick && this.ctrl) {
             item.rollAttack();
             return;
         }
-        if (rightClick && altKey) {
+        
+        if (this.rightClick && this.alt) {
             item.rollDamage();
             return;
         }
@@ -69,10 +66,10 @@ export class RollHandlerBetterRolls5e extends RollHandlerBase5e {
             disadv: 0,
         }
 
-		if (shiftKey) { params.adv = 1; }
-        if (ctrlKey) { params.disadv = 1; }
+		if (this.shift) { params.adv = 1; }
+        if (this.ctrl) { params.disadv = 1; }
 
-        params.preset = altKey ? 1 : 0;
+        params.preset = this.alt ? 1 : 0;
 
         BetterRolls.rollItem(item, params).toMessage();
     }

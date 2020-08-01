@@ -14,22 +14,19 @@ export class RollHandlerMinorQol5e extends RollHandlerBase5e {
             item.rollRecharge();
             return;
         }
-
-        let rightClick = event.originalEvent.button === 2;
-        let ctrlKey = keyboard.isCtrl(event);
-        let altKey = event.altKey;
-        if (rightClick && ctrlKey) {
+        
+        if (this.rightClick && this.ctrl) {
             item.rollAttack();
             return;
         }
-        if (rightClick && altKey) {
+        if (this.rightClick && this.alt) {
             item.rollDamage();
             return;
         }
 
         var versatile;
         if (item.data.data.properties?.ver) {
-            versatile = rightClick;
+            versatile = this.rightClick;
         }
 
         MinorQOL.doCombinedRoll({actor, item, event, versatile});

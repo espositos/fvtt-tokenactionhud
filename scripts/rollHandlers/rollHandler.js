@@ -9,6 +9,10 @@ export class RollHandler {
         return canvas.tokens.placeables.find(t => t.data._id === tokenId)?.actor;
     }
     
+    getItem(actor, itemId) {
+        return actor.getOwnedItem(itemId);
+    }
+    
     getToken(tokenId) {
         return canvas.tokens.placeables.find(t => t.data._id === tokenId);
     }
@@ -20,7 +24,12 @@ export class RollHandler {
     handleActionEvent(event, encodedValue) {
         settings.Logger.debug(encodedValue);
 
-        let handled = false;
+        this.getKeys(event);
+
+        let handled = this.handleCompendiums(event, encodedValue);
+        if (handled)
+            return;
+
         this.preRollHandlers.forEach(handler => {
             if (handled)
                 return;
@@ -64,5 +73,45 @@ export class RollHandler {
         let pack = game.packs.get(compendiumKey);
 
         pack.getEntity(entityId).then(e => e.execute());
+    }
+
+    async handlePlaylistCompendium(macroType, event, compendiumKey, actionId) {
+        let pack = game.packs.get(compendiumKey);
+
+        let actionPayload = actionId.split('>');
+        let playlistId = actionPayload[0];
+        let soundId = actionPayload[1];
+
+        let playlist = await pack.getEntity(playlistId);
+        let sound = playlist.sounds.find(s => s._id === soundId);
+
+        AudioHelper.play({src: sound.path}, {})
+    }
+
+    getKeys(event) {
+        this.rightClick = this.isRightClick(event);
+        this.ctrl = this.isCtrl(event);
+        this.alt = this.isAlt(event);
+        this.shift = this.isShift(event);
+    }
+
+    isRenderItem() {
+        return settings.get('renderItemOnRightClick') && this.rightClick && !(this.alt || this.ctrl || this.shift)
+    }
+
+    isRightClick(event) {
+        return event?.originalEvent?.button === 2;
+    }
+
+    isAlt(event) {
+        return event?.altKey;
+    }
+
+    isCtrl(event) {
+        return keyboard?.isCtrl(event);
+    }
+
+    isShift(event) {
+        return event?.shiftKey;
     }
 }
