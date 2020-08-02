@@ -10,8 +10,7 @@
     width: auto;
     margin: 5px;
     background: none;
-    font-size: 14px;
-    font-family: "Signika", sans-serif;
+    font-size: small;
 }
 
 [class*="icon-"] {
@@ -39,10 +38,13 @@
 }
 
 #tah-reposition > .fa, #tah-reposition > .fas, #tah-compendiums > .fa, #tah-compendiums > .fas {
-    color: #fff;
+    color: #DDD;
     padding: 3px;
     margin: 3px;
-    text-shadow: 0px 0px 3px rgba(52, 52, 52, 1);
+    text-shadow: -1px -1px 1px rgba(52, 52, 52, 1),
+    -1px -1px 1px rgba(52, 52, 52, 1),
+    -1px -1px 1px rgba(52, 52, 52, 1),
+    -1px -1px 1px rgba(52, 52, 52, 1);
     text-align: center;
     pointer-events: none;
 }
@@ -57,6 +59,7 @@
 
 #tah-reposition:hover > i, #tah-compendiums:hover > i {
     text-shadow: 0 0 10px #ff6400;
+    color: #FFF;
 }
 
 /* The container <div> - needed to position the dropdown content */
@@ -68,18 +71,20 @@
 .tah-title-button {
     width: auto;
     height: auto;
-    color: #fff;
+    color: #DDD;
     text-align: center;
-    background: rgba(52, 52, 52, 0.95);
+    background: rgba(0, 0, 0, 0.7);
     padding: 3px;
     margin: 3px;
-    border: 1px solid transparent;
+    border: 1px solid #000;
     cursor: pointer;
 }
 
 .tah-title-button:hover {
+    color: #FFF;
     font-weight: normal;
     color: #fff;
+    border: 1px solid red;
     border-bottom: 1px solid #ff6400;
     box-shadow: 0 0 10px #ff6400;
 }
@@ -261,19 +266,23 @@
     min-width: 50px;
     font-size: small;
     text-decoration: none;
-    color: #fff;
-    background: rgba(52, 52, 52, 0.95);
+    color: #DDD;
+    border: 1px solid #000;
+    background: rgba(0, 0, 0, 0.7);
 }
 
 /* Change color of dropdown links on hover */
 .tah-action button:hover {
     font-weight: inherit;
-    color: #fff;
+    color: #FFF;
+    border: 1px solid red;
     border-bottom: 1px solid #ff6400;
+    box-shadow: 0 0 10px #ff6400;
     box-shadow: 0 0 10px #ff6400;
 }
 
 .tah-action .active {
+    border: 1px solid red;
     border-bottom: 1px solid #ff6400;
     box-shadow: 0 0 10px #ff6400;
 }
