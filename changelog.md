@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.18] 2021-08-04
+### Bugfix
+- Fix for Item-Macro token actors
+
 ## [0.5.17] 2021-08-01
 ### Bugfix
 - Fixed bug where feats and spells weren't being correctly sent to Item Macro.
