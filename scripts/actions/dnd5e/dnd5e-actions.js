@@ -223,7 +223,7 @@ export class ActionHandler5e extends ActionHandler {
             }
             else {
                 levelKey = 'spell' + level;
-                levelName = level === 0 ? this.i18n('tokenactionhud.cantrips') : `${this.i18n('tokenactionhud.level')} ${level}`;
+                levelName = level ? `${this.i18n('tokenactionhud.level')} ${level}` : this.i18n('tokenactionhud.cantrips');
             }
 
             levelInfo = spellSlotInfo.find(lvl => lvl[0] === levelKey)?.[1];
