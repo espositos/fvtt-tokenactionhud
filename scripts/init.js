@@ -1,6 +1,6 @@
 import * as settings from './settings.js';
 import { HandlersManager } from './handlersManager.js';
-import { CategoryManager } from './actions/compendiums/categoryManager.js';
+import { CategoryManager } from './actions/categories/categoryManager.js';
 import { FilterManager } from './actions/filter/filterManager.js';
 import { TokenActionHUD } from './tokenactionhud.js';
 

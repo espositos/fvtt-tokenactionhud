@@ -18,12 +18,12 @@
     width: 100%;
 }
 
-#token-action-hud:hover > #tah-reposition, #token-action-hud:hover > #tah-compendiums {
+#token-action-hud:hover > #tah-reposition, #token-action-hud:hover > #tah-categories {
     display: block;
     position: absolute;
 }
 
-#tah-reposition, #tah-compendiums {
+#tah-reposition, #tah-categories {
     display: none;
     font-style: normal;
     font-weight: normal;
@@ -33,11 +33,11 @@
     left: -20px;
 }
 
-#tah-compendiums {
+#tah-categories {
     left: 100%;
 }
 
-#tah-reposition > .fa, #tah-reposition > .fas, #tah-compendiums > .fa, #tah-compendiums > .fas {
+#tah-reposition > .fa, #tah-reposition > .fas, #tah-categories > .fa, #tah-categories > .fas {
     color: #DDD;
     padding: 3px;
     margin: 3px;
@@ -53,11 +53,11 @@
     font-size: small;
 }
 
-#tah-compendiums > .fa, #tah-compendiums > .fas {
+#tah-categories > .fa, #tah-categories > .fas {
     font-size: large;
 }
 
-#tah-reposition:hover > i, #tah-compendiums:hover > i {
+#tah-reposition:hover > i, #tah-categories:hover > i {
     text-shadow: 0 0 10px #ff6400;
     color: #FFF;
 }

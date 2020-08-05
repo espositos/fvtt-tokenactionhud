@@ -69,7 +69,7 @@ export class TokenActionHUD extends Application {
     activateListeners(html) {
         const tokenactionhud = '#token-action-hud';
         const repositionIcon = '#tah-reposition';
-        const compendiumsIcon = '#tah-compendiums';
+        const categoriesIcon = '#tah-categories';
         const action = '.tah-action';   
 
         const handleClick = e => {
@@ -144,7 +144,7 @@ export class TokenActionHUD extends Application {
             }
         );
 
-        html.find(compendiumsIcon).mousedown(ev => {
+        html.find(categoriesIcon).mousedown(ev => {
             ev.preventDefault();
             ev = ev || window.event;
 

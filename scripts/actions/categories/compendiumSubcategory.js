@@ -10,12 +10,12 @@ export class CompendiumSubcategory {
 
     async updateFlag(categoryId) {
         let contents = {id: this.compendiumId, title: this.title}
-        await game.user.setFlag('token-action-hud', `compendiumCategories.${categoryId}.compendiums.${this.id}`, contents);
+        await game.user.setFlag('token-action-hud', `categories.${categoryId}.compendiums.${this.id}`, contents);
     }
 
     async unsetFlag(categoryId) {
         if (categoryId)
-            await game.user.setFlag('token-action-hud', `compendiumCategories.${categoryId}.compendiums`, {[`-=${this.id}`]: null})
+            await game.user.setFlag('token-action-hud', `categories.${categoryId}.compendiums`, {[`-=${this.id}`]: null})
     }
 
     createFilter() {

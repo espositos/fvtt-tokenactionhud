@@ -11,7 +11,7 @@ export class CategoryManager {
     }
 
     async init() {
-        let savedCategories = this.user.getFlag('token-action-hud', 'compendiumCategories');
+        let savedCategories = this.user.getFlag('token-action-hud', 'categories');
         if (savedCategories) {
             settings.Logger.debug('saved categories:', savedCategories);
             
@@ -27,7 +27,7 @@ export class CategoryManager {
                 let compendiums = cat[1].compendiums;
                 if (compendiums) {
                     let compendiums = Object.values(cat[1].compendiums);
-                    await category.selectCompendiums(compendiums);
+                    await category.selectSubcategories(compendiums);
                 }
                 this.categories.push(category);
             }
@@ -90,13 +90,13 @@ export class CategoryManager {
         this.categories.splice(index, 1);
     }
 
-    async submitCompendiums(categoryId, choices) {
+    async submitSubcategories(categoryId, choices) {
         let category = this.categories.find(c => c.id === categoryId);
 
         if (!category)
             return;
 
-        await category.selectCompendiums(choices);
+        await category.selectSubcategories(choices);
     }
 
     getExistingCategories() {

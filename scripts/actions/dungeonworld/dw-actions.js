@@ -1,6 +1,6 @@
 import {ActionHandler} from '../actionHandler.js';
 import * as settings from '../../settings.js';
-import { CompendiumHelper } from '../compendiums/compendiumHelper.js';
+import { CompendiumHelper } from '../categories/compendiumHelper.js';
 
 export class ActionHandlerDw extends ActionHandler {
     constructor (filterManager, categoryManager) {

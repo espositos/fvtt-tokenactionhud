@@ -1,5 +1,5 @@
 import {TagDialog} from '../tagDialog.js';
-import { CompendiumHelper } from '../actions/compendiums/compendiumHelper.js';
+import { CompendiumHelper } from '../actions/categories/compendiumHelper.js';
 
 export class TagDialogHelper {
     
@@ -20,8 +20,8 @@ export class TagDialogHelper {
         game.tokenActionHUD.update()
     }
 
-    static async submitCompendiums(categoryManager, categoryId, choices) {
-        await categoryManager.submitCompendiums(categoryId, choices);
+    static async submitSubcategories(categoryManager, categoryId, choices) {
+        await categoryManager.submitSubcategories(categoryId, choices);
         game.tokenActionHUD.update();
     }
 
@@ -71,7 +71,7 @@ export class TagDialogHelper {
 
         let submitFunc = (choices, indexValue) => {
             let compendiums = choices.map(c => {return {id: c.id, title: c.value}})
-            TagDialogHelper.submitCompendiums(categoryManager, categoryId, compendiums);
+            TagDialogHelper.submitSubcategories(categoryManager, categoryId, compendiums);
         }
 
         TagDialog.showDialog(suggestions, selected, null, title, hbsData, submitFunc);
