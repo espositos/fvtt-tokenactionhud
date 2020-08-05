@@ -2,8 +2,8 @@ import {ActionHandler} from '../actionHandler.js';
 import * as settings from '../../settings.js';
 
 export class ActionHandlerSfrpg extends ActionHandler {
-    constructor (filterManager, compendiumManager) {
-        super(filterManager, compendiumManager);
+    constructor (filterManager, categoryManager) {
+        super(filterManager, categoryManager);
     }
 
     /** @override */

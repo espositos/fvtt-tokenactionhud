@@ -1,7 +1,7 @@
-import {HudCompendium} from './hudCompendium.js';
+import {CompendiumSubcategory} from './compendiumSubcategory.js';
 import {CompendiumHelper} from './compendiumHelper.js';
 
-export class CompendiumCategory {
+export class Category {
     compendiums = [];
     id = '';
     key = '';
@@ -55,7 +55,7 @@ export class CompendiumCategory {
         if (!CompendiumHelper.exists(compendium.id))
             return;
 
-        let hudCompendium = new HudCompendium(this.filterManager, this.key, compendium.id, compendium.title);
+        let hudCompendium = new CompendiumSubcategory(this.filterManager, this.key, compendium.id, compendium.title);
         hudCompendium.createFilter();
         await hudCompendium.submitFilterSuggestions();
 

@@ -7,21 +7,21 @@ export class TagDialogHelper {
         TagDialogHelper._showFilterDialog(filterManager, categoryId);
     }
 
-    static showCompendiumDialog(compendiumManager, categoryId, categoryName) {
-        TagDialogHelper._showCompendiumDialog(compendiumManager, categoryId, categoryName);
+    static showCompendiumDialog(categoryManager, categoryId, categoryName) {
+        TagDialogHelper._showCompendiumDialog(categoryManager, categoryId, categoryName);
     }
 
-    static showCategoryDialog(compendiumManager) {
-        TagDialogHelper._showCategoryDialog(compendiumManager);
+    static showCategoryDialog(categoryManager) {
+        TagDialogHelper._showCategoryDialog(categoryManager);
     }
 
-    static async submitCategories(compendiumManager, choices, push) {
-        await compendiumManager.submitCategories(choices, push);
+    static async submitCategories(categoryManager, choices, push) {
+        await categoryManager.submitCategories(choices, push);
         game.tokenActionHUD.update()
     }
 
-    static async submitCompendiums(compendiumManager, categoryId, choices) {
-        await compendiumManager.submitCompendiums(categoryId, choices);
+    static async submitCompendiums(categoryManager, categoryId, choices) {
+        await categoryManager.submitCompendiums(categoryId, choices);
         game.tokenActionHUD.update();
     }
 
@@ -51,15 +51,15 @@ export class TagDialogHelper {
 
         let submitFunc = (choices, indexValue) => {
             let isBlocklist = parseInt(indexValue) != 0 ? true : false;
-            TagDialogHelper.submitFilters(categoryId, categoryId, isBlocklist);
+            TagDialogHelper.submitFilter(filterManager, categoryId, choices, isBlocklist);
         }
 
         TagDialog.showDialog(suggestions, selected, indexChoice, title, hbsData, submitFunc);
     }
     
-    static _showCompendiumDialog(compendiumManager, categoryId, categoryName) {
+    static _showCompendiumDialog(categoryManager, categoryId, categoryName) {
         let suggestions = CompendiumHelper.getCompendiumChoicesForFilter();
-        let selected = compendiumManager.getCategoryCompendiumsAsTagifyEntries(categoryId);
+        let selected = categoryManager.getCategoryCompendiumsAsTagifyEntries(categoryId);
 
         let title = game.i18n.localize('tokenactionhud.compendiumTagTitle') + ` (${categoryName})`;
         
@@ -71,16 +71,16 @@ export class TagDialogHelper {
 
         let submitFunc = (choices, indexValue) => {
             let compendiums = choices.map(c => {return {id: c.id, title: c.value}})
-            TagDialogHelper.submitCompendiums(compendiumManager, categoryId, compendiums);
+            TagDialogHelper.submitCompendiums(categoryManager, categoryId, compendiums);
         }
 
         TagDialog.showDialog(suggestions, selected, null, title, hbsData, submitFunc);
     }
 
-    static _showCategoryDialog(compendiumManager) {
-        let selected = compendiumManager.getExistingCategories();
+    static _showCategoryDialog(categoryManager) {
+        let selected = categoryManager.getExistingCategories();
 
-        let indexChoice = compendiumManager.arePush() ? 1 : 0;
+        let indexChoice = categoryManager.arePush() ? 1 : 0;
 
         let title = game.i18n.localize('tokenactionhud.categoryTagTitle');
         
@@ -97,7 +97,7 @@ export class TagDialogHelper {
 
         let submitFunc = (choices, indexValue) => {
             let push = parseInt(indexValue) != 0 ? true : false;
-            TagDialogHelper.submitCategories(compendiumManager, choices, push);
+            TagDialogHelper.submitCategories(categoryManager, choices, push);
         }
 
         TagDialog.showDialog(null, selected, indexChoice, title, hbsData, submitFunc);

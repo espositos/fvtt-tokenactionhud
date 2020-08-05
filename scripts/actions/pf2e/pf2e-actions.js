@@ -4,8 +4,8 @@ import { PcActionHandlerPf2e } from './pf2e-actions-pc.js';
 import { NpcActionHandlerPf2e } from './pf2e-actions-npc.js';
 
 export class ActionHandlerPf2e extends ActionHandler {
-    constructor(filterManager, compendiumManager) {
-        super(filterManager, compendiumManager);
+    constructor(filterManager, categoryManager) {
+        super(filterManager, categoryManager);
         this.pcActionHandler = new PcActionHandlerPf2e(this);
         this.npcActionHandler = new NpcActionHandlerPf2e(this);
     }    

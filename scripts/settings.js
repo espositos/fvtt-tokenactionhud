@@ -27,9 +27,9 @@ export const registerSettings = function(system, rollHandlers) {
         onChange: value => { updateSettings(value); }
     });
 
-    game.settings.register(app,'alwaysShowCompendiumCategories', {
-        name : game.i18n.localize('tokenactionhud.settings.alwaysShowCompendiumCategories.name'),
-        hint : game.i18n.localize('tokenactionhud.settings.alwaysShowCompendiumCategories.hint'),
+    game.settings.register(app,'alwaysShowAdditionalCategories', {
+        name : game.i18n.localize('tokenactionhud.settings.alwaysShowAdditionalCategories.name'),
+        hint : game.i18n.localize('tokenactionhud.settings.alwaysShowAdditionalCategories.hint'),
         scope : 'client',
         config : true,
         type : Boolean,

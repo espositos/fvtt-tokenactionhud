@@ -1,6 +1,6 @@
 import { CompendiumHelper } from './compendiumHelper.js';
 
-export class HudCompendium {
+export class CompendiumSubcategory {
     constructor(filterManager, categoryId, compendiumId, title) {
         this.filterManager = filterManager;
         this.id = `${categoryId}_${compendiumId}`.slugify({replacement: '_', strict:true});

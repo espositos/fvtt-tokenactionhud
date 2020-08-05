@@ -1,6 +1,6 @@
 import * as settings from './settings.js';
 import { HandlersManager } from './handlersManager.js';
-import { CompendiumCategoryManager } from './actions/compendiums/compendiumCategoryManager.js';
+import { CategoryManager } from './actions/compendiums/categoryManager.js';
 import { FilterManager } from './actions/filter/filterManager.js';
 import { TokenActionHUD } from './tokenactionhud.js';
 
@@ -59,10 +59,10 @@ Hooks.on('canvasReady', async () => {
         let user = game.user;
 
         let filterManager = new FilterManager(user);
-        let compendiumManager = new CompendiumCategoryManager(user, filterManager);
-        await compendiumManager.init();
+        let categoryManager = new CategoryManager(user, filterManager);
+        await categoryManager.init();
 
-        let actionHandler = HandlersManager.getActionHandler(system, filterManager, compendiumManager);
+        let actionHandler = HandlersManager.getActionHandler(system, filterManager, categoryManager);
         
         let handlerId = settings.get('rollHandler');
         
@@ -74,7 +74,7 @@ Hooks.on('canvasReady', async () => {
 
         let rollHandler = HandlersManager.getRollHandler(system, handlerId);
         
-        game.tokenActionHUD = new TokenActionHUD(actionHandler, rollHandler, filterManager, compendiumManager);
+        game.tokenActionHUD = new TokenActionHUD(actionHandler, rollHandler, filterManager, categoryManager);
     }
     
     game.tokenActionHUD.setTokensReference(canvas.tokens);

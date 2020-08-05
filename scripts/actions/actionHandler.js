@@ -13,15 +13,15 @@ export class ActionHandler {
 
     filterManager = null;
 
-    constructor(filterManager, compendiumManager) {
+    constructor(filterManager, categoryManager) {
         this.filterManager = filterManager;
-        this.compendiumManager = compendiumManager;
+        this.categoryManager = categoryManager;
     }
 
     async buildActionList(token) {
         let actionList = await this.doBuildActionList(token);
         this._doBuildFurtherActions(token, actionList);
-        await this.compendiumManager.addCategoriesToActionList(this, actionList);
+        await this.categoryManager.addCategoriesToActionList(this, actionList);
         return actionList;
     }
 

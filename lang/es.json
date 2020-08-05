@@ -102,8 +102,8 @@
     "tokenactionhud.settings.playerPermission.hint": "Si está activo, los jugadores podrán usar el HUD.",
     "tokenactionhud.settings.debug.name": "Activar depuración",
     "tokenactionhud.settings.debug.hint": "Activar el registro de depuración.",
-    "tokenactionhud.settings.alwaysShowCompendiumCategories.name": "Always show compendium categories",
-    "tokenactionhud.settings.alwaysShowCompendiumCategories.hint": "If enabled, compendium categories will be shown even when no token is selected.",
+    "tokenactionhud.settings.alwaysShowAdditionalCategories.name": "Always show compendium categories",
+    "tokenactionhud.settings.alwaysShowAdditionalCategories.hint": "If enabled, compendium categories will be shown even when no token is selected.",
     "tokenactionhud.settings.showIcons.name": "Show icons next to buttons",
     "tokenactionhud.settings.showIcons.hint": "If enabled, icons will be displayed on the HUD button where available.",
 

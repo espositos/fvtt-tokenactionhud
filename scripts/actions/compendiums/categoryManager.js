@@ -1,7 +1,7 @@
-import { CompendiumCategory } from './compendiumCategory.js';
+import { Category } from './category.js';
 import * as settings from '../../settings.js';
 
-export class CompendiumCategoryManager {
+export class CategoryManager {
     categories = [];
     user = null;
 
@@ -22,7 +22,7 @@ export class CompendiumCategoryManager {
                 if (!(id || title))
                     continue;
 
-                let category = new CompendiumCategory(this.filterManager, id, title, push);
+                let category = new Category(this.filterManager, id, title, push);
 
                 let compendiums = cat[1].compendiums;
                 if (compendiums) {
@@ -35,7 +35,7 @@ export class CompendiumCategoryManager {
     }
 
     async addCategoriesToActionList(actionHandler, actionList) {
-        let alwaysShow = settings.get('alwaysShowCompendiumCategories');
+        let alwaysShow = settings.get('alwaysShowAdditionalCategories');
         if (alwaysShow){
             if (!actionList.tokenId)
                 actionList.tokenId = 'compendiums';
@@ -74,7 +74,7 @@ export class CompendiumCategoryManager {
     }
 
     async createCategory(tagifyCategory, push) {
-        let newCategory = new CompendiumCategory(this.filterManager, tagifyCategory.id, tagifyCategory.value, push);
+        let newCategory = new Category(this.filterManager, tagifyCategory.id, tagifyCategory.value, push);
         await newCategory.updateFlag();
         this.categories.push(newCategory);
     }

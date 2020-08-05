@@ -3,8 +3,8 @@ import * as settings from '../../settings.js';
 import { CompendiumHelper } from '../compendiums/compendiumHelper.js';
 
 export class ActionHandlerDw extends ActionHandler {
-    constructor (filterManager, compendiumManager) {
-        super(filterManager, compendiumManager);
+    constructor (filterManager, categoryManager) {
+        super(filterManager, categoryManager);
     }
 
     /** @override */

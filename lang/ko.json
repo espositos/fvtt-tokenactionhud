@@ -104,8 +104,8 @@
     "tokenactionhud.settings.playerPermission.hint": "활성화할 경우 플레이어가 HUD를 사용할 수 있다.",
     "tokenactionhud.settings.debug.name": "디버깅 활성화",
     "tokenactionhud.settings.debug.hint": "디버그 기록을 활성화한다.",
-    "tokenactionhud.settings.alwaysShowCompendiumCategories.name": "Always show compendium categories",
-    "tokenactionhud.settings.alwaysShowCompendiumCategories.hint": "If enabled, compendium categories will be shown even when no token is selected.",
+    "tokenactionhud.settings.alwaysShowAdditionalCategories.name": "Always show compendium categories",
+    "tokenactionhud.settings.alwaysShowAdditionalCategories.hint": "If enabled, compendium categories will be shown even when no token is selected.",
     "tokenactionhud.settings.showIcons.name": "Show icons next to buttons",
     "tokenactionhud.settings.showIcons.hint": "If enabled, icons will be displayed on the HUD button where available.",
 

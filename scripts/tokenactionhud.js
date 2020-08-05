@@ -6,14 +6,14 @@ import { CategoryResizer } from './utilities/categoryResizer.js';
 export class TokenActionHUD extends Application {
     i18n = (toTranslate) => game.i18n.localize(toTranslate);
 
-    constructor(actions, rollHandler, filterManager, compendiumManager) {
+    constructor(actions, rollHandler, filterManager, categoryManager) {
         super();
         this.refresh_timeout = null;
         this.tokens = null;
         this.actions = actions;
         this.rollHandler = rollHandler;
         this.filterManager = filterManager;
-        this.compendiumManager = compendiumManager;
+        this.categoryManager = categoryManager;
         this.rendering = false;
         this.categoryHovered = '';
     }
@@ -102,8 +102,8 @@ export class TokenActionHUD extends Application {
             let id = target.value;
             let categoryTitle = target.innerText ?? target.outerText;
 
-            if (game.tokenActionHUD.compendiumManager.isCompendiumCategory(id))
-                TagDialogHelper.showCompendiumDialog(game.tokenActionHUD.compendiumManager, id, categoryTitle)
+            if (game.tokenActionHUD.categoryManager.isCompendiumCategory(id))
+                TagDialogHelper.showCompendiumDialog(game.tokenActionHUD.categoryManager, id, categoryTitle)
             else
                 TagDialogHelper.showFilterDialog(game.tokenActionHUD.filterManager, id);
         }     
@@ -148,7 +148,7 @@ export class TokenActionHUD extends Application {
             ev.preventDefault();
             ev = ev || window.event;
 
-            TagDialogHelper._showCategoryDialog(this.compendiumManager)
+            TagDialogHelper._showCategoryDialog(this.categoryManager)
         })
 
         html.find(repositionIcon).mousedown(ev => {
@@ -364,7 +364,7 @@ export class TokenActionHUD extends Application {
 
     isLinkedCompendium(compendiumKey) {
         settings.Logger.debug('Compendium hook triggered. Checking if compendium is linked.')
-        return this.compendiumManager.isLinkedCompendium(compendiumKey);
+        return this.categoryManager.isLinkedCompendium(compendiumKey);
     }
 
     /** @private */
