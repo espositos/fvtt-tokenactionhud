@@ -1,65 +1,69 @@
 # Changelog
 
-## [0.5.18] 2021-08-04
+## [0.5.19] 2020-08-06
+### Added
+- Japanese localization for DND5e and Pathfinder
+
+## [0.5.18] 2020-08-04
 ### Bugfix
 - Fix for Item-Macro token actors
 
-## [0.5.17] 2021-08-01
+## [0.5.17] 2020-08-01
 ### Bugfix
 - Fixed bug where feats and spells weren't being correctly sent to Item Macro.
 
-## [0.5.16] 2021-08-01
+## [0.5.16] 2020-08-01
 ### Bugfix
 - Fixed bug where filename in the wrong case caused error on case-sensitive filesystems.
 
-## [0.5.15] 2021-08-01
+## [0.5.15] 2020-08-01
 ### Added
 - DND5e: support for [Kekilla's Item Macro module](https://github.com/Kekilla0/Item-Macro)
 
-## [0.5.14] 2021-07-30
+## [0.5.14] 2020-07-30
 ### Bugfix
 -DND5e forgot to include shfitkey check in betterrolls item roll, which was causing error.
 
-## [0.5.13] 2021-07-29
+## [0.5.13] 2020-07-29
 ### Changed
 - DND5e: removed right click for versatile ability in BetterRoll and Minor QoL handlers in favour of alt + right-click and ctrl + right-click to bring up damage and attack roll modals, respectively.
 
-## [0.5.12] 2021-07-27
+## [0.5.12] 2020-07-27
 ### Bugfix
 - DND5e: fixed error for actors with magic item mod enabled but no magic items.
 
-## [0.5.11] 2021-07-26
+## [0.5.11] 2020-07-26
 ### Added
 - Added further KO localization from drdwing
 
-## [0.5.10] 2021-07-25
+## [0.5.10] 2020-07-25
 ### Added
 - Added missing method causing exception when checking compendiums
 
-## [0.5.9] 2021-07-23
+## [0.5.9] 2020-07-23
 ### Added
 - French localization thanks to LeRatierBretonnien
 
-## [0.5.8] 2021-07-23
+## [0.5.8] 2020-07-23
 ### Changed
 - PF2E moved hero points to top of utility category
 
-## [0.5.7] 2021-07-23
+## [0.5.7] 2020-07-23
 ### Added
 - PF2E added utility category
 
-## [0.5.6] 2021-07-23
+## [0.5.6] 2020-07-23
 ### Added
 - HUD should now try to resize itself if it has too many rows or columns, or hits the edge of the screen.
 
-## [0.5.5] 2021-07-22
+## [0.5.5] 2020-07-22
 ### Bugfix
 - WFRP had misnamed method which was preventing loading of action list
 
 ### Added
 - DND5e: added tools to inventory
 
-## [0.5.4] 2021-07-19
+## [0.5.4] 2020-07-19
 ### Added
 - DND5e: Added a utility category (rests, death saves, toggles)
 
