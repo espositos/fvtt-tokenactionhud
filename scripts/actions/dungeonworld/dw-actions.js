@@ -29,6 +29,7 @@ export class ActionHandlerDw extends ActionHandler {
         return result;
 
         result.actorId = actor._id;
+
         let actorType = actor.data.type;
 
         if (actorType === 'npc') {

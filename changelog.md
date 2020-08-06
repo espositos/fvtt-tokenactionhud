@@ -3,6 +3,7 @@
 ## [0.5.20] 2020-08-06
 ### Added
 - Setting for always showing HUD (show's user's assigned character) as long as token is somewhere in scene.
+- Setting for displaying a HUD title, which by default is the token's alias.
 
 ## [0.5.19] 2020-08-06
 ### Added

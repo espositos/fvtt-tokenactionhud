@@ -16,13 +16,14 @@ export class ActionHandler5e extends ActionHandler {
         let tokenId = token.data._id;
 
         result.tokenId = tokenId;
-
+        
         let actor = token.actor;
-
+        
         if (!actor)
             return result;
-
+        
         result.actorId = actor._id;
+
         let items = this._getItemList(actor, tokenId);
         let spells = this._getSpellsList(actor, tokenId);
         let feats = this._getFeatsList(actor, tokenId);
