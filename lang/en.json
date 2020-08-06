@@ -101,7 +101,9 @@
     "tokenactionhud.settings.playerPermission.hint": "If enabled, players will be able to use the HUD.",
     "tokenactionhud.settings.debug.name": "Enable debugging",
     "tokenactionhud.settings.debug.hint": "Enable debug logging.",
-
+    "tokenactionhud.settings.alwaysShowHud.name": "Always display HUD",
+    "tokenactionhud.settings.alwaysShowHud.hint": "If the user has an assigned character, the HUD will default to this character when no token is selected.",
+    
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.name": "Ignore passive feats",
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.hint": "If enabled, passive feats are not shown.",
     "tokenactionhud.settings.dnd5e.showSpellInfo.name": "Display spell information",

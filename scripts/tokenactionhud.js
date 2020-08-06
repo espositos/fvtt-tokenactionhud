@@ -510,8 +510,20 @@ export class TokenActionHUD extends Application {
 
     /** @private */
     _getTargetToken(controlled) {
-        if (controlled.length != 1)
+        if (controlled.length > 1)
             return null;
+
+        if (controlled.length === 0 && canvas.tokens?.placeables) {
+            if (!settings.get('alwaysShowHud'))
+                return null;
+            
+            let character = game.user.character;
+            let token = canvas.tokens.placeables.find(t => t.actor._id === character._id)
+            if (token)
+                return token;
+            
+            return null;
+        }
 
         let ct = controlled[0];
 
