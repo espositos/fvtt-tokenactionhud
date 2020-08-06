@@ -26,6 +26,26 @@ export const registerSettings = function(system, rollHandlers) {
         default : true,
         onChange: value => { updateSettings(value); }
     });
+    
+    game.settings.register(app,'alwaysShowHud', {
+        name : game.i18n.localize('tokenactionhud.settings.alwaysShowHud.name'),
+        hint : game.i18n.localize('tokenactionhud.settings.alwaysShowHud.hint'),
+        scope : 'client',
+        config : true,
+        type : Boolean,
+        default : true,
+        onChange: value => { updateSettings(value); }
+    });
+    
+    game.settings.register(app,'showHudTitle', {
+        name : game.i18n.localize('tokenactionhud.settings.showHudTitle.name'),
+        hint : game.i18n.localize('tokenactionhud.settings.showHudTitle.hint'),
+        scope : 'client',
+        config : true,
+        type : Boolean,
+        default : false,
+        onChange: value => { updateSettings(value); }
+    });
 
     game.settings.register(app,'alwaysShowAdditionalCategories', {
         name : game.i18n.localize('tokenactionhud.settings.alwaysShowAdditionalCategories.name'),

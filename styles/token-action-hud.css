@@ -23,6 +23,19 @@
     position: absolute;
 }
 
+#tah-hudTitle {
+    color: #fff;
+    padding: 3px;
+    margin: 3px;
+    text-shadow: -1px -1px 1px rgba(52, 52, 52, 1),
+    -1px -1px 1px rgba(52, 52, 52, 1),
+    -1px -1px 1px rgba(52, 52, 52, 1),
+    -1px -1px 1px rgba(52, 52, 52, 1);
+    text-align: left;
+    pointer-events: none;
+    position: absolute;
+}
+
 #tah-reposition, #tah-categories {
     display: none;
     font-style: normal;

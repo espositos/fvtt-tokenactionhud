@@ -33,6 +33,9 @@ export class TokenActionHUD extends Application {
         this.tokens = tokens;
     }
 
+        let hudTitle = $(document).find('#tah-hudTitle');
+        if (hudTitle.length > 0)
+            hudTitle.css('top', -hudTitle[0].getBoundingClientRect().height)
     /** @override */
     static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
@@ -312,6 +315,9 @@ export class TokenActionHUD extends Application {
         let token = this._getTargetToken(this.tokens?.controlled);
 
         this.targetActions = await this.actions.buildActionList(token);
+        
+        if (this.targetActions && settings.get('showHudTitle'))
+            this.targetActions.hudTitle = token?.actor?.name;
 
         if (!this.showHudEnabled()) {
             this.close();
@@ -369,8 +375,20 @@ export class TokenActionHUD extends Application {
 
     /** @private */
     _getTargetToken(controlled) {
-        if (controlled.length != 1)
+        if (controlled.length > 1)
             return null;
+
+        if (controlled.length === 0 && canvas.tokens?.placeables && game.user.character) {
+            if (!settings.get('alwaysShowHud'))
+                return null;
+            
+            let character = game.user.character
+            let token = canvas.tokens.placeables.find(t => t.actor._id === character._id)
+            if (token)
+                return token;
+            
+            return null;
+        }
 
         let ct = controlled[0];
 
