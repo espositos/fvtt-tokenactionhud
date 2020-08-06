@@ -10,6 +10,7 @@ export class ActionHandler {
     emptyActionList = {
         tokenId: '',
         actorId: '',
+        hudTitle: '',
         categories: []
     }
 
