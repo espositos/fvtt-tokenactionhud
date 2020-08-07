@@ -33,9 +33,6 @@ export class TokenActionHUD extends Application {
         this.tokens = tokens;
     }
 
-        let hudTitle = $(document).find('#tah-hudTitle');
-        if (hudTitle.length > 0)
-            hudTitle.css('top', -hudTitle[0].getBoundingClientRect().height)
     /** @override */
     static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
@@ -217,6 +214,10 @@ export class TokenActionHUD extends Application {
     trySetPos() {
         if (!(this.targetActions && this.targetActions.tokenId))
             return;
+
+        let hudTitle = $(document).find('#tah-hudTitle');
+        if (hudTitle.length > 0)
+            hudTitle.css('top', -hudTitle[0].getBoundingClientRect().height)
 
         if (settings.get('onTokenHover')) {           
             let token = canvas.tokens.placeables.find(t => t.data._id === this.targetActions.tokenId);

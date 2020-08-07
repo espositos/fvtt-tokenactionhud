@@ -1,13 +1,13 @@
 export class CompendiumHelper {
     constructor() {}
 
-    static getCompendiumChoicesForFilter() {
+    static getCompendiumChoicesAsTagifyEntries() {
         return game.packs.entries.filter(p => {
             let packTypes = ['JournalEntry', 'Macro', 'RollTable', 'Playlist'];
             return packTypes.includes(p.metadata.entity);
         }).map(p => {
             let key = `${p.metadata.package}.${p.metadata.name}`
-            return {id: key, value: p.metadata.label} });
+            return {id: key, value: p.metadata.label, type: 'comp'} });
     }
 
     static exists(key) {

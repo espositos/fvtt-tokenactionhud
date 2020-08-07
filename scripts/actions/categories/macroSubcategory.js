@@ -1,14 +1,16 @@
 import { MacroHelper } from './macroHelper.js';
+import { SubcategoryType } from '../../enums/subcategoryType.js';
 
 export class MacroSubcategory {
-    constructor(filterManager, categoryId, title) {
+    constructor(filterManager, categoryKey, title) {
         this.filterManager = filterManager;
-        this.id = `${categoryId}_${title}`.slugify({replacement: '_', strict:true});
+        this.id = `${categoryKey}_${title}`.slugify({replacement: '_', strict:true});
         this.title = title;
+        this.type = SubcategoryType.MACRO;
     }
 
     async updateFlag(categoryId) {
-        let contents = {id: this.id, title: this.title}
+        let contents = {id: this.id, title: this.title, type: this.type}
         await game.user.setFlag('token-action-hud', `categories.${categoryId}.subcategories.${this.id}`, contents);
     }
 
@@ -56,6 +58,6 @@ export class MacroSubcategory {
     }
 
     asTagifyEntry() {
-        return {id: this.id, value: this.title}
+        return {id: this.id, value: this.title, type: this.type}
     }
 }

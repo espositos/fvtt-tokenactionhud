@@ -6,16 +6,17 @@ export class CompendiumSubcategory {
         this.id = `${categoryId}_${compendiumId}`.slugify({replacement: '_', strict:true});
         this.compendiumId = compendiumId;
         this.title = title;
+        this.type = SubcategoryType.COMPENDIUM;
     }
 
     async updateFlag(categoryId) {
-        let contents = {id: this.compendiumId, title: this.title}
-        await game.user.setFlag('token-action-hud', `categories.${categoryId}.compendiums.${this.id}`, contents);
+        let contents = {id: this.compendiumId, title: this.title, type: this.type}
+        await game.user.setFlag('token-action-hud', `categories.${categoryId}.subcategories.${this.id}`, contents);
     }
 
     async unsetFlag(categoryId) {
         if (categoryId)
-            await game.user.setFlag('token-action-hud', `categories.${categoryId}.compendiums`, {[`-=${this.id}`]: null})
+            await game.user.setFlag('token-action-hud', `categories.${categoryId}.subcategories`, {[`-=${this.id}`]: null})
     }
 
     createFilter() {
@@ -57,6 +58,6 @@ export class CompendiumSubcategory {
     }
 
     asTagifyEntry() {
-        return {id: this.compendiumId, value: this.title}
+        return {id: this.compendiumId, value: this.title, type: this.type}
     }
 }

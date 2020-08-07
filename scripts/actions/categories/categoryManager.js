@@ -15,19 +15,19 @@ export class CategoryManager {
         if (savedCategories) {
             settings.Logger.debug('saved categories:', savedCategories);
             
-            for (let cat of Object.entries(savedCategories)) {
-                let id = cat[1].id;
-                let title = cat[1].title;
-                let push = cat[1].push;
+            for (let cat of Object.values(savedCategories)) {
+                let id = cat.id;
+                let title = cat.title;
+                let push = cat.push;
                 if (!(id || title))
                     continue;
 
                 let category = new Category(this.filterManager, id, title, push);
 
-                let compendiums = cat[1].compendiums;
-                if (compendiums) {
-                    let compendiums = Object.values(cat[1].compendiums);
-                    await category.selectSubcategories(compendiums);
+                let subcategories = cat.subcategories;
+                if (subcategories) {
+                    subcategories = Object.values(subcategories);
+                    await category.selectSubcategories(subcategories);
                 }
                 this.categories.push(category);
             }
@@ -121,6 +121,6 @@ export class CategoryManager {
         if (!category)
             return;
 
-        return category.getCompendiumsAsTagifyEntries();
+        return category.getSubcategoriesAsTagifyEntries();
     }
 }

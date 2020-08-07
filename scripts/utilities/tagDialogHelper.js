@@ -58,7 +58,7 @@ export class TagDialogHelper {
     }
     
     static _showCompendiumDialog(categoryManager, categoryId, categoryName) {
-        let suggestions = CompendiumHelper.getCompendiumChoicesForFilter();
+        let suggestions = CompendiumHelper.getCompendiumChoicesAsTagifyEntries();
         let selected = categoryManager.getCategoryCompendiumsAsTagifyEntries(categoryId);
 
         let title = game.i18n.localize('tokenactionhud.compendiumTagTitle') + ` (${categoryName})`;
@@ -70,8 +70,8 @@ export class TagDialogHelper {
         }
 
         let submitFunc = (choices, indexValue) => {
-            let compendiums = choices.map(c => {return {id: c.id, title: c.value}})
-            TagDialogHelper.submitSubcategories(categoryManager, categoryId, compendiums);
+            let subcats = choices.map(c => {return {id: c.id, title: c.value, type: c.type}})
+            TagDialogHelper.submitSubcategories(categoryManager, categoryId, subcats);
         }
 
         TagDialog.showDialog(suggestions, selected, null, title, hbsData, submitFunc);
