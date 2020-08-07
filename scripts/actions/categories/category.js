@@ -40,10 +40,10 @@ export class Category {
         if (this.subcategories.length === 0)
             return;
 
-        let idMap = subcats.map(c => c.id);
+        let titleMap = subcats.map(c => c.title);
         for (var i = this.subcategories.length - 1; i >= 0; i--) {
-            let compendium = this.subcategories[i];
-            if (!idMap.includes(compendium.compendiumId))
+            let subcat = this.subcategories[i];
+            if (!titleMap.includes(subcat.title))
                await this.removeCompendium(i)
         }
 
