@@ -36,25 +36,25 @@ export class MacroSubcategory {
         this.filterManager.setFilteredElements(this.id, elements, isBlocklist);
     }
 
-    async addToCategory(actionHandler, category) {
+    addToCategory(actionHandler, category) {
         let subcategory = actionHandler.initializeEmptySubcategory(this.id);
-        subcategory.actions = await this._createCompendiumActions(actionHandler.delimiter);
+        subcategory.actions = this._createMacroActions(actionHandler.delimiter);
         subcategory.canFilter = true;
         actionHandler._combineSubcategoryWithCategory(category, this.title, subcategory);
     }
 
-    async _createCompendiumActions(delimiter) {
+    _createMacroActions(delimiter) {
         let possibleMacros = MacroHelper.getEntriesForActions(delimiter);
 
         let filters = this.filterManager.getFilteredIds(this.id);
         let isBlocklist = this.filterManager.isBlocklist(this.id);
       
-        let actions = possibleMacros;
+        if (filters.length === 0)
+            return [];
 
-        if (filters.length > 0)
-            actions = possibleMacros.filter(p => filters.includes(p.id) !== isBlocklist)
+        let filteredActions = possibleMacros.filter(p => filters.includes(p.id) !== isBlocklist)
         
-        return actions;
+        return filteredActions;
     }
 
     asTagifyEntry() {

@@ -5,11 +5,11 @@ export class MacroHelper {
         return !!game.macros.entries.some(m => m.data._id === key);
     }
 
-    static getEntriesForActions(delimiter) {
+    static getEntriesForActions(tokenId, delimiter) {
         let macroType = 'macro';
         let entries = MacroHelper.getMacros();
-        return entries.map(m => { 
-            let encodedValue = [macroType, key, m.data._id].join(delimiter);
+        return entries.map(m => {
+            let encodedValue = [macroType, tokenId, m.data._id].join(delimiter);
             return {name: m.data.name, encodedValue: encodedValue, id: m.data._id }
         });
     }

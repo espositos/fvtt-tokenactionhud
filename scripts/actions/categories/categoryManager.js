@@ -38,9 +38,9 @@ export class CategoryManager {
         let alwaysShow = settings.get('alwaysShowAdditionalCategories');
         if (alwaysShow){
             if (!actionList.tokenId)
-                actionList.tokenId = 'compendiums';
+                actionList.tokenId = 'categoryManager';
             if (!actionList.actorId)
-                actionList.actorId = 'compendiums'
+                actionList.actorId = 'categoryManager'
         }
 
         if (!actionList.tokenId)
@@ -79,9 +79,9 @@ export class CategoryManager {
         this.categories.push(newCategory);
     }
 
-    async updateCategory(compendiumCategory, push) {
-        compendiumCategory.push = push;
-        await compendiumCategory.updateFlag();
+    async updateCategory(category, push) {
+        category.push = push;
+        await category.updateFlag();
     }
 
     async deleteCategory(index) {
@@ -115,7 +115,7 @@ export class CategoryManager {
         return this.categories.filter(c => c.push).length >= this.categories.filter(c => !c.push).length;
     }
 
-    getCategoryCompendiumsAsTagifyEntries(categoryId) {
+    getCategorySubcategoriesAsTagifyEntries(categoryId) {
         let category = this.categories.find(c => c.id === categoryId);
 
         if (!category)

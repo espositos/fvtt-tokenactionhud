@@ -1,4 +1,5 @@
 import {CompendiumSubcategory} from './compendiumSubcategory.js';
+import {MacroSubcategory} from './macroSubcategory.js';
 import {CompendiumHelper} from './compendiumHelper.js';
 import {SubcategoryType} from '../../enums/subcategoryType.js';
 
@@ -29,18 +30,18 @@ export class Category {
         return actionList;
     }
 
-    async selectSubcategories(subcats) {
-        for (let sub of subcats) {
-            if (sub.type === SubcategoryType.COMPENDIUM)
-                await this.addCompendiumSubcategory(sub);
+    async selectSubcategories(selection) {
+        for (let subcat of selection) {
+            if (subcat.type === SubcategoryType.COMPENDIUM)
+                await this.addCompendiumSubcategory(subcat);
             else
-                await this.addMacroSubcategory(sub);
+                await this.addMacroSubcategory(subcat);
         }
 
         if (this.subcategories.length === 0)
             return;
 
-        let titleMap = subcats.map(c => c.title);
+        let titleMap = selection.map(subcat => subcat.title);
         for (var i = this.subcategories.length - 1; i >= 0; i--) {
             let subcat = this.subcategories[i];
             if (!titleMap.includes(subcat.title))
@@ -64,11 +65,11 @@ export class Category {
         this.subcategories.push(hudCompendium);
     }
     
-    async addMacroSubcategory(title) {
-        if (this.subcategories.some(c => c.title === compendium.title))
+    async addMacroSubcategory(choice) {
+        if (this.subcategories.some(c => c.title === choice.title))
             return;
 
-        let subcategory = new MacroSubcategory(this.filterManager, this.key, title);
+        let subcategory = new MacroSubcategory(this.filterManager, this.key, choice.title);
         subcategory.createFilter();
         await subcategory.submitFilterSuggestions();
 

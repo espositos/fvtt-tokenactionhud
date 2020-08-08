@@ -59,7 +59,7 @@ export class TagDialogHelper {
     
     static _showCompendiumDialog(categoryManager, categoryId, categoryName) {
         let suggestions = CompendiumHelper.getCompendiumChoicesAsTagifyEntries();
-        let selected = categoryManager.getCategoryCompendiumsAsTagifyEntries(categoryId);
+        let selected = categoryManager.getCategorySubcategoriesAsTagifyEntries(categoryId);
 
         let title = game.i18n.localize('tokenactionhud.compendiumTagTitle') + ` (${categoryName})`;
         
