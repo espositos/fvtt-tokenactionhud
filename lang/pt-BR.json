@@ -90,7 +90,7 @@
   "tokenactionhud.allowlist": "Lista Permitida",
 
   "tokenactionhud.categoryTagTitle": "Add/remove categories",
-  "tokenactionhud.compendiumTagTitle": "Add/remove compendiums",
+  "tokenactionhud.subcategoryTagTitle": "Add/remove subcategories",
 
   "tokenactionhud.settings.rollHandler.name": "HUD de Manipulação de rolganes",
   "tokenactionhud.settings.rollHandler.hint": "Escolha qual modulo será usado na HUD de ações.",
@@ -139,8 +139,8 @@
   "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Se ativado, e se o usuário for um MJ, a barra HUD incluirá movimentos do GM, tabelas de rolagem do tesouro e gráficos.",
     
   "tokenactionhud.filterTagExplanation": "Add entries here to show or hide specific category entries.",
-  "tokenactionhud.categoryTagExplanation": "Add (or remove) additional categories that are able to hold compendium entries.",
-  "tokenactionhud.compendiumTagExplanation": "Compendiums added here will be shown as subcategories, limited to journal entries, roll tables, playlists, and macros.",
+  "tokenactionhud.categoryTagExplanation": "Add (or remove) additional categories that are able to hold compendium entries and macros.",
+  "tokenactionhud.subcategoryTagExplanation": "Compendiums added here will be shown as subcategories, limited to journal entries, roll tables, playlists, and macros.",
   "tokenactionhud.clearButton": "Clear",
   "tokenactionhud.unshift": "Left",
   "tokenactionhud.push": "Right",

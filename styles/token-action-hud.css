@@ -106,7 +106,7 @@
     visibility:hidden;
     width: auto;
     height: auto;
-    color: #fff;
+    color: rgba(255, 255, 255, 0.6);
     text-align: center;
     font-size: xx-small;
     padding: 1px;
@@ -162,7 +162,7 @@
     visibility:hidden;
     width: auto;
     height: auto;
-    color: #fff;
+    color: rgba(255, 255, 255, 0.6);
     text-align: center;
     font-size: xx-small;
     padding: 1px;
@@ -172,6 +172,7 @@
     pointer-events: none;
     position: relative;
     top: -5px;
+    right: 0px;
 }
 
 .tah-subtitle:hover > .fa, .tah-subtitle:hover > .fas {

@@ -90,7 +90,7 @@
     "tokenactionhud.allowlist": "Lista de permitidos",
 
     "tokenactionhud.categoryTagTitle": "Add/remove categories",
-    "tokenactionhud.compendiumTagTitle": "Add/remove compendiums",
+    "tokenactionhud.subcategoryTagTitle": "Add/remove subcategories",
 
     "tokenactionhud.settings.rollHandler.name": "Manejador de tiradas",
     "tokenactionhud.settings.rollHandler.hint": "Elige que módulo recibirá las acciones de la barra.",
@@ -139,8 +139,8 @@
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Si está activo, y el usuario es un DJ, el HUD incluirá los movimientos del DJ, las tablas aleatorias de tesoro y las cartas.",    
     
     "tokenactionhud.filterTagExplanation": "Add entries here to show or hide specific category entries.",
-    "tokenactionhud.categoryTagExplanation": "Add (or remove) additional categories that are able to hold compendium entries.",
-    "tokenactionhud.compendiumTagExplanation": "Compendiums added here will be shown as subcategories, limited to journal entries, roll tables, playlists, and macros.",
+    "tokenactionhud.categoryTagExplanation": "Add (or remove) additional categories that are able to hold compendium entries and macros.",
+    "tokenactionhud.subcategoryTagExplanation": "Compendiums added here will be shown as subcategories, limited to journal entries, roll tables, playlists, and macros.",
     "tokenactionhud.clearButton": "Clear",
     "tokenactionhud.unshift": "Left",
     "tokenactionhud.push": "Right",

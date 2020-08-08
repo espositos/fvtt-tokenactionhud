@@ -93,9 +93,9 @@
     "tokenactionhud.allowlist": "Allowlist",
 
     "tokenactionhud.categoryTagTitle": "Add/remove categories",
-    "tokenactionhud.compendiumTagTitle": "Add/remove compendiums",
-    "tokenactionhud.categoryTagExplanation": "Add (or remove) additional categories that are able to hold compendium entries.",
-    "tokenactionhud.compendiumTagExplanation": "Compendiums added here will be shown as subcategories, limited to journal entries, roll tables, playlists, and macros.",
+    "tokenactionhud.subcategoryTagTitle": "Add/remove subcategories",
+    "tokenactionhud.categoryTagExplanation": "Add (or remove) additional categories that are able to hold compendium entries and macros.",
+    "tokenactionhud.subcategoryTagExplanation": "Tags added will be shown as subcategories: macro subcategories; or compendium subcategories (journal entries, roll tables, macros, or playlists).",
     "tokenactionhud.clearButton": "Clear",
     "tokenactionhud.unshift": "Left",
     "tokenactionhud.push": "Right",

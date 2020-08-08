@@ -80,7 +80,6 @@ Hooks.on('canvasReady', async () => {
     game.tokenActionHUD.setTokensReference(canvas.tokens);
 
     Hooks.on('controlToken', (token, controlled) => {
-        if (game.tokenActionHUD.validTokenChange())
             game.tokenActionHUD.update();
     });
     

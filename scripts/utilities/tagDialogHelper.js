@@ -61,10 +61,10 @@ export class TagDialogHelper {
         let suggestions = CompendiumHelper.getCompendiumChoicesAsTagifyEntries();
         let selected = categoryManager.getCategorySubcategoriesAsTagifyEntries(categoryId);
 
-        let title = game.i18n.localize('tokenactionhud.compendiumTagTitle') + ` (${categoryName})`;
+        let title = game.i18n.localize('tokenactionhud.subcategoryTagTitle') + ` (${categoryName})`;
         
         let hbsData = {
-            topLabel: game.i18n.localize('tokenactionhud.compendiumTagExplanation'),
+            topLabel: game.i18n.localize('tokenactionhud.subcategoryTagExplanation'),
             placeholder: game.i18n.localize('tokenactionhud.filterPlaceholder'),
             clearButtonText: game.i18n.localize('tokenactionhud.clearButton'),
         }

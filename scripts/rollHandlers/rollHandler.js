@@ -20,7 +20,7 @@ export class RollHandler {
     handleActionEvent(event, encodedValue) {
         settings.Logger.debug(encodedValue);
 
-        let handled = this.handleCompendiums(event, encodedValue);
+        let handled = this.handleSpecial(event, encodedValue);
         if (handled)
             return;
 
@@ -41,7 +41,7 @@ export class RollHandler {
         this.preRollHandlers.push(handler);
     }
 
-    handleCompendiums(event, encodedValue) {
+    handleSpecial(event, encodedValue) {
         let delimiter = game.tokenActionHUD.actions.delimiter;
         
         let payload = encodedValue.split(delimiter);
@@ -50,22 +50,25 @@ export class RollHandler {
             return false;
         
         let macroType = payload[0];
-        let tokenId = payload[1];
+        let key = payload[1];
         let actionId = payload[2];
         
-        let types = ['compendiumEntry', 'compendiumMacro', 'compendiumPlaylist'];
+        let types = ['compendiumEntry', 'compendiumMacro', 'compendiumPlaylist', 'macro'];
         if (!types.includes(macroType))
             return false;
 
         switch (macroType) {
             case 'compendiumEntry':
-                this.handleCompendium(macroType, event, tokenId, actionId);
+                this.handleCompendium(macroType, event, key, actionId);
                 break;
             case 'compendiumMacro':
-                this.handleMacroCompendium(macroType, event, tokenId, actionId);
+                this.handleMacroCompendium(macroType, event, key, actionId);
                 break;
             case 'compendiumPlaylist':
-                this.handlePlaylistCompendium(macroType, event, tokenId, actionId);
+                this.handlePlaylistCompendium(macroType, event, key, actionId);
+                break;
+            case 'macro':
+                this.handleMacro(macroType, event, key, actionId);
                 break;
             default:
                 return false;
@@ -97,5 +100,9 @@ export class RollHandler {
         let sound = playlist.sounds.find(s => s._id === soundId);
 
         AudioHelper.play({src: sound.path}, {})
+    }
+
+    handleMacro(macroType, event, tokenId, actionId) {
+        game.macros.find(i => i.data._id === actionId).execute();
     }
 }

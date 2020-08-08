@@ -18,16 +18,30 @@ export class Category {
     }
 
     async addToActionList(actionHandler, actionList) {
+        if (actionList.categories.some(c => c.name === this.title)) {
+            let existingCat = actionList.categories.find(c => c.name === this.title);
+            existingCat.canFilter = true;
+            this.addSubcategoriesToCategory(actionHandler, existingCat);
+        } else {
+            this.doAddToActionList(actionHandler, actionList);
+        }
+    }
+
+    async doAddToActionList(actionHandler, actionList) {
         let result = actionHandler.initializeEmptyCategory(this.id);
         result.canFilter = true;
 
-        for (let subcategory of this.subcategories) {
-            await subcategory.addToCategory(actionHandler, result);
-        }
+        this.addSubcategoriesToCategory(actionHandler, result);
 
         actionHandler._combineCategoryWithList(actionList, this.title, result, this.push);
 
         return actionList;
+    }
+
+    async addSubcategoriesToCategory(actionHandler, category) {
+        for (let subcategory of this.subcategories) {
+            await subcategory.addToCategory(actionHandler, category);
+        }
     }
 
     async selectSubcategories(selection) {

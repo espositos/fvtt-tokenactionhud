@@ -92,7 +92,7 @@
     "tokenactionhud.allowlist": "허가 목록",
 
     "tokenactionhud.categoryTagTitle": "Add/remove categories",
-    "tokenactionhud.compendiumTagTitle": "Add/remove compendiums",
+    "tokenactionhud.subcategoryTagTitle": "Add/remove subcategories",
 
     "tokenactionhud.settings.rollHandler.name": "HUD 굴림 처리기",
     "tokenactionhud.settings.rollHandler.hint": "HUD의 작업을 받을 모듈을 선택한다.",
@@ -141,8 +141,8 @@
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "활성화 했을 때 사용자가 GM인 경우 HUD바에 GM 이동, 전리품 굴림표, 차트가 포함된다.",
     
     "tokenactionhud.filterTagExplanation": "Add entries here to show or hide specific category entries.",
-    "tokenactionhud.categoryTagExplanation": "Add (or remove) additional categories that are able to hold compendium entries.",
-    "tokenactionhud.compendiumTagExplanation": "Compendiums added here will be shown as subcategories, limited to journal entries, roll tables, playlists, and macros.",
+    "tokenactionhud.categoryTagExplanation": "Add (or remove) additional categories that are able to hold compendium entries and macros.",
+    "tokenactionhud.subcategoryTagExplanation": "Compendiums added here will be shown as subcategories, limited to journal entries, roll tables, playlists, and macros.",
     "tokenactionhud.clearButton": "Clear",
     "tokenactionhud.unshift": "Left",
     "tokenactionhud.push": "Right",
