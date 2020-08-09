@@ -70,9 +70,9 @@ export class CategoryManager {
         for (let choice of selections) {
             let category = this.categories.find(c => c.id === choice.id);
             if (!category)
-                await this.createCategory(choice, push);
+                await this._createCategory(choice, push);
             else
-                await this.updateCategory(category, push);
+                await this._updateCategory(category, push);
         }
 
         let idMap = selections.map(s => s.id);
@@ -88,12 +88,14 @@ export class CategoryManager {
     }
 
     async createCategory(tagifyCategory, push) {
+
+    async _createCategory(tagifyCategory, push) {
         let newCategory = new Category(this.filterManager, tagifyCategory.id, tagifyCategory.value, push);
         await newCategory.updateFlag();
         this.categories.push(newCategory);
     }
 
-    async updateCategory(category, push) {
+    async _updateCategory(category, push) {
         category.push = push;
         await category.updateFlag();
     }
