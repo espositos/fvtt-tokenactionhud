@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.21] 2020-08-09
+### Bugfix
+- PF2E: Strikes with non-default MAPs had the wrong attack bonus shown.
+
 ## [0.5.20] 2020-08-06
 ### Added
 - Setting for always showing HUD (show's user's assigned character) as long as token is somewhere in scene.

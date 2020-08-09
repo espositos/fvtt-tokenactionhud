@@ -43,11 +43,11 @@ export class PcActionHandlerPf2e {
 
         let strikes = actor.data.data.actions.filter(a => a.type === macroType);
         
-        let calculateAttackPenalty = settings.get('calculateAttackPenalty')
+        let calculateAttackPenalty = settings.get('calculateAttackPenalty');
 
         strikes.forEach(s => {
             let subcategory = this.baseHandler.initializeEmptySubcategory();
-            let map = s.traits.some(t => t.name === 'agile') ? 4 : 5;
+            let map = Math.abs(parseInt(s.variants[1].label.split(' ')[1]));
             let attackMod = s.totalModifier;
             
             let currentMap = 0;
