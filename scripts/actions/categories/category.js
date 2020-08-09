@@ -8,19 +8,29 @@ export class Category {
     id = '';
     key = '';
     title = '';
+    push = false; // push or shift when adding to actionList
+    core = false; // is it a base category; if so, don't always display
 
-    constructor(filterManager, id, title, push) {
+    constructor(filterManager, id, title, push, core) {
         this.filterManager = filterManager;
         this.id = id;
         this.key = id.slugify({replacement: '_', strict:true})
         this.title = title;
         this.push = push;
+        this.core = core ?? false;
     }
 
     async addToActionList(actionHandler, actionList) {
         if (actionList.categories.some(c => c.name === this.title)) {
             let existingCat = actionList.categories.find(c => c.name === this.title);
             existingCat.canFilter = true;
+            
+            // If not already marked as core, correct this.
+            if (!this.core) {
+                this.core = true;
+                this.updateFlag();
+            }
+
             this.addSubcategoriesToCategory(actionHandler, existingCat);
         } else {
             this.doAddToActionList(actionHandler, actionList);
@@ -94,6 +104,7 @@ export class Category {
         await game.user.setFlag('token-action-hud', `categories.${this.key}.title`, this.title);
         await game.user.setFlag('token-action-hud', `categories.${this.key}.id`, this.id);
         await game.user.setFlag('token-action-hud', `categories.${this.key}.push`, this.push);
+        await game.user.setFlag('token-action-hud', `categories.${this.key}.core`, this.core);
 
         for (let subcategory of this.subcategories) {
             subcategory.updateFlag(this.key);

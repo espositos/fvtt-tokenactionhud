@@ -165,14 +165,11 @@
     color: rgba(255, 255, 255, 0.6);
     text-align: center;
     font-size: xx-small;
-    padding: 1px;
-    margin: 1px;
     border: 1px solid transparent;
     cursor: pointer;
     pointer-events: none;
-    position: relative;
-    top: -5px;
-    right: 0px;
+    position: absolute;
+    top: 3px;
 }
 
 .tah-subtitle:hover > .fa, .tah-subtitle:hover > .fas {

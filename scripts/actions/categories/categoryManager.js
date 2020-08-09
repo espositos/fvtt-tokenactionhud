@@ -19,10 +19,11 @@ export class CategoryManager {
                 let id = cat.id;
                 let title = cat.title;
                 let push = cat.push;
+                let core = cat.core;
                 if (!(id || title))
                     continue;
 
-                let category = new Category(this.filterManager, id, title, push);
+                let category = new Category(this.filterManager, id, title, push, core);
 
                 let subcategories = cat.subcategories;
                 if (subcategories) {
@@ -36,17 +37,30 @@ export class CategoryManager {
 
     async addCategoriesToActionList(actionHandler, actionList) {
         let alwaysShow = settings.get('alwaysShowAdditionalCategories');
+        let addCore = true;
+        
         if (alwaysShow){
-            if (!actionList.tokenId)
+            if (!actionList.tokenId) {
                 actionList.tokenId = 'categoryManager';
-            if (!actionList.actorId)
+                addCore = false;
+            }
+
+            if (!actionList.actorId) {
                 actionList.actorId = 'categoryManager'
+            }
         }
 
         if (!actionList.tokenId)
             return;
 
+        await this.doAddCategories(actionHandler, actionList, addCore)
+    }
+
+    async doAddCategories(actionHandler, actionList, addCore) {
         for (let category of this.categories) {
+            if (category.core && !addCore)
+                continue;
+
             await category.addToActionList(actionHandler, actionList)
         }
     }
