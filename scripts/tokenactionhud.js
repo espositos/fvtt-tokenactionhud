@@ -103,7 +103,7 @@ export class TokenActionHUD extends Application {
             let categoryTitle = target.innerText ?? target.outerText;
 
             if (game.tokenActionHUD.categoryManager.isCompendiumCategory(id))
-                TagDialogHelper.showCompendiumDialog(game.tokenActionHUD.categoryManager, id, categoryTitle)
+                TagDialogHelper.showSubcategoryDialogue(game.tokenActionHUD.categoryManager, id, categoryTitle)
             else
                 TagDialogHelper.showFilterDialog(game.tokenActionHUD.filterManager, id);
         }     

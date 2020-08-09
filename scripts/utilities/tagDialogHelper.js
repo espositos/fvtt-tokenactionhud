@@ -3,12 +3,12 @@ import { CompendiumHelper } from '../actions/categories/compendiumHelper.js';
 
 export class TagDialogHelper {
     
-    static showFilterDialog(filterManager, categoryId) {
-        TagDialogHelper._showFilterDialog(filterManager, categoryId);
+    static showFilterDialog(filterManager, subcategoryId) {
+        TagDialogHelper._showFilterDialog(filterManager, subcategoryId);
     }
 
-    static showCompendiumDialog(categoryManager, categoryId, categoryName) {
-        TagDialogHelper._showCompendiumDialog(categoryManager, categoryId, categoryName);
+    static showSubcategoryDialogue(categoryManager, categoryId, categoryName) {
+        TagDialogHelper._showSubcategoryDialogue(categoryManager, categoryId, categoryName);
     }
 
     static showCategoryDialog(categoryManager) {
@@ -29,12 +29,11 @@ export class TagDialogHelper {
         await filterManager.setFilteredElements(categoryId, elements, isBlocklist);
         game.tokenActionHUD.update();
     }
-    
-    // Currently only used for WFRP skill filter
-    static _showFilterDialog(filterManager, categoryId) {
-        let suggestions = filterManager.getSuggestions(categoryId);
-        let selected = filterManager.getFilteredElements(categoryId);
-        let indexChoice = filterManager.isBlocklist(categoryId) ? 1 : 0;
+
+    static _showFilterDialog(filterManager, subcategoryId) {
+        let suggestions = filterManager.getSuggestions(subcategoryId);
+        let selected = filterManager.getFilteredElements(subcategoryId);
+        let indexChoice = filterManager.isBlocklist(subcategoryId) ? 1 : 0;
 
         let title = game.i18n.localize('tokenactionhud.filterTitle');
         
@@ -51,13 +50,13 @@ export class TagDialogHelper {
 
         let submitFunc = (choices, indexValue) => {
             let isBlocklist = parseInt(indexValue) != 0 ? true : false;
-            TagDialogHelper.submitFilter(filterManager, categoryId, choices, isBlocklist);
+            TagDialogHelper.submitFilter(filterManager, subcategoryId, choices, isBlocklist);
         }
 
         TagDialog.showDialog(suggestions, selected, indexChoice, title, hbsData, submitFunc);
     }
     
-    static _showCompendiumDialog(categoryManager, categoryId, categoryName) {
+    static _showSubcategoryDialogue(categoryManager, categoryId, categoryName) {
         let suggestions = CompendiumHelper.getCompendiumChoicesAsTagifyEntries();
         let selected = categoryManager.getCategorySubcategoriesAsTagifyEntries(categoryId);
 
