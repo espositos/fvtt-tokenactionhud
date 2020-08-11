@@ -144,6 +144,7 @@
 }
 
 .tah-subtitle {
+    position: relative;
     grid-column: 1;
     padding: 10px 8px 0px 0px;
     margin: 0px;
@@ -158,7 +159,15 @@
     line-height: 1em;
 }
 
-.tah-subtitle > .fa, .tah-subtitle > .fas {
+.tah-filterholder {
+    position: absolute;
+    width: 0;
+    height: 0;
+    top:0px;
+    right:5px;
+}
+
+.tah-subtitle > .tah-filterholder > .fa, .tah-subtitle >  .tah-filterholder > .fas {
     visibility:hidden;
     width: auto;
     height: auto;
@@ -172,7 +181,7 @@
     top: 3px;
 }
 
-.tah-subtitle:hover > .fa, .tah-subtitle:hover > .fas {
+.tah-subtitle:hover >  .tah-filterholder > .fa, .tah-subtitle:hover >  .tah-filterholder > .fas {
     visibility:visible;
 }
 

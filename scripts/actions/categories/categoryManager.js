@@ -18,8 +18,8 @@ export class CategoryManager {
             for (let cat of Object.values(savedCategories)) {
                 let id = cat.id;
                 let title = cat.title;
-                let push = cat.push;
-                let core = cat.core;
+                let push = cat.push ?? false;
+                let core = cat.core ?? false;
                 if (!(id || title))
                     continue;
 
@@ -87,10 +87,23 @@ export class CategoryManager {
         }
     }
 
-    async createCategory(tagifyCategory, push) {
+    async addCoreCategories(categories) {
+        for (let core of categories) {
+            let existing = this.categories.find(cat => cat.id === core.id);
+            if (existing && !existing.core) {
+                existing.core = true;
+                await existing.updateFlag();
+                continue;
+            } else if (existing) {
+                continue;
+            }
 
-    async _createCategory(tagifyCategory, push) {
-        let newCategory = new Category(this.filterManager, tagifyCategory.id, tagifyCategory.value, push);
+            await this._createCategory({ id: core.id, value: core.name }, false, true);
+        }
+    }
+
+    async _createCategory(tagifyCategory, push, core = false) {
+        let newCategory = new Category(this.filterManager, tagifyCategory.id, tagifyCategory.value, push, core);
         await newCategory.updateFlag();
         this.categories.push(newCategory);
     }

@@ -5,6 +5,7 @@ import { ActionHandlerWfrp } from './actions/wfrp4e/wfrp4e-actions.js';
 import { ActionHandlerPf2e } from './actions/pf2e/pf2e-actions.js';
 import { ActionHandlerDw } from './actions/dungeonworld/dw-actions.js';
 import { ActionHandlerSfrpg } from './actions/sfrpg/sfrpg-actions.js';
+import { CompendiumMacroPreHandler } from './rollHandlers/compendiumMacroPreHandler.js';
 
 import * as roll5e from './rollHandlers/dnd5e/dnd5e-factory.js';
 import * as rollWfrp from './rollHandlers/wfrp4e/wfrp4e-factory.js';
@@ -55,7 +56,8 @@ export class HandlersManager {
             case 'sfrpg':
                 return rollSf.getRollHandler(handlerId);
         }
-        throw new Error('System not supported by Token Action HUD');
+
+        rollHandler.addPreRollHandler(new CompendiumMacroPreHandler())
     }
 
     // Not yet implemented.

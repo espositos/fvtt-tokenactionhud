@@ -6,6 +6,8 @@ export class ActionHandler5e extends ActionHandler {
         super(filterManager, categoryManager);
     }
 
+    
+
     /** @override */
     async doBuildActionList(token) {
         let result = this.initializeEmptyActionList();

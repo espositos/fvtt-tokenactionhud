@@ -4,7 +4,11 @@
     {{cap this.name}}
     {{#if this.info1}}<div class="tah-info1">{{this.info1}}</div>{{/if}}
     {{#if this.info2}}<div class="tah-info2">{{this.info2}}</div>{{/if}}
-    {{#if this.canFilter}}<i class="fa fa-filter" aria-hidden="true"></i>{{/if}}
+    {{#if this.canFilter}}
+        <div class="tah-filterholder">
+            <i class="fa fa-filter" aria-hidden="true"></i>
+        </div>
+    {{/if}}
 </div>
 <div class="tah-actions">
 {{#each actions}}

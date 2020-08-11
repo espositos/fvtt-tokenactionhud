@@ -23,13 +23,9 @@ export class Category {
     async addToActionList(actionHandler, actionList) {
         if (actionList.categories.some(c => c.name === this.title)) {
             let existingCat = actionList.categories.find(c => c.name === this.title);
-            existingCat.canFilter = true;
-            
-            // If not already marked as core, correct this.
-            if (!this.core) {
-                this.core = true;
-                this.updateFlag();
-            }
+
+            if (!existingCat.subcategories.length)
+                return;
 
             this.addSubcategoriesToCategory(actionHandler, existingCat);
         } else {
