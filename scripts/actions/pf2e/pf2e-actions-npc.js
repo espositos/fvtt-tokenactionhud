@@ -84,9 +84,9 @@ export class NpcActionHandlerPf2e {
                     let encodedValue = [macroType, tokenId, id].join(this.baseHandler.delimiter);
                     subcategory.actions.push({name: `Plus ${a}`, encodedValue: encodedValue, id: id})
                 });
-
-               this.baseHandler._combineSubcategoryWithCategory(result, s.name, subcategory);
             }
+            
+            this.baseHandler._combineSubcategoryWithCategory(result, s.name, subcategory);
         });
 
         return result;
