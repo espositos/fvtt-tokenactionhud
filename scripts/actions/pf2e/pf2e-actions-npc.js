@@ -78,13 +78,14 @@ export class NpcActionHandlerPf2e {
             subcategory.actions.push({name: this.i18n('tokenactionhud.critical'), encodedValue: critEncodedValue, id: encodeURIComponent(s.data._id+'>critical')})
 
             let attackEffects = s.data.data.attackEffects?.value;
-            if (attackEffects.length > 0) {}
+            if (attackEffects.length > 0) {
                 attackEffects.forEach(a => {
                     let id = `plus>${encodeURIComponent(a)}`;
                     let encodedValue = [macroType, tokenId, id].join(this.baseHandler.delimiter);
                     subcategory.actions.push({name: `Plus ${a}`, encodedValue: encodedValue, id: id})
                 });
-
+            }
+            
             this.baseHandler._combineSubcategoryWithCategory(result, s.name, subcategory);
         });
 

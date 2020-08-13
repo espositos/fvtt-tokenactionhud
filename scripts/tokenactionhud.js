@@ -318,7 +318,7 @@ export class TokenActionHUD extends Application {
         this.targetActions = await this.actions.buildActionList(token);
         
         if (this.targetActions && settings.get('showHudTitle'))
-            this.targetActions.hudTitle = token?.actor?.name;
+            this.targetActions.hudTitle = token?.data?.name;
 
         if (!this.showHudEnabled()) {
             this.close();
