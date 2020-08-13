@@ -40,7 +40,7 @@ export class TagDialog extends Dialog {
         d.render(true);
     }
 
-    static _prepareHook(choices, selection, placeholder, indexChoice) {
+    static _prepareHook(choices, selection, indexChoice) {
         Hooks.once('renderTagDialog', (app, html, options) => {
 
             html.css('height', 'auto');
@@ -59,7 +59,6 @@ export class TagDialog extends Dialog {
             if ($tagFilter.length > 0) {
 
                 let options = {
-                    placeholder: placeholder,
                     delimiters: ';',
                     maxTags: 'Infinity',
                     dropdown: {
