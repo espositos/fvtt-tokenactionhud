@@ -257,6 +257,20 @@
     -1px -1px 1px rgba(52, 52, 52, 1);
 }
 
+.tah-icon {
+    display: inline;
+}
+
+.tah-icon > .fa, .tah-icon > .fas {
+    font-size: xx-small;
+    margin: 0px 2px 0px 0px;
+    text-shadow:  0 0 1px rgba(247, 2, 2, 0.95),
+    -1px -1px 1px rgba(52, 52, 52, 1),
+    -1px -1px 1px rgba(52, 52, 52, 1),
+    -1px -1px 1px rgba(52, 52, 52, 1),
+    -1px -1px 1px rgba(52, 52, 52, 1);
+}
+
 .tah-info1:before {
     content: " (";
 }

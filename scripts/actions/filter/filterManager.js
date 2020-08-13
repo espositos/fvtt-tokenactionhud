@@ -21,6 +21,11 @@ export class FilterManager {
         })
     }
 
+    async reset() {
+        this. filters = [];
+        game.user.unsetFlag('token-action-hud', 'filters');
+    }
+
     createOrGetFilter(filterId) {
         if (this.filters.some(f => f.id === filterId))
             return this.filters.find(f => f.id);
@@ -28,11 +33,6 @@ export class FilterManager {
         let filter = new Filter(filterId);
         this.filters.push(filter);
         return filter;
-    }
-
-    setCanFilter(category) {
-        if (this.filters.some(f => f.id === category.id))
-            category.canFilter = true;
     }
 
     getSuggestions(filterId) {

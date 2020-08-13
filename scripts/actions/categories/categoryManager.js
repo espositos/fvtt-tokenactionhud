@@ -1,4 +1,4 @@
-import { Category } from './category.js';
+import { FilterCategory } from './filterCategory.js';
 import * as settings from '../../settings.js';
 
 export class CategoryManager {
@@ -8,6 +8,11 @@ export class CategoryManager {
     constructor(user, filterManager) {
         this.user = user;
         this.filterManager = filterManager;
+    }
+
+    async reset() {
+        this.categories = [];
+        game.user.unsetFlag('token-action-hud', 'categories');
     }
 
     async init() {
@@ -23,7 +28,7 @@ export class CategoryManager {
                 if (!(id || title))
                     continue;
 
-                let category = new Category(this.filterManager, id, title, push, core);
+                let category = new FilterCategory(this.filterManager, id, title, push, core);
 
                 let subcategories = cat.subcategories;
                 if (subcategories) {
@@ -37,12 +42,10 @@ export class CategoryManager {
 
     async addCategoriesToActionList(actionHandler, actionList) {
         let alwaysShow = settings.get('alwaysShowAdditionalCategories');
-        let addCore = true;
         
         if (alwaysShow){
             if (!actionList.tokenId) {
                 actionList.tokenId = 'categoryManager';
-                addCore = false;
             }
 
             if (!actionList.actorId) {
@@ -53,14 +56,11 @@ export class CategoryManager {
         if (!actionList.tokenId)
             return;
 
-        await this.doAddCategories(actionHandler, actionList, addCore)
+        await this.doAddCategories(actionHandler, actionList)
     }
 
-    async doAddCategories(actionHandler, actionList, addCore) {
+    async doAddCategories(actionHandler, actionList) {
         for (let category of this.categories) {
-            if (category.core && !addCore)
-                continue;
-
             await category.addToActionList(actionHandler, actionList)
         }
     }
@@ -103,7 +103,7 @@ export class CategoryManager {
     }
 
     async _createCategory(tagifyCategory, push, core = false) {
-        let newCategory = new Category(this.filterManager, tagifyCategory.id, tagifyCategory.value, push, core);
+        let newCategory = new FilterCategory(this.filterManager, tagifyCategory.id, tagifyCategory.value, push, core);
         await newCategory.updateFlag();
         this.categories.push(newCategory);
     }
@@ -129,7 +129,7 @@ export class CategoryManager {
     }
 
     getExistingCategories() {
-        return this.categories.map(c => c.asTagifyEntry());
+        return this.categories.filter(c => !c.core).map(c => c.asTagifyEntry());
     }
 
     isCompendiumCategory(id) {
@@ -137,7 +137,7 @@ export class CategoryManager {
     }
 
     isLinkedCompendium(id) {
-        return this.categories.some(c => c.compendiums.some(c => c.id === id));
+        return this.categories.some(c => c.compendiums?.some(c => c.id === id));
     }
 
     arePush() {

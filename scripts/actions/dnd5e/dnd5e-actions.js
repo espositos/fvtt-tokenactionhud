@@ -29,7 +29,7 @@ export class ActionHandler5e extends ActionHandler {
         let items = this._getItemList(actor, tokenId);
         let spells = this._getSpellsList(actor, tokenId);
         let feats = this._getFeatsList(actor, tokenId);
-        let skills = this._getSkillsList(tokenId);
+        let skills = this._getSkillsList(actor.data.data.skills, tokenId);
         let utility = this._getUtilityList(actor, tokenId);
 
         let itemsTitle = this.i18n('tokenactionhud.inventory');
@@ -45,14 +45,14 @@ export class ActionHandler5e extends ActionHandler {
         if (settings.get('splitAbilities')) {
             let savesTitle = this.i18n('tokenactionhud.saves');
             let checksTitle = this.i18n('tokenactionhud.checks');
-            let saves = this._getAbilityList(tokenId, 'saves', savesTitle, 'abilitySave');
-            let checks = this._getAbilityList(tokenId, 'checks', checksTitle, 'abilityCheck');
+            let saves = this._getAbilityList(tokenId, actor.data.data.abilities, 'saves', savesTitle, 'abilitySave');
+            let checks = this._getAbilityList(tokenId, actor.data.data.abilities, 'checks', checksTitle, 'abilityCheck');
             
             this._combineCategoryWithList(result, savesTitle, saves);
             this._combineCategoryWithList(result, checksTitle, checks);
         } else {
             let abilitiesTitle = this.i18n('tokenactionhud.abilities');
-            let abilities = this._getAbilityList(tokenId, 'abilities', abilitiesTitle, 'ability');
+            let abilities = this._getAbilityList(tokenId, actor.data.data.abilities, 'abilities', abilitiesTitle, 'ability');
             
             this._combineCategoryWithList(result, abilitiesTitle, abilities);
         }
@@ -362,7 +362,7 @@ export class ActionHandler5e extends ActionHandler {
     }
 
     /** @private */
-    _getSkillsList(tokenId) {
+    _getSkillsList(skills, tokenId) {
         let result = this.initializeEmptyCategory('skills');
         let macroType = 'skill';
         
@@ -372,7 +372,8 @@ export class ActionHandler5e extends ActionHandler {
             let name = abbr ? e[0] : e[1];
             name = name.charAt(0).toUpperCase() + name.slice(1);
             let encodedValue = [macroType, tokenId, e[0]].join(this.delimiter);
-            return { name: name, id: e[0], encodedValue: encodedValue }; 
+            let icon = this._getProficiencyIcon(skills[e[0]].value);
+            return { name: name, id: e[0], encodedValue: encodedValue, icon: icon }; 
         });
         let skillsCategory = this.initializeEmptySubcategory();
         skillsCategory.actions = skillsActions;
@@ -384,7 +385,7 @@ export class ActionHandler5e extends ActionHandler {
     }
 
      /** @private */
-     _getAbilityList(tokenId, categoryId, categoryName, macroType) {
+     _getAbilityList(tokenId, abilities, categoryId, categoryName, macroType) {
         let result = this.initializeEmptyCategory(categoryId);
         
         let abbr = settings.get('abbreviateSkills');
@@ -393,7 +394,13 @@ export class ActionHandler5e extends ActionHandler {
             let name = abbr ? e[0] : e[1];
             name = name.charAt(0).toUpperCase() + name.slice(1);
             let encodedValue = [macroType, tokenId, e[0]].join(this.delimiter);
-            return { name: name, id: e[0], encodedValue: encodedValue }; 
+            let icon;
+            if (categoryId === 'checks')
+                icon = '';
+            else
+                icon = this._getProficiencyIcon(abilities[e[0]].proficient);
+
+            return { name: name, id: e[0], encodedValue: encodedValue, icon: icon }; 
         });
         let abilityCategory = this.initializeEmptySubcategory();
         abilityCategory.actions = actions;
@@ -590,4 +597,16 @@ export class ActionHandler5e extends ActionHandler {
 
         return result;
     }
+
+    /** @private */
+    _getProficiencyIcon(level) {
+        const icons = {
+          0: '',
+          0.5: '<i class="fas fa-adjust"></i>',
+          1: '<i class="fas fa-check"></i>',
+          2: '<i class="fas fa-check-double"></i>'
+        };
+        return icons[level];
+      }
+    
 }

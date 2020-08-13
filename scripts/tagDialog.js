@@ -8,7 +8,7 @@ export class TagDialog extends Dialog {
     }
     
     static showDialog(suggestions, selected, indexChoice, title, hbsData, submitFunc) {
-        let tagify = TagDialog._prepareHook(suggestions, selected, indexChoice);
+        TagDialog._prepareHook(suggestions, selected, indexChoice);
         
         let template = Handlebars.compile('{{> modules/token-action-hud/templates/tagdialog.hbs}}');
         let content = template(hbsData);
@@ -21,7 +21,7 @@ export class TagDialog extends Dialog {
                 icon: '<i class="fas fa-check"></i>',
                 label: game.i18n.localize("tokenactionhud.accept"),
                 callback: (html) => {
-                    let selection = TagDialog.tagify.value.map(c => {return {id: c.id, value: c.value}});
+                    let selection = TagDialog.tagify.value.map(c => {return {id: c.id, value: c.value, type: c.type}});
                     let index = html.find('select[id="token-action-hud-index"]');
                     let indexValue;
                     if (index.length > 0)

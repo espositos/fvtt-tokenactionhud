@@ -22,6 +22,7 @@ export class RollHandler {
     handleActionEvent(event, encodedValue) {
         settings.Logger.debug(encodedValue);
 
+        let handled = false;
         this.preRollHandlers.forEach(handler => {
             if (handled)
                 return;

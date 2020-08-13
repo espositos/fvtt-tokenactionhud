@@ -1,5 +1,5 @@
 
-export class Subcategory {
+export class ActionSubcategory {
     constructor() {
         this.id = '';
         this.name = '';

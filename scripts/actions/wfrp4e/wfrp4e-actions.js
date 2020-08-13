@@ -34,8 +34,6 @@ export class ActionHandlerWfrp extends ActionHandler {
         let prayers = this._getPrayers(actor, tokenId);
         let talents = this._getTalents(actor, tokenId);
         let traits = this._getTraits(actor, tokenId);
-
-        [filteredNames, skills, magic, prayers, talents, traits].forEach(c => this.filterManager.setCanFilter(c));
         
         this._combineCategoryWithList(result, this.i18n('tokenactionhud.weapons'), weapons);
         this._combineCategoryWithList(result, this.i18n('tokenactionhud.characteristics'), characteristics);

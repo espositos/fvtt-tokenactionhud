@@ -3,7 +3,7 @@ import {MacroSubcategory} from './macroSubcategory.js';
 import {CompendiumHelper} from './compendiumHelper.js';
 import {SubcategoryType} from '../../enums/subcategoryType.js';
 
-export class Category {
+export class FilterCategory {
     subcategories = [];
     id = '';
     key = '';
@@ -34,14 +34,15 @@ export class Category {
     }
 
     async doAddToActionList(actionHandler, actionList) {
+        if (this.core)
+            return;
+
         let result = actionHandler.initializeEmptyCategory(this.id);
-        result.canFilter = true;
+        result.core = this.core;
 
         this.addSubcategoriesToCategory(actionHandler, result);
 
         actionHandler._combineCategoryWithList(actionList, this.title, result, this.push);
-
-        return actionList;
     }
 
     async addSubcategoriesToCategory(actionHandler, category) {

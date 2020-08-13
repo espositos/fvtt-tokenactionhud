@@ -1,4 +1,5 @@
 import { CompendiumHelper } from './compendiumHelper.js';
+import { SubcategoryType } from '../../enums/subcategoryType.js';
 
 export class CompendiumSubcategory {
     constructor(filterManager, categoryId, compendiumId, title) {

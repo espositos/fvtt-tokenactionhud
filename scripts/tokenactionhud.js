@@ -297,9 +297,22 @@ export class TokenActionHUD extends Application {
         category.mouseenter();
     }
 
+    async resetHud() {
+        this.resetFlags();
+        this.resetPosition();
+
+    }
+
     resetPosition() {
         settings.Logger.info(`Resetting HUD position to x: 80px, y: 150px, and saving in user flags. \nIf HUD is still not visible, something else may be wrong.\nFeel free to contact ^ and stick#0520 on Discord`)
         game.user.update({flags: {'token-action-hud': {hudPos: { top: 80, left: 150 }}}})
+        this.update();
+    }
+
+    async resetFlags() {
+        settings.Logger.info(`Resetting Token Action HUD filter and category flags`);
+        this.categoryManager.reset();
+        this.filterManager.reset();
         this.update();
     }
 

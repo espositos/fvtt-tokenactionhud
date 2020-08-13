@@ -1,6 +1,6 @@
 import {ActionList} from './entities/actionList.js';
-import {Category} from './entities/category.js';
-import {Subcategory} from './entities/subcategory.js';
+import {ActionCategory} from './entities/actionCategory.js';
+import {ActionSubcategory} from './entities/actionSubcategory.js';
 import * as settings from '../settings.js';
 
 export class ActionHandler {
@@ -45,13 +45,13 @@ export class ActionHandler {
     }
 
     initializeEmptyCategory(categoryId) {
-        let category = new Category();
+        let category = new ActionCategory();
         category.id = categoryId;
         return category;
     }
 
     initializeEmptySubcategory(id = '') {
-        let subcategory = new Subcategory();
+        let subcategory = new ActionSubcategory();
         subcategory.id = id;
         return subcategory;
     }
@@ -60,17 +60,16 @@ export class ActionHandler {
         if (!category)
             return;
 
+        if (category.subcategories.length === 0 && (category.core || category.core === undefined))
+            return;
+
         if (categoryName?.length > 0)
             category.name = categoryName;
 
-        if (category.subcategories.length > 0 || category.canFilter) {
-            if (push)
-                result.categories.push(category);
-            else
-                result.categories.unshift(category);
-        } else {
-            settings.Logger.debug('category criteria not met, disposing of', categoryName)
-        }
+        if (push)
+            result.categories.push(category);
+        else
+            result.categories.unshift(category);
     }
 
     _combineSubcategoryWithCategory(category, subcategoryName, subcategory) {

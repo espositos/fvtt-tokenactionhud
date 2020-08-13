@@ -1,8 +1,7 @@
-export class Category {
+export class ActionCategory {
     constructor() {
         this.id = '';
         this.name = '';
-        this.canFilter = false;
         this.cssClass = '';
         this.subcategories = [];
     }
