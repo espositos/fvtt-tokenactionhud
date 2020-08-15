@@ -5,6 +5,7 @@ import { ActionHandlerWfrp } from './actions/wfrp4e/wfrp4e-actions.js';
 import { ActionHandlerPf2e } from './actions/pf2e/pf2e-actions.js';
 import { ActionHandlerDw } from './actions/dungeonworld/dw-actions.js';
 import { ActionHandlerSfrpg } from './actions/sfrpg/sfrpg-actions.js';
+import { CompendiumMacroPreHandler } from './rollHandlers/compendiumMacroPreHandler.js';
 
 import * as roll5e from './rollHandlers/dnd5e/dnd5e-factory.js';
 import * as rollWfrp from './rollHandlers/wfrp4e/wfrp4e-factory.js';
@@ -15,24 +16,24 @@ import * as rollSf from './rollHandlers/sfrpg/sfrpg-factory.js';
 
 export class HandlersManager {
     // Currently only planning for one kind of action handler for each system
-    static getActionHandler(system, filterManager) {
+    static getActionHandler(system, filterManager, categoryManager) {
         switch (system) {
             case 'dnd5e':
-                return HandlersManager.getActionHandler5e(filterManager);
+                return HandlersManager.getActionHandler5e(filterManager, categoryManager);
             case 'pf2e':
-                return new ActionHandlerPf2e(filterManager);
+                return new ActionHandlerPf2e(filterManager, categoryManager);
             case 'wfrp4e':
-                return new ActionHandlerWfrp(filterManager);
+                return new ActionHandlerWfrp(filterManager, categoryManager);
             case 'dungeonworld':
-                return new ActionHandlerDw(filterManager);
+                return new ActionHandlerDw(filterManager, categoryManager);
             case 'sfrpg':
-                return new ActionHandlerSfrpg(filterManager);
+                return new ActionHandlerSfrpg(filterManager, categoryManager);
         }
         throw new Error('System not supported by Token Action HUD');
     }
 
-    static getActionHandler5e(filterManager) {
-        let actionHandler = new ActionHandler5e(filterManager);
+    static getActionHandler5e(filterManager, categoryManager) {
+        let actionHandler = new ActionHandler5e(filterManager, categoryManager);
         if (HandlersManager.isModuleActive('magicitems'))
             actionHandler.addFurtherActionHandler(new MagicItemActionListExtender())
         if (HandlersManager.isModuleActive('itemacro'))
@@ -43,19 +44,28 @@ export class HandlersManager {
     // Possibility for several types of rollers (e.g. BetterRolls, MinorQOL for DND5e),
     // so pass off to a RollHandler factory
     static getRollHandler(system, handlerId) {
+        let rollHandler;
         switch (system) {
             case 'dnd5e':
-                return roll5e.getRollHandler(handlerId)
+                rollHandler = roll5e.getRollHandler(handlerId)
+                break;
             case 'pf2e':
-                return rollPf2e.getRollHandler(handlerId);
+                rollHandler =  rollPf2e.getRollHandler(handlerId);
+                break;
             case 'wfrp4e':
-                return rollWfrp.getRollHandler(handlerId);
+                rollHandler =  rollWfrp.getRollHandler(handlerId);
+                break;
             case 'dungeonworld':
-                return rollDw.getRollHandler(handlerId);
+                rollHandler =  rollDw.getRollHandler(handlerId);
+                break;
             case 'sfrpg':
-                return rollSf.getRollHandler(handlerId);
+                rollHandler =  rollSf.getRollHandler(handlerId);
+                break;
         }
-        throw new Error('System not supported by Token Action HUD');
+
+        rollHandler.addPreRollHandler(new CompendiumMacroPreHandler())
+
+        return rollHandler;
     }
 
     // Not yet implemented.

@@ -28,7 +28,6 @@ The action handler has one public method, buildActionList(token), which takes a 
     "id": 'Used for filtering',
     "name": 'Category title',
     "subcategories": []
-    "canFilter": boolean - categories can be provided a list of choices (a whitelist or suggestions) and then filter actions based on an allow or block policy.
 }
 ```
 

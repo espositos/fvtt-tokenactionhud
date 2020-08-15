@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.6.0] 2020-08-15
+### Bugfixes
+- Probably the opposite, be careful updating and don't do it before a game.
+
+### Added
+- Icons for some abilities (Pf2e: action usage; DND5e: proficiency)
+- Images for things that support images (can be disabled in settings)
+- Ability to add new categories and subcategories, to use compendiums and macros (pretty experimental at this stage and totally unsortable)
+- Other stuff
+
+### Changed
+- A lot of behind the scenes stuff. Please report any bugs.
+
 ## [0.5.24] 2020-08-13
 ### Bugfix
 - HUD Title was display token's sheet's name not the token's name itself.
