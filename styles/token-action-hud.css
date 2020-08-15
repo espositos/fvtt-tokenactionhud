@@ -42,6 +42,10 @@
     font-weight: normal;
 }
 
+#tah-reposition:hover, #tah-categories:hover {
+    cursor: pointer;
+}
+
 #tah-reposition {
     left: -20px;
 }
@@ -79,6 +83,7 @@
 .tah-category {
     position: relative;
     display: block;
+    cursor: default;
 }
 
 .tah-title-button {
@@ -90,7 +95,6 @@
     padding: 3px;
     margin: 3px;
     border: 1px solid #000;
-    cursor: pointer;
 }
 
 .tah-title-button:hover {
@@ -100,6 +104,7 @@
     border: 1px solid red;
     border-bottom: 1px solid #ff6400;
     box-shadow: 0 0 10px #ff6400;
+    cursor: pointer;
 }
 
 .tah-title-button > .fa, .tah-title-button > .fas {
@@ -112,7 +117,6 @@
     padding: 3px;
     margin: 1px;
     border: 1px solid transparent;
-    cursor: pointer;
     pointer-events: none;
     position: absolute;
     top: 2px;
@@ -121,6 +125,7 @@
 
 .tah-title-button:hover > .fa, .tah-title-button:hover > .fas {
     visibility:visible;
+    cursor: pointer;
 }
 
 /* Dropdown Content (Hidden by Default) */
@@ -141,6 +146,8 @@
     display: grid;
     grid-template-columns: 150px auto;
     grid-auto-rows: auto;
+    min-height: 33px;
+    cursor: default;
 }
 
 .tah-subtitle {
@@ -175,14 +182,13 @@
     text-align: center;
     font-size: 6px;
     border: 1px solid transparent;
-    cursor: pointer;
     pointer-events: none;
     position: absolute;
     top: 3px;
     left: -3px;
 }
 
-.tah-subtitle:hover >  .tah-filterholder > .fa, .tah-subtitle:hover >  .tah-filterholder > .fas {
+.tah-subtitle:hover > .tah-filterholder > .fa, .tah-subtitle:hover > .tah-filterholder > .fas {
     visibility:visible;
 }
 
@@ -213,7 +219,7 @@
     min-width:20px;
     height: 20px;
     padding: 0px;
-    margin: 0px;
+    margin: 0px 0px 0px 3px;
     font-size: small;
     font-weight: bold;
     text-align: center;
@@ -264,9 +270,12 @@
 
 .tah-img {
     display: inline;
-    padding: 0px 0px 0px 17px;
+    padding: 0px 0px 0px 16px;
     margin: 0px 5px 0px 0px;
     border-radius: 3px;
+}
+
+.tah-action .tah-img {
     border: 1px solid rgba(129, 129, 129, 0.877);
 }
 
@@ -322,6 +331,7 @@
     border-bottom: 1px solid #ff6400;
     box-shadow: 0 0 10px #ff6400;
     box-shadow: 0 0 10px #ff6400;
+    cursor: pointer;
 }
 
 .tah-action .active {

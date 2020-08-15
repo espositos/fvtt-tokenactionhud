@@ -208,6 +208,8 @@ export class TokenActionHUD extends Application {
                 }
             }
         });
+
+        $(document).find('.tah-filterholder').parents('.tah-subcategory').css('cursor', 'pointer');
     }
 
     // Positioning

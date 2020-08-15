@@ -46,7 +46,10 @@ export class NpcActionHandlerPf2e {
 
         strikes.forEach(s => {
             let subcategory = this.baseHandler.initializeEmptySubcategory();
-
+            subcategory.img = this.baseHandler._getImage(s.data);
+            let actionIcon = parseInt((s.data.data.actions || {}).value, 10) || 1;
+            subcategory.icon = this.baseHandler._getActionIcon(actionIcon)
+            
             let variantsMap = [];
             let map = (s.data.data.traits.value || []).includes('agile') || s.data.isAgile ? 4 : 5;
             let attackMod = s.data.data.bonus.total;

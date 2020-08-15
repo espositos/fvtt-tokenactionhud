@@ -477,7 +477,11 @@ export class ActionHandler5e extends ActionHandler {
     }
 
     _getImage(item) {
-        return settings.get('showIcons') ? item.img : '';
+        let result = '';
+        if (settings.get('showIcons'))
+            result = item.img ?? '';
+
+        return !result?.includes('icons/svg/mystery-man.svg') ? result : '';
     }
 
     /** @private */

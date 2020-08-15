@@ -47,6 +47,11 @@ export class PcActionHandlerPf2e {
 
         strikes.forEach(s => {
             let subcategory = this.baseHandler.initializeEmptySubcategory();
+            subcategory.img = this._getImage(s)
+            let glyph = s.glyph;
+            if (glyph)
+                subcategory.icon = `<span style='font-family: "Pathfinder2eActions"'>${glyph}</span>`
+
             let map = Math.abs(parseInt(s.variants[1].label.split(' ')[1]));
             let attackMod = s.totalModifier;
             
@@ -124,5 +129,11 @@ export class PcActionHandlerPf2e {
         return result;
     }
 
+    _getImage(item) {
+        let result = '';
+        if (settings.get('showIcons'))
+            result = item.imageUrl ?? '';
 
+        return !result?.includes('icons/svg/mystery-man.svg') ? result : '';
+    }
 }

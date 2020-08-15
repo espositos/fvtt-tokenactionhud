@@ -27,7 +27,7 @@ export class ActionHandlerSfrpg extends ActionHandler {
         actionList = this._buildItemCategory(token, actionList);
         actionList = this._buildSpellsCategory(token, actionList);
         actionList = this._buildFeatsCategory(token, actionList);
-        actionList = this._buildSkillCategory(token, actionList);
+        actionList = this._buildSkillCategory(token, actor, actionList);
         actionList = this._buildAbilitiesCategory(token, actionList);
         actionList = this._buildSavesCategory(token, actionList);
 
@@ -99,14 +99,15 @@ export class ActionHandlerSfrpg extends ActionHandler {
     }        
 
     /** @private */
-    _buildSkillCategory(token, actionList) {
+    _buildSkillCategory(token, actor, actionList) {
         let category = this.initializeEmptyCategory('skills');
         let macroType = 'skill';
         
         let skillsActions = Object.entries(CONFIG.SFRPG.skills).map(e => {
             let name = e[1];
             let encodedValue = [macroType, token.data._id, e[0]].join(this.delimiter);
-            return { name: name, id: e[0], encodedValue: encodedValue }; 
+            let icon = this._getClassSkillIcon(actor.data.data.skills[e[0]].value)
+            return { name: name, id: e[0], encodedValue: encodedValue, icon: icon };
         });
         let skillsCategory = this.initializeEmptySubcategory();
         skillsCategory.actions = skillsActions;
@@ -198,9 +199,25 @@ export class ActionHandlerSfrpg extends ActionHandler {
 
     _buildItemAction(tokenId, macroType, item) {
         let encodedValue = [macroType, tokenId, item._id].join(this.delimiter);
-        let result = { name: item.name, id: item._id, encodedValue: encodedValue }
+        let img = this._getImage(item);
+        let result = { name: item.name, id: item._id, encodedValue: encodedValue, img:img }
         
         return result;
     }
+    
+    _getImage(item) {
+        let result = '';
+        if (settings.get('showIcons'))
+            result = item.img ?? '';
 
+        return !result?.includes('icons/svg/mystery-man.svg') ? result : '';
+    }
+
+    _getClassSkillIcon(level) {
+        const icons = {
+            3: '<i class="fas fa-check"></i>'
+        };
+
+        return icons[level];
+    }
 }

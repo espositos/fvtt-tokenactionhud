@@ -1,6 +1,8 @@
 {{#ifCond this.actions.length '||' this.canFilter}}
 <div class="tah-subcategory">
 <div class="tah-subtitle" {{#if this.canFilter}}id="{{this.id}}"{{/if}}>
+    {{#if img}}<div class="tah-img" style="background: url({{img}}) no-repeat center center; background-size:contain"></div>{{/if}}
+    {{#if icon}}<div class="tah-icon">{{{icon}}} </div>{{/if}}
     {{cap this.name}}
     {{#if this.info1}}<div class="tah-info1">{{this.info1}}</div>{{/if}}
     {{#if this.info2}}<div class="tah-info2">{{this.info2}}</div>{{/if}}

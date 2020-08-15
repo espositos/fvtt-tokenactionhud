@@ -1,4 +1,5 @@
 import {ActionListExtender} from '../actionListExtender.js';
+import * as settings from '../../settings.js';
 
 export class MagicItemActionListExtender extends ActionListExtender {
     constructor() { super(); }
@@ -42,7 +43,8 @@ export class MagicItemActionListExtender extends ActionListExtender {
                 magicItem.ownedEntries.forEach(entry => {
                     let effect = entry.item;
                     let encodedValue = ['magicItem', tokenId, `${action.id}>${effect.id}`].join('|');
-                    let magicItemAction = {name: effect.name, id:effect.id, encodedValue: encodedValue};
+                    let img = this._getImage(effect);
+                    let magicItemAction = {name: effect.name, id:effect.id, encodedValue: encodedValue, img:img};
                     magicItemAction.info1 = effect.consumption;
                     if (effect.baseLevel)
                         magicItemAction.info2 = `${this.i18n('tokenactionhud.levelAbbreviation')} ${effect.baseLevel}`;
@@ -56,5 +58,13 @@ export class MagicItemActionListExtender extends ActionListExtender {
         });
 
         actionList.categories.unshift(magicItemsCategory);
+    }
+
+    _getImage(item) {
+        let result = '';
+        if (settings.get('showIcons'))
+            result = item.img ?? '';
+
+        return !result?.includes('icons/svg/mystery-man.svg') ? result : '';
     }
 }

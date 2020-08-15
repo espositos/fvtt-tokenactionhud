@@ -233,7 +233,16 @@ export class ActionHandlerWfrp extends ActionHandler {
     _produceMap(tokenId, itemSet, type) {
         return itemSet.map(i => {
             let encodedValue = [type, tokenId, i._id].join(this.delimiter);
-            return { name: i.name, encodedValue: encodedValue, id: i._id };
+            let img = this._getImage(i);
+            return { name: i.name, encodedValue: encodedValue, id: i._id, img:img };
         });
-    }   
+    }
+
+    _getImage(item) {
+        let result = '';
+        if (settings.get('showIcons'))
+            result = item.img ?? '';
+
+        return !result?.includes('icons/svg/mystery-man.svg') ? result : '';
+    }
 }

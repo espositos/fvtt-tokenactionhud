@@ -34,6 +34,10 @@ export class MacroHelper {
     }
 
     static getImage(macro) {
-        return settings.get('showIcons') ? macro.data.img : '';
+        let result = '';
+        if (settings.get('showIcons'))
+            result = macro.data.img;
+
+        return !result?.includes('icons/svg/mystery-man.svg') ? result : '';
     }
 }

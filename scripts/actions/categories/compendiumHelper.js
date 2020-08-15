@@ -74,6 +74,10 @@ export class CompendiumHelper {
     }
 
     static getImage(item) {
-        return settings.get('showIcons') ? item.img : '';
+        let result = '';
+        if (settings.get('showIcons'))
+            result = item.img ?? '';
+
+        return !result?.includes('icons/svg/mystery-man.svg') ? result : '';
     }
 }
