@@ -7,7 +7,7 @@ export class PcActionHandlerPf2e {
         this.baseHandler = actionHandlerpf2e;
     }
 
-    async buildActionList(result, tokenId, actor) {
+    buildActionList(result, tokenId, actor) {
         let strikes = this._getStrikesList(actor, tokenId);
         let actions = this.baseHandler._getActionsList(actor, tokenId);
         let items = this.baseHandler._getItemsList(actor, tokenId);

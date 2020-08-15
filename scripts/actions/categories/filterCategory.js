@@ -54,9 +54,9 @@ export class FilterCategory {
     async selectSubcategories(selection) {
         for (let subcat of selection) {
             if (subcat.type === SubcategoryType.COMPENDIUM)
-                await this.addCompendiumSubcategory(subcat);
+                this.addCompendiumSubcategory(subcat);
             else
-                await this.addMacroSubcategory(subcat);
+                this.addMacroSubcategory(subcat);
         }
 
         if (this.subcategories.length === 0)
@@ -66,13 +66,13 @@ export class FilterCategory {
         for (var i = this.subcategories.length - 1; i >= 0; i--) {
             let subcat = this.subcategories[i];
             if (!titleMap.includes(subcat.title))
-               await this.removeCompendium(i)
+               this.removeSubcategory(i)
         }
 
         this.updateFlag();
     }
 
-    async addCompendiumSubcategory(compendium) {
+    addCompendiumSubcategory(compendium) {
         if (this.subcategories.some(c => c.compendiumId === compendium.id))
             return;
 
@@ -81,53 +81,51 @@ export class FilterCategory {
 
         let hudCompendium = new CompendiumSubcategory(this.filterManager, this.key, compendium.id, compendium.title);
         hudCompendium.createFilter();
-        await hudCompendium.submitFilterSuggestions();
+        hudCompendium.submitFilterSuggestions();
 
         this.subcategories.push(hudCompendium);
     }
     
-    async addMacroSubcategory(choice) {
+    addMacroSubcategory(choice) {
         if (this.subcategories.some(c => c.title === choice.title))
             return;
 
         let subcategory = new MacroSubcategory(this.filterManager, this.key, choice.title);
         subcategory.createFilter();
-        await subcategory.submitFilterSuggestions();
+        subcategory.submitFilterSuggestions();
 
         this.subcategories.push(subcategory);
     }
 
-    async updateFlag() {
-        await game.user.setFlag('token-action-hud', `categories.${this.key}.title`, this.title);
-        await game.user.setFlag('token-action-hud', `categories.${this.key}.id`, this.id);
-        await game.user.setFlag('token-action-hud', `categories.${this.key}.push`, this.push);
-        await game.user.setFlag('token-action-hud', `categories.${this.key}.core`, this.core);
+    updateFlag() {
+        let update = {categories: {[this.key]: {title: this.title, id: this.id, push: this.push, core: this.core}}};
+        game.user.update({flags: {'token-action-hud': update}});
 
         for (let subcategory of this.subcategories) {
             subcategory.updateFlag(this.key);
         }
     }
 
-    async removeCompendium(index) {
+    removeSubcategory(index) {
         let subcategory = this.subcategories[index];
-        await subcategory.clearFilter();
-        await subcategory.unsetFlag();
+        subcategory.clearFilter();
+        subcategory.unsetFlag();
         this.subcategories.splice(index, 1);
     }
 
-    async prepareForDelete() {
-        await this.clearFilters();
-        await this.unsetFlag();
+    prepareForDelete() {
+        this.clearFilters();
+        this.unsetFlag();
     }
 
-    async clearFilters() {
+    clearFilters() {
         for (let c of this.subcategories) {
-            await c.clearFilter();
+            c.clearFilter();
         }
     }
 
     async unsetFlag() {
-        await game.user.setFlag('token-action-hud', 'categories', {[`-=${this.key}`]: null});
+        game.user.setFlag('token-action-hud', 'categories', {[`-=${this.key}`]: null});
     }
 
     asTagifyEntry() {

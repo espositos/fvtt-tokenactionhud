@@ -7,7 +7,7 @@ export class ActionHandlerSfrpg extends ActionHandler {
     }
 
     /** @override */
-    async doBuildActionList(token) {
+    doBuildActionList(token) {
         let actionList = this.initializeEmptyActionList();
 
         if (!token)

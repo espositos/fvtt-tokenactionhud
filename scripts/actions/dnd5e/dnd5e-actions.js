@@ -9,7 +9,7 @@ export class ActionHandler5e extends ActionHandler {
     
 
     /** @override */
-    async doBuildActionList(token) {
+    doBuildActionList(token) {
         let result = this.initializeEmptyActionList();
 
         if (!token)
@@ -460,7 +460,8 @@ export class ActionHandler5e extends ActionHandler {
     /** @private */
     _buildItem(tokenId, actor, macroType, item) {
         let encodedValue = [macroType, tokenId, item._id].join(this.delimiter);
-        let result = { name: item.name, id: item._id, encodedValue: encodedValue }
+        let img = this._getImage(item);
+        let result = { name: item.name, id: item._id, encodedValue: encodedValue, img: img }
         
         if (item.data.recharge && !item.data.recharge.charged && item.data.recharge.value) {
             result.name += ` (${this.i18n('tokenactionhud.recharge')})`;
@@ -473,6 +474,10 @@ export class ActionHandler5e extends ActionHandler {
         result.info3 = this._getConsumeData(item, actor)
 
         return result;
+    }
+
+    _getImage(item) {
+        return settings.get('showIcons') ? item.img : '';
     }
 
     /** @private */

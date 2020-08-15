@@ -11,23 +11,23 @@ export class MacroSubcategory {
 
     async updateFlag(categoryId) {
         let contents = {id: this.id, title: this.title, type: this.type}
-        await game.user.setFlag('token-action-hud', `categories.${categoryId}.subcategories.${this.id}`, contents);
+        game.user.setFlag('token-action-hud', `categories.${categoryId}.subcategories.${this.id}`, contents);
     }
 
     async unsetFlag(categoryId) {
         if (categoryId)
-            await game.user.setFlag('token-action-hud', `categories.${categoryId}.subcategories`, {[`-=${this.id}`]: null})
+            game.user.setFlag('token-action-hud', `categories.${categoryId}.subcategories`, {[`-=${this.id}`]: null})
     }
 
     createFilter() {
         this.filterManager.createOrGetFilter(this.id);
     }
 
-    async clearFilter() {
-        await this.filterManager.clearFilter(this.id);
+    clearFilter() {
+        this.filterManager.clearFilter(this.id);
     }
 
-    async submitFilterSuggestions() {
+    submitFilterSuggestions() {
         let suggestions = MacroHelper.getMacrosForFilter();
         this.filterManager.setSuggestions(this.id, suggestions);
     }

@@ -8,7 +8,7 @@ export class Filter {
         this.id = id;
     }
 
-    async setFilteredElements(elements, isBlocklist) {
+    setFilteredElements(elements, isBlocklist) {
         if (Array.isArray(elements)) {
             this.filteredElements = elements;
             this.isBlocklist = isBlocklist;
@@ -42,10 +42,10 @@ export class Filter {
 
     async updateFlag() {
         let flag = {isBlocklist: this.isBlocklist, elements: this.filteredElements}
-        await game.user.setFlag('token-action-hud', `filters.${this.id}`, flag)
+        game.user.setFlag('token-action-hud', `filters.${this.id}`, flag)
     }
 
     async clearFlag() {
-        await game.user.setFlag('token-action-hud', 'filters', {[`-=${this.id}`]: null})    
+        game.user.setFlag('token-action-hud', 'filters', {[`-=${this.id}`]: null})    
     }
 }

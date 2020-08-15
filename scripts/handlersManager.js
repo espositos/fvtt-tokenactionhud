@@ -44,20 +44,28 @@ export class HandlersManager {
     // Possibility for several types of rollers (e.g. BetterRolls, MinorQOL for DND5e),
     // so pass off to a RollHandler factory
     static getRollHandler(system, handlerId) {
+        let rollHandler;
         switch (system) {
             case 'dnd5e':
-                return roll5e.getRollHandler(handlerId)
+                rollHandler = roll5e.getRollHandler(handlerId)
+                break;
             case 'pf2e':
-                return rollPf2e.getRollHandler(handlerId);
+                rollHandler =  rollPf2e.getRollHandler(handlerId);
+                break;
             case 'wfrp4e':
-                return rollWfrp.getRollHandler(handlerId);
+                rollHandler =  rollWfrp.getRollHandler(handlerId);
+                break;
             case 'dungeonworld':
-                return rollDw.getRollHandler(handlerId);
+                rollHandler =  rollDw.getRollHandler(handlerId);
+                break;
             case 'sfrpg':
-                return rollSf.getRollHandler(handlerId);
+                rollHandler =  rollSf.getRollHandler(handlerId);
+                break;
         }
 
         rollHandler.addPreRollHandler(new CompendiumMacroPreHandler())
+
+        return rollHandler;
     }
 
     // Not yet implemented.

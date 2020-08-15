@@ -9,5 +9,6 @@ export class Action {
         this.info3 = '';
         this.cssClass = '';
         this.icon = '';
+        this.img = '';
     }
 }

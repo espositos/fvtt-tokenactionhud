@@ -11,7 +11,7 @@ export class ActionHandlerPf2e extends ActionHandler {
     }    
 
     /** @override */
-    async doBuildActionList(token) {
+    doBuildActionList(token) {
         let result = this.initializeEmptyActionList();
 
         if (!token)
@@ -32,10 +32,10 @@ export class ActionHandlerPf2e extends ActionHandler {
         result.actorId = actor._id;
 
         if (actorType === 'character')
-            await this.pcActionHandler.buildActionList(result, tokenId, actor);
+            this.pcActionHandler.buildActionList(result, tokenId, actor);
         
         if (actorType === 'npc')
-            await this.npcActionHandler.buildActionList(result, tokenId, actor);
+            this.npcActionHandler.buildActionList(result, tokenId, actor);
 
         return result;
     }

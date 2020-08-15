@@ -33,7 +33,7 @@ export class CategoryManager {
                 let subcategories = cat.subcategories;
                 if (subcategories) {
                     subcategories = Object.values(subcategories);
-                    await category.selectSubcategories(subcategories);
+                    category.selectSubcategories(subcategories);
                 }
                 this.categories.push(category);
             }
@@ -65,14 +65,14 @@ export class CategoryManager {
         }
     }
 
-    async submitCategories(selections, push) {
+    submitCategories(selections, push) {
         selections = selections.map(s => { return {id: s.value.slugify({replacement: '_', strict: true}), value: s.value}})
         for (let choice of selections) {
             let category = this.categories.find(c => c.id === choice.id);
             if (!category)
-                await this._createCategory(choice, push);
+                this._createCategory(choice, push);
             else
-                await this._updateCategory(category, push);
+                this._updateCategory(category, push);
         }
 
         let idMap = selections.map(s => s.id);
@@ -83,49 +83,48 @@ export class CategoryManager {
         for (var i = this.categories.length - 1; i >= 0; i--) {
             let category = this.categories[i];
             if (!idMap.includes(category.id))
-                await this.deleteCategory(i);
+                this.deleteCategory(i);
         }
     }
 
-    async addCoreCategories(categories) {
+    addCoreCategories(categories) {
         for (let core of categories) {
             let existing = this.categories.find(cat => cat.id === core.id);
             if (existing && !existing.core) {
                 existing.core = true;
-                await existing.updateFlag();
+                existing.updateFlag();
                 continue;
             } else if (existing) {
                 continue;
             }
-
-            await this._createCategory({ id: core.id, value: core.name }, false, true);
+            this._createCategory({ id: core.id, value: core.name }, false, true);
         }
     }
 
-    async _createCategory(tagifyCategory, push, core = false) {
+    _createCategory(tagifyCategory, push, core = false) {
         let newCategory = new FilterCategory(this.filterManager, tagifyCategory.id, tagifyCategory.value, push, core);
-        await newCategory.updateFlag();
+        newCategory.updateFlag();
         this.categories.push(newCategory);
     }
 
-    async _updateCategory(category, push) {
+    _updateCategory(category, push) {
         category.push = push;
-        await category.updateFlag();
+        category.updateFlag();
     }
 
-    async deleteCategory(index) {
+    deleteCategory(index) {
         let category = this.categories[index];
-        await category.prepareForDelete();
+        category.prepareForDelete();
         this.categories.splice(index, 1);
     }
 
-    async submitSubcategories(categoryId, choices) {
+    submitSubcategories(categoryId, choices) {
         let category = this.categories.find(c => c.id === categoryId);
 
         if (!category)
             return;
 
-        await category.selectSubcategories(choices);
+        category.selectSubcategories(choices);
     }
 
     getExistingCategories() {

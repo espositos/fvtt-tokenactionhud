@@ -47,6 +47,16 @@ export const registerSettings = function(system, rollHandlers) {
         onChange: value => { updateSettings(value); }
     });
 
+    game.settings.register(app,'showIcons', {
+        name : game.i18n.localize('tokenactionhud.settings.showIcons.name'),
+        hint : game.i18n.localize('tokenactionhud.settings.showIcons.hint'),
+        scope : 'client',
+        config : true,
+        type : Boolean,
+        default : true,
+        onChange: value => { updateSettings(value); }
+    });
+
     game.settings.register(app,'alwaysShowAdditionalCategories', {
         name : game.i18n.localize('tokenactionhud.settings.alwaysShowAdditionalCategories.name'),
         hint : game.i18n.localize('tokenactionhud.settings.alwaysShowAdditionalCategories.hint'),

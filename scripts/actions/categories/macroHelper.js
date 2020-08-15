@@ -1,3 +1,5 @@
+import * as settings from '../../settings.js';
+
 export class MacroHelper {
     constructor() {}
 
@@ -10,7 +12,8 @@ export class MacroHelper {
         let entries = MacroHelper.getMacros();
         return entries.map(m => {
             let encodedValue = [macroType, macroType, m.data._id].join(delimiter);
-            return {name: m.data.name, encodedValue: encodedValue, id: m.data._id }
+            let img = MacroHelper.getImage(m);
+            return { name: m.data.name, encodedValue: encodedValue, id: m.data._id, img: img }
         });
     }
 
@@ -28,5 +31,9 @@ export class MacroHelper {
             
             return permissions.default > 0;
         });
+    }
+
+    static getImage(macro) {
+        return settings.get('showIcons') ? macro.data.img : '';
     }
 }

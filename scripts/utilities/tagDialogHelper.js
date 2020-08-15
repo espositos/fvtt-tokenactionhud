@@ -15,18 +15,18 @@ export class TagDialogHelper {
         TagDialogHelper._showCategoryDialog(categoryManager);
     }
 
-    static async submitCategories(categoryManager, choices, push) {
-        await categoryManager.submitCategories(choices, push);
+    static submitCategories(categoryManager, choices, push) {
+        categoryManager.submitCategories(choices, push);
         game.tokenActionHUD.update()
     }
 
-    static async submitSubcategories(categoryManager, categoryId, choices) {
-        await categoryManager.submitSubcategories(categoryId, choices);
+    static submitSubcategories(categoryManager, categoryId, choices) {
+        categoryManager.submitSubcategories(categoryId, choices);
         game.tokenActionHUD.update();
     }
 
-    static async submitFilter(filterManager, categoryId, elements, isBlocklist) {
-        await filterManager.setFilteredElements(categoryId, elements, isBlocklist);
+    static submitFilter(filterManager, categoryId, elements, isBlocklist) {
+        filterManager.setFilteredElements(categoryId, elements, isBlocklist);
         game.tokenActionHUD.update();
     }
 

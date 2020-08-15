@@ -65,12 +65,12 @@ export class FilterManager {
         return filter.getFilteredIds();
     }
 
-    async setFilteredElements(filterId, elements, isBlocklist) {
+    setFilteredElements(filterId, elements, isBlocklist) {
         let filter = this._getFilter(filterId);        
-        await filter.setFilteredElements(elements, isBlocklist);
+        filter.setFilteredElements(elements, isBlocklist);
     }
 
-    async clearFilter(filterId) {
+    clearFilter(filterId) {
         let filter = this.filters.find(f => f.id === filterId);
 
         if (!filter)

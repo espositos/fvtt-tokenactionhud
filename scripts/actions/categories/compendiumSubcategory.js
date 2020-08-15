@@ -12,12 +12,12 @@ export class CompendiumSubcategory {
 
     async updateFlag(categoryId) {
         let contents = {id: this.compendiumId, title: this.title, type: this.type}
-        await game.user.setFlag('token-action-hud', `categories.${categoryId}.subcategories.${this.id}`, contents);
+        game.user.setFlag('token-action-hud', `categories.${categoryId}.subcategories.${this.id}`, contents);
     }
 
     async unsetFlag(categoryId) {
         if (categoryId)
-            await game.user.setFlag('token-action-hud', `categories.${categoryId}.subcategories`, {[`-=${this.id}`]: null})
+            game.user.setFlag('token-action-hud', `categories.${categoryId}.subcategories`, {[`-=${this.id}`]: null})
     }
 
     createFilter() {
@@ -25,7 +25,7 @@ export class CompendiumSubcategory {
     }
 
     async clearFilter() {
-        await this.filterManager.clearFilter(this.id);
+        this.filterManager.clearFilter(this.id);
     }
 
     async submitFilterSuggestions() {

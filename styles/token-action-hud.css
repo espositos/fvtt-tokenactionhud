@@ -108,8 +108,8 @@
     height: auto;
     color: rgba(255, 255, 255, 0.6);
     text-align: center;
-    font-size: xx-small;
-    padding: 1px;
+    font-size: 6px;
+    padding: 3px;
     margin: 1px;
     border: 1px solid transparent;
     cursor: pointer;
@@ -173,12 +173,13 @@
     height: auto;
     color: rgba(255, 255, 255, 0.6);
     text-align: center;
-    font-size: xx-small;
+    font-size: 6px;
     border: 1px solid transparent;
     cursor: pointer;
     pointer-events: none;
     position: absolute;
     top: 3px;
+    left: -3px;
 }
 
 .tah-subtitle:hover >  .tah-filterholder > .fa, .tah-subtitle:hover >  .tah-filterholder > .fas {
@@ -259,6 +260,14 @@
 
 .tah-icon {
     display: inline;
+}
+
+.tah-img {
+    display: inline;
+    padding: 0px 0px 0px 17px;
+    margin: 0px 5px 0px 0px;
+    border-radius: 3px;
+    border: 1px solid rgba(129, 129, 129, 0.877);
 }
 
 .tah-icon > .fa, .tah-icon > .fas {

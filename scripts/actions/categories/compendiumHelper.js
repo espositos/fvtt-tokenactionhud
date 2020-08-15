@@ -1,3 +1,5 @@
+import * as settings from '../../settings.js';
+
 export class CompendiumHelper {
     constructor() {}
 
@@ -19,7 +21,8 @@ export class CompendiumHelper {
         let macroType = CompendiumHelper.getCompendiumMacroType(key);
         return entries.map(e => { 
             let encodedValue = [macroType, key, e._id].join(delimiter);
-            return {name: e.name, encodedValue: encodedValue, id: e._id }
+            let img = CompendiumHelper.getImage(e);
+            return {name: e.name, encodedValue: encodedValue, id: e._id, img: img }
         });
     }
 
@@ -68,5 +71,9 @@ export class CompendiumHelper {
             })
             return acc;
         }, [])
+    }
+
+    static getImage(item) {
+        return settings.get('showIcons') ? item.img : '';
     }
 }
