@@ -56,30 +56,6 @@
     "tokenactionhud.talents": "Talentos",
     "tokenactionhud.traits": "Rasgos",
     "tokenactionhud.weapons": "Armas",
-    "tokenactionhud.attributes": "Attributes",
-    "tokenactionhud.critical": "Critical",
-    "tokenactionhud.magicItems": "Magic Items",
-    "tokenactionhud.levelAbbreviation": "Lvl",
-    "tokenactionhud.strikes": "Strikes",
-    "tokenactionhud.lore": "Lore",
-    "tokenactionhud.spellbook": "Spellbook",
-    "tokenactionhud.tools": "Tools",
-    
-    "tokenactionhud.utility": "Utility",
-    "tokenactionhud.toggleCombatState": "Toggle Combat State",
-    "tokenactionhud.toggleVisibility": "Toggle Visibility",
-    "tokenactionhud.shortRest": "Short rest",
-    "tokenactionhud.longRest": "Long rest",
-    "tokenactionhud.deathSave": "Death Save",
-    "tokenactionhud.rests": "Rests",
-    "tokenactionhud.inspiration": "Inspiration",    
-    "tokenactionhud.gm": "GM",    
-
-    "tokenactionhud.mwa": "Melee Weapon Attacks",
-    "tokenactionhud.rwa": "Ranged Weapon Attacks",
-    "tokenactionhud.msa": "Melee Spell Attacks",
-    "tokenactionhud.rsa": "Ranged Spell Attacks",
-    "tokenactionhud.healing": "Healing",
     
     "tokenactionhud.blocklistLabel": "lista bloqueada: esconder / lista admitida: mostrar",
     "tokenactionhud.filterPlaceholder": "Opciones (separar con punto y coma)",
@@ -88,9 +64,6 @@
     "tokenactionhud.cancel": "Cancelar",
     "tokenactionhud.blocklist": "Lista de bloqueados",
     "tokenactionhud.allowlist": "Lista de permitidos",
-
-    "tokenactionhud.categoryTagTitle": "Add/remove categories",
-    "tokenactionhud.subcategoryTagTitle": "Add/remove subcategories",
 
     "tokenactionhud.settings.rollHandler.name": "Manejador de tiradas",
     "tokenactionhud.settings.rollHandler.hint": "Elige que módulo recibirá las acciones de la barra.",
@@ -102,10 +75,6 @@
     "tokenactionhud.settings.playerPermission.hint": "Si está activo, los jugadores podrán usar el HUD.",
     "tokenactionhud.settings.debug.name": "Activar depuración",
     "tokenactionhud.settings.debug.hint": "Activar el registro de depuración.",
-    "tokenactionhud.settings.alwaysShowAdditionalCategories.name": "Always show compendium categories",
-    "tokenactionhud.settings.alwaysShowAdditionalCategories.hint": "If enabled, compendium categories will be shown even when no token is selected.",
-    "tokenactionhud.settings.showIcons.name": "Show icons next to buttons",
-    "tokenactionhud.settings.showIcons.hint": "If enabled, icons will be displayed on the HUD button where available.",
 
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.name": "Ignorar las dotes pasivas",
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.hint": "Si está activo, las dotes pasivas no se mostrarán.",
@@ -136,13 +105,5 @@
     "tokenactionhud.settings.pf2e.abbreviateSkills.hint": "Si está activo, las habilidades serán abreviadas a 3 caracteres.",
 
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "Mostrar los compendios del DJ",
-    "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Si está activo, y el usuario es un DJ, el HUD incluirá los movimientos del DJ, las tablas aleatorias de tesoro y las cartas.",    
-    
-    "tokenactionhud.filterTagExplanation": "Add entries here to show or hide specific category entries.",
-    "tokenactionhud.categoryTagExplanation": "Add (or remove) additional categories that are able to hold compendium entries and macros.",
-    "tokenactionhud.subcategoryTagExplanation": "Compendiums added here will be shown as subcategories, limited to journal entries, roll tables, playlists, and macros.",
-    "tokenactionhud.clearButton": "Clear",
-    "tokenactionhud.unshift": "Left",
-    "tokenactionhud.push": "Right",
-    "tokenactionhud.pushLabelExplanation": "Show categories on which side?"
+    "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Si está activo, y el usuario es un DJ, el HUD incluirá los movimientos del DJ, las tablas aleatorias de tesoro y las cartas."
 }

@@ -94,8 +94,8 @@
 
     "tokenactionhud.categoryTagTitle": "Add/remove categories",
     "tokenactionhud.subcategoryTagTitle": "Add/remove subcategories",
-    "tokenactionhud.categoryTagExplanation": "Add (or remove) additional categories that are able to hold compendium entries and macros.",
-    "tokenactionhud.subcategoryTagExplanation": "Tags added will be shown as subcategories: macro subcategories; or compendium subcategories (journal entries, roll tables, macros, or playlists).",
+    "tokenactionhud.categoryTagExplanation": "Add and remove additional customisable categories.",
+    "tokenactionhud.subcategoryTagExplanation": "Add and remove subcategories: enter free-text for macro subcategories or select linked compendiums.",
     "tokenactionhud.clearButton": "Clear",
     "tokenactionhud.unshift": "Left",
     "tokenactionhud.push": "Right",

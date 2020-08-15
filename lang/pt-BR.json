@@ -54,32 +54,10 @@
   "tokenactionhud.treasure": "Tesouro",
   "tokenactionhud.unrollable": "Não jogavél",
   "tokenactionhud.weapons": "Armas",
-  "tokenactionhud.tools": "Tools",
-    
-  "tokenactionhud.utility": "Utility",
-  "tokenactionhud.toggleCombatState": "Toggle Combat State",
-  "tokenactionhud.toggleVisibility": "Toggle Visibility",
-  "tokenactionhud.shortRest": "Short rest",
-  "tokenactionhud.longRest": "Long rest",
-  "tokenactionhud.deathSave": "Death Save",
-  "tokenactionhud.rests": "Rests",
-  "tokenactionhud.inspiration": "Inspiration",    
-  "tokenactionhud.gm": "GM",    
+  "tokenactionhud.tools": "Ferramentas",
 
-  "tokenactionhud.attributes": "Attributes",
-  "tokenactionhud.critical": "Critical",
-  "tokenactionhud.magicItems": "Magic Items",
   "tokenactionhud.features": "Talentos",
   "tokenactionhud.levelAbbreviation": "Lvl",
-  "tokenactionhud.strikes": "Strikes",
-  "tokenactionhud.lore": "Lore",
-  "tokenactionhud.spellbook": "Spellbook",
-
-  "tokenactionhud.mwa": "Melee Weapon Attacks",
-  "tokenactionhud.rwa": "Ranged Weapon Attacks",
-  "tokenactionhud.msa": "Melee Spell Attacks",
-  "tokenactionhud.rsa": "Ranged Spell Attacks",
-  "tokenactionhud.healing": "Healing",
   
   "tokenactionhud.blocklistLabel": "Lista Bloquiada (somente esconder) ou Lista Permitida (somente exibir)",
   "tokenactionhud.filterPlaceholder": "escolhas (separar com ponto e virgula)",
@@ -88,9 +66,6 @@
   "tokenactionhud.cancel": "Cancelar",
   "tokenactionhud.blocklist": "Lista Bloquiada",
   "tokenactionhud.allowlist": "Lista Permitida",
-
-  "tokenactionhud.categoryTagTitle": "Add/remove categories",
-  "tokenactionhud.subcategoryTagTitle": "Add/remove subcategories",
 
   "tokenactionhud.settings.rollHandler.name": "HUD de Manipulação de rolganes",
   "tokenactionhud.settings.rollHandler.hint": "Escolha qual modulo será usado na HUD de ações.",
@@ -102,10 +77,6 @@
   "tokenactionhud.settings.playerPermission.hint": "Se ativado, os jogadores poderão usar a HUD.",
   "tokenactionhud.settings.debug.name": "Ativar depuração",
   "tokenactionhud.settings.debug.hint": "Ativar registro de depuração.",
-  "tokenactionhud.settings.alwaysShowAdditionalCategories.name": "Always show compendium categories",
-  "tokenactionhud.settings.alwaysShowAdditionalCategories.hint": "If enabled, compendium categories will be shown even when no token is selected.",
-  "tokenactionhud.settings.showIcons.name": "Show icons next to buttons",
-  "tokenactionhud.settings.showIcons.hint": "If enabled, icons will be displayed on the HUD button where available.",
 
   "tokenactionhud.settings.dnd5e.ignorePassiveFeats.name": "Ignore talentos passivos",
   "tokenactionhud.settings.dnd5e.ignorePassiveFeats.hint": "Se ativado, talentos passivos não serão exibidos.",
@@ -121,8 +92,6 @@
   "tokenactionhud.settings.dnd5e.splitAbilities.hint": "Se ativado, checagem de atributos serão separadas de checagem de Salvaguarda",
   "tokenactionhud.settings.dnd5e.showAllNpcItems.name": "Exibir todos os itens de NPCs",
   "tokenactionhud.settings.dnd5e.showAllNpcItems.hint": "se ativado, todos os itens dos NPCs serão exibidos, não apenas itens equipados.",
-  "tokenactionhud.settings.dnd5e.showEmptyItems.name": "Show empty items (includes items and spells)",
-  "tokenactionhud.settings.dnd5e.showEmptyItems.hint": "If enabled, items are shown in the HUD even if they have no remaining charges.",
 
   "tokenactionhud.settings.pf2e.showPcAbilities.name": "Exibior atributos dos Personagens",
   "tokenactionhud.settings.pf2e.showPcAbilities.hint": "Se ativado, Personagens também terão a categoria Atributos em suas HUDs",
@@ -136,13 +105,5 @@
   "tokenactionhud.settings.pf2e.abbreviateSkills.hint": "Se ativado, as pericias e atributos usarão abreviação de três caracteres.",
 
   "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "Exibir os Compêndios do MJ",
-  "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Se ativado, e se o usuário for um MJ, a barra HUD incluirá movimentos do GM, tabelas de rolagem do tesouro e gráficos.",
-    
-  "tokenactionhud.filterTagExplanation": "Add entries here to show or hide specific category entries.",
-  "tokenactionhud.categoryTagExplanation": "Add (or remove) additional categories that are able to hold compendium entries and macros.",
-  "tokenactionhud.subcategoryTagExplanation": "Compendiums added here will be shown as subcategories, limited to journal entries, roll tables, playlists, and macros.",
-  "tokenactionhud.clearButton": "Clear",
-  "tokenactionhud.unshift": "Left",
-  "tokenactionhud.push": "Right",
-  "tokenactionhud.pushLabelExplanation": "Show categories on which side?"
+  "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Se ativado, e se o usuário for um MJ, a barra HUD incluirá movimentos do GM, tabelas de rolagem do tesouro e gráficos."
 }
