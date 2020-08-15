@@ -46,7 +46,6 @@ export class NpcActionHandlerPf2e {
 
         strikes.forEach(s => {
             let subcategory = this.baseHandler.initializeEmptySubcategory();
-            subcategory.img = this.baseHandler._getImage(s.data);
             let actionIcon = parseInt((s.data.data.actions || {}).value, 10) || 1;
             subcategory.icon = this.baseHandler._getActionIcon(actionIcon)
             
@@ -72,7 +71,8 @@ export class NpcActionHandlerPf2e {
 
                 variantsMap.push({_id: `${s.data._id}>${i}`, name: name});
             }
-                
+            
+            variantsMap[0].img = s.data.img;
             subcategory.actions = this.baseHandler._produceMap(tokenId, variantsMap, macroType);
             
             let damageEncodedValue = [macroType, tokenId, encodeURIComponent(s.data._id+'>damage')].join(this.baseHandler.delimiter);

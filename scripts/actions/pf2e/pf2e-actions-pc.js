@@ -47,7 +47,6 @@ export class PcActionHandlerPf2e {
 
         strikes.forEach(s => {
             let subcategory = this.baseHandler.initializeEmptySubcategory();
-            subcategory.img = this._getImage(s)
             let glyph = s.glyph;
             if (glyph)
                 subcategory.icon = `<span style='font-family: "Pathfinder2eActions"'>${glyph}</span>`
@@ -72,6 +71,7 @@ export class PcActionHandlerPf2e {
                 return {_id: encodeURIComponent(`${this.name}>${this.variants.indexOf(v)}`), name: name }
             }.bind(s));
 
+            variantsMap[0].img = s.imageUrl;
             subcategory.actions = this.baseHandler._produceMap(tokenId, variantsMap, macroType);
             
             let damageEncodedValue = [macroType, tokenId, encodeURIComponent(s.name+'>damage')].join(this.baseHandler.delimiter);
@@ -127,13 +127,5 @@ export class PcActionHandlerPf2e {
         this.baseHandler._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.attributes'), attributes);
 
         return result;
-    }
-
-    _getImage(item) {
-        let result = '';
-        if (settings.get('showIcons'))
-            result = item.imageUrl ?? '';
-
-        return !result?.includes('icons/svg/mystery-man.svg') ? result : '';
     }
 }
