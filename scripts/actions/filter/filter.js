@@ -2,7 +2,7 @@ export class Filter {
     id = '';
     isBlocklist = false;
     filteredElements = [];
-    choices = [];
+    possibleChoices = [];
 
     constructor(id) {
         this.id = id;
@@ -13,10 +13,12 @@ export class Filter {
             this.filteredElements = elements;
             this.isBlocklist = isBlocklist;
         }
+
+        this.updateFlag();
     }
 
     getSuggestions() {
-        return this.choices;
+        return this.possibleChoices;
     }
 
     getFilteredElements() {
@@ -35,6 +37,15 @@ export class Filter {
 
     setSuggestions(choices) {
         if (Array.isArray(choices))
-            this.choices = choices;
+            this.possibleChoices = choices;
+    }
+
+    async updateFlag() {
+        let flag = {isBlocklist: this.isBlocklist, elements: this.filteredElements}
+        game.user.setFlag('token-action-hud', `filters.${this.id}`, flag)
+    }
+
+    async clearFlag() {
+        game.user.setFlag('token-action-hud', 'filters', {[`-=${this.id}`]: null})    
     }
 }

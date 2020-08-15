@@ -4,14 +4,14 @@ import { PcActionHandlerPf2e } from './pf2e-actions-pc.js';
 import { NpcActionHandlerPf2e } from './pf2e-actions-npc.js';
 
 export class ActionHandlerPf2e extends ActionHandler {
-    constructor(filterManager) {
-        super(filterManager);
+    constructor(filterManager, categoryManager) {
+        super(filterManager, categoryManager);
         this.pcActionHandler = new PcActionHandlerPf2e(this);
         this.npcActionHandler = new NpcActionHandlerPf2e(this);
     }    
 
     /** @override */
-    async doBuildActionList(token, filters) {
+    doBuildActionList(token) {
         let result = this.initializeEmptyActionList();
 
         if (!token)
@@ -32,10 +32,10 @@ export class ActionHandlerPf2e extends ActionHandler {
         result.actorId = actor._id;
 
         if (actorType === 'character')
-            await this.pcActionHandler.buildActionList(result, tokenId, actor);
+            this.pcActionHandler.buildActionList(result, tokenId, actor);
         
         if (actorType === 'npc')
-            await this.npcActionHandler.buildActionList(result, tokenId, actor);
+            this.npcActionHandler.buildActionList(result, tokenId, actor);
 
         return result;
     }
@@ -160,7 +160,8 @@ export class ActionHandlerPf2e extends ActionHandler {
                 
                 let bookCategory;
                 if (!result.subcategories.some(s => s.name === bookName)) {
-                    bookCategory = this.initializeEmptySubcategory(bookName);
+                    bookCategory = this.initializeEmptySubcategory();
+                    bookCategory.name = bookName;
                     result.subcategories.push(bookCategory);
                 } else {
                     bookCategory = result.subcategories.find(b => b.name === bookName);
@@ -171,6 +172,7 @@ export class ActionHandlerPf2e extends ActionHandler {
                 items.forEach(s => {
                     let encodedValue = [macroType, tokenId, `${spellbook.data._id}>${level}>${s.data._id}`].join(this.delimiter);
                     let spell = { name: s.name, encodedValue: encodedValue, id: s.data._id };
+                    spell.img = this._getImage(s);
 
                     this._addSpellInfo(s, spell);
                     levelSubcategory.actions.push(spell);
@@ -210,6 +212,7 @@ export class ActionHandlerPf2e extends ActionHandler {
             let category;
             if (!result.subcategories.some(b => b.name === bookName)) {
                 category = this.initializeEmptySubcategory(bookName);
+                category.name = bookName;
                 result.subcategories.push(category);
             } else {
                 category = result.subcategories.find(b => b.name === bookName);
@@ -221,7 +224,8 @@ export class ActionHandlerPf2e extends ActionHandler {
             // On first subcategory, include bookName, attack bonus, and spell DC.
             let levelCategory;
             if (category.subcategories.length === 0) {
-                levelCategory = this.initializeEmptySubcategory(levelNameWithBook);
+                levelCategory = this.initializeEmptySubcategory();
+                levelCategory.name = levelNameWithBook;
                 category.subcategories.push(levelCategory);
                 
                 if (actor.data.type === 'character')
@@ -235,9 +239,11 @@ export class ActionHandlerPf2e extends ActionHandler {
             
             if (!(stillFirstSubcategory || category.subcategories.some(s => s.name === levelName))) {
                 levelCategory = this.initializeEmptySubcategory(levelName);
+                levelCategory.name = levelName;
                 category.subcategories.push(levelCategory);
+
                 if (actor.data.type === 'character')
-                this._setSpellSlotInfo(tokenId, levelCategory, spellbook, level, false);
+                    this._setSpellSlotInfo(tokenId, levelCategory, spellbook, level, false);
             }
             
             let categoryName = stillFirstSubcategory ? levelNameWithBook : levelName;
@@ -245,6 +251,7 @@ export class ActionHandlerPf2e extends ActionHandler {
 
             let encodedValue = [macroType, tokenId, `${spellbook.data._id}>${level}>${s.data._id}`].join(this.delimiter);
             let spell = { name: s.name, encodedValue: encodedValue, id: s.data._id };
+            spell.img = this._getImage(s);
             this._addSpellInfo(s, spell);
             levelCategory.actions.push(spell);     
                   
@@ -349,7 +356,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         active.actions = this._produceMap(tokenId, (items ?? []).filter(a => a.data.data.actionType.value !== 'passive'), macroType);
 
         let passive = this.initializeEmptySubcategory();
-        passive.actions = this._produceMap(tokenId, (items ?? []).filter(a => a.data.data.actionType.value === 'passive'), macroType);
+        passive.actions = this._produceMap(tokenId, (items ?? []).filter(a => a.data.data.actionType.value === 'passive'), macroType, true);
 
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.active'), active);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.passive'), passive);
@@ -454,8 +461,8 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
-    _buildItemActions(tokenId, macroType, itemList) {
-        let result = this._produceMap(tokenId, itemList, macroType);
+    _buildItemActions(tokenId, macroType, itemList, isPassive = false) {
+        let result = this._produceMap(tokenId, itemList, macroType, isPassive);
 
         result.forEach(i => this._addItemInfo( itemList.find(item => item.data._id === i.id), i));
 
@@ -479,10 +486,37 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
     
     /** @private */
-    _produceMap(tokenId, itemSet, type) {
+    _produceMap(tokenId, itemSet, type, isPassive = false) {
         return itemSet.map(i => {
             let encodedValue = [type, tokenId, i._id].join(this.delimiter);
-            return { name: i.name, encodedValue: encodedValue, id: i._id };
+            let icon;
+            let actions = i.data?.data?.actions;
+            if (actions && !isPassive) {
+                let actionValue = parseInt((actions || {}).value, 10) || 1;
+                icon = this._getActionIcon(actionValue);
+            }
+            let img = this._getImage(i);
+            return { name: i.name, encodedValue: encodedValue, id: i._id, img: img, icon: icon };
         });
+    }
+    
+    _getActionIcon(action) {
+        const img = {
+          1: `<span style='font-family: "Pathfinder2eActions"'>A</span>`,
+          2: `<span style='font-family: "Pathfinder2eActions"'>D</span>`,
+          3: `<span style='font-family: "Pathfinder2eActions"'>T</span>`,
+          free: `<span style='font-family: "Pathfinder2eActions"'>F</span>`,
+          reaction: `<span style='font-family: "Pathfinder2eActions"'>R</span>`
+          //passive: `<span style='font-family: "Pathfinder2eActions"'>A</span>`,
+        };
+        return img[action];
+    }
+
+    _getImage(item) {
+        let result = '';
+        if (settings.get('showIcons'))
+            result = item.img ?? '';
+
+        return !result?.includes('icons/svg/mystery-man.svg') ? result : '';
     }
 }

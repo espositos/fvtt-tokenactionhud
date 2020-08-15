@@ -21,18 +21,18 @@ export class FilterManager {
         })
     }
 
-    createFilter(filterId) {
-        if (!this.filters.some(f => f.id === filterId)) {
-            let filter = new Filter(filterId);
-            this.filters.push(filter);
-        }
-
-        return this;
+    async reset() {
+        this. filters = [];
+        game.user.unsetFlag('token-action-hud', 'filters');
     }
 
-    setCanFilter(category) {
-        if (this.filters.some(f => f.id === category.id))
-            category.canFilter = true;
+    createOrGetFilter(filterId) {
+        if (this.filters.some(f => f.id === filterId))
+            return this.filters.find(f => f.id);
+
+        let filter = new Filter(filterId);
+        this.filters.push(filter);
+        return filter;
     }
 
     getSuggestions(filterId) {
@@ -66,14 +66,19 @@ export class FilterManager {
     }
 
     setFilteredElements(filterId, elements, isBlocklist) {
-        let filter = this._getFilter(filterId);
-
-        let blocklist = isBlocklist === 1 ? true : false;
-
-        let flag = {isBlocklist: blocklist, elements: elements}
-        this.user.setFlag('token-action-hud', `filters.${filterId}`, flag)
-        
+        let filter = this._getFilter(filterId);        
         filter.setFilteredElements(elements, isBlocklist);
+    }
+
+    clearFilter(filterId) {
+        let filter = this.filters.find(f => f.id === filterId);
+
+        if (!filter)
+            return;
+
+        filter.clearFlag();
+        
+        this.filters.splice(this.filters.indexOf(filter), 1);
     }
 
     isBlocklist(filterId) {
@@ -83,6 +88,6 @@ export class FilterManager {
     }
 
     _getFilter(filterId) {
-        return this.filters.find(f => f.id === filterId) ?? new Filter();
+        return this.filters.find(f => f.id === filterId) ?? this.createOrGetFilter(filterId);
     }
 }

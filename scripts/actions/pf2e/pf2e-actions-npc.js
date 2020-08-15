@@ -8,7 +8,7 @@ export class NpcActionHandlerPf2e {
         this.baseHandler = actionHandlerpf2e;
     }
 
-    async buildActionList(result, tokenId, actor) {
+    buildActionList(result, tokenId, actor) {
         let strikes = this._getStrikesListNpc(actor, tokenId);
         let actions = this.baseHandler._getActionsList(actor, tokenId);
         let items = this.baseHandler._getItemsList(actor, tokenId);
@@ -46,7 +46,9 @@ export class NpcActionHandlerPf2e {
 
         strikes.forEach(s => {
             let subcategory = this.baseHandler.initializeEmptySubcategory();
-
+            let actionIcon = parseInt((s.data.data.actions || {}).value, 10) || 1;
+            subcategory.icon = this.baseHandler._getActionIcon(actionIcon)
+            
             let variantsMap = [];
             let map = (s.data.data.traits.value || []).includes('agile') || s.data.isAgile ? 4 : 5;
             let attackMod = s.data.data.bonus.total;
@@ -69,7 +71,8 @@ export class NpcActionHandlerPf2e {
 
                 variantsMap.push({_id: `${s.data._id}>${i}`, name: name});
             }
-                
+            
+            variantsMap[0].img = s.data.img;
             subcategory.actions = this.baseHandler._produceMap(tokenId, variantsMap, macroType);
             
             let damageEncodedValue = [macroType, tokenId, encodeURIComponent(s.data._id+'>damage')].join(this.baseHandler.delimiter);

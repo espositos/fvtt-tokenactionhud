@@ -3,6 +3,8 @@ import * as settings from '../settings.js';
 export class RollHandler {
     preRollHandlers = [];
 
+    constructor() {}
+
     i18n = (toTranslate) => game.i18n.localize(toTranslate);
     
     getActor(tokenId) {
@@ -36,33 +38,5 @@ export class RollHandler {
 
     addPreRollHandler(handler) {
         this.preRollHandlers.push(handler);
-    }
-
-    handleCompendiums(macroType, event, tokenId, actionId) {
-        if (!macroType.endsWith('compendium'))
-            return false;
-
-        switch (macroType) {
-            case 'compendium':
-                this.handleCompendium(macroType, event, tokenId, actionId);
-                break;
-            case 'macros':
-                this.handleMacroCompendium(macroType, event, tokenId, actionId);
-                break;
-        }   
-
-        return true;
-    }
-
-    handleCompendium(macroType, event, compendiumKey, entityId) {
-        let pack = game.packs.get(compendiumKey);
-
-        pack.getEntity(entityId).then(e => e.sheet.render(true));
-    }
-
-    handleMacroCompendium(macroType, event, compendiumKey, entityId) {
-        let pack = game.packs.get(compendiumKey);
-
-        pack.getEntity(entityId).then(e => e.execute());
     }
 }

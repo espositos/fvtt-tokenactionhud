@@ -1,4 +1,11 @@
 
 <div class="tah-action{{#if cssClass}} {{cssClass}}{{/if}}">
-    <button value="{{encodedValue}}" {{#if cssClass}}class="{{cssClass}}"{{/if}}>{{name}}{{#if info1}}<div class="tah-info1">{{info1}}</div>{{/if}}{{#if info2}}<div class="tah-info2">{{info2}}</div>{{/if}}{{#if info3}}<div class="tah-info3">{{info3}}</div>{{/if}}</button>
+    <button value="{{encodedValue}}" {{#if cssClass}}class="{{cssClass}}"{{/if}}>
+        {{#if img}}<div class="tah-img" style="background: url({{img}}) no-repeat center center; background-size:contain"></div>{{/if}}
+        {{#if icon}}<div class="tah-icon">{{{icon}}} </div>{{/if}}
+        {{name}}
+        {{#if info1}}<div class="tah-info1">{{info1}}</div>{{/if}}
+        {{#if info2}}<div class="tah-info2">{{info2}}</div>{{/if}}
+        {{#if info3}}<div class="tah-info3">{{info3}}</div>{{/if}}
+    </button>
 </div>

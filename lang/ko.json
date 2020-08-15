@@ -14,7 +14,6 @@
     "tokenactionhud.book": "책",
     "tokenactionhud.books": "책",
     "tokenactionhud.cantrips": "소마법",
-    "tokenactionhud.characteristics": "Characteristics",
     "tokenactionhud.charts": "차트",
     "tokenactionhud.checks": "판정",
     "tokenactionhud.consumables": "소모품",    
@@ -40,8 +39,6 @@
     "tokenactionhud.moves": "이동",
     "tokenactionhud.other": "기타",
     "tokenactionhud.passive": "상시",
-    "tokenactionhud.petty": "Petty",
-    "tokenactionhud.powers": "Powers",
     "tokenactionhud.ranged": "원거리",
     "tokenactionhud.reactions": "리액션",
     "tokenactionhud.recharge": "재충전",
@@ -50,14 +47,11 @@
     "tokenactionhud.rollable": "굴림 가능",
     "tokenactionhud.saves": "내성 굴림",
     "tokenactionhud.skills": "기술",
-    "tokenactionhud.strikes": "Strikes",
     "tokenactionhud.lore": "지식",
     "tokenactionhud.specialQualities": "특수 능력",
     "tokenactionhud.spells": "주문",
     "tokenactionhud.spellbook": "주문서",
-    "tokenactionhud.starting": "Starting",
     "tokenactionhud.tags": "태그",
-    "tokenactionhud.talents": "Talents",
     "tokenactionhud.traits": "특성",
     "tokenactionhud.tools": "Tools",
     "tokenactionhud.treasure": "전리품",
@@ -83,7 +77,6 @@
     "tokenactionhud.rsa": "원거리 주문 공격",
     "tokenactionhud.healing": "회복",
 
-    "tokenactionhud.blocklistLabel": "blocklist: hide / allowlist: show",
     "tokenactionhud.filterPlaceholder": "선택 (세미 콜론으로 구분)",
     "tokenactionhud.filterTitle": "필터",
     "tokenactionhud.accept": "확인",
@@ -131,5 +124,5 @@
     "tokenactionhud.settings.pf2e.abbreviateSkills.hint": "활성화할 경우 기술 및 능력치는 3 글자 약어로 표시된다.",
 
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "GM 컴펜디움 보기",
-    "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "활성화 했을 때 사용자가 GM인 경우 HUD바에 GM 이동, 전리품 굴림표, 차트가 포함된다."    
+    "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "활성화 했을 때 사용자가 GM인 경우 HUD바에 GM 이동, 전리품 굴림표, 차트가 포함된다."
 }
