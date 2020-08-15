@@ -134,12 +134,14 @@ Hooks.on('canvasReady', async () => {
     });
 
     Hooks.on('renderCompendium', (source, html, ) => {
-        if (game.tokenActionHUD.isLinkedCompendium(source?.metadata?.label))
+        let metadata = source?.metadata;
+        if (game.tokenActionHUD.isLinkedCompendium(`${metadata?.package}.${metadata?.name}`))
             game.tokenActionHUD.update();
     });
 
     Hooks.on('deleteCompendium', (source, html, ) => {
-        if (game.tokenActionHUD.isLinkedCompendium(source?.metadata?.label))
+        let metadata = source?.metadata;
+        if (game.tokenActionHUD.isLinkedCompendium(`${metadata?.package}.${metadata?.name}`))
             game.tokenActionHUD.update();
     });
 

@@ -137,11 +137,13 @@ export class CategoryManager {
     }
 
     isLinkedCompendium(id) {
-        return this.categories.some(c => c.compendiums?.some(c => c.id === id));
+        return this.categories.some(c => c.subcategories?.some(c => c.compendiumId === id));
     }
 
     arePush() {
-        return this.categories.filter(c => c.push).length >= this.categories.filter(c => !c.push).length;
+        let categories = this.categories.filter(c => !c.core);
+        let pushCount = categories.filter(c => c.push).length;
+        return pushCount >= categories.length / 2;
     }
 
     getCategorySubcategoriesAsTagifyEntries(categoryId) {

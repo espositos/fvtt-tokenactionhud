@@ -78,9 +78,7 @@ export class TagDialogHelper {
 
     static _showCategoryDialog(categoryManager) {
         let selected = categoryManager.getExistingCategories();
-
         let indexChoice = categoryManager.arePush() ? 1 : 0;
-
         let title = game.i18n.localize('tokenactionhud.categoryTagTitle');
         
         let hbsData = {
