@@ -1,4 +1,5 @@
 import {ActionHandler} from '../actionHandler.js';
+import * as settings from '../../settings.js';
 
 export class ActionHandlerWfrp extends ActionHandler {
     constructor(filterManager, categoryManager) {
