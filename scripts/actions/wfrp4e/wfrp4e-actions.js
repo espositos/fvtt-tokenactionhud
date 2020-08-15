@@ -244,6 +244,6 @@ export class ActionHandlerWfrp extends ActionHandler {
         if (settings.get('showIcons'))
             result = item.img ?? '';
 
-        return !result?.includes('icons/svg/mystery-man.svg') ? result : '';
+        return result?.includes('icons/svg/mystery-man.svg') || result?.includes('systems/wfrp4e/icons/blank.png') ? '' : result;
     }
 }

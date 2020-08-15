@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.2] 2020-08-15
+### Bugfixes
+- WFRP: Hide 'blank' icon
+
+## [0.6.0] 2020-08-15
+### Bugfixes
+- WFRP: Action List builder was breaking because it was missing reference to settings
+
 ## [0.6.0] 2020-08-15
 ### Bugfixes
 - Probably the opposite, be careful updating and don't do it before a game.
