@@ -9,6 +9,6 @@ export class Logger {
 
     static debug(...args) {
         if (game.settings.get('token-action-hud', 'debug'))
-            Logger.info("debug:", ...args);
+            Logger.info("Token Action HUD | debug:", ...args);
     }
 }
