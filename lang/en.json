@@ -111,7 +111,7 @@
     "tokenactionhud.settings.playerPermission.hint": "If enabled, players will be able to use the HUD.",
     "tokenactionhud.settings.debug.name": "Enable debugging",
     "tokenactionhud.settings.renderItemOnRightClick.name": "Show Item Sheet on right-click",
-    "tokenactionhud.settings.renderItemOnRightClick.hint": "If enabled, right-clicking on an item in the HUD will bring up the item's sheet (may be overridden by other settings).",
+    "tokenactionhud.settings.renderItemOnRightClick.hint": "If enabled, right-clicking on an item in the HUD will bring up the item's sheet (possibly conflicts with other settings that use right-click).",
     "tokenactionhud.settings.debug.hint": "Enable debug logging. (This has sort of fallen by the wayside, don't expect it to be very useful)",
     "tokenactionhud.settings.alwaysShowHud.name": "Always display HUD",
     "tokenactionhud.settings.alwaysShowHud.hint": "If the user has an assigned character, the HUD will default to this character when no token is selected.",
