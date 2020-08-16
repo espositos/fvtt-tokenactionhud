@@ -4,6 +4,9 @@
 ### Added
 - PF2E: Show action cost for spells (those with a cost of three actions or less)
 
+### Changed
+- HUD title should only be displayed for actors with actions (e.g., not loot or hazard tokens)
+
 ## [0.6.4] 2020-08-16
 ### Bugfixes
 - Custom subcategories weren't clearing from the HUD properly

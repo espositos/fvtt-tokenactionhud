@@ -27,7 +27,7 @@ export class ActionHandlerDw extends ActionHandler {
         let actor = token.actor;
 
         if (!actor)
-        return result;
+            return result;
 
         result.actorId = actor._id;
 
@@ -59,6 +59,9 @@ export class ActionHandlerDw extends ActionHandler {
             this._combineCategoryWithList(result, this.i18n('tokenactionhud.equipment'), equipment);
             this._combineCategoryWithList(result, this.i18n('tokenactionhud.abilities'), abilities);
         }
+        
+        if (settings.get('showHudTitle'))
+            result.hudTitle = token.data?.name;
       
         return result;
     }

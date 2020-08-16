@@ -36,6 +36,9 @@ export class ActionHandlerPf2e extends ActionHandler {
         
         if (actorType === 'npc')
             this.npcActionHandler.buildActionList(result, tokenId, actor);
+        
+        if (settings.get('showHudTitle'))
+            result.hudTitle = token.data?.name;
 
         return result;
     }
