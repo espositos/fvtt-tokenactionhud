@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.4] 2020-08-16
+### Bugfixes
+- Custom subcategories weren't clearing from the HUD properly
+
+## [0.6.3] 2020-08-16
+### Added
+- Merged in further Korean localization thanks to drdwing
+
 ## [0.6.2] 2020-08-15
 ### Bugfixes
 - WFRP: Hide 'blank' icon
