@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.6.5] 2020-08-16
+### Added
+- PF2E: Show action cost for spells (those with a cost of three actions or less)
+
 ## [0.6.4] 2020-08-16
 ### Bugfixes
 - Custom subcategories weren't clearing from the HUD properly
