@@ -45,7 +45,7 @@ export function registerSettings(app, updateSettings) {
         scope: "client",
         config: true,
         type: Boolean,
-        default: true,
+        default: false,
         onChange: value => { updateSettings(value); }
     });
 }
