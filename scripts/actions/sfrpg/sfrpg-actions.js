@@ -33,6 +33,9 @@ export class ActionHandlerSfrpg extends ActionHandler {
 
         settings.Logger.debug('SFRPG ActionList:', actionList);
         
+        if (settings.get('showHudTitle'))
+            actionList.hudTitle = token.data?.name;
+        
         return actionList;
     }
 

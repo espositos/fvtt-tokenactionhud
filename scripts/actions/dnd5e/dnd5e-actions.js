@@ -60,6 +60,9 @@ export class ActionHandler5e extends ActionHandler {
         let utilityTitle = this.i18n('tokenactionhud.utility');
         this._combineCategoryWithList(result, utilityTitle, utility);
         
+        if (settings.get('showHudTitle'))
+            result.hudTitle = token.data?.name;
+        
         return result;
     }
     

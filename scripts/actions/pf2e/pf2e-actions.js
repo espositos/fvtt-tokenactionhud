@@ -36,6 +36,9 @@ export class ActionHandlerPf2e extends ActionHandler {
         
         if (actorType === 'npc')
             this.npcActionHandler.buildActionList(result, tokenId, actor);
+        
+        if (settings.get('showHudTitle'))
+            result.hudTitle = token.data?.name;
 
         return result;
     }
@@ -173,6 +176,7 @@ export class ActionHandlerPf2e extends ActionHandler {
                     let encodedValue = [macroType, tokenId, `${spellbook.data._id}>${level}>${s.data._id}`].join(this.delimiter);
                     let spell = { name: s.name, encodedValue: encodedValue, id: s.data._id };
                     spell.img = this._getImage(s);
+                    spell.icon = this._getActionIcon(s.data.data?.time?.value)
 
                     this._addSpellInfo(s, spell);
                     levelSubcategory.actions.push(spell);
@@ -252,6 +256,7 @@ export class ActionHandlerPf2e extends ActionHandler {
             let encodedValue = [macroType, tokenId, `${spellbook.data._id}>${level}>${s.data._id}`].join(this.delimiter);
             let spell = { name: s.name, encodedValue: encodedValue, id: s.data._id };
             spell.img = this._getImage(s);
+            spell.icon = this._getActionIcon(s.data.data?.time?.value)
             this._addSpellInfo(s, spell);
             levelCategory.actions.push(spell);     
                   

@@ -45,6 +45,10 @@ export class ActionHandlerWfrp extends ActionHandler {
         this._combineCategoryWithList(result, this.i18n('tokenactionhud.traits'), traits);
 
         this._setFilterSuggestions(actor);
+        
+        if (settings.get('showHudTitle'))
+            result.hudTitle = token.data?.name;
+            
         return result;
     }
 
