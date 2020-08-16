@@ -1,0 +1,13 @@
+<div><label>{{topLabel}}</label></div>
+<div><input name='token-action-hud-taginput' class='token-action-hud-taginput' placeholder='{{placeholder}}'/></div>
+<div><button class="tags--removeAllBtn">{{clearButtonText}}</button></div>
+{{#if index}}
+<div>
+    <select id='token-action-hud-index' name='index' size='1'>
+    {{#each index}}
+    <option value="{{value}}">{{text}}</option>
+    {{/each}}
+    </select>
+    <label>{{indexExplanationLabel}}</label>
+</div>
+{{/if}}

@@ -1,7 +1,8 @@
 import * as settings from './settings.js';
 import { HandlersManager } from './handlersManager.js';
-import { TokenActionHUD } from './tokenactionhud.js';
+import { CategoryManager } from './actions/categories/categoryManager.js';
 import { FilterManager } from './actions/filter/filterManager.js';
+import { TokenActionHUD } from './tokenactionhud.js';
 
 Hooks.on('init', () => {
     Handlebars.registerHelper('cap', function(string) {
@@ -9,11 +10,40 @@ Hooks.on('init', () => {
             return '';
         return string[0].toUpperCase() + string.slice(1); 
     });
+    
+    Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
+
+        switch (operator) {
+            case '==':
+                return (v1 == v2) ? options.fn(this) : options.inverse(this);
+            case '===':
+                return (v1 === v2) ? options.fn(this) : options.inverse(this);
+            case '!=':
+                return (v1 != v2) ? options.fn(this) : options.inverse(this);
+            case '!==':
+                return (v1 !== v2) ? options.fn(this) : options.inverse(this);
+            case '<':
+                return (v1 < v2) ? options.fn(this) : options.inverse(this);
+            case '<=':
+                return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+            case '>':
+                return (v1 > v2) ? options.fn(this) : options.inverse(this);
+            case '>=':
+                return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+            case '&&':
+                return (v1 && v2) ? options.fn(this) : options.inverse(this);
+            case '||':
+                return (v1 || v2) ? options.fn(this) : options.inverse(this);
+            default:
+                return options.inverse(this);
+        }
+    });
 
     loadTemplates([
         'modules/token-action-hud/templates/category.hbs',
         'modules/token-action-hud/templates/subcategory.hbs',
-        'modules/token-action-hud/templates/action.hbs'
+        'modules/token-action-hud/templates/action.hbs',
+        'modules/token-action-hud/templates/tagdialog.hbs'
     ]);
 
     let system = game.data.system.id;
@@ -22,13 +52,17 @@ Hooks.on('init', () => {
     settings.registerSettings(system, rollHandlers);
 });
 
-Hooks.on('canvasReady', () => {
+Hooks.on('canvasReady', async () => {
 
     if (!game.tokenActionHUD) {
         let system = game.data.system.id;
         let user = game.user;
+
         let filterManager = new FilterManager(user);
-        let actionHandler = HandlersManager.getActionHandler(system, filterManager);
+        let categoryManager = new CategoryManager(user, filterManager);
+        await categoryManager.init();
+
+        let actionHandler = HandlersManager.getActionHandler(system, filterManager, categoryManager);
         
         let handlerId = settings.get('rollHandler');
         
@@ -40,13 +74,12 @@ Hooks.on('canvasReady', () => {
 
         let rollHandler = HandlersManager.getRollHandler(system, handlerId);
         
-        game.tokenActionHUD = new TokenActionHUD(actionHandler, rollHandler, filterManager);
+        game.tokenActionHUD = new TokenActionHUD(actionHandler, rollHandler, filterManager, categoryManager);
     }
     
     game.tokenActionHUD.setTokensReference(canvas.tokens);
 
     Hooks.on('controlToken', (token, controlled) => {
-        if (game.tokenActionHUD.validTokenChange())
             game.tokenActionHUD.update();
     });
     
@@ -101,12 +134,14 @@ Hooks.on('canvasReady', () => {
     });
 
     Hooks.on('renderCompendium', (source, html, ) => {
-        if (game.tokenActionHUD.isLinkedCompendium(source?.metadata?.label))
+        let metadata = source?.metadata;
+        if (game.tokenActionHUD.isLinkedCompendium(`${metadata?.package}.${metadata?.name}`))
             game.tokenActionHUD.update();
     });
 
     Hooks.on('deleteCompendium', (source, html, ) => {
-        if (game.tokenActionHUD.isLinkedCompendium(source?.metadata?.label))
+        let metadata = source?.metadata;
+        if (game.tokenActionHUD.isLinkedCompendium(`${metadata?.package}.${metadata?.name}`))
             game.tokenActionHUD.update();
     });
 

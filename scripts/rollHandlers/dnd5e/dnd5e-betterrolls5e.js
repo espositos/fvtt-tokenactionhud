@@ -1,4 +1,4 @@
-import { RollHandlerBase5e } from "./dnd5e-base.js"
+import { RollHandlerBase5e } from './dnd5e-base.js'
 
 export class RollHandlerBetterRolls5e extends RollHandlerBase5e {
     constructor() {

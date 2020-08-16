@@ -1,92 +1,100 @@
 export class TagDialog extends Dialog {
+    i18n = (toTranslate) => game.i18n.localize(toTranslate);
+    tagify = null;
+
     constructor(dialogData, options){
         super(options);
         this.data = dialogData;
     }
     
-    static showTagDialog(filterManager, categoryId) {
-        let choices = filterManager.getSuggestions(categoryId);
-        let filters = filterManager.getFilteredElements(categoryId);
-        let tagify;
+    static showDialog(suggestions, selected, indexChoice, title, hbsData, submitFunc) {
+        TagDialog._prepareHook(suggestions, selected, indexChoice);
+        
+        let template = Handlebars.compile('{{> modules/token-action-hud/templates/tagdialog.hbs}}');
+        let content = template(hbsData);
+
+        let d = new TagDialog({
+            title: title,
+            content: content,
+            buttons: {
+                accept: {
+                icon: '<i class="fas fa-check"></i>',
+                label: game.i18n.localize("tokenactionhud.accept"),
+                callback: (html) => {
+                    let selection = TagDialog.tagify.value.map(c => {return {id: c.id, value: c.value, type: c.type}});
+                    let index = html.find('select[id="token-action-hud-index"]');
+                    let indexValue;
+                    if (index.length > 0)
+                        indexValue = index[0]?.value;
+                    submitFunc(selection, indexValue);
+                }
+                },
+                cancel: {
+                icon: '<i class="fas fa-times"></i>',
+                label: game.i18n.localize("tokenactionhud.cancel")
+                }
+            },
+            default: 'accept',
+        });
+
+        d.render(true);
+    }
+
+    static _prepareHook(choices, selection, indexChoice) {
         Hooks.once('renderTagDialog', (app, html, options) => {
 
             html.css('height', 'auto');
 
-            var $blocklist = html.find('select[id="isBlocklist"]')
-            let blocklistChoice = filterManager.isBlocklist(categoryId) ? "1" : "0";
-            $blocklist.val(blocklistChoice);
-            $blocklist.css('background', '#fff')
-            $blocklist.css('color', '#000')
+            var $index = html.find('select[id="token-action-hud-index"]')
+            if ($index.length > 0) {
+                if (indexChoice)
+                    $index.val(indexChoice);
 
-            var $tagFilter = html.find('input[name="tokenactionhud-tagfilter"]');
+                $index.css('background', '#fff')
+                $index.css('color', '#000')
+            }
+
+            var $tagFilter = html.find('input[class="token-action-hud-taginput"]');
             
             if ($tagFilter.length > 0) {
-                let filterPlaceholder = game.i18n.localize('tokenactionhud.filterPlaceholder');
 
-                tagify = new Tagify($tagFilter[0], {
-                whitelist: choices,
-                value: filters,
-                placeholder: filterPlaceholder,
-                delimiters: ';',
-                maxTags: 'Infinity',
-                dropdown: {
-                    maxItems: 20,           // <- maxumum allowed rendered suggestions
-                    classname: 'tags-look', // <- custom classname for this dropdown, so it could be targeted
-                    enabled: 0,             // <- show suggestions on focus
-                    closeOnSelect: false    // <- do not hide the suggestions dropdown once an item has been selected
+                let options = {
+                    delimiters: ';',
+                    maxTags: 'Infinity',
+                    dropdown: {
+                        maxItems: 20,           // <- maxumum allowed rendered suggestions
+                        classname: 'tags-look', // <- custom classname for this dropdown, so it could be targeted
+                        enabled: 0,             // <- show suggestions on focus
+                        closeOnSelect: false    // <- do not hide the suggestions dropdown once an item has been selected
+                    }
                 }
-                });
 
-                tagify.addTags(filters);
+                if (choices)
+                    options.whitelist = choices;
+
+                TagDialog.tagify = new Tagify($tagFilter[0], options);
+
+                var $tagifyBox = $(document).find('.tagify');
+
+                $tagifyBox.css('background', '#fff')
+                $tagifyBox.css('color', '#000')
+
+                if (selection)
+                    TagDialog.tagify.addTags(selection);
 
                 // "remove all tags" button event listener
                 let clearBtn = html.find('button[class="tags--removeAllBtn"]');
-                clearBtn.on('click', tagify.removeAllTags.bind(tagify))
+                clearBtn.on('click', TagDialog.tagify.removeAllTags.bind(TagDialog.tagify))
                 clearBtn.css('float', 'right');
                 clearBtn.css('width', 'auto');
-
             }
-
         })
-
-        let filterPlaceholder = game.i18n.localize('tokenactionhud.filterPlaceholder');
-        let blocklistLabel = game.i18n.localize('tokenactionhud.blocklistLabel');
-        let filterTitle = game.i18n.localize('tokenactionhud.filterTitle');
-        let content = ` <div><label>${filterPlaceholder}</label></div>
-                        <div><input name='tokenactionhud-tagfilter' class='some_class_name'/></div>
-                        <div><button class="tags--removeAllBtn">Clear</button></div>
-                        <select id='isBlocklist' name='blocklist' size='1'>
-                            <option value="1">${game.i18n.localize('tokenactionhud.blocklist')}</option>
-                            <option value="0">${game.i18n.localize('tokenactionhud.allowlist')}</option>
-                        </select><label> ${blocklistLabel}</label>`
-        let d = new TagDialog({
-            title: filterTitle,
-            content: content,
-            buttons: {
-             accept: {
-              icon: '<i class="fas fa-check"></i>',
-              label: game.i18n.localize("tokenactionhud.accept"),
-              callback: (html) => {
-                  let choices = tagify.value;
-                  let isBlocklist = html.find('select[id="isBlocklist"]')[0].value
-                  game.tokenActionHUD.submitFilter(categoryId, choices, isBlocklist);
-              }
-             },
-             cancel: {
-              icon: '<i class="fas fa-times"></i>',
-              label: game.i18n.localize("tokenactionhud.cancel")
-             }
-            },
-            default: 'accept',
-           });
-
-           d.render(true);
     }
 
     /** @override */
     _onKeyDown(event) {
         // Close dialog
-        if ( event.key === "Escape" ) {
+        if ( event.key === "Escape" && !event.target.className.includes('tagify')) {
             event.preventDefault();
             event.stopPropagation();
             return this.close();

@@ -60,6 +60,8 @@ export class ItemMacroActionListExtender extends ActionListExtender {
         newAction.encodedValue = macroType + keep;
         newAction.name = replace ? action.name : `(M) ${action.name}`
         newAction.id = action.id;
+        newAction.img = action.img;
+        newAction.icon = action.icon;
 
         return newAction;
     }

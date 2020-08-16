@@ -22,7 +22,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         if (actor)
             charType = actor.data.type;
 
-        let renderable = ['item', 'spell', 'lore'];
+        let renderable = ['item', 'feat', 'action', 'lore'];
         if (renderable.includes(macroType) && this.isRenderItem())
             return this.doRenderItem(tokenId, actionId);
 
@@ -31,10 +31,10 @@ export class RollHandlerBasePf2e extends RollHandler {
         if (!sharedActions.includes(macroType)) {
             switch (charType) {
                 case 'npc':
-                    this._handleUniqueActionsNpc(macroType, event, actor, actionId);
+                    this._handleUniqueActionsNpc(macroType, event, tokenId, actor, actionId);
                     break;
                 case 'character':
-                    await this._handleUniqueActionsChar(macroType, event, actor, actionId);
+                    await this._handleUniqueActionsChar(macroType, event, tokenId, actor, actionId);
                     break;
             }
         }
@@ -55,7 +55,7 @@ export class RollHandlerBasePf2e extends RollHandler {
                 this._rollItem(event, actor, actionId);
                 break;
             case 'spell':
-                this._rollSpell(event, actor, actionId);
+                this._rollSpell(event, tokenId, actor, actionId);
                 break;
             case 'utility':
                 this._performUtilityMacro(event, tokenId, actionId);
@@ -64,13 +64,13 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
 
     /** @private */
-    async _handleUniqueActionsChar(macroType, event, actor, actionId) {
+    async _handleUniqueActionsChar(macroType, event, tokenId, actor, actionId) {
         switch (macroType) {
             case 'save':
                 this._rollSaveChar(event, actor, actionId);
                 break;
             case 'strike':
-                this._rollStrikeChar(event, actor, actionId);
+                this._rollStrikeChar(event, tokenId, actor, actionId);
                 break;  
             case 'attribute':
                 this._rollAttributeChar(event, actor, actionId);
@@ -85,13 +85,13 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
 
     /** @private */
-    _handleUniqueActionsNpc(macroType, event, actor, actionId) {
+    _handleUniqueActionsNpc(macroType, event, tokenId, actor, actionId) {
         switch (macroType) {
             case 'save':
                 this._rollSaveNpc(event, actor, actionId);
                 break;
             case 'strike':
-                this._rollStrikeNpc(event, actor, actionId);
+                this._rollStrikeNpc(event, tokenId, actor, actionId);
                 break;  
             case 'attribute':
                 this._rollAttributeNpc(event, actor, actionId);
@@ -202,11 +202,17 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
 
     /** @private */
-    _rollStrikeChar(event, actor, actionId) {
+    _rollStrikeChar(event, tokenId, actor, actionId) {
         let actionParts = decodeURIComponent(actionId).split('>');
 
         let strikeName = actionParts[0];
         let strikeType = actionParts[1];
+
+        if (this.isRenderItem()) {
+            let item = actor.items.find(i => strikeName.toUpperCase().localeCompare(i.name.toUpperCase(), undefined, {sensitivity: 'base'}) === 0);
+            if (item)
+                return this.doRenderItem(tokenId, item.data._id);
+        }
 
         let strike = actor.data.data.actions.filter(a => a.type === 'strike').find(s => s.name === strikeName);
 
@@ -228,7 +234,7 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
 
     /** @private */
-    _rollStrikeNpc(event, actor, actionId) {
+    _rollStrikeNpc(event, tokenId, actor, actionId) {
         let actionParts = decodeURIComponent(actionId).split('>');
 
         let strikeId = actionParts[0];
@@ -236,9 +242,16 @@ export class RollHandlerBasePf2e extends RollHandler {
 
         if (strikeId === 'plus') {
             let item = actor.items.find(i => strikeType.toUpperCase().localeCompare(i.name.toUpperCase(), undefined, {sensitivity: 'base'}) === 0);
+            
+            if (this.isRenderItem())
+                return this.doRenderItem(tokenId, item._id);
+
             item.roll();
             return;
         }
+        
+        if (this.isRenderItem())
+            return this.doRenderItem(tokenId, strikeId);
 
         let strike = actor.getOwnedItem(strikeId);
 
@@ -269,7 +282,7 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
 
     /** @private */
-    _rollSpell(event, actor, actionId) {
+    _rollSpell(event, tokenId, actor, actionId) {
         let actionParts = decodeURIComponent(actionId).split('>');
 
         let spellbookId = actionParts[0];
@@ -282,9 +295,13 @@ export class RollHandlerBasePf2e extends RollHandler {
             return;
         }
 
+        let printCard = settings.get('printSpellCard');
+        if (this.isRenderItem() && printCard)
+            return this.doRenderItem(tokenId, spellId);
+
         let spell = actor.getOwnedItem(spellId);
 
-        if (settings.get('printSpellCard')) {
+        if (printCard) {
             this._rollHeightenedSpell(actor, spell, level); 
             return;
         }
@@ -294,6 +311,8 @@ export class RollHandlerBasePf2e extends RollHandler {
         if (damageRoll) {
             if (spell.data.data.damage.value)
                 spell.rollSpellDamage(event);
+            else if (this.isRenderItem())
+                this.doRenderItem(tokenId, spellId);
             else if (spell.data.data.spellType.value === 'attack') {
                 spell.rollSpellAttack(event);
             } else {
@@ -326,7 +345,6 @@ export class RollHandlerBasePf2e extends RollHandler {
           expended: true,
         };
         actor.updateEmbeddedEntity('OwnedItem', options);
-    
     }
 
     async _rollHeightenedSpell(actor, item, spellLevel) {

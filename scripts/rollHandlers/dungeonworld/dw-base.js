@@ -16,12 +16,6 @@ export class RollHandlerBaseDw extends RollHandler {
         let tokenId = payload[1];
         let actionId = payload[2];
 
-        if (this.handleCompendiums(macroType, event, tokenId, actionId))
-            return;
-
-        if (this.isRenderItem())
-            return this.doRenderItem(tokenId, actionId);
-
         let actor = super.getActor(tokenId);
         let charType = actor.data.type;
 

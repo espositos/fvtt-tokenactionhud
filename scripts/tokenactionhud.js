@@ -1,17 +1,19 @@
 import * as settings from './settings.js';
 import { HandlersManager } from './handlersManager.js';
-import { TagDialog } from './tagDialog.js';
+import { TagDialogHelper } from './utilities/tagDialogHelper.js';
+import { CategoryResizer } from './utilities/categoryResizer.js';
 
 export class TokenActionHUD extends Application {
     i18n = (toTranslate) => game.i18n.localize(toTranslate);
 
-    constructor(actions, rollHandler, filterManager) {
+    constructor(actions, rollHandler, filterManager, categoryManager) {
         super();
         this.refresh_timeout = null;
         this.tokens = null;
         this.actions = actions;
         this.rollHandler = rollHandler;
         this.filterManager = filterManager;
+        this.categoryManager = categoryManager;
         this.rendering = false;
         this.categoryHovered = '';
     }
@@ -29,81 +31,6 @@ export class TokenActionHUD extends Application {
 
     setTokensReference(tokens) {
         this.tokens = tokens;
-    }
-    
-    showFilterDialog(categoryId) {
-        TagDialog.showTagDialog(this.filterManager, categoryId);
-    }
-
-    trySetPos() {
-        if (!(this.targetActions && this.targetActions.tokenId))
-            return;
-
-        if (settings.get('onTokenHover')) {           
-            let token = canvas.tokens.placeables.find(t => t.data._id === this.targetActions.tokenId);
-            this.setHoverPos(token);
-        } else {
-            this.setUserPos();
-        }
-
-        this.restoreCategoryHoverState();
-        this.rendering = false;
-    }
-
-    setUserPos() {
-        if(!(game.user.data.flags['token-action-hud'] && game.user.data.flags['token-action-hud'].hudPos))
-            return;
-
-        let pos = game.user.data.flags['token-action-hud'].hudPos;
-
-        return new Promise(resolve => {
-            function check() {
-                let elmnt = document.getElementById('token-action-hud')
-                if (elmnt) {
-                    elmnt.style.bottom = null;
-                    elmnt.style.top = (pos.top) + 'px';
-                    elmnt.style.left = (pos.left) + 'px';
-                    elmnt.style.position = 'fixed';
-                    elmnt.style.zIndex = 100;
-                resolve();
-                } else {
-                    setTimeout(check, 30);
-                }
-            }
-
-            check();
-        });
-    }
-
-    setHoverPos(token) { 
-        return new Promise(resolve => {
-            function check(token) {
-                let elmnt = $('#token-action-hud');
-                if (elmnt) {
-                    elmnt.css('bottom', null);
-                    elmnt.css('left', (token.worldTransform.tx + (((token.data.width * canvas.dimensions.size) + 55) * canvas.scene._viewPosition.scale)) + 'px');
-                    elmnt.css('top', (token.worldTransform.ty + 0) + 'px');
-                    elmnt.css('position', 'fixed');
-                    elmnt.css('zIndex', 100);
-                    resolve();
-                } else {
-                    setTimeout(check, 30);
-                }
-            }
-
-            check(token);
-        });
-    }
-
-    static path(filepath) {
-        return this._modDir + filepath;
-    }
-
-    async submitFilter(categoryId, elements, isBlocklist) {
-        let blocklist = parseInt(isBlocklist) === 0 ? false : true;
-
-        this.filterManager.setFilteredElements(categoryId, elements, blocklist);
-        this.update();
     }
 
     /** @override */
@@ -142,6 +69,7 @@ export class TokenActionHUD extends Application {
     activateListeners(html) {
         const tokenactionhud = '#token-action-hud';
         const repositionIcon = '#tah-reposition';
+        const categoriesIcon = '#tah-categories';
         const action = '.tah-action';   
 
         const handleClick = e => {
@@ -166,11 +94,35 @@ export class TokenActionHUD extends Application {
             handleClick(e);
         });
 
-        html.find('.tah-title-button').contextmenu('click', e => {
+        function handlePossibleFilterButtonClick(e) {
             let target = e.target;
-            if(target.value.length > 0)
-                game.tokenActionHUD.showFilterDialog(target.value);
-        });
+            if(target.value.length === 0)
+                return;
+
+            let id = target.value;
+            let categoryTitle = target.innerText ?? target.outerText;
+
+            if (game.tokenActionHUD.categoryManager.isCompendiumCategory(id))
+                TagDialogHelper.showSubcategoryDialogue(game.tokenActionHUD.categoryManager, id, categoryTitle)
+            else
+                TagDialogHelper.showFilterDialog(game.tokenActionHUD.filterManager, id);
+        }     
+
+        function handlePossibleFilterSubtitleClick(e) {
+            let target = e.target;
+            if(target.id.length === 0)
+                return;
+
+            let id = target.id;
+
+            TagDialogHelper.showFilterDialog(game.tokenActionHUD.filterManager, id);
+        }
+
+        html.find('.tah-title-button').click('click', e => handlePossibleFilterButtonClick(e));
+        html.find('.tah-title-button').contextmenu('click', e => handlePossibleFilterButtonClick(e));      
+        
+        html.find('.tah-subtitle').click('click', e => handlePossibleFilterSubtitleClick(e));
+        html.find('.tah-subtitle').contextmenu('click', e => handlePossibleFilterSubtitleClick(e));
 
         html.find('.tah-category').hover(
             // mouseenter    
@@ -179,7 +131,7 @@ export class TokenActionHUD extends Application {
                 $(category).addClass('hover');
                 let id = category.id;
                 game.tokenActionHUD.setHoveredCategory(id);
-                game.tokenActionHUD.resizeHoveredCategory(id);
+                CategoryResizer.resizeHoveredCategory(id);
             },
             // mouseleave
             function() {
@@ -191,6 +143,13 @@ export class TokenActionHUD extends Application {
                 game.tokenActionHUD.clearHoveredCategory(id);
             }
         );
+
+        html.find(categoriesIcon).mousedown(ev => {
+            ev.preventDefault();
+            ev = ev || window.event;
+
+            TagDialogHelper._showCategoryDialog(this.categoryManager)
+        })
 
         html.find(repositionIcon).mousedown(ev => {
             ev.preventDefault();
@@ -249,6 +208,73 @@ export class TokenActionHUD extends Application {
                 }
             }
         });
+
+        $(document).find('.tah-filterholder').parents('.tah-subcategory').css('cursor', 'pointer');
+    }
+
+    // Positioning
+    trySetPos() {
+        if (!(this.targetActions && this.targetActions.tokenId))
+            return;
+
+        let hudTitle = $(document).find('#tah-hudTitle');
+        if (hudTitle.length > 0)
+            hudTitle.css('top', -hudTitle[0].getBoundingClientRect().height)
+
+        if (settings.get('onTokenHover')) {           
+            let token = canvas.tokens.placeables.find(t => t.data._id === this.targetActions.tokenId);
+            this.setHoverPos(token);
+        } else {
+            this.setUserPos();
+        }
+
+        this.restoreCategoryHoverState();
+        this.rendering = false;
+    }
+
+    setUserPos() {
+        if(!(game.user.data.flags['token-action-hud'] && game.user.data.flags['token-action-hud'].hudPos))
+            return;
+
+        let pos = game.user.data.flags['token-action-hud'].hudPos;
+
+        return new Promise(resolve => {
+            function check() {
+                let elmnt = document.getElementById('token-action-hud')
+                if (elmnt) {
+                    elmnt.style.bottom = null;
+                    elmnt.style.top = (pos.top) + 'px';
+                    elmnt.style.left = (pos.left) + 'px';
+                    elmnt.style.position = 'fixed';
+                    elmnt.style.zIndex = 100;
+                resolve();
+                } else {
+                    setTimeout(check, 30);
+                }
+            }
+
+            check();
+        });
+    }
+
+    setHoverPos(token) { 
+        return new Promise(resolve => {
+            function check(token) {
+                let elmnt = $('#token-action-hud');
+                if (elmnt) {
+                    elmnt.css('bottom', null);
+                    elmnt.css('left', (token.worldTransform.tx + (((token.data.width * canvas.dimensions.size) + 55) * canvas.scene._viewPosition.scale)) + 'px');
+                    elmnt.css('top', (token.worldTransform.ty + 0) + 'px');
+                    elmnt.css('position', 'fixed');
+                    elmnt.css('zIndex', 100);
+                    resolve();
+                } else {
+                    setTimeout(check, 30);
+                }
+            }
+
+            check(token);
+        });
     }
 
     setHoveredCategory(catId) {
@@ -273,170 +299,21 @@ export class TokenActionHUD extends Application {
         category.mouseenter();
     }
 
-    resizeHoveredCategory(catId) {
-        let id = `#${catId}`
-        let category = $(id);
-        
-        if (!category[0])
-            return;        
-        
-        let content = category.find('.tah-content');
-        let isOneLineFit = category.hasClass('oneLine');
-        let actions = category.find('.tah-actions');
-        
-        if (actions.length === 0)
-            return;
-        
-        // reset content to original width
-        let contentDefaultWidth = 300;
-        let minPossibleWidth = 200;
-        this.resizeActions(actions, contentDefaultWidth);
-
-        let changeStep = 30;
-        
-        let bottomLimit = $(document).find('#hotbar').offset().top - 20;
-        let rightLimit = $(document).find('#sidebar').offset().left - 20;
-
-        let maxRequiredWidth = this.calculateMaxRequiredWidth(actions);
-        while (this.shouldIncreaseWidth(content, actions, maxRequiredWidth, bottomLimit, rightLimit, isOneLineFit)) {
-            let actionRect = actions[0].getBoundingClientRect();
-            let actionWidth = actionRect.width;
-            
-            let newWidth = actionWidth + changeStep;
-            
-            this.resizeActions(actions, newWidth);          
-        }
-
-        while (this.shouldShrinkWidth(content, actions, minPossibleWidth, bottomLimit, rightLimit, isOneLineFit)) {
-            let actionRect = actions[0].getBoundingClientRect();
-            let actionWidth = actionRect.width;
-
-            if (actionWidth < minPossibleWidth)
-                return;
-
-            let newWidth = actionWidth - changeStep;
-            
-            this.resizeActions(actions, newWidth); 
-        }
-    }
-
-    calculateMaxRequiredWidth(actions) {
-        let maxWidth = 0;
-
-        actions.each(function() {
-            let totalWidth = 0;
-            Array.from($(this).children()).forEach(c => {
-                let child = $(c);
-                let childWidth = child.width();
-                let marginWidth = parseInt(child.css('marginLeft')) + parseInt(child.css('marginRight'));
-                
-                totalWidth += childWidth + marginWidth;
-            });
-
-            if (totalWidth > maxWidth)
-                maxWidth = totalWidth;
-        });
-
-        return maxWidth;
-    }
-
-    shouldIncreaseWidth(content, actions, maxRequiredWidth, bottomLimit, rightLimit, isOneLineFit) {
-        let contentRect = content[0].getBoundingClientRect();
-        let actionsRect = actions[0].getBoundingClientRect();
-
-        if (actionsRect.right >= rightLimit)
-            return false;
-
-        if (actionsRect.width >= maxRequiredWidth)
-            return false;
-
-        let actionArray = Array.from(content.find('.tah-action')).sort((a, b) => $(a).offset().top - $(b).offset().top);
-        let rows = this.calculateRows(actionArray);
-        let columns = this.calculateMaxRowButtons(actionArray);
-        if (contentRect.bottom <= bottomLimit && columns >= rows && !isOneLineFit)
-            return false;
-        
-        return true;
-    }
-
-    shouldShrinkWidth(content, actions, actionsMinWidth, bottomLimit, rightLimit, isOneLineFit) {
-        let contentRect = content[0].getBoundingClientRect();
-        let actionsRect = actions[0].getBoundingClientRect();
-
-        if (contentRect.bottom >= bottomLimit)
-            return false;
-
-        if (actionsRect.width <= actionsMinWidth)
-            return false;
-
-        let actionArray = Array.from(content.find('.tah-action')).sort((a, b) => $(a).offset().top - $(b).offset().top);
-        let rows = this.calculateRows(actionArray);
-        let columns = this.calculateMaxRowButtons(actionArray);
-
-        if (actionsRect.right <= rightLimit && (rows >= columns - 1 || isOneLineFit))
-            return false;
-
-        return true;
-    }
-
-    calculateRows(actionArray) {
-        var rows = 0;
-        let currentTopOffset = 0;
-        let closeRange = 5;
-
-        actionArray.forEach(a => {
-            let offset = $(a).offset().top
-
-            if (Math.abs(currentTopOffset - offset) >= closeRange) {
-                rows++;
-                currentTopOffset = offset;
-            }
-        });
-
-        return rows;
-    }
-
-    calculateMaxRowButtons(actionArray) {
-        if (actionArray.length < 2)
-            return actionArray.length;
-
-        var rowButtons = [];
-        let currentTopOffset = 0;
-        let rowButtonCounter = 0;
-        let closeRange = 5;
-
-        actionArray.forEach(a => {
-            let offset = $(a).offset().top;
-
-            if (Math.abs(currentTopOffset - offset) >= closeRange) {
-                if (rowButtonCounter >= 1)
-                    rowButtons.push(rowButtonCounter);
-
-                currentTopOffset = offset;
-                rowButtonCounter = 1;
-            } else {
-                rowButtonCounter++;
-            }
-
-            // if it's the final object, add counter anyway in case it was missed.
-            if (rowButtonCounter >= 1 && actionArray.indexOf(a) === actionArray.length - 1)
-                rowButtons.push(rowButtonCounter);
-        });
-
-        return Math.max(...rowButtons);
-    }
-
-    resizeActions(actions, newWidth) {
-        // resize each action with new width
-        actions.map(function() {
-            $(this).css({"width": newWidth + 'px',
-            "min-width" : newWidth + 'px'});
-        })
+    resetHud() {
+        this.resetFlags();
+        this.resetPosition();
     }
 
     resetPosition() {
         settings.Logger.info(`Resetting HUD position to x: 80px, y: 150px, and saving in user flags. \nIf HUD is still not visible, something else may be wrong.\nFeel free to contact ^ and stick#0520 on Discord`)
         game.user.update({flags: {'token-action-hud': {hudPos: { top: 80, left: 150 }}}})
+        this.update();
+    }
+
+    resetFlags() {
+        settings.Logger.info(`Resetting Token Action HUD filter and category flags`);
+        this.categoryManager.reset();
+        this.filterManager.reset();
         this.update();
     }
 
@@ -447,21 +324,15 @@ export class TokenActionHUD extends Application {
         this.refresh_timeout = setTimeout(this.updateHud.bind(this), 100)
     }
 
-    showHudEnabled() {
-        settings.Logger.debug('showHudEnabled()', `isGM: ${game.user.isGM}`, `enabledForUser: ${settings.get('enabledForUser')}`, `playerPermission: ${settings.get('playerPermission')}`);
-
-        if (!settings.get('enabledForUser'))            
-            return false;
-
-        return (settings.get('playerPermission') || game.user.isGM);
-    }
-
     async updateHud() {
         settings.Logger.debug('Updating HUD');
 
         let token = this._getTargetToken(this.tokens?.controlled);
 
         this.targetActions = await this.actions.buildActionList(token);
+        
+        if (this.targetActions && settings.get('showHudTitle'))
+            this.targetActions.hudTitle = token?.data?.name;
 
         if (!this.showHudEnabled()) {
             this.close();
@@ -503,15 +374,36 @@ export class TokenActionHUD extends Application {
         return false;
     }
 
+    showHudEnabled() {
+        settings.Logger.debug('showHudEnabled()', `isGM: ${game.user.isGM}`, `enabledForUser: ${settings.get('enabledForUser')}`, `playerPermission: ${settings.get('playerPermission')}`);
+
+        if (!settings.get('enabledForUser'))            
+            return false;
+
+        return (settings.get('playerPermission') || game.user.isGM);
+    }
+
     isLinkedCompendium(compendiumKey) {
         settings.Logger.debug('Compendium hook triggered. Checking if compendium is linked.')
-        return this.actions.isLinkedCompendium(compendiumKey);
+        return this.categoryManager.isLinkedCompendium(compendiumKey);
     }
 
     /** @private */
     _getTargetToken(controlled) {
-        if (controlled.length != 1)
+        if (controlled.length > 1)
             return null;
+
+        if (controlled.length === 0 && canvas.tokens?.placeables && game.user.character) {
+            if (!settings.get('alwaysShowHud'))
+                return null;
+            
+            let character = game.user.character
+            let token = canvas.tokens.placeables.find(t => t.actor._id === character._id)
+            if (token)
+                return token;
+            
+            return null;
+        }
 
         let ct = controlled[0];
 

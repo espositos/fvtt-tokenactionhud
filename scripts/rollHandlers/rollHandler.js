@@ -3,6 +3,8 @@ import * as settings from '../settings.js';
 export class RollHandler {
     preRollHandlers = [];
 
+    constructor() {}
+
     i18n = (toTranslate) => game.i18n.localize(toTranslate);
     
     getActor(tokenId) {
@@ -24,12 +26,9 @@ export class RollHandler {
     handleActionEvent(event, encodedValue) {
         settings.Logger.debug(encodedValue);
 
-        this.getKeys(event);
+        this.registerKeyPresses(event);
 
-        let handled = this.handleCompendiums(event, encodedValue);
-        if (handled)
-            return;
-
+        let handled = false;
         this.preRollHandlers.forEach(handler => {
             if (handled)
                 return;
@@ -37,8 +36,10 @@ export class RollHandler {
             handled = handler.prehandleActionEvent(event, encodedValue);
         })
 
-        if (!handled)
-            this.doHandleActionEvent(event, encodedValue);
+        if (handled)
+            return;
+            
+        this.doHandleActionEvent(event, encodedValue);
     }
 
     doHandleActionEvent(event, encodedValue) {}
@@ -47,57 +48,16 @@ export class RollHandler {
         this.preRollHandlers.push(handler);
     }
 
-    handleCompendiums(macroType, event, tokenId, actionId) {
-        if (!macroType.endsWith('compendium'))
-            return false;
-
-        switch (macroType) {
-            case 'compendium':
-                this.handleCompendium(macroType, event, tokenId, actionId);
-                break;
-            case 'macros':
-                this.handleMacroCompendium(macroType, event, tokenId, actionId);
-                break;
-        }   
-
-        return true;
-    }
-
-    handleCompendium(macroType, event, compendiumKey, entityId) {
-        let pack = game.packs.get(compendiumKey);
-
-        pack.getEntity(entityId).then(e => e.sheet.render(true));
-    }
-
-    handleMacroCompendium(macroType, event, compendiumKey, entityId) {
-        let pack = game.packs.get(compendiumKey);
-
-        pack.getEntity(entityId).then(e => e.execute());
-    }
-
-    async handlePlaylistCompendium(macroType, event, compendiumKey, actionId) {
-        let pack = game.packs.get(compendiumKey);
-
-        let actionPayload = actionId.split('>');
-        let playlistId = actionPayload[0];
-        let soundId = actionPayload[1];
-
-        let playlist = await pack.getEntity(playlistId);
-        let sound = playlist.sounds.find(s => s._id === soundId);
-
-        AudioHelper.play({src: sound.path}, {})
-    }
-
-    getKeys(event) {
+    registerKeyPresses(event) {
         this.rightClick = this.isRightClick(event);
         this.ctrl = this.isCtrl(event);
         this.alt = this.isAlt(event);
         this.shift = this.isShift(event);
     }
 
-    doRenderItem(tokenId, actionId) {
+    doRenderItem(tokenId, itemId) {
          let actor = this.getActor(tokenId);
-         let item = this.getItem(actor);
+         let item = this.getItem(actor, itemId);
 
          item.sheet.render(true);
     }

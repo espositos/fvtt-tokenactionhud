@@ -10,8 +10,7 @@
     width: auto;
     margin: 5px;
     background: none;
-    font-size: 14px;
-    font-family: "Signika", sans-serif;
+    font-size: small;
 }
 
 [class*="icon-"] {
@@ -19,82 +18,114 @@
     width: 100%;
 }
 
-#token-action-hud:hover > #tah-reposition, #token-action-hud:hover > #tah-close {
+#token-action-hud:hover > #tah-reposition, #token-action-hud:hover > #tah-categories {
     display: block;
     position: absolute;
 }
 
-#tah-reposition, #tah-close {
+#tah-hudTitle {
+    color: #fff;
+    padding: 3px;
+    margin: 3px;
+    text-shadow: -1px -1px 1px rgba(52, 52, 52, 1),
+    -1px -1px 1px rgba(52, 52, 52, 1),
+    -1px -1px 1px rgba(52, 52, 52, 1),
+    -1px -1px 1px rgba(52, 52, 52, 1);
+    text-align: left;
+    pointer-events: none;
+    position: absolute;
+}
+
+#tah-reposition, #tah-categories {
     display: none;
+    font-style: normal;
+    font-weight: normal;
+}
+
+#tah-reposition:hover, #tah-categories:hover {
+    cursor: pointer;
 }
 
 #tah-reposition {
     left: -20px;
 }
 
-#tah-close {
-    right: -20px;
+#tah-categories {
+    left: 100%;
 }
 
-#tah-reposition > .fa, #tah-reposition > .fas, #tah-close > .fa, #tah-close > .fas {
-    color: #fff;
-    font-size: small;
+#tah-reposition > .fa, #tah-reposition > .fas, #tah-categories > .fa, #tah-categories > .fas {
+    color: #DDD;
     padding: 3px;
     margin: 3px;
-    text-shadow: 0px 0px 3px rgba(52, 52, 52, 1);
+    text-shadow: -1px -1px 1px rgba(52, 52, 52, 1),
+    -1px -1px 1px rgba(52, 52, 52, 1),
+    -1px -1px 1px rgba(52, 52, 52, 1),
+    -1px -1px 1px rgba(52, 52, 52, 1);
     text-align: center;
     pointer-events: none;
 }
 
-#tah-reposition:hover > i, #tah-close:hover > i {
+#tah-reposition > .fa, #tah-reposition > .fas {
+    font-size: small;
+}
+
+#tah-categories > .fa, #tah-categories > .fas {
+    font-size: large;
+}
+
+#tah-reposition:hover > i, #tah-categories:hover > i {
     text-shadow: 0 0 10px #ff6400;
+    color: #FFF;
 }
 
 /* The container <div> - needed to position the dropdown content */
 .tah-category {
     position: relative;
     display: block;
+    cursor: default;
 }
 
 .tah-title-button {
     width: auto;
     height: auto;
-    color: #fff;
+    color: #DDD;
     text-align: center;
-    background: rgba(52, 52, 52, 0.95);
+    background: rgba(0, 0, 0, 0.7);
     padding: 3px;
     margin: 3px;
-    border: 1px solid transparent;
-    cursor: pointer;
+    border: 1px solid #000;
 }
 
 .tah-title-button:hover {
+    color: #FFF;
     font-weight: normal;
     color: #fff;
+    border: 1px solid red;
     border-bottom: 1px solid #ff6400;
     box-shadow: 0 0 10px #ff6400;
+    cursor: pointer;
 }
 
 .tah-title-button > .fa, .tah-title-button > .fas {
     visibility:hidden;
     width: auto;
     height: auto;
-    color: #fff;
+    color: rgba(255, 255, 255, 0.6);
     text-align: center;
-    font-size: xx-small;
-    padding: 1px;
+    font-size: 6px;
+    padding: 3px;
     margin: 1px;
     border: 1px solid transparent;
-    cursor: pointer;
     pointer-events: none;
     position: absolute;
-    z-index: 1;
     top: 2px;
     right: 2px; 
 }
 
 .tah-title-button:hover > .fa, .tah-title-button:hover > .fas {
     visibility:visible;
+    cursor: pointer;
 }
 
 /* Dropdown Content (Hidden by Default) */
@@ -115,9 +146,12 @@
     display: grid;
     grid-template-columns: 150px auto;
     grid-auto-rows: auto;
+    min-height: 33px;
+    cursor: default;
 }
 
 .tah-subtitle {
+    position: relative;
     grid-column: 1;
     padding: 10px 8px 0px 0px;
     margin: 0px;
@@ -130,6 +164,32 @@
     font-size: small;
     text-align: right;
     line-height: 1em;
+}
+
+.tah-filterholder {
+    position: absolute;
+    width: 0;
+    height: 0;
+    top:0px;
+    right:5px;
+}
+
+.tah-subtitle > .tah-filterholder > .fa, .tah-subtitle >  .tah-filterholder > .fas {
+    visibility:hidden;
+    width: auto;
+    height: auto;
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+    font-size: 6px;
+    border: 1px solid transparent;
+    pointer-events: none;
+    position: absolute;
+    top: 3px;
+    left: -3px;
+}
+
+.tah-subtitle:hover > .tah-filterholder > .fa, .tah-subtitle:hover > .tah-filterholder > .fas {
+    visibility:visible;
 }
 
 .tah-actions {
@@ -159,7 +219,7 @@
     min-width:20px;
     height: 20px;
     padding: 0px;
-    margin: 0px;
+    margin: 0px 0px 0px 3px;
     font-size: small;
     font-weight: bold;
     text-align: center;
@@ -204,6 +264,31 @@
     -1px -1px 1px rgba(52, 52, 52, 1);
 }
 
+.tah-icon {
+    display: inline;
+}
+
+.tah-img {
+    display: inline;
+    padding: 4px 12px 4px 12px;
+    margin: 0px 5px 0px 0px;
+    border-radius: 3px;
+}
+
+.tah-action .tah-img {
+    border: 1px solid rgba(129, 129, 129, 0.877);
+}
+
+.tah-icon > .fa, .tah-icon > .fas {
+    font-size: xx-small;
+    margin: 0px 2px 0px 0px;
+    text-shadow:  0 0 1px rgba(247, 2, 2, 0.95),
+    -1px -1px 1px rgba(52, 52, 52, 1),
+    -1px -1px 1px rgba(52, 52, 52, 1),
+    -1px -1px 1px rgba(52, 52, 52, 1),
+    -1px -1px 1px rgba(52, 52, 52, 1);
+}
+
 .tah-info1:before {
     content: " (";
 }
@@ -233,19 +318,24 @@
     min-width: 50px;
     font-size: small;
     text-decoration: none;
-    color: #fff;
-    background: rgba(52, 52, 52, 0.95);
+    color: #DDD;
+    border: 1px solid #000;
+    background: rgba(0, 0, 0, 0.7);
 }
 
 /* Change color of dropdown links on hover */
 .tah-action button:hover {
     font-weight: inherit;
-    color: #fff;
+    color: #FFF;
+    border: 1px solid red;
     border-bottom: 1px solid #ff6400;
     box-shadow: 0 0 10px #ff6400;
+    box-shadow: 0 0 10px #ff6400;
+    cursor: pointer;
 }
 
 .tah-action .active {
+    border: 1px solid red;
     border-bottom: 1px solid #ff6400;
     box-shadow: 0 0 10px #ff6400;
 }

@@ -18,9 +18,6 @@ export class RollHandlerBaseSfrpg extends RollHandler {
         let tokenId = payload[1];
         let actionId = payload[2];
 
-        if (this.handleCompendiums(macroType, event, tokenId, actionId))
-            return;
-
         switch (macroType) {
             case "ability":
                 this.rollAbilityMacro(event, tokenId, actionId);

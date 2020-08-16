@@ -1,15 +1,14 @@
 import {ActionHandler} from '../actionHandler.js';
+import * as settings from '../../settings.js';
 
 export class ActionHandlerWfrp extends ActionHandler {
-    constructor(filterManager) {
-        super();
-
-        this.filterManager = filterManager;
-        filterManager.createFilter('skills');
+    constructor(filterManager, categoryManager) {
+        super(filterManager, categoryManager);
+        this.filterManager.createOrGetFilter('skills');
     }    
 
     /** @override */
-    async doBuildActionList(token) {
+    doBuildActionList(token) {
         let result = this.initializeEmptyActionList();
 
         if (!token)
@@ -36,8 +35,6 @@ export class ActionHandlerWfrp extends ActionHandler {
         let prayers = this._getPrayers(actor, tokenId);
         let talents = this._getTalents(actor, tokenId);
         let traits = this._getTraits(actor, tokenId);
-
-        [filteredNames, skills, magic, prayers, talents, traits].forEach(c => this.filterManager.setCanFilter(c));
         
         this._combineCategoryWithList(result, this.i18n('tokenactionhud.weapons'), weapons);
         this._combineCategoryWithList(result, this.i18n('tokenactionhud.characteristics'), characteristics);
@@ -237,7 +234,16 @@ export class ActionHandlerWfrp extends ActionHandler {
     _produceMap(tokenId, itemSet, type) {
         return itemSet.map(i => {
             let encodedValue = [type, tokenId, i._id].join(this.delimiter);
-            return { name: i.name, encodedValue: encodedValue, id: i._id };
+            let img = this._getImage(i);
+            return { name: i.name, encodedValue: encodedValue, id: i._id, img:img };
         });
-    }   
+    }
+
+    _getImage(item) {
+        let result = '';
+        if (settings.get('showIcons'))
+            result = item.img ?? '';
+
+        return result?.includes('icons/svg/mystery-man.svg') || result?.includes('systems/wfrp4e/icons/blank.png') ? '' : result;
+    }
 }

@@ -7,7 +7,7 @@ export class PcActionHandlerPf2e {
         this.baseHandler = actionHandlerpf2e;
     }
 
-    async buildActionList(result, tokenId, actor) {
+    buildActionList(result, tokenId, actor) {
         let strikes = this._getStrikesList(actor, tokenId);
         let actions = this.baseHandler._getActionsList(actor, tokenId);
         let items = this.baseHandler._getItemsList(actor, tokenId);
@@ -43,11 +43,15 @@ export class PcActionHandlerPf2e {
 
         let strikes = actor.data.data.actions.filter(a => a.type === macroType);
         
-        let calculateAttackPenalty = settings.get('calculateAttackPenalty')
+        let calculateAttackPenalty = settings.get('calculateAttackPenalty');
 
         strikes.forEach(s => {
             let subcategory = this.baseHandler.initializeEmptySubcategory();
-            let map = s.traits.some(t => t.name === 'agile') ? 4 : 5;
+            let glyph = s.glyph;
+            if (glyph)
+                subcategory.icon = `<span style='font-family: "Pathfinder2eActions"'>${glyph}</span>`
+
+            let map = Math.abs(parseInt(s.variants[1].label.split(' ')[1]));
             let attackMod = s.totalModifier;
             
             let currentMap = 0;
@@ -67,6 +71,7 @@ export class PcActionHandlerPf2e {
                 return {_id: encodeURIComponent(`${this.name}>${this.variants.indexOf(v)}`), name: name }
             }.bind(s));
 
+            variantsMap[0].img = s.imageUrl;
             subcategory.actions = this.baseHandler._produceMap(tokenId, variantsMap, macroType);
             
             let damageEncodedValue = [macroType, tokenId, encodeURIComponent(s.name+'>damage')].join(this.baseHandler.delimiter);
@@ -123,6 +128,4 @@ export class PcActionHandlerPf2e {
 
         return result;
     }
-
-
 }
