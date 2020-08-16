@@ -43,7 +43,7 @@ export const registerSettings = function(system, rollHandlers) {
         scope : 'client',
         config : true,
         type : Boolean,
-        default : false,
+        default : true,
         onChange: value => { updateSettings(value); }
     });
 
@@ -83,6 +83,16 @@ export const registerSettings = function(system, rollHandlers) {
         name : game.i18n.localize('tokenactionhud.settings.playerPermission.name'),
         hint : game.i18n.localize('tokenactionhud.settings.playerPermission.hint'),
         scope : 'world',
+        config : true,
+        type : Boolean,
+        default : true,
+        onChange: value => { updateSettings(value); }
+    });
+    
+    game.settings.register(app,'renderItemOnRightClick', {
+        name : game.i18n.localize('tokenactionhud.settings.renderItemOnRightClick.name'),
+        hint : game.i18n.localize('tokenactionhud.settings.renderItemOnRightClick.hint'),
+        scope : 'client',
         config : true,
         type : Boolean,
         default : true,

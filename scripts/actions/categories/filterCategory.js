@@ -109,7 +109,7 @@ export class FilterCategory {
     removeSubcategory(index) {
         let subcategory = this.subcategories[index];
         subcategory.clearFilter();
-        subcategory.unsetFlag();
+        subcategory.unsetFlag(this.key);
         this.subcategories.splice(index, 1);
     }
 
