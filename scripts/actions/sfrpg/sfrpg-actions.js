@@ -203,7 +203,8 @@ export class ActionHandlerSfrpg extends ActionHandler {
     _buildItemAction(tokenId, macroType, item) {
         let encodedValue = [macroType, tokenId, item._id].join(this.delimiter);
         let img = this._getImage(item);
-        let result = { name: item.name, id: item._id, encodedValue: encodedValue, img:img }
+        let icon = this._getActionIcon(item.data.activation?.type)
+        let result = { name: item.name, id: item._id, encodedValue: encodedValue, img:img, icon: icon }
         
         return result;
     }
@@ -222,5 +223,22 @@ export class ActionHandlerSfrpg extends ActionHandler {
         };
 
         return icons[level];
+    }
+    
+    
+    _getActionIcon(action) {
+        const icon = {
+            //action: `<i class="fas fa-fist-raised"></i>`,
+            move: `<i class="fas fa-shoe-prints"></i>`,
+            swift: `<i class="fas fa-bolt"></i>`,
+            full: `<i class="fas fa-circle"></i>`,
+            other: `<i class="far fa-circle"></i>`,
+            reaction: `<i class="fas fa-undo-alt"></i>`,
+            special: `<i class="fas fa-atom"></i>`,
+            minute: `<i class="fas fa-hourglass-start"></i>`,
+            hour: `<i class="fas fa-hourglass-half"></i>`,
+            day: `<i class="fas fa-hourglass-end"></i>`
+        };
+        return icon[action];
     }
 }
