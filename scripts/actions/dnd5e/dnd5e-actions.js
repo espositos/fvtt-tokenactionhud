@@ -464,7 +464,8 @@ export class ActionHandler5e extends ActionHandler {
     _buildItem(tokenId, actor, macroType, item) {
         let encodedValue = [macroType, tokenId, item._id].join(this.delimiter);
         let img = this._getImage(item);
-        let result = { name: item.name, id: item._id, encodedValue: encodedValue, img: img }
+        let icon = this._getActionIcon(item.data?.activation?.type);
+        let result = { name: item.name, id: item._id, encodedValue: encodedValue, img: img, icon: icon }
         
         if (item.data.recharge && !item.data.recharge.charged && item.data.recharge.value) {
             result.name += ` (${this.i18n('tokenactionhud.recharge')})`;
@@ -619,6 +620,23 @@ export class ActionHandler5e extends ActionHandler {
           2: '<i class="fas fa-check-double"></i>'
         };
         return icons[level];
-      }
+    }
     
+    
+    _getActionIcon(action) {
+        const img = {
+            //action: `<i class="fas fa-fist-raised"></i>`,
+            bonus: `<i class="fas fa-plus"></i>`,
+            crew: `<i class="fas fa-users"></i>`,
+            legendary: `<i class="fas fa-dragon"></i>`,
+            reaction: `<i class="fas fa-bolt"></i>`,
+            //none: `<i class="far fa-circle"></i>`,
+            special: `<i class="fas fa-star"></i>`,
+            lair: `<i class="fas fa-home"></i>`,
+            minute: `<i class="fas fa-hourglass-start"></i>`,
+            hour: `<i class="fas fa-hourglass-half"></i>`,
+            day: `<i class="fas fa-hourglass-end"></i>`
+        };
+        return img[action];
+    }
 }
