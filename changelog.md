@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.6.6] 2020-08-17
+### Added
+- PF2E: Add tracking for dying, wounded, and doomed in utility menu (left-click increments, right-click decrements)
+
 ## [0.6.5] 2020-08-16
 ### Added
 - PF2E: Show action cost for spells (those with a cost of three actions or less)
