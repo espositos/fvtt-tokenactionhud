@@ -1,6 +1,10 @@
 # Changelog
 
-## [0.6.6] 2020-08-17
+## [0.6.8] 2020-08-17
+### Added
+- SFRPG: icons to distinguish non-action actions (if you have better icon suggestions, let me know)
+
+## [0.6.7] 2020-08-17
 ### Added
 - DND5e: icons to distinguish non-action actions
 
