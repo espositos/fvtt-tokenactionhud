@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.6.9] 2020-08-17
+### Added
+- SFRPG: add additional information to items (capacity, uses, quantity, usages)
+
 ## [0.6.8] 2020-08-17
 ### Added
 - SFRPG: icons to distinguish non-action actions (if you have better icon suggestions, let me know)
