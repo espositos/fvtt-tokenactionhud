@@ -226,6 +226,12 @@
     line-height: 0px;
 }
 
+.tah-actionSet {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
+
 /* Links inside the dropdown */
 .tah-action {
     flex-grow: 0;

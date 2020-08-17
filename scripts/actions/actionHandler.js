@@ -1,6 +1,8 @@
 import {ActionList} from './entities/actionList.js';
 import {ActionCategory} from './entities/actionCategory.js';
 import {ActionSubcategory} from './entities/actionSubcategory.js';
+import {ActionSet} from './entities/actionSet.js';
+import {Action} from './entities/action.js';
 import * as settings from '../settings.js';
 
 export class ActionHandler {
@@ -42,6 +44,14 @@ export class ActionHandler {
 
     initializeEmptyActionList() {
         return new ActionList();
+    }
+
+    initializeEmptyActionSet() {
+        return new ActionSet();
+    }
+
+    initializeEmptyAction() {
+        return new Action();
     }
 
     initializeEmptyCategory(categoryId) {

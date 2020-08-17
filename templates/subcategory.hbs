@@ -13,9 +13,13 @@
     {{/if}}
 </div>
 <div class="tah-actions">
-{{#each actions}}
-{{>"modules/token-action-hud/templates/action.hbs"}}
-{{/each}}
+    {{#each actions}}
+        {{#if this.set}}
+            {{>"modules/token-action-hud/templates/actionSet.hbs"}}
+        {{else}}
+            {{>"modules/token-action-hud/templates/action.hbs"}}
+        {{/if}}
+    {{/each}}
 </div>
 </div>
 {{/ifCond}}

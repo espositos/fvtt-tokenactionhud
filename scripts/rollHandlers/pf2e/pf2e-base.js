@@ -79,7 +79,12 @@ export class RollHandlerBasePf2e extends RollHandler {
                 await this._adjustSpellSlot(event, actor, actionId);
                 break;
             case 'heroPoint':
-                await this._adjustHeroPoints(event, actor, actionId);
+                await this._adjustAttribute(event, actor, 'heroPoints', 'rank', actionId);
+                break;
+            case 'doomed':
+            case 'wounded':
+            case 'dying':
+                await this._adjustAttribute(event, actor, macroType, 'value', actionId);
                 break;
         }
     }
@@ -421,24 +426,21 @@ export class RollHandlerBasePf2e extends RollHandler {
         )});
     }
 
-    async _adjustHeroPoints(event, actor, actionId) {
-        let value = actor.data.data.attributes.heroPoints.rank;
-        let max = actor.data.data.attributes.heroPoints.max;
-        switch (actionId) {
-            case 'increase':
-                if (value >= max)
-                    break;
-                
-                value++;
-                break;
-            case 'decrease':
-                if (value <= 0)
-                    break;
-                    
-                value--;
+    async _adjustAttribute(event, actor, property, valueName, actionId) {
+        let value = actor.data.data.attributes[property][valueName];
+        let max = actor.data.data.attributes[property]['max'];
+
+        if (this.rightClick){
+            if (value <= 0)
+                return;
+            value--;
+        } else {
+            if (value >= max)
+                return;    
+            value++;
         }
 
-        let update = {data: {attributes: {heroPoints: {rank: value}}}};
+        let update = {data: {attributes: {[property]: {[valueName]: value}}}};
 
         await actor.update(update);
     }

@@ -409,23 +409,34 @@ export class ActionHandlerPf2e extends ActionHandler {
         let macroType = 'utility';
         
         if (actor.data.type === 'character') {
+                        
+            let attributes = this.initializeEmptySubcategory();
+            let atrributeActions = [];
 
-            let heroPoints = this.initializeEmptySubcategory();
-            let heroPointsActions = [];
-            let increasePointValue = ['heroPoint', tokenId, 'increase'].join(this.delimiter);
-            let increasePointAction = {id: 'increaseHeroPoints', name: '+', encodedValue: increasePointValue, cssClass:'shrink'}
-            heroPointsActions.unshift(increasePointAction)
-    
-            let decreasePointValue = ['heroPoint', tokenId, 'decrease'].join(this.delimiter);
-            let decreasePointAction = {id: 'decreaseHeroPoints', name: '-', encodedValue: decreasePointValue, cssClass:'shrink'}
-            heroPointsActions.unshift(decreasePointAction)
-            heroPoints.actions = heroPointsActions;
+            let heroPoints = actor.data.data.attributes?.heroPoints;
+            if (heroPoints)
+                atrributeActions.push(this._getAttributeAction(tokenId, 'heroPoint', this.i18n('tokenactionhud.heroPoints'), heroPoints.rank, heroPoints.max));
 
-            let hp = actor.data.data.attributes?.heroPoints;
-            if (hp)
-                heroPoints.info1 = `${hp.rank}/${hp.max}`;
+            let doomedPoints = actor.data.data.attributes?.doomed;
+            let dyingPoints = actor.data.data.attributes?.dying;
+            if (dyingPoints) {
+                let dyingVal = dyingPoints.value;
+                let dyingMax = dyingPoints.max;
+                if (doomedPoints)
+                    dyingMax -= doomedPoints.value;
+                atrributeActions.push(this._getAttributeAction(tokenId, 'dying', this.i18n('tokenactionhud.dying'), dyingVal, dyingMax));
+            }
+            
+            let woundedPoints = actor.data.data.attributes?.wounded;
+            if (woundedPoints)
+                atrributeActions.push(this._getAttributeAction(tokenId, 'wounded', this.i18n('tokenactionhud.wounded'), woundedPoints.value, woundedPoints.max));
 
-            this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.heroPoints'), heroPoints);
+            if (doomedPoints)
+                atrributeActions.push(this._getAttributeAction(tokenId, 'doomed', this.i18n('tokenactionhud.doomed'), doomedPoints.value, doomedPoints.max));
+
+            attributes.actions = atrributeActions;
+
+            this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.attributes'), attributes);
             
             let rests = this.initializeEmptySubcategory();
 
@@ -463,6 +474,16 @@ export class ActionHandlerPf2e extends ActionHandler {
         }
 
         return result;
+    }
+
+    _getAttributeAction(tokenId, macroType, attrName, attrVal, attrMax) {
+        
+        let id = attrName.slugify({replacement: '_', strict: true});
+        let labelValue = [macroType, tokenId, id].join(this.delimiter);
+        let attributeAction = {name: attrName, encodedValue: labelValue, id: id}
+        attributeAction.info1 = `${attrVal}/${attrMax}`;
+
+        return attributeAction;
     }
 
     /** @private */
