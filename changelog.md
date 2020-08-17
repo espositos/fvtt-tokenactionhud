@@ -3,6 +3,7 @@
 ## [0.6.9] 2020-08-17
 ### Added
 - SFRPG: add additional information to items (capacity, uses, quantity, usages)
+- SFRPG: add spell information (and setting to disable if desired)
 
 ## [0.6.8] 2020-08-17
 ### Added
