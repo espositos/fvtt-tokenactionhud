@@ -533,7 +533,6 @@ export class ActionHandlerPf2e extends ActionHandler {
           3: `<span style='font-family: "Pathfinder2eActions"'>T</span>`,
           free: `<span style='font-family: "Pathfinder2eActions"'>F</span>`,
           reaction: `<span style='font-family: "Pathfinder2eActions"'>R</span>`
-          //passive: `<span style='font-family: "Pathfinder2eActions"'>A</span>`,
         };
         return img[action];
     }

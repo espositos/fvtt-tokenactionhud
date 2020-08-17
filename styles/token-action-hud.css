@@ -286,9 +286,12 @@
 }
 
 .tah-icon > .fa, .tah-icon > .fas {
-    font-size: xx-small;
+    font-size: x-small;
     margin: 0px 2px 0px 0px;
-    text-shadow:  0 0 1px rgba(247, 2, 2, 0.95),
+}
+
+.tah-subtitle > .tah-icon > .fa, .tah-subtitle > .tah-icon > .fas {
+    text-shadow:  0 0 1px rgb(255, 255, 255),
     -1px -1px 1px rgba(52, 52, 52, 1),
     -1px -1px 1px rgba(52, 52, 52, 1),
     -1px -1px 1px rgba(52, 52, 52, 1),
