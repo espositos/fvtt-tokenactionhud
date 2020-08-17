@@ -204,10 +204,68 @@ export class ActionHandlerSfrpg extends ActionHandler {
         let encodedValue = [macroType, tokenId, item._id].join(this.delimiter);
         let img = this._getImage(item);
         let icon = this._getActionIcon(item.data.activation?.type)
-        let result = { name: item.name, id: item._id, encodedValue: encodedValue, img:img, icon: icon }
+        let result = { name: item.name, id: item._id, encodedValue: encodedValue, img:img, icon: icon }        
+
+        result.info1 = this._getQuantityData(item);
+
+        result.info2 = this._getUsesOrUsageData(item);
+
+        result.info3 = this._getCapacityData(item)
         
         return result;
     }
+
+    /** @private */
+    _getQuantityData(item) {
+        let result = '';
+        if (item.data.quantity > 1) {
+            result = item.data.quantity;
+        }
+
+        return result;
+    }
+
+    /** @private */
+    _getUsesOrUsageData(item) {
+        let result = '';
+
+        let uses = item.data.uses;
+        if (uses?.max || uses?.value) {
+            result = uses.value;
+            
+            if (uses.max > 0) {
+                result += `/${uses.max}`
+            }
+            return result;
+        }
+        
+        let usage = item.data.usage;
+        if (usage?.value) {
+            result = usage.value;
+            
+            if (usage.value > 0) {
+                result += `/${usage.per}`
+            }
+            return result;
+        }
+
+        return result;
+    }
+
+    /** @private */
+    _getCapacityData(item) {
+        let result = '';
+
+        let capacity = item.data.capacity;
+        if (!capacity)
+            return;
+
+        result = capacity.value;
+        if (!!capacity.max)
+            result += `/${capacity.max}`
+
+        return result;
+    }    
     
     _getImage(item) {
         let result = '';
@@ -235,7 +293,7 @@ export class ActionHandlerSfrpg extends ActionHandler {
             other: `<i class="far fa-circle"></i>`,
             reaction: `<i class="fas fa-undo-alt"></i>`,
             special: `<i class="fas fa-atom"></i>`,
-            minute: `<i class="fas fa-hourglass-start"></i>`,
+            min: `<i class="fas fa-hourglass-start"></i>`,
             hour: `<i class="fas fa-hourglass-half"></i>`,
             day: `<i class="fas fa-hourglass-end"></i>`
         };
