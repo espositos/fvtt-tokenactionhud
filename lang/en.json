@@ -155,6 +155,9 @@
     "tokenactionhud.settings.pf2e.abbreviateSkills.name": "Abbreviate skill and ability names",
     "tokenactionhud.settings.pf2e.abbreviateSkills.hint": "If enabled, skills and abilities will use a three-character abbreviation.",
 
+    "tokenactionhud.settings.sfrpg.showSpellInfo.name": "Display spell information",
+    "tokenactionhud.settings.sfrpg.showSpellInfo.hint": "If enabled, spell resistance, dismissible, concentration and save information noted next to the spell name.",
+
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "Show GM Compendiums",
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "If enabled, and if the user is a GM, the HUD bar will include GM moves, treasure rollable-tables, and charts."
 }

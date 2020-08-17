@@ -193,11 +193,35 @@ export class ActionHandlerSfrpg extends ActionHandler {
         let subCategory = this.initializeEmptySubcategory();    
 
         let itemsOfType = itemList.filter(item => item.data.level == level);
-        subCategory.actions = itemsOfType.map(item => this._buildItemAction(tokenId, macroType, item));
+        subCategory.actions = itemsOfType.map(item => {
+            let action = this._buildItemAction(tokenId, macroType, item);
+            if (settings.get('showSpellInfo'))
+                this._addSpellInfo(item, action);
+            return action;
+        });
                   
         this._combineSubcategoryWithCategory(category, subCategoryName, subCategory);
         
         return category;
+    }
+
+    /** @private */
+    _addSpellInfo(s, spell) {
+        let data = s.data;
+
+        if (data?.sr)
+            spell.info2 += 'Sr';
+
+        if (data?.dismissible)
+            spell.info2 += 'D';
+
+        if (data?.concentration)
+            spell.info2 += 'C';
+
+        if (data?.save?.type) {
+            let type = data.save.type;
+            spell.info3 += type?.charAt(0).toUpperCase() + type?.slice(1);
+        }
     }
 
     _buildItemAction(tokenId, macroType, item) {
@@ -231,7 +255,7 @@ export class ActionHandlerSfrpg extends ActionHandler {
 
         let uses = item.data.uses;
         if (uses?.max || uses?.value) {
-            result = uses.value;
+            result = uses.value ?? '';
             
             if (uses.max > 0) {
                 result += `/${uses.max}`
@@ -241,7 +265,7 @@ export class ActionHandlerSfrpg extends ActionHandler {
         
         let usage = item.data.usage;
         if (usage?.value) {
-            result = usage.value;
+            result = usage.value ?? '';
             
             if (usage.value > 0) {
                 result += `/${usage.per}`
@@ -258,9 +282,9 @@ export class ActionHandlerSfrpg extends ActionHandler {
 
         let capacity = item.data.capacity;
         if (!capacity)
-            return;
+            return result;
 
-        result = capacity.value;
+        result = capacity.value ?? '';
         if (!!capacity.max)
             result += `/${capacity.max}`
 
