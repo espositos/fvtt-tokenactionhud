@@ -66,6 +66,9 @@
     "tokenactionhud.restNight": "Rest for the Night",
     "tokenactionhud.treatWounds": "Treat Wounds",
     "tokenactionhud.heroPoints": "Hero Points",
+    "tokenactionhud.doomed": "Doomed",
+    "tokenactionhud.wounded": "Wounded",
+    "tokenactionhud.dying": "Dying",
     
     "tokenactionhud.utility": "Utility",
     "tokenactionhud.toggleCombatState": "Toggle Combat State",

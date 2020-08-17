@@ -42,6 +42,7 @@ Hooks.on('init', () => {
     loadTemplates([
         'modules/token-action-hud/templates/category.hbs',
         'modules/token-action-hud/templates/subcategory.hbs',
+        'modules/token-action-hud/templates/actionSet.hbs',
         'modules/token-action-hud/templates/action.hbs',
         'modules/token-action-hud/templates/tagdialog.hbs'
     ]);
