@@ -27,7 +27,7 @@ export class RollHandlerBaseDw extends RollHandler {
                 case 'move':
                 case 'spell':
                 case 'equipment':
-                    this._handleMove(macroType, event, actor, actionId);
+                    this._handleMove(macroType, event, tokenId, actor, actionId);
                     break;
                 case 'ability':
                     this._handleAbility(macroType, event, actor, actionId);
@@ -67,8 +67,13 @@ export class RollHandlerBaseDw extends RollHandler {
         actor.rollMove(formula, actor, {}, templateData);
     }
 
-    _handleMove(macroType, event, actor, actionId) {
+    _handleMove(macroType, event, tokenId, actor, actionId) {
         let move = actor.getOwnedItem(actionId);
+ 
+        if (this.isRenderItem()) {
+            this.doRenderItem(tokenId, actionId);
+            return;
+        }
 
         move.roll();
     }
