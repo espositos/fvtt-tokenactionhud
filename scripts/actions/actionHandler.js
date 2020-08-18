@@ -25,7 +25,7 @@ export class ActionHandler {
     }
 
     async buildActionList(token) {
-        let actionList = this.doBuildActionList(token);
+        let actionList = await this.doBuildActionList(token);
         this._doBuildFurtherActions(token, actionList);
         this.registerCoreCategories(actionList.categories);
         await this.categoryManager.addCategoriesToActionList(this, actionList);

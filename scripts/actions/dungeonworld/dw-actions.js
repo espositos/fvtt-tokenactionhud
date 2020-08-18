@@ -8,13 +8,13 @@ export class ActionHandlerDw extends ActionHandler {
     }
 
     /** @override */
-    doBuildActionList(token) {
+    async doBuildActionList(token) {
         let result = this.initializeEmptyActionList();
 
         if (settings.get('showGmCompendiums')) {
             result.tokenId = 'gm';
             result.actorId = 'gm';
-            this.addGmCompendiumsToList(result);
+            await this.addGmCompendiumsToList(result);
         }
 
         if (!token)
@@ -66,21 +66,21 @@ export class ActionHandlerDw extends ActionHandler {
         return result;
     }
 
-    addGmCompendiumsToList(actionList) {
+    async addGmCompendiumsToList(actionList) {
         let category = this.initializeEmptyCategory('gm');
         
         let movesSubcategory = this.initializeEmptySubcategory();
-        movesSubcategory.actions = CompendiumHelper.getEntriesForActions('dungeonworld.gm-movesprincipals', this.delimiter)
+        movesSubcategory.actions = await CompendiumHelper.getEntriesForActions('dungeonworld.gm-movesprincipals', this.delimiter)
         let movesName = this.i18n('tokenactionhud.moves');
         this._combineSubcategoryWithCategory(category, movesName, movesSubcategory);
 
         let chartsSubcategory = this.initializeEmptySubcategory();
-        chartsSubcategory.actions = CompendiumHelper.getEntriesForActions('dungeonworld.charts', this.delimiter)
+        chartsSubcategory.actions = await CompendiumHelper.getEntriesForActions('dungeonworld.charts', this.delimiter)
         let chartsName = this.i18n('tokenactionhud.charts');
         this._combineSubcategoryWithCategory(category, chartsName, chartsSubcategory);
 
         let treasureSubcategory = this.initializeEmptySubcategory();
-        treasureSubcategory.actions = CompendiumHelper.getEntriesForActions('dungeonworld.rollable-tables', this.delimiter)
+        treasureSubcategory.actions = await CompendiumHelper.getEntriesForActions('dungeonworld.rollable-tables', this.delimiter)
         let treasureName = this.i18n('tokenactionhud.treasure');
         this._combineSubcategoryWithCategory(category, treasureName, treasureSubcategory);
 
@@ -262,7 +262,19 @@ export class ActionHandlerDw extends ActionHandler {
     _produceMap(tokenId, itemSet, macroType) {
         return itemSet.filter(i => !!i).map(i => {
             let encodedValue = [macroType, tokenId, i.data._id].join(this.delimiter);
-            return { name: i.name, encodedValue: encodedValue, id: i.data._id };
+            let item = { name: i.name, encodedValue: encodedValue, id: i.data._id };
+
+            this._addItemInfo(i, item);
+
+            return item;
         });
+    }
+
+    _addItemInfo(i, item) {
+        let uses = i.data.data?.uses;
+        item.info1 = uses ?? '';
+
+        let quantity = i.data.data?.quantity;
+        item.info2 = quantity > 1 ? quantity : '';
     }
 }
