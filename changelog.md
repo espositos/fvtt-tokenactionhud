@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.6.10] 2020-08-18
+### Bugfix
+- DungeonWorld GM compendiums were not being shown
+
 ## [0.6.9] 2020-08-17
 ### Added
 - SFRPG: add additional information to items (capacity, uses, quantity, usages)
