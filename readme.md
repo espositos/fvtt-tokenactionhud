@@ -1,5 +1,5 @@
 # Token Action HUD
-This module populates a repositionable HUD showing the most common basic actions for a selected token. Currently the HUD supports DND5e, WFRP4e, Dungeon World, Pathfinder 2E, and SFRPG.
+This module populates a repositionable HUD showing the most common basic actions for a selected token. Currently the HUD supports DND5e, WFRP4e, Dungeon World, Pathfinder 2E, and SFRPG (thanks to Rainer#5041).
 ![Easy action access](.github/readme/tah-dnd5e.gif)
 
 # Installation
@@ -43,8 +43,7 @@ For questions, feature requests, or bug reports, feel free to contact me on the 
 
 # Thanks
 Enormous thanks goes to the following people for their help in getting the HUD to its current state:
-Kekilla#7036, Skimble#8601, Forien#2130, and the Fabricator General.
-I'd also like to acknowledge the other module develops I've taken ideas and code from, as well as the other developers who make FoundryVTT a joy to use.
+Kekilla#7036, Rainer#5041, the Fabricator General, and anyone who has provided advice to any and all of my problems on Discord, as well as all the other developers who make FoundryVTT a joy to use.
 
 # License
 This Foundry VTT module is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
