@@ -9,8 +9,13 @@ export class ActionHandler5e extends ActionHandler {
     
 
     /** @override */
-    doBuildActionList(token) {
+    doBuildActionList(token, multipleTokens) {
         let result = this.initializeEmptyActionList();
+
+        if (multipleTokens) {
+            this._buildMultipleTokenList(result);
+            return result;
+        }
 
         if (!token)
             return result;
@@ -64,6 +69,22 @@ export class ActionHandler5e extends ActionHandler {
             result.hudTitle = token.data?.name;
         
         return result;
+    }
+
+    _buildMultipleTokenList(list) {
+        list.tokenId = 'multi';
+        list.actorId = 'multi';
+
+        this._addMultiSkills(list, list.tokenId);
+
+        // if (settings.get('splitAbilities')) {
+        //     this.addMultiSaves(list);
+        //     this.addMultiChecks(list);
+        // } else {
+        //     this.addMultiAbilities(list);
+        // }
+
+        // this._addMultiUtilities(list);
     }
     
     /** ITEMS **/
@@ -385,6 +406,28 @@ export class ActionHandler5e extends ActionHandler {
         this._combineSubcategoryWithCategory(result, skillsTitle, skillsCategory);
 
         return result;
+    }
+
+    _addMultiSkills(list, tokenId) {
+
+
+        let result = this.initializeEmptyCategory('skills');
+        let macroType = 'skill';
+        
+        let abbr = settings.get('abbreviateSkills');
+        
+        let skillsActions = Object.entries(game.dnd5e.config.skills).map(e => {
+            let name = abbr ? e[0] : e[1];
+            name = name.charAt(0).toUpperCase() + name.slice(1);
+            let encodedValue = [macroType, tokenId, e[0]].join(this.delimiter);
+            return { name: name, id: e[0], encodedValue: encodedValue }; 
+        });
+        let skillsCategory = this.initializeEmptySubcategory();
+        skillsCategory.actions = skillsActions;
+
+        let skillsTitle = this.i18n('tokenactionhud.skills');
+        this._combineSubcategoryWithCategory(result, skillsTitle, skillsCategory);
+        this._combineCategoryWithList(list, skillsTitle, result, true);
     }
 
      /** @private */

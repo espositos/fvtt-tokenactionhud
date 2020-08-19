@@ -329,7 +329,8 @@ export class TokenActionHUD extends Application {
 
         let token = this._getTargetToken(this.tokens?.controlled);
 
-        this.targetActions = await this.actions.buildActionList(token);
+        let multipleTokens = this.tokens?.controlled.length > 1 && !token;
+        this.targetActions = await this.actions.buildActionList(token, multipleTokens);
 
         if (!this.showHudEnabled()) {
             this.close();

@@ -18,6 +18,17 @@ export class RollHandlerBase5e extends RollHandler {
         let tokenId = payload[1];
         let actionId = payload[2];
 
+        if (tokenId === 'multi') {
+            canvas.tokens.controlled.forEach(t => {
+                let idToken = t.data._id;
+                this._handleMacros(event, macroType, idToken, actionId);
+            })
+        } else {
+            this._handleMacros(event, macroType, tokenId, actionId);
+        }
+    }
+
+    _handleMacros(event, macroType, tokenId, actionId) {
         switch (macroType) {
             case "ability":
                 this.rollAbilityMacro(event, tokenId, actionId);
