@@ -27,9 +27,7 @@ export class ActionHandlerWfrp extends ActionHandler {
         
         let weapons = this._getItemsList(actor, tokenId, 'weapon');
         let characteristics = this._getCharacteristics(actor, tokenId);
-
-        let filteredNames = this.filterManager.getFilteredNames('skills');
-        let skills = this._getSkills(actor, tokenId, filteredNames);
+        let skills = this._getSkills(actor, tokenId);
         
         let magic = this._getSpells(actor, tokenId);
         let prayers = this._getPrayers(actor, tokenId);
@@ -50,12 +48,6 @@ export class ActionHandlerWfrp extends ActionHandler {
             result.hudTitle = token.data?.name;
             
         return result;
-    }
-
-    /** @override */
-    _setFilterSuggestions(actor) {
-        let skillSuggestions = actor.items.filter(i => i.type === 'skill').map(s => { return { id: s._id, value: s.name } })
-        this.filterManager.setSuggestions('skills', skillSuggestions);
     }
 
     _getItemsList(actor, tokenId, type) {
@@ -86,7 +78,7 @@ export class ActionHandlerWfrp extends ActionHandler {
         return result;
     }
 
-    _getSkills(actor, tokenId, filteredNames) {
+    _getSkills(actor, tokenId) {
         let categoryId = 'skills';
         let macroType = 'skill';
         
@@ -96,35 +88,64 @@ export class ActionHandlerWfrp extends ActionHandler {
 
         result.choices = skills.length;
 
-        if (filteredNames.length > 0) {
-            if (this.filterManager.isBlocklist(categoryId)) {
-                skills = skills.filter(s => !filteredNames.includes(s.name));
-            }
-            else {
-                skills = skills.filter(s => filteredNames.includes(s.name));
-            }
-        }        
-
         let meleeSkills = skills.filter(s => s.data.name.startsWith('Melee'));
-        let meleeCategory = this.initializeEmptySubcategory();
-        meleeCategory.actions = this._produceMap(tokenId, meleeSkills, macroType);
+        let meleeId = `${categoryId}_melee`;
+        this._setFilterSuggestions(meleeId, meleeSkills);
+        let meleeCat = this.initializeEmptySubcategory(meleeId);
+        meleeCat.canFilter = meleeSkills.length > 0 ? true : false;
+        let filteredMeleeSkills = this._filterElements(meleeId, meleeSkills);
+        meleeCat.actions = this._produceMap(tokenId, filteredMeleeSkills, macroType);
 
         let rangedSkills = skills.filter(s => s.data.name.startsWith('Ranged'));
-        let rangedCategory = this.initializeEmptySubcategory();
-        rangedCategory.actions = this._produceMap(tokenId, rangedSkills, macroType);
+        let rangedId = `${categoryId}_ranged`;
+        this._setFilterSuggestions(rangedId, rangedSkills);
+        let rangedCat = this.initializeEmptySubcategory(rangedId);
+        rangedCat.canFilter = rangedSkills.length > 0 ? true : false;
+        let filteredRangedSkills = this._filterElements(rangedId, rangedSkills);        
+        rangedCat.actions = this._produceMap(tokenId, filteredRangedSkills, macroType);
 
         let basicSkills = skills.filter(s => !(s.data.name.startsWith('Melee') || s.data.name.startsWith('Ranged'))  && s.data.data.grouped.value !== 'isSpec');
-        let basicSkillsCat = this.initializeEmptySubcategory();
-        basicSkillsCat.actions = this._produceMap(tokenId, basicSkills, macroType);
+        let basicId = `${categoryId}_basic`;
+        this._setFilterSuggestions(basicId, basicSkills);
+        let basicSkillsCat = this.initializeEmptySubcategory(basicId);
+        let filteredBasicSkills = this._filterElements(basicId, basicSkills);
+        basicSkillsCat.canFilter = basicSkills.length > 0 ? true : false;
+        basicSkillsCat.actions = this._produceMap(tokenId, filteredBasicSkills, macroType);
 
         let advancedSkills = skills.filter(s => !(s.data.name.startsWith('Melee') || s.data.name.startsWith('Ranged')) && s.data.data.grouped.value === 'isSpec');
-        let advancedSkillsCat = this.initializeEmptySubcategory();
-        advancedSkillsCat.actions = this._produceMap(tokenId, advancedSkills, macroType);
+        let advancedId = `${categoryId}_advanced`;
+        this._setFilterSuggestions(advancedId, advancedSkills);
+        let advancedSkillsCat = this.initializeEmptySubcategory(advancedId);
+        advancedSkillsCat.canFilter = advancedSkills.length > 0 ? true : false;
+        let filteredAdvancedSkills = this._filterElements(advancedId, advancedSkills);
+        advancedSkillsCat.actions = this._produceMap(tokenId, filteredAdvancedSkills, macroType);
         
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.melee'), meleeCategory);
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.ranged'), rangedCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.melee'), meleeCat);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.ranged'), rangedCat);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.basic'), basicSkillsCat);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.advanced'), advancedSkillsCat);
+
+        return result;
+    }
+
+    /** @override */
+    _setFilterSuggestions(id, items) {
+        let suggestions = items?.map(s => { return { id: s._id, value: s.name } })
+        if (suggestions?.length > 0)
+            this.filterManager.setSuggestions(id, suggestions);
+    }
+
+    _filterElements(categoryId, skills) {
+        let filteredNames = this.filterManager.getFilteredNames(categoryId);
+        let result = skills.filter(s => !!s);
+        if (filteredNames.length > 0) {
+            if (this.filterManager.isBlocklist(categoryId)) {
+                result = skills.filter(s => !filteredNames.includes(s.name));
+            }
+            else {
+                result = skills.filter(s => filteredNames.includes(s.name));
+            }
+        }
 
         return result;
     }
