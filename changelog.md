@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.6.11] 2020-08-19
+### Added
+- DND5e: Added Midi QoL support via the Core Roller.
+
 ## [0.6.10] 2020-08-18
 ### Bugfix
 - DungeonWorld GM compendiums were not being shown
