@@ -19,10 +19,15 @@ export class RollHandlerBase5e extends RollHandler {
         let actionId = payload[2];
 
         if (tokenId === 'multi') {
-            canvas.tokens.controlled.forEach(t => {
-                let idToken = t.data._id;
-                this._handleMacros(event, macroType, idToken, actionId);
-            })
+            if (macroType === 'utility' && actionId.includes('toggle')) {
+                this.performMultiToggleUtilityMacro(actionId);
+            }
+            else {
+                canvas.tokens.controlled.forEach(t => {
+                    let idToken = t.data._id;
+                    this._handleMacros(event, macroType, idToken, actionId);
+                });
+            }
         } else {
             this._handleMacros(event, macroType, tokenId, actionId);
         }
@@ -58,19 +63,28 @@ export class RollHandlerBase5e extends RollHandler {
     }
     
     rollAbilityMacro(event, tokenId, checkId) {
-        super.getActor(tokenId).rollAbility(checkId, {event: event});
+        const actor = super.getActor(tokenId);
+       actor.rollAbility(...this.getRollBody(event, actor, checkId));
     }
     
     rollAbilityCheckMacro(event, tokenId, checkId) {
-        super.getActor(tokenId).rollAbilityTest(checkId, {event: event});
+        const actor = super.getActor(tokenId);
+        actor.rollAbilityTest(...this.getRollBody(event, actor, checkId));
     }
 
     rollAbilitySaveMacro(event, tokenId, checkId) {
-        super.getActor(tokenId).rollAbilitySave(checkId, {event: event});
+        const actor = super.getActor(tokenId);
+        actor.rollAbilitySave(...this.getRollBody(event, actor, checkId));
     }
     
     rollSkillMacro(event, tokenId, checkId) {
-        super.getActor(tokenId).rollSkill(checkId, {event: event});
+        const actor = super.getActor(tokenId);
+        actor.rollSkill(...this.getRollBody(event, actor, checkId));
+    }
+
+    getRollBody(event, actor, checkId) {
+        const speaker = ChatMessage.getSpeaker({scene: canvas.scene, token: actor.token});
+        return [checkId, {speaker: speaker, event, event}];
     }
     
     rollItemMacro(event, tokenId, itemId) {
@@ -117,6 +131,29 @@ export class RollHandlerBase5e extends RollHandler {
             case 'deathSave':
                 actor.rollDeathSave();
                 break;
+        }
+    }
+
+    async performMultiToggleUtilityMacro(actionId) {
+        if (actionId === 'toggleVisibility') {
+            const allVisible = canvas.tokens.controlled.every(t => !t.data.hidden);
+            canvas.tokens.controlled.forEach(t => {
+                if (allVisible)
+                    t.toggleVisibility();
+                else if (t.data.hidden)
+                    t.toggleVisibility();
+            })
+        }
+
+        if (actionId === 'toggleCombat') {
+            const allInCombat = canvas.tokens.controlled.every(t => t.data.inCombat);
+            for (let t of canvas.tokens.controlled) {
+                if (allInCombat)
+                    await t.toggleCombat();
+                else if (!t.data.inCombat)
+                    await t.toggleCombat();
+            }
+            Hooks.callAll('forceUpdateTokenActionHUD')
         }
     }
 }
