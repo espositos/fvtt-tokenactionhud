@@ -74,7 +74,7 @@ export class RollHandlerBase5e extends RollHandler {
         if (item.data.type === "spell")
             return actor.useSpell(item);
             
-        return item.roll();
+        return item.roll({event});
     }
 
     needsRecharge(item) {

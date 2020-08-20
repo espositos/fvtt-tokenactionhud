@@ -74,7 +74,10 @@ export class HandlersManager {
 
         switch (system) {
             case 'dnd5e':
-                choices = {'core': 'Core 5e'};
+                let coreTitle = 'Core 5e';
+                if (HandlersManager.isModuleActive('midi-qol'))
+                    coreTitle += ` [supports ${HandlersManager.getModuleTitle('midi-qol')}]`;
+                choices = {core: coreTitle};
                 this.addModule(choices, 'betterrolls5e');
                 this.addModule(choices, 'minor-qol');
                 break;
@@ -96,7 +99,7 @@ export class HandlersManager {
 
     static addModule(choices, id) {
         if (HandlersManager.isModuleActive(id)) {
-            let title = game.modules.get(id).data.title;
+            let title = HandlersManager.getModuleTitle(id);
             mergeObject(choices, { [id]: title })
         }
     }
@@ -104,5 +107,9 @@ export class HandlersManager {
     static isModuleActive(id) {
         let module = game.modules.get(id);
         return module && module.active;
+    }
+
+    static getModuleTitle(id) {
+        return game.modules.get(id)?.data.title ?? '';
     }
 }
