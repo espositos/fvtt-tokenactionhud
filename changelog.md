@@ -1,6 +1,10 @@
 # Changelog
 
 ## [0.6.11] 2020-08-19
+### Bugfix
+- WFRP: skill filter had disappeared with the addition of compendiums, so readding filter on skill subcategories
+
+## [0.6.11] 2020-08-19
 ### Added
 - DND5e: Added Midi QoL support via the Core Roller.
 
