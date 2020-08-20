@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.6.11] 2020-08-19
+## [0.6.12] 2020-08-19
 ### Bugfix
 - WFRP: skill filter had disappeared with the addition of compendiums, so readding filter on skill subcategories
 
