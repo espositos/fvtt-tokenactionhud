@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.6.13] 2020-08-23
+### Bugfix
+- DND5e Magic Items: Don't show category if it is empty
+
 ## [0.6.12] 2020-08-19
 ### Bugfix
 - WFRP: skill filter had disappeared with the addition of compendiums, so readding filter on skill subcategories
