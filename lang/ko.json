@@ -14,7 +14,7 @@
     "tokenactionhud.book": "책",
     "tokenactionhud.books": "책",
     "tokenactionhud.cantrips": "소마법",
-    "tokenactionhud.characteristics": "Characteristics",
+    "tokenactionhud.characteristics": "캐릭터성",
     "tokenactionhud.charts": "차트",
     "tokenactionhud.checks": "판정",
     "tokenactionhud.consumables": "소모품",    
@@ -66,6 +66,9 @@
     "tokenactionhud.restNight": "밤 동안 휴식",
     "tokenactionhud.treatWounds": "상처 치료",
     "tokenactionhud.heroPoints": "영웅 점수",
+    "tokenactionhud.doomed": "죽음",
+    "tokenactionhud.wounded": "부상",
+    "tokenactionhud.dying": "죽어감",
     
     "tokenactionhud.utility": "유틸리티",
     "tokenactionhud.toggleCombatState": "전투 상태 전환",
@@ -111,6 +114,8 @@
     "tokenactionhud.settings.playerPermission.hint": "활성화할 경우 플레이어가 HUD를 사용할 수 있다.",
     "tokenactionhud.settings.debug.name": "디버깅 활성화",
     "tokenactionhud.settings.debug.hint": "디버그 기록을 활성화한다.",
+    "tokenactionhud.settings.renderItemOnRightClick.name": "오른쪽 클릭으로 아이템 시트 보기",
+    "tokenactionhud.settings.renderItemOnRightClick.hint": "활성화된 경우 HUD에서 항목을 마우스 우클릭 시 항목의 시트가 표시된다(우클릭을 사용하는 다른 설정과 충돌 가능성 있음)",
     "tokenactionhud.settings.alwaysShowHud.name": "항상 HUD 표시",
     "tokenactionhud.settings.alwaysShowHud.hint": "유저에게 할당된 캐릭터가 있을 경우 토큰이 선택되지 않으면 HUD는 기본적으로 해당 캐릭터로 지정된다.",
     "tokenactionhud.settings.showHudTitle.name": "HUD 제목 표시",
@@ -149,6 +154,9 @@
     "tokenactionhud.settings.pf2e.printSpellCard.hint": "비활성화 될 경우 마우스 왼쪽 클릭을 하면 공격이 굴려지고(보너스 대화 상자의 경우 Shift+오른 클릭) 마우스 오른 클릭을 하면 피해가 굴려진다.(보너스 대화 상자의 경우 Ctrl+오른 클릭). 해당되지 않는 경우 주문 카드가 채팅에 출력된다.",
     "tokenactionhud.settings.pf2e.abbreviateSkills.name": "기술 및 능력치 이름을 줄임",
     "tokenactionhud.settings.pf2e.abbreviateSkills.hint": "활성화할 경우 기술 및 능력치는 3 글자 약어로 표시된다.",
+
+    "tokenactionhud.settings.sfrpg.showSpellInfo.name": "주문 정보 표시",
+    "tokenactionhud.settings.sfrpg.showSpellInfo.hint": "활성화될 경우 주문 이름 옆에 주문 저항, 차단, 집중, 내성 굴림 정보가 표기된다.",
 
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "GM 컴펜디움 보기",
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "활성화 했을 때 사용자가 GM인 경우 HUD바에 GM 이동, 전리품 굴림표, 차트가 포함된다."
