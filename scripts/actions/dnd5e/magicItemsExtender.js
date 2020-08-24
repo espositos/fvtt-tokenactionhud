@@ -57,7 +57,7 @@ export class MagicItemActionListExtender extends ActionListExtender {
             });
         });
 
-        actionList.categories.unshift(magicItemsCategory);
+        this._combineCategoryWithList(actionList, magicItemsCategory.name, magicItemsCategory, false);
     }
 
     _getImage(item) {
