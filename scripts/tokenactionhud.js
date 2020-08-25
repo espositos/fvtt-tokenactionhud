@@ -345,7 +345,7 @@ export class TokenActionHUD extends Application {
     validTokenChange(token) {
         let controlled = this.tokens?.controlled;
 
-        return controlled.some(t => t.id === token._id) || (controlled?.length === 0 && canvas.scene.placeables.some(t => t.id === this.targetActions?.tokenId));
+        return controlled.some(t => t.id === token._id) || (controlled?.length === 0 && canvas.tokens.placeables.some(t => t.id === this.targetActions?.tokenId));
     }
 
     // Is something being hovered on, is the setting on, and is it the token you're currently selecting.
