@@ -42,10 +42,10 @@ export class Filter {
 
     async updateFlag() {
         let flag = {isBlocklist: this.isBlocklist, elements: this.filteredElements}
-        game.user.setFlag('token-action-hud', `filters.${this.id}`, flag)
+        await game.user.setFlag('token-action-hud', `filters.${this.id}`, flag)
     }
 
     async clearFlag() {
-        game.user.setFlag('token-action-hud', 'filters', {[`-=${this.id}`]: null})    
+        await game.user.setFlag('token-action-hud', 'filters', {[`-=${this.id}`]: null})    
     }
 }

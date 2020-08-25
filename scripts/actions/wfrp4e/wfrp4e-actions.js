@@ -8,7 +8,7 @@ export class ActionHandlerWfrp extends ActionHandler {
     }    
 
     /** @override */
-    async doBuildActionList(token) {
+    async doBuildActionList(token, multipleTokens) {
         let result = this.initializeEmptyActionList();
 
         if (!token)

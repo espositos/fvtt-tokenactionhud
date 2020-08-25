@@ -23,7 +23,7 @@ export class FilterManager {
 
     async reset() {
         this. filters = [];
-        game.user.unsetFlag('token-action-hud', 'filters');
+        await game.user.unsetFlag('token-action-hud', 'filters');
     }
 
     createOrGetFilter(filterId) {

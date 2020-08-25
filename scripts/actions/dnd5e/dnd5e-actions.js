@@ -9,8 +9,13 @@ export class ActionHandler5e extends ActionHandler {
     
 
     /** @override */
-    doBuildActionList(token) {
+    doBuildActionList(token, multipleTokens) {
         let result = this.initializeEmptyActionList();
+
+        if (multipleTokens) {
+            this._buildMultipleTokenList(result);
+            return result;
+        }
 
         if (!token)
             return result;
@@ -64,6 +69,30 @@ export class ActionHandler5e extends ActionHandler {
             result.hudTitle = token.data?.name;
         
         return result;
+    }
+
+    _buildMultipleTokenList(list) {
+        list.tokenId = 'multi';
+        list.actorId = 'multi';
+
+        const allowedTypes = ['npc', 'character'];
+        let actors = canvas.tokens.controlled.map(t => t.actor).filter(a => allowedTypes.includes(a.data.type));
+
+        const tokenId = list.tokenId;
+
+        this._addMultiSkills(list, tokenId);
+
+        if (settings.get('splitAbilities')) {
+            let savesTitle = this.i18n('tokenactionhud.saves');
+            let checksTitle = this.i18n('tokenactionhud.checks');
+            this._addMultiAbilities(list, tokenId, 'saves', savesTitle, 'abilitySave');
+            this._addMultiAbilities(list, tokenId, 'checks', checksTitle, 'abilityCheck');
+        } else {
+            let abilitiesTitle = this.i18n('tokenactionhud.abilities');
+            this._addMultiAbilities(list, tokenId, 'abilities', abilitiesTitle, 'ability');
+        }
+
+        this._addMultiUtilities(list, tokenId, actors);
     }
     
     /** ITEMS **/
@@ -387,6 +416,26 @@ export class ActionHandler5e extends ActionHandler {
         return result;
     }
 
+    _addMultiSkills(list, tokenId) {
+        let result = this.initializeEmptyCategory('skills');
+        let macroType = 'skill';
+        
+        let abbr = settings.get('abbreviateSkills');
+        
+        let skillsActions = Object.entries(game.dnd5e.config.skills).map(e => {
+            let name = abbr ? e[0] : e[1];
+            name = name.charAt(0).toUpperCase() + name.slice(1);
+            let encodedValue = [macroType, tokenId, e[0]].join(this.delimiter);
+            return { name: name, id: e[0], encodedValue: encodedValue }; 
+        });
+        let skillsCategory = this.initializeEmptySubcategory();
+        skillsCategory.actions = skillsActions;
+
+        let skillsTitle = this.i18n('tokenactionhud.skills');
+        this._combineSubcategoryWithCategory(result, skillsTitle, skillsCategory);
+        this._combineCategoryWithList(list, skillsTitle, result, true);
+    }
+
      /** @private */
      _getAbilityList(tokenId, abilities, categoryId, categoryName, macroType) {
         let result = this.initializeEmptyCategory(categoryId);
@@ -411,6 +460,25 @@ export class ActionHandler5e extends ActionHandler {
         this._combineSubcategoryWithCategory(result, categoryName, abilityCategory);
 
         return result;
+    }
+
+    _addMultiAbilities(list, tokenId, categoryId, categoryName, macroType) {        
+        let cat = this.initializeEmptyCategory(categoryId);
+        
+        let abbr = settings.get('abbreviateSkills');
+        
+        let actions = Object.entries(game.dnd5e.config.abilities).map(e => {
+            let name = abbr ? e[0] : e[1];
+            name = name.charAt(0).toUpperCase() + name.slice(1);
+            let encodedValue = [macroType, tokenId, e[0]].join(this.delimiter);
+
+            return { name: name, id: e[0], encodedValue: encodedValue }; 
+        });
+        let abilityCategory = this.initializeEmptySubcategory();
+        abilityCategory.actions = actions;
+
+        this._combineSubcategoryWithCategory(cat, categoryName, abilityCategory);
+        this._combineCategoryWithList(list, categoryName, cat, true);
     }
 
     /** @private */
@@ -457,6 +525,50 @@ export class ActionHandler5e extends ActionHandler {
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.utility'), utility);
         
         return result;
+    }
+
+    /** @private */
+    _addMultiUtilities(list, tokenId, actors) {
+        let category = this.initializeEmptyCategory('utility');
+        let macroType = 'utility';
+        
+        let rests = this.initializeEmptySubcategory();
+        let utility = this.initializeEmptySubcategory();
+
+        if (actors.every(a => a.data.type === 'character')) {          
+            let shortRestValue = [macroType, tokenId, 'shortRest'].join(this.delimiter);
+            rests.actions.push({id:'shortRest', encodedValue: shortRestValue, name: this.i18n('tokenactionhud.shortRest')})
+            let longRestValue = [macroType, tokenId, 'longRest'].join(this.delimiter);
+            rests.actions.push({id:'longRest', encodedValue: longRestValue, name: this.i18n('tokenactionhud.longRest')})
+                        
+            let inspirationValue = [macroType, tokenId, 'inspiration'].join(this.delimiter);
+            let inspirationAction = {id:'inspiration', encodedValue: inspirationValue, name: this.i18n('tokenactionhud.inspiration')};
+            inspirationAction.cssClass = actors.every(a => a.data.data.attributes?.inspiration) ? 'active' : '';
+            utility.actions.push(inspirationAction)
+        }
+            
+        // let combatStateValue = [macroType, tokenId, 'toggleCombat'].join(this.delimiter);
+        // let combatAction = {id:'toggleCombat', encodedValue: combatStateValue, name: this.i18n('tokenactionhud.toggleCombatState')};
+        // combatAction.cssClass = actors.every(a => canvas.tokens.placeables.find(t => t.data._id === a.token.data._id).inCombat) ? 'active' : '';
+        // utility.actions.push(combatAction);
+        
+        if (game.user.isGM) {
+            let gm = this.initializeEmptySubcategory();
+            let visbilityValue = [macroType, tokenId, 'toggleVisibility'].join(this.delimiter);
+            let visibilityAction = {id:'toggleVisibility', encodedValue: visbilityValue, name: this.i18n('tokenactionhud.toggleVisibility')};
+            visibilityAction.cssClass = actors.every(a => {
+                let token = canvas.tokens.placeables.find(t => t.data._id === a.token?.data._id);
+                if (!token)
+                    token = canvas.tokens.placeables.find(t => t.actor.id === a.id);
+                return !token.data.hidden;
+            }) ? 'active' : '';
+            gm.actions.push(visibilityAction);
+            this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.gm'), gm);
+        }
+        
+        this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.rests'), rests);
+        this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.utility'), utility);
+        this._combineCategoryWithList(list, this.i18n('tokenactionhud.utility'), category)
     }
 
 
