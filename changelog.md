@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.7.0] 2020-08-25
+### Bugfix
+- Hopefully reduced chance of additional categories not being deleted properly
+
+### Added
+- DND5e - Added ability to select multiple tokens and roll checks and saves, as well as toggle their visibility (combat toggling will come later, at the moment there is a Foundry bug preventing its implementation)
+
+## [0.6.14] 2020-08-23
+### Bugfix
+- Added further Korean localization
+
 ## [0.6.13] 2020-08-23
 ### Bugfix
 - DND5e Magic Items: Don't show category if it is empty
