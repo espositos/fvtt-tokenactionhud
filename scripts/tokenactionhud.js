@@ -329,7 +329,8 @@ export class TokenActionHUD extends Application {
 
         let token = this._getTargetToken(this.tokens?.controlled);
 
-        this.targetActions = await this.actions.buildActionList(token);
+        let multipleTokens = this.tokens?.controlled.length > 1 && !token;
+        this.targetActions = await this.actions.buildActionList(token, multipleTokens);
 
         if (!this.showHudEnabled()) {
             this.close();
@@ -341,10 +342,10 @@ export class TokenActionHUD extends Application {
     }
 
     // Really just checks if only one token is being controlled. Not smart.
-    validTokenChange() {
+    validTokenChange(token) {
         let controlled = this.tokens?.controlled;
 
-        return (controlled?.length === 1 && controlled[0]) || controlled?.length === 0;
+        return controlled.some(t => t.id === token._id) || (controlled?.length === 0 && canvas.tokens.placeables.some(t => t.id === this.targetActions?.tokenId));
     }
 
     // Is something being hovered on, is the setting on, and is it the token you're currently selecting.

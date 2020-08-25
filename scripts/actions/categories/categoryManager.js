@@ -12,7 +12,7 @@ export class CategoryManager {
 
     async reset() {
         this.categories = [];
-        game.user.unsetFlag('token-action-hud', 'categories');
+        await game.user.unsetFlag('token-action-hud', 'categories');
     }
 
     async init() {
@@ -82,7 +82,7 @@ export class CategoryManager {
 
         for (var i = this.categories.length - 1; i >= 0; i--) {
             let category = this.categories[i];
-            if (!idMap.includes(category.id))
+            if (!(idMap.includes(category.id) || category.core))
                 this.deleteCategory(i);
         }
     }

@@ -125,7 +125,7 @@ export class FilterCategory {
     }
 
     async unsetFlag() {
-        game.user.setFlag('token-action-hud', 'categories', {[`-=${this.key}`]: null});
+        await game.user.setFlag('token-action-hud', 'categories', {[`-=${this.key}`]: null});
     }
 
     asTagifyEntry() {
