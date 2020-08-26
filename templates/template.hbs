@@ -4,9 +4,7 @@
     {{#if actions.hudTitle}}
     <div id="tah-hudTitle">{{actions.hudTitle}}</div>
     {{/if}}
-    {{#unless hovering}}
     <div id="tah-reposition"><i class="fas fa-arrows-alt"></i></div>
-    {{/unless}}
     {{#each actions.categories}}
     {{>"modules/token-action-hud/templates/category.hbs"}}
     {{/each}}

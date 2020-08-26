@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.1] 2020-08-26
+### Changed
+- The HUD can now be repositioned even when hovering is enabled.
+
 ## [0.7.0] 2020-08-25
 ### Bugfix
 - Hopefully reduced chance of additional categories not being deleted properly
