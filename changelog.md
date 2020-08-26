@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.2] 2020-08-26
+### Bugfix
+- PF2E - NPC strike bonus information should now calculate more correctly
+
 ## [0.7.1] 2020-08-26
 ### Changed
 - The HUD can now be repositioned even when hovering is enabled.
