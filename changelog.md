@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.7.2] 2020-08-26
+## [0.7.3] 2020-08-26
 ### Bugfix
 - PF2E - Spell heightening wasn't working
 
