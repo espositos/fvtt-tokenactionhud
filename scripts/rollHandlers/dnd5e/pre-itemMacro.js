@@ -7,6 +7,8 @@ export class ItemMacroPreRollHandler extends PreRollHandler {
 
     /** @override */
     prehandleActionEvent(event, encodedValue) {
+        this.registerKeyPresses(event);
+        
         let payload = encodedValue.split('|');
         
         if (payload.length != 3)
@@ -18,6 +20,9 @@ export class ItemMacroPreRollHandler extends PreRollHandler {
 
         if (macroType != 'itemMacro')
             return false;
+        
+        if (this.isRenderItem())
+            this.doRenderItem(tokenId, actionId);
 
         return this._tryExecuteItemMacro(event, tokenId, actionId);
     }
