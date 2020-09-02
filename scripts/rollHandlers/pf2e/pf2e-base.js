@@ -362,6 +362,7 @@ export class RollHandlerBasePf2e extends RollHandler {
             if (!item.data.hasOwnProperty('contextualData'))
                 item.data.contextualData = {};
             item.data.contextualData.spellLvl = castLevel;
+            data.spellLvl = castLevel;
         }
 
         const template = `systems/pf2e/templates/chat/${item.data.type}-card.html`;
