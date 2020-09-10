@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.5] 2020-09-10
+### Bugfix
+- DND5e consumables should no longer be shown twice, once in consumables and once in inconsumables
+
 ## [0.7.4] 2020-09-10
 ### Bugfix
 - Brazilian Portuguese now correctly referenced in the module.json.
