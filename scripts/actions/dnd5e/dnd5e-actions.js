@@ -129,7 +129,7 @@ export class ActionHandler5e extends ActionHandler {
         let allConsumables = sortedItems.filter(i => i.type == 'consumable');
         
         let expendedFiltered = this._filterExpendedItems(allConsumables);
-        let consumable = expendedFiltered.filter(c => (c.data.uses?.value !== null && c.data.uses?.value >= 0) || (c.data.uses?.max !== null && c.data.uses?.max >= 0) );
+        let consumable = expendedFiltered.filter(c => (c.data.uses?.value && c.data.uses?.value >= 0) || (c.data.uses?.max && c.data.uses?.max >= 0) );
         let consumableActions = consumable.map(c => this._buildItem(tokenId, actor, macroType, c));
         let consumablesCat = this.initializeEmptySubcategory();
         consumablesCat.actions = consumableActions;
