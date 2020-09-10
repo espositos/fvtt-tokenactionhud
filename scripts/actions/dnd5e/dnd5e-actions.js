@@ -128,12 +128,13 @@ export class ActionHandler5e extends ActionHandler {
     
         let allConsumables = sortedItems.filter(i => i.type == 'consumable');
         
-        let consumable = this._filterExpendedItems(allConsumables);
+        let expendedFiltered = this._filterExpendedItems(allConsumables);
+        let consumable = expendedFiltered.filter(c => (c.data.uses?.value !== null && c.data.uses?.value >= 0) || (c.data.uses?.max !== null && c.data.uses?.max >= 0) );
         let consumableActions = consumable.map(c => this._buildItem(tokenId, actor, macroType, c));
         let consumablesCat = this.initializeEmptySubcategory();
         consumablesCat.actions = consumableActions;
         
-        let inconsumable = allConsumables.filter(c => !(c.data.uses.max || c.data.uses.value) && c.data.consumableType != 'ammo')
+        let inconsumable = allConsumables.filter(c => !(c.data.uses?.max || c.data.uses?.value) && c.data.consumableType != 'ammo')
         let incomsumableActions = inconsumable.map(i => this._buildItem(tokenId, actor, macroType, i));
         let inconsumablesCat = this.initializeEmptySubcategory();
         inconsumablesCat.actions = incomsumableActions;
@@ -618,10 +619,10 @@ export class ActionHandler5e extends ActionHandler {
         if (!uses)
             return result;
 
-        if (uses.max === 0 && uses.value === 0)
+        if (!(uses.max || uses.value))
             return result;
 
-        result = uses.value;
+        result = uses.value ?? 0;
 
         if (uses.max > 0) {
             result += `/${uses.max}`
@@ -707,7 +708,7 @@ export class ActionHandler5e extends ActionHandler {
             if (!uses) return true;
 
             // if it has a max but value is 0, don't return.
-            if (uses.max > 0 && uses.value == 0)
+            if (uses.max > 0 && !uses.value)
                 return false;
 
             return true;
