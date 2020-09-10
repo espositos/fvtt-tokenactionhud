@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.4] 2020-09-10
+### Bugfix
+- Brazilian Portuguese now correctly referenced in the module.json.
+
 ## [0.7.3] 2020-08-26
 ### Bugfix
 - PF2E - Spell heightening wasn't working
