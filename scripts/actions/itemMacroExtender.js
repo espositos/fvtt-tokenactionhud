@@ -21,9 +21,8 @@ export class ItemMacroActionListExtender extends ActionListExtender {
             return;
 
         let replace = settings.get('itemMacroReplace');
-        let itemCatIds = ['spells', 'feats', 'inventory'];
 
-        actionList.categories.filter(c => itemCatIds.includes(c.id)).forEach(category => {
+        actionList.categories.forEach(category => {
             category.subcategories.forEach(subcategory => {
                 this.addSubcategoryActions(itemIds, subcategory, replace);
             });
@@ -63,6 +62,10 @@ export class ItemMacroActionListExtender extends ActionListExtender {
         newAction.img = action.img;
         newAction.icon = action.icon;
 
+        newAction.info1 = action.info1;
+        newAction.info2 = action.info2;
+        newAction.info3 = action.info3;
+    
         return newAction;
     }
 

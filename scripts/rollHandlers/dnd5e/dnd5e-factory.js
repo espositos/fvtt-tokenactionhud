@@ -22,8 +22,6 @@ export function getRollHandler(rollHandler = '') {
 
     if (HandlersManager.isModuleActive('magicitems'))
         handler.addPreRollHandler(new MagicItemsPreRollHandler());
-    if (HandlersManager.isModuleActive('itemacro'))
-        handler.addPreRollHandler(new ItemMacroPreRollHandler());
 
     return handler;
 }
