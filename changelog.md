@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.6] 2020-09-10
+### Changed
+- Moved support for Item-Macro to all systems. Now conducts a generic check to see if the module is running.
+
 ## [0.7.5] 2020-09-10
 ### Bugfix
 - DND5e consumables should no longer be shown twice, once in consumables and once in inconsumables
