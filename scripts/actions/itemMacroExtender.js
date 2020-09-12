@@ -1,5 +1,5 @@
-import {ActionListExtender} from '../actionListExtender.js';
-import * as settings from '../../settings.js';
+import {ActionListExtender} from './actionListExtender.js';
+import * as settings from '../settings.js';
 
 export class ItemMacroActionListExtender extends ActionListExtender {
     constructor() { super(); }

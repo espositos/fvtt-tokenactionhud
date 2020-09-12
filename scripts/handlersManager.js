@@ -1,6 +1,6 @@
 import { ActionHandler5e } from './actions/dnd5e/dnd5e-actions.js';
 import { MagicItemActionListExtender } from './actions/dnd5e/magicItemsExtender.js';
-import { ItemMacroActionListExtender } from './actions/dnd5e/itemMacroExtender.js';
+import { ItemMacroActionListExtender } from './actions/itemMacroExtender.js';
 import { ActionHandlerWfrp } from './actions/wfrp4e/wfrp4e-actions.js';
 import { ActionHandlerPf2e } from './actions/pf2e/pf2e-actions.js';
 import { ActionHandlerDw } from './actions/dungeonworld/dw-actions.js';
@@ -17,27 +17,38 @@ import * as rollSf from './rollHandlers/sfrpg/sfrpg-factory.js';
 export class HandlersManager {
     // Currently only planning for one kind of action handler for each system
     static getActionHandler(system, filterManager, categoryManager) {
+        let handler;
+        
         switch (system) {
             case 'dnd5e':
-                return HandlersManager.getActionHandler5e(filterManager, categoryManager);
+                handler = HandlersManager.getActionHandler5e(filterManager, categoryManager);
+                break;
             case 'pf2e':
-                return new ActionHandlerPf2e(filterManager, categoryManager);
+                handler = new ActionHandlerPf2e(filterManager, categoryManager);
+                break;
             case 'wfrp4e':
-                return new ActionHandlerWfrp(filterManager, categoryManager);
+                handler = new ActionHandlerWfrp(filterManager, categoryManager);
+                break;
             case 'dungeonworld':
-                return new ActionHandlerDw(filterManager, categoryManager);
+                handler = new ActionHandlerDw(filterManager, categoryManager);
+                break;
             case 'sfrpg':
-                return new ActionHandlerSfrpg(filterManager, categoryManager);
+                handler = new ActionHandlerSfrpg(filterManager, categoryManager);
+                break;
+            default:
+                throw new Error('System not supported by Token Action HUD');
         }
-        throw new Error('System not supported by Token Action HUD');
+
+        if (HandlersManager.isModuleActive('itemacro'))
+            handler.addFurtherActionHandler(new ItemMacroActionListExtender())
+
+        return handler;
     }
 
     static getActionHandler5e(filterManager, categoryManager) {
         let actionHandler = new ActionHandler5e(filterManager, categoryManager);
         if (HandlersManager.isModuleActive('magicitems'))
             actionHandler.addFurtherActionHandler(new MagicItemActionListExtender())
-        if (HandlersManager.isModuleActive('itemacro'))
-            actionHandler.addFurtherActionHandler(new ItemMacroActionListExtender())
         return actionHandler;
     }
 

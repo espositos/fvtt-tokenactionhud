@@ -78,7 +78,19 @@ export const registerSettings = function(system, rollHandlers) {
     });
    
     systemSettings.setSettings(system, app, updateSettings);
-    
+
+    if (game.modules.get('itemacro')?.active) {
+        game.settings.register(app,'itemMacroReplace', {
+            name: game.i18n.localize('tokenactionhud.settings.dnd5e.itemMacroReplace.name'),
+            hint: game.i18n.localize('tokenactionhud.settings.dnd5e.itemMacroReplace.hint'),
+            scope: "client",
+            config: true,
+            type: Boolean,
+            default: true,
+            onChange: value => { updateSettings(value); }
+        });
+    }
+            
     game.settings.register(app,'playerPermission', {
         name : game.i18n.localize('tokenactionhud.settings.playerPermission.name'),
         hint : game.i18n.localize('tokenactionhud.settings.playerPermission.hint'),
