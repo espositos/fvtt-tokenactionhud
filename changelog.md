@@ -1,8 +1,12 @@
 # Changelog
 
-## [0.7.6] 2020-09-10
+## [0.7.7] 2020-09-12
 ### Changed
 - Moved support for Item-Macro to all systems. Now conducts a generic check to see if the module is running.
+
+## [0.7.6] 2020-09-10
+### Nothing
+- Trying to fix a bug but it has no effect.
 
 ## [0.7.5] 2020-09-10
 ### Bugfix
