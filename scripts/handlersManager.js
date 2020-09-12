@@ -12,6 +12,7 @@ import * as rollWfrp from './rollHandlers/wfrp4e/wfrp4e-factory.js';
 import * as rollPf2e from './rollHandlers/pf2e/pf2e-factory.js';
 import * as rollDw from './rollHandlers/dungeonworld/dw-factory.js';
 import * as rollSf from './rollHandlers/sfrpg/sfrpg-factory.js';
+import { ItemMacroPreRollHandler } from './rollHandlers/dnd5e/pre-itemMacro.js';
 
 
 export class HandlersManager {
@@ -55,28 +56,31 @@ export class HandlersManager {
     // Possibility for several types of rollers (e.g. BetterRolls, MinorQOL for DND5e),
     // so pass off to a RollHandler factory
     static getRollHandler(system, handlerId) {
-        let rollHandler;
+        let handler;
         switch (system) {
             case 'dnd5e':
-                rollHandler = roll5e.getRollHandler(handlerId)
+                handler = roll5e.getRollHandler(handlerId)
                 break;
             case 'pf2e':
-                rollHandler =  rollPf2e.getRollHandler(handlerId);
+                handler =  rollPf2e.getRollHandler(handlerId);
                 break;
             case 'wfrp4e':
-                rollHandler =  rollWfrp.getRollHandler(handlerId);
+                handler =  rollWfrp.getRollHandler(handlerId);
                 break;
             case 'dungeonworld':
-                rollHandler =  rollDw.getRollHandler(handlerId);
+                handler =  rollDw.getRollHandler(handlerId);
                 break;
             case 'sfrpg':
-                rollHandler =  rollSf.getRollHandler(handlerId);
+                handler =  rollSf.getRollHandler(handlerId);
                 break;
         }
 
-        rollHandler.addPreRollHandler(new CompendiumMacroPreHandler())
+        handler.addPreRollHandler(new CompendiumMacroPreHandler())
 
-        return rollHandler;
+        if (HandlersManager.isModuleActive('itemacro'))
+            handler.addPreRollHandler(new ItemMacroPreRollHandler())
+
+        return handler;
     }
 
     // Not yet implemented.
