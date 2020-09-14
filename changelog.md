@@ -2,6 +2,10 @@
 
 ## [0.7.8] 2020-09-12
 ### Bugfix
+- DND5e - support for multiple tokens were not working when Item-Macro was active.
+
+## [0.7.8] 2020-09-12
+### Bugfix
 - Forgot to add Item-Macro roll support, only added the actions.
 
 ## [0.7.7] 2020-09-12
