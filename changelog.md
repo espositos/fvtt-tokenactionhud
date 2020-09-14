@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.10] 2020-09-15
+### Bugfix
+- DND5e - continue trying to fix multiple token selection.
+
 ## [0.7.9] 2020-09-14
 ### Bugfix
 - DND5e - support for multiple tokens were not working when Item-Macro was active.

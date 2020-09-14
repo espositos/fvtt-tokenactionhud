@@ -26,7 +26,7 @@ export class ActionHandler {
 
     async buildActionList(token, multipleTokens) {
         let actionList = await this.doBuildActionList(token, multipleTokens);
-        this._doBuildFurtherActions(token, actionList);
+        this._doBuildFurtherActions(token, actionList, multipleTokens);
         this.registerCoreCategories(actionList.categories);
         await this.categoryManager.addCategoriesToActionList(this, actionList);
         return actionList;
@@ -34,8 +34,8 @@ export class ActionHandler {
 
     doBuildActionList(token) {};
 
-    _doBuildFurtherActions(token, actionList) {
-        this.furtherActionHandlers.forEach(handler => handler.extendActionList(actionList))
+    _doBuildFurtherActions(token, actionList, multipleTokens) {
+        this.furtherActionHandlers.forEach(handler => handler.extendActionList(actionList, multipleTokens))
     }
 
     addFurtherActionHandler(handler) {
