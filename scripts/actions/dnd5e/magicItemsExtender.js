@@ -5,7 +5,10 @@ export class MagicItemActionListExtender extends ActionListExtender {
     constructor() { super(); }
 
     /** @override */
-    extendActionList(actionList) {
+    extendActionList(actionList, multipleTokens) {
+        if (multipleTokens)
+            return;
+            
         let tokenId = actionList.tokenId;
         let actorId = actionList.actorId;
 
