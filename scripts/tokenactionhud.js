@@ -221,8 +221,8 @@ export class TokenActionHUD extends Application {
         if (hudTitle.length > 0)
             hudTitle.css('top', -hudTitle[0].getBoundingClientRect().height)
 
-        if (settings.get('onTokenHover')) {           
-            let token = canvas.tokens.placeables.find(t => t.data._id === this.targetActions.tokenId);
+        let token = canvas?.tokens?.placeables.find(t => t.data._id === this.targetActions?.tokenId);
+        if (settings.get('onTokenHover') && token) {           
             this.setHoverPos(token);
         } else {
             this.setUserPos();

@@ -444,6 +444,9 @@ export class ActionHandler5e extends ActionHandler {
         let abbr = settings.get('abbreviateSkills');
         
         let actions = Object.entries(game.dnd5e.config.abilities).map(e => {
+            if (abilities[e[0]].value === 0)
+                return;
+
             let name = abbr ? e[0] : e[1];
             name = name.charAt(0).toUpperCase() + name.slice(1);
             let encodedValue = [macroType, tokenId, e[0]].join(this.delimiter);
@@ -456,7 +459,7 @@ export class ActionHandler5e extends ActionHandler {
             return { name: name, id: e[0], encodedValue: encodedValue, icon: icon }; 
         });
         let abilityCategory = this.initializeEmptySubcategory();
-        abilityCategory.actions = actions;
+        abilityCategory.actions = actions.filter(a => !!a);
 
         this._combineSubcategoryWithCategory(result, categoryName, abilityCategory);
 
