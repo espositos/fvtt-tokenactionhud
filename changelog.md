@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.11] 2020-09-15
+### Bugfix
+- Try to suppress worldtransform error (didn't do anything bad, was just annoying)
+
+### Changed
+- DND5e - if a token has 0 in a stat (e.g. vehicles in wisdom) then that save or ability will not be displayed while selected
+
 ## [0.7.10] 2020-09-15
 ### Bugfix
 - DND5e - continue trying to fix multiple token selection.
