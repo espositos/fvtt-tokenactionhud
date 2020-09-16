@@ -201,8 +201,9 @@ export class RollHandlerBasePf2e extends RollHandler {
             actor.rollSkill(event, actionId);
         }
         else {
-            const opts = actor.getRollOptions(['all', 'skill-check', CONFIG.PF2E.skills[actionId] ?? actionId]);
-            skill.roll(event);
+            var abilityBased = `${skill.ability}-based`;
+            const opts = actor.getRollOptions(['all', 'skill-check', abilityBased, CONFIG.PF2E.skills[actionId] ?? actionId]);
+            skill.roll(event, opts);
         }
     }
 
