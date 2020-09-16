@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.14] 2020-09-16
+### Bugfix
+- MagicItemExtender - embarrassingly failed to apply De Morgan's law properly when checking null inventory
+
 ## [0.7.13] 2020-09-16
 ### Bugfix
 - PF2e - Something I don't understand with skill checks was failing
