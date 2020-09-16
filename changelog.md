@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.13] 2020-09-16
+### Bugfix
+- PF2e - Something I don't understand with skill checks was failing
+
 ## [0.7.12] 2020-09-16
 ### Bugfix
 - HUD would fail to load on characters where magic item was the only item and it had no activation cost.
