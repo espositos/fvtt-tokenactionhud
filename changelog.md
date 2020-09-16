@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.12] 2020-09-16
+### Bugfix
+- HUD would fail to load on characters where magic item was the only item and it had no activation cost.
+
 ## [0.7.11] 2020-09-15
 ### Bugfix
 - Try to suppress worldtransform error (didn't do anything bad, was just annoying)
