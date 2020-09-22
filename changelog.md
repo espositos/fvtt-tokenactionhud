@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.15] 2020-09-22
+### Bugfix
+- SFRPG - recognise professions for skills
+
 ## [0.7.14] 2020-09-16
 ### Bugfix
 - MagicItemExtender - embarrassingly failed to apply De Morgan's law properly when checking null inventory

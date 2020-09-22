@@ -69,6 +69,7 @@
     "tokenactionhud.doomed": "Doomed",
     "tokenactionhud.wounded": "Wounded",
     "tokenactionhud.dying": "Dying",
+    "tokenactionhud.profession": "Profession",
     
     "tokenactionhud.utility": "Utility",
     "tokenactionhud.toggleCombatState": "Toggle Combat State",
