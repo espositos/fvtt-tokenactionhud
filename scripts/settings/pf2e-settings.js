@@ -1,13 +1,13 @@
 export function registerSettings(app, updateSettings) {    
-        game.settings.register(app,'showPcAbilities', {
-            name: game.i18n.localize('tokenactionhud.settings.pf2e.showPcAbilities.name'),
-            hint: game.i18n.localize('tokenactionhud.settings.pf2e.showPcAbilities.hint'),
-            scope: "client",
-            config: true,
-            type: Boolean,
-            default: true,
-            onChange: value => { updateSettings(value); }
-        });
+    game.settings.register(app,'showPcAbilities', {
+        name: game.i18n.localize('tokenactionhud.settings.pf2e.showPcAbilities.name'),
+        hint: game.i18n.localize('tokenactionhud.settings.pf2e.showPcAbilities.hint'),
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: true,
+        onChange: value => { updateSettings(value); }
+    });
     
     game.settings.register(app,'showNpcAbilities', {
         name: game.i18n.localize('tokenactionhud.settings.pf2e.showNpcAbilities.name'),
@@ -16,6 +16,16 @@ export function registerSettings(app, updateSettings) {
         config: true,
         type: Boolean,
         default: true,
+        onChange: value => { updateSettings(value); }
+    });
+    
+    game.settings.register(app,'ignorePassiveActions', {
+        name: game.i18n.localize('tokenactionhud.settings.pf2e.ignorePassiveActions.name'),
+        hint: game.i18n.localize('tokenactionhud.settings.pf2e.ignorePassiveActions.hint'),
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: false,
         onChange: value => { updateSettings(value); }
     });
 

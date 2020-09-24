@@ -70,6 +70,8 @@
     "tokenactionhud.wounded": "Wounded",
     "tokenactionhud.dying": "Dying",
     "tokenactionhud.profession": "Profession",
+    "tokenactionhud.exploration": "Exploration",
+    "tokenactionhud.downtime": "Downtime",
     
     "tokenactionhud.utility": "Utility",
     "tokenactionhud.toggleCombatState": "Toggle Combat State",
@@ -155,6 +157,8 @@
     "tokenactionhud.settings.pf2e.printSpellCard.hint": "If disabled, left-clicking a spell will roll attack (shift right-click for bonus dialogue), right-clicking will roll damage (ctrl right-click for bonus dialogue). If neither are applicable, the spell card will be printed to chat anyway.",
     "tokenactionhud.settings.pf2e.abbreviateSkills.name": "Abbreviate skill and ability names",
     "tokenactionhud.settings.pf2e.abbreviateSkills.hint": "If enabled, skills and abilities will use a three-character abbreviation.",
+    "tokenactionhud.settings.pf2e.ignorePassiveActions.name": "Ignore passive actions",
+    "tokenactionhud.settings.pf2e.ignorePassiveActions.hint": "If enabled, passive actions are not shown.",
 
     "tokenactionhud.settings.sfrpg.showSpellInfo.name": "Display spell information",
     "tokenactionhud.settings.sfrpg.showSpellInfo.hint": "If enabled, spell resistance, dismissible, concentration and save information noted next to the spell name.",

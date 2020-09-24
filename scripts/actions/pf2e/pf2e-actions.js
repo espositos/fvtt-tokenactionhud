@@ -88,20 +88,36 @@ export class ActionHandlerPf2e extends ActionHandler {
 
         let filteredActions = (actor.items ?? []).filter(a => a.type === macroType);
 
+        if (settings.get('ignorePassiveActions'))
+            filteredActions = filteredActions.filter(a => a.data.data.actionType.value !== 'passive');
+
         let actions = this.initializeEmptySubcategory();
-        actions.actions = this._produceMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'action'), macroType);
+        actions.actions = this._produceMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'action' && this._actionIsShort(a)), macroType);
 
         let reactions = this.initializeEmptySubcategory();
-        reactions.actions = this._produceMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'reaction'), macroType);
+        reactions.actions = this._produceMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'reaction' && this._actionIsShort(a)), macroType);
 
         let free = this.initializeEmptySubcategory();
-        free.actions = this._produceMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'free'), macroType);
+        free.actions = this._produceMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'free' && this._actionIsShort(a)), macroType);
+
+        let exploration = this.initializeEmptySubcategory();
+        exploration.actions = this._produceMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.traits?.value.includes('exploration')), macroType);
+
+        let downtime = this.initializeEmptySubcategory();
+        downtime.actions = this._produceMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.traits?.value.includes('downtime')), macroType);
 
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.actions'), actions);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.reactions'), reactions);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.free'), free);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.exploration'), exploration);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.downtime'), downtime);
 
         return result;
+    }
+
+    /** @private */
+    _actionIsShort(action) {
+        return !(action.data.data.traits?.value.includes('exploration') || action.data.data.traits?.value.includes('downtime'));
     }
 
     /** @private */
