@@ -24,14 +24,14 @@ export class ActionHandlerPf2e extends ActionHandler {
         if (!actor)
             return result;
 
-        let legitimateActors = ['character', 'npc'];
+        let legitimateActors = ['character', 'npc', 'familiar'];
         let actorType = actor.data.type;
         if (!legitimateActors.includes(actorType))
             return result;
         
         result.actorId = actor._id;
 
-        if (actorType === 'character')
+        if (actorType === 'character' || actorType === 'familiar')
             this.pcActionHandler.buildActionList(result, tokenId, actor);
         
         if (actorType === 'npc')

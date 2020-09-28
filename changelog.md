@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.17] 2020-09-28
+### Added
+- Pf2e - Support for Familiars
+
 ## [0.7.16] 2020-09-22
 ### Bugfix
 - Pf2e - Add action categories for exploration and downtime and add setting for ignoring passive actions (default: false)
