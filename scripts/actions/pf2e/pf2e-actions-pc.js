@@ -8,31 +8,52 @@ export class PcActionHandlerPf2e {
     }
 
     buildActionList(result, tokenId, actor) {
-        let strikes = this._getStrikesList(actor, tokenId);
-        let actions = this.baseHandler._getActionsList(actor, tokenId);
-        let items = this.baseHandler._getItemsList(actor, tokenId);
-        let spells = this.baseHandler._getSpellsList(actor, tokenId);
-        let feats = this.baseHandler._getFeatsList(actor, tokenId);
+        const type = actor.data.type;
+        if (type === 'familiar') {
+            this._forFamiliar(result, tokenId, actor);
+        } else {
+            this._forCharacter(result, tokenId, actor);
+        }
+
         let skills = this._getSkillsList(actor, tokenId);
         let saves = this.baseHandler._getSaveList(actor, tokenId);
         let attributes = this._getAttributeList(actor, tokenId);
         let utilities = this.baseHandler._getUtilityList(actor, tokenId);
-        
-        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.strikes'), strikes);
-        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.actions'), actions);
-        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.inventory'), items);
-        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.spells'), spells);
-        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.features'), feats);
+
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.skills'), skills);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.saves'), saves);
 
-        if (settings.get('showPcAbilities')) {
+        if (settings.get('showPcAbilities') && type === 'character') {
             let abilities = this.baseHandler._getAbilityList(actor, tokenId);
             this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.abilities'), abilities);
         }
 
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.attributes'), attributes);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.utility'), utilities)
+    }
+
+    /** @private */
+    _forFamiliar(result, tokenId, actor) {
+        let attack = this._getFamiliarAttack(actor, tokenId);
+        let items = this.baseHandler._getItemsList(actor, tokenId);
+
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.inventory'), items);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.attack'), attack);
+    }
+
+    /** @private */
+    _forCharacter(result, tokenId, actor) {
+        let strikes = this._getStrikesList(actor, tokenId);
+        let actions = this.baseHandler._getActionsList(actor, tokenId);
+        let spells = this.baseHandler._getSpellsList(actor, tokenId);
+        let feats = this.baseHandler._getFeatsList(actor, tokenId);
+        let items = this.baseHandler._getItemsList(actor, tokenId);
+        
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.strikes'), strikes);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.actions'), actions);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.inventory'), items);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.spells'), spells);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.features'), feats);
     }
 
     /** @private */
@@ -81,6 +102,29 @@ export class PcActionHandlerPf2e {
 
             this.baseHandler._combineSubcategoryWithCategory(result, s.name, subcategory);
         });
+
+        return result;
+    }
+
+    /** @private */
+    _getFamiliarAttack(actor, tokenId) {
+        let macroType = 'familiarAttack';
+        let result = this.baseHandler.initializeEmptyCategory('attack');
+
+        let subcategory = this.baseHandler.initializeEmptySubcategory();
+                
+        const att = actor.data.data.attack;
+        const attMod = att.totalModifier < 0 ? att.totalModifier : `+${att.totalModifier}`;
+
+        let name = att.name.charAt(0).toUpperCase() + att.name.slice(1);
+
+        let encodedValue = [macroType, tokenId, att.name].join(this.baseHandler.delimiter);
+
+        let action = {name: name, encodedValue: encodedValue, encodedValue, info1: attMod}
+            
+        subcategory.actions = [action];
+            
+        this.baseHandler._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.attack'), subcategory);
 
         return result;
     }

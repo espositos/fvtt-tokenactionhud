@@ -87,6 +87,7 @@
     "tokenactionhud.rwa": "Ranged Weapon Attacks",
     "tokenactionhud.msa": "Melee Spell Attacks",
     "tokenactionhud.rsa": "Ranged Spell Attacks",
+    "tokenactionhud.attack": "Attack",
     "tokenactionhud.healing": "Healing",
     
     "tokenactionhud.blocklistLabel": "blocklist: hide / allowlist: show",

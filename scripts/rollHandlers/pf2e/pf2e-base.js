@@ -34,6 +34,7 @@ export class RollHandlerBasePf2e extends RollHandler {
                     this._handleUniqueActionsNpc(macroType, event, tokenId, actor, actionId);
                     break;
                 case 'character':
+                case 'familiar':
                     await this._handleUniqueActionsChar(macroType, event, tokenId, actor, actionId);
                     break;
             }
@@ -85,6 +86,9 @@ export class RollHandlerBasePf2e extends RollHandler {
             case 'wounded':
             case 'dying':
                 await this._adjustAttribute(event, actor, macroType, 'value', actionId);
+                break;
+            case 'familiarAttack':
+                this._rollFamiliarAttack(event, actor);
                 break;
         }
     }
@@ -285,6 +289,12 @@ export class RollHandlerBasePf2e extends RollHandler {
         let item = actor.getOwnedItem(actionId);
         
         item.roll();
+    }
+
+    /** @private */
+    _rollFamiliarAttack(event, actor) {
+        const options = actor.getRollOptions(['all', 'attack']);
+        actor.data.data.attack.roll(event, options);
     }
 
     /** @private */
