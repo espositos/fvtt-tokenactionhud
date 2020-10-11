@@ -1,6 +1,6 @@
 
-import { PreRollHandler } from '../preRollHandler.js';
-import * as settings from '../../settings.js';
+import { PreRollHandler } from './preRollHandler.js';
+import * as settings from '../settings.js';
 
 export class ItemMacroPreRollHandler extends PreRollHandler {
     constructor() {super();}

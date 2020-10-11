@@ -5,6 +5,7 @@ import { ActionHandlerWfrp } from './actions/wfrp4e/wfrp4e-actions.js';
 import { ActionHandlerPf2e } from './actions/pf2e/pf2e-actions.js';
 import { ActionHandlerDw } from './actions/dungeonworld/dw-actions.js';
 import { ActionHandlerSfrpg } from './actions/sfrpg/sfrpg-actions.js';
+import { ActionHandlerSw5e } from './actions/sw5e/sw5e-actions.js';
 import { CompendiumMacroPreHandler } from './rollHandlers/compendiumMacroPreHandler.js';
 
 import * as roll5e from './rollHandlers/dnd5e/dnd5e-factory.js';
@@ -12,7 +13,8 @@ import * as rollWfrp from './rollHandlers/wfrp4e/wfrp4e-factory.js';
 import * as rollPf2e from './rollHandlers/pf2e/pf2e-factory.js';
 import * as rollDw from './rollHandlers/dungeonworld/dw-factory.js';
 import * as rollSf from './rollHandlers/sfrpg/sfrpg-factory.js';
-import { ItemMacroPreRollHandler } from './rollHandlers/dnd5e/pre-itemMacro.js';
+import * as rollSw from './rollHandlers/sw5e/sw5e-factory.js';
+import { ItemMacroPreRollHandler } from './rollHandlers/pre-itemMacro.js';
 
 
 export class HandlersManager {
@@ -35,6 +37,9 @@ export class HandlersManager {
                 break;
             case 'sfrpg':
                 handler = new ActionHandlerSfrpg(filterManager, categoryManager);
+                break;
+            case 'sw5e':
+                handler = new ActionHandlerSw5e(filterManager, categoryManager);
                 break;
             default:
                 throw new Error('System not supported by Token Action HUD');
@@ -73,6 +78,9 @@ export class HandlersManager {
             case 'sfrpg':
                 handler =  rollSf.getRollHandler(handlerId);
                 break;
+            case 'sw5e':
+                handler =  rollSw.getRollHandler(handlerId);
+                break;
         }
 
         handler.addPreRollHandler(new CompendiumMacroPreHandler())
@@ -104,8 +112,12 @@ export class HandlersManager {
                 break;
             case 'dungeonworld':
                 choices = {'core': 'Core DungeonWorld'};
+                break;
             case 'sfrpg':
-                choices = {'core': 'Core sfrpg'};
+                choices = {'core': 'Core Starfinder'};
+                break;
+            case 'sw5e':
+                choices = {'core': 'Core Star Wars RPG'};
                 break;
         }
 
