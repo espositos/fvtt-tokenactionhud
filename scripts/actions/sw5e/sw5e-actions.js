@@ -301,21 +301,9 @@ export class ActionHandlerSw5e extends ActionHandler {
     /** @private */
     _addPowerInfo(s, power) {
         let c = s.data.components;
-
-        if (c?.vocal)
-            power.info1 += this.i18n('SW5E.ComponentVerbal').charAt(0).toUpperCase();
-
-        if (c?.somatic)
-            power.info1 += this.i18n('SW5E.ComponentSomatic').charAt(0).toUpperCase();
         
-        if (c?.material)
-            power.info1 += this.i18n('SW5E.ComponentMaterial').charAt(0).toUpperCase();
-
         if (c?.concentration)
             power.info2 += this.i18n('SW5E.Concentration').charAt(0).toUpperCase();
-
-        if (c?.ritual)
-            power.info3 += this.i18n('SW5E.Ritual').charAt(0).toUpperCase();
     }
     
     /** FEATS **/
