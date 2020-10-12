@@ -711,7 +711,7 @@ export class ActionHandlerSw5e extends ActionHandler {
             //action: `<i class="fas fa-fist-raised"></i>`,
             bonus: `<i class="fas fa-plus"></i>`,
             crew: `<i class="fas fa-users"></i>`,
-            legendary: `<i class="fas fa-dragon"></i>`,
+            legendary: `<i class="fas fa-jedi"></i>`,
             reaction: `<i class="fas fa-bolt"></i>`,
             //none: `<i class="far fa-circle"></i>`,
             special: `<i class="fas fa-star"></i>`,
