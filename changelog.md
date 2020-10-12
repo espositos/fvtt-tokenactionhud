@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.7.17] 2020-09-28
+## [0.7.18] 2020-10-12
 ### Added
 - SW5E - Support for Star Wars 5e
 
