@@ -5,6 +5,7 @@ import * as pf2esettings from "./pf2e-settings.js"
 import * as wfrp4eSettings from "./wfrp4e-settings.js"
 import * as sfrpgSettings from "./sfrpg-settings.js"
 import * as sw5eettings from "./sw5e-settings.js"
+import * as demonlordSettings from "./demonlord-settings.js"
 
 export function setSettings(system, app, updateSettings) {
     switch (system) {
@@ -24,6 +25,12 @@ export function setSettings(system, app, updateSettings) {
             break;
         case "sw5e":
             sw5eettings.registerSettings(app, updateSettings);
+            break;
+        case "sw5e":
+            sw5eettings.registerSettings(app, updateSettings);
+            break;
+        case "demonlord":
+            demonlordSettings.registerSettings(app, updateSettings);
             break;
         default:
             throw new Error(`Unknown system: ${system}`);
