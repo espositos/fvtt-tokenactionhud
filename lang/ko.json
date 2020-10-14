@@ -159,5 +159,15 @@
     "tokenactionhud.settings.sfrpg.showSpellInfo.hint": "활성화될 경우 주문 이름 옆에 주문 저항, 차단, 집중, 내성 굴림 정보가 표기된다.",
 
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "GM 컴펜디움 보기",
-    "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "활성화 했을 때 사용자가 GM인 경우 HUD바에 GM 이동, 전리품 굴림표, 차트가 포함된다."
+    "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "활성화 했을 때 사용자가 GM인 경우 HUD바에 GM 이동, 전리품 굴림표, 차트가 포함된다.",
+    
+    "tokenactionhud.settings.demonlord.challenge": "Challenge Roll",
+    "tokenactionhud.settings.demonlord.attackoptions": "Attack Options",
+    "tokenactionhud.settings.demonlord.specialattacks": "Special Attacks",
+    "tokenactionhud.settings.demonlord.rest": "Rest",
+    "tokenactionhud.settings.demonlord.attributestrength": "Strength",
+    "tokenactionhud.settings.demonlord.attributeagility": "Agility",
+    "tokenactionhud.settings.demonlord.attributeintellect": "Intellect",
+    "tokenactionhud.settings.demonlord.attributewill": "Will",
+    "tokenactionhud.settings.demonlord.attributeperception": "Perception"
 }

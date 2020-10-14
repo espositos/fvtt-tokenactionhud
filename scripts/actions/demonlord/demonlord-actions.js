@@ -34,17 +34,17 @@ export class ActionHandlerDemonlord extends ActionHandler {
         let spells = this._getSpells(actor, tokenId);
         let utility = this._getUtilityList(actor, tokenId);
 
-        this._combineCategoryWithList(result, this.i18n('tokenactionhud.challenge'), attributes);
+        this._combineCategoryWithList(result, this.i18n('tokenactionhud.settings.demonlord.challenge'), attributes);
 
         if (actor.data.type === 'character')
             this._combineCategoryWithList(result, this.i18n('tokenactionhud.weapons'), weapons);
         else
-            this._combineCategoryWithList(result, this.i18n('tokenactionhud.attackoptions'), weapons);
+            this._combineCategoryWithList(result, this.i18n('tokenactionhud.settings.demonlord.attackoptions'), weapons);
 
         if (actor.data.type === 'character')
             this._combineCategoryWithList(result, this.i18n('tokenactionhud.talents'), talents);
         else
-            this._combineCategoryWithList(result, this.i18n('tokenactionhud.specialattacks'), talents);
+            this._combineCategoryWithList(result, this.i18n('tokenactionhud.settings.demonlord.specialattacks'), talents);
 
         this._combineCategoryWithList(result, this.i18n('tokenactionhud.spells'), spells);
         this._combineCategoryWithList(result, this.i18n('tokenactionhud.utility'), utility);
@@ -76,14 +76,14 @@ export class ActionHandlerDemonlord extends ActionHandler {
 
         let rollableAttributes = Object.entries(actor.data.data.attributes);
         let attributesMap = rollableAttributes.map(c => {
-            let name = this.i18n('tokenactionhud.attribute' + c[0]);
+            let name = this.i18n('tokenactionhud.settings.demonlord.attribute' + c[0]);
             let encodedValue = [macroType, tokenId, c[0]].join(this.delimiter);
             return { name: name, encodedValue: encodedValue, id: c[0] }
         });
 
         attributes.actions = this._produceMap(tokenId, attributesMap, macroType);
 
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.challenge'), attributes);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.settings.demonlord.challenge'), attributes);
 
         return result;
     }
@@ -195,7 +195,7 @@ export class ActionHandlerDemonlord extends ActionHandler {
 
         if (actor.data.type === 'character') {
             let shortRestValue = [macroType, tokenId, 'rest', ''].join(this.delimiter);
-            rests.actions.push({ id: 'rest', encodedValue: shortRestValue, name: this.i18n('tokenactionhud.rest') })
+            rests.actions.push({ id: 'rest', encodedValue: shortRestValue, name: this.i18n('tokenactionhud.settings.demonlord.rest') })
         }
 
         let combatStateValue = [macroType, tokenId, 'toggleCombat', ''].join(this.delimiter);
@@ -212,7 +212,7 @@ export class ActionHandlerDemonlord extends ActionHandler {
             this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.gm'), gm);
         }
 
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.rest'), rests);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.settings.demonlord.rest'), rests);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.utility'), utility);
 
         return result;
@@ -227,7 +227,7 @@ export class ActionHandlerDemonlord extends ActionHandler {
 
         if (actors.every(actor => actor.data.type === 'character')) {
             let shortRestValue = [macroType, tokenId, 'rest', ''].join(this.delimiter);
-            rests.actions.push({ id: 'rest', encodedValue: shortRestValue, name: this.i18n('tokenactionhud.rest') })
+            rests.actions.push({ id: 'rest', encodedValue: shortRestValue, name: this.i18n('tokenactionhud.settings.demonlord.rest') })
         }
 
         if (game.user.isGM) {
@@ -244,7 +244,7 @@ export class ActionHandlerDemonlord extends ActionHandler {
             this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.gm'), gm);
         }
 
-        this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.rest'), rests);
+        this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.settings.demonlord.rest'), rests);
         this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.utility'), utility);
         this._combineCategoryWithList(list, this.i18n('tokenactionhud.utility'), category)
     }

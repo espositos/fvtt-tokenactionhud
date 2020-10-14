@@ -133,5 +133,15 @@
     "tokenactionhud.settings.pf2e.abbreviateSkills.hint": "If enabled, skills and abilities will use a three-character abbreviation.",
 
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "Show GM Compendiums",
-    "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "If enabled, and if the user is a GM, the HUD bar will include GM moves, treasure rollable-tables, and charts."
+    "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "If enabled, and if the user is a GM, the HUD bar will include GM moves, treasure rollable-tables, and charts.",
+    
+    "tokenactionhud.settings.demonlord.challenge": "Challenge Roll",
+    "tokenactionhud.settings.demonlord.attackoptions": "Attack Options",
+    "tokenactionhud.settings.demonlord.specialattacks": "Special Attacks",
+    "tokenactionhud.settings.demonlord.rest": "Rest",
+    "tokenactionhud.settings.demonlord.attributestrength": "Strength",
+    "tokenactionhud.settings.demonlord.attributeagility": "Agility",
+    "tokenactionhud.settings.demonlord.attributeintellect": "Intellect",
+    "tokenactionhud.settings.demonlord.attributewill": "Will",
+    "tokenactionhud.settings.demonlord.attributeperception": "Perception"
 }
