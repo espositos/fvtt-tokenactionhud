@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.19] 2020-10-14
+### Added
+- SotDL - Support for Shadow of the Demonlord, thanks to Xacus.
+
 ## [0.7.18] 2020-10-12
 ### Added
 - SW5E - Support for Star Wars 5e
