@@ -4,7 +4,7 @@
     "author": "^ and stick#0520",
     "description": "Creates a bar showing a selected token's actions.",
     "minimumCoreVersion": "0.6.0",
-    "compatibleCoreVersion": "0.7.1",
+    "compatibleCoreVersion": "0.7.4",
     "scripts": [
         "./lib/tagify/tagify.min.js"
     ],
