@@ -64,8 +64,6 @@ export class ActionHandlerSfrpg extends ActionHandler {
         var itemsCategoryName = this.i18n('tokenactionhud.features');
         var itemsMacroType = "feat";
         let itemsCategory = this.initializeEmptyCategory(itemsCategoryName);
-        
-        console.log(itemList.map(item => item.data.actionType));
 
         itemsCategory = this._addSubcategoryByActionType(this.i18n('tokenactionhud.mwa'), "mwak", itemsMacroType, itemList, tokenId, itemsCategory);
         itemsCategory = this._addSubcategoryByActionType(this.i18n('tokenactionhud.rwa'), "rwak", itemsMacroType, itemList, tokenId, itemsCategory);
