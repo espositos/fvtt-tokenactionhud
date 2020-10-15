@@ -72,7 +72,8 @@
     "tokenactionhud.profession": "Profession",
     "tokenactionhud.exploration": "Exploration",
     "tokenactionhud.downtime": "Downtime",
-    
+    "tokenactionhud.misc": "Misc",
+        
     "tokenactionhud.utility": "Utility",
     "tokenactionhud.toggleCombatState": "Toggle Combat State",
     "tokenactionhud.toggleVisibility": "Toggle Visibility",
@@ -172,6 +173,8 @@
 
     "tokenactionhud.settings.sfrpg.showSpellInfo.name": "Display spell information",
     "tokenactionhud.settings.sfrpg.showSpellInfo.hint": "If enabled, spell resistance, dismissible, concentration and save information noted next to the spell name.",
+    "tokenactionhud.settings.sfrpg.showMiscFeats.name": "Display miscellaneous feats",
+    "tokenactionhud.settings.sfrpg.showMiscFeats.hint": "If enabled, features with no assigned action type will be shown in a catch-all, miscellaneous category.",
 
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "Show GM Compendiums",
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "If enabled, and if the user is a GM, the HUD bar will include GM moves, treasure rollable-tables, and charts.",

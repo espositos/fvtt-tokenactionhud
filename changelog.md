@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.20] 2020-10-15
+### Added
+- SFRPG - Add miscellaneous category and setting for unassigned feats.
+
 ## [0.7.19] 2020-10-14
 ### Added
 - SotDL - Support for Shadow of the Demonlord, thanks to Xacus.
