@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.0] 2020-10-15
+### Changed
+- PF2E - Order of items, feats, and lore skills should now reflect sheet ordering.
+
 ## [0.7.20] 2020-10-15
 ### Added
 - SFRPG - Add miscellaneous category and setting for unassigned feats.

@@ -144,7 +144,7 @@ export class PcActionHandlerPf2e {
         let skills = this.baseHandler.initializeEmptySubcategory();
         skills.actions = this.baseHandler._produceMap(tokenId, skillMap, 'skill');
 
-        let loreItems = actor.items.filter(i => i.data.type === 'lore');
+        let loreItems = actor.items.filter(i => i.data.type === 'lore').sort(this._foundrySort);;
         let lore = this.baseHandler.initializeEmptySubcategory();
         lore.actions = this.baseHandler._produceMap(tokenId, loreItems, 'lore');
 
@@ -171,5 +171,13 @@ export class PcActionHandlerPf2e {
         this.baseHandler._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.attributes'), attributes);
 
         return result;
+    }
+
+    /** @protected */
+    _foundrySort(a, b) {
+        if (!(a?.data?.sort || b?.data?.sort))
+            return 0;
+
+        return a.data.sort - b.data.sort;
     }
 }
