@@ -40,7 +40,7 @@ export class NpcActionHandlerPf2e {
         let result = this.baseHandler.initializeEmptyCategory('strikes');
         result.cssClass = 'oneLine';
 
-        let strikes = actor.items.filter(a => a.type === 'melee');
+        let strikes = actor.items.filter(a => a.type === 'melee').sort(this._foundrySort);;
 
         let calculateAttackPenalty = settings.get('calculateAttackPenalty')
 
@@ -99,7 +99,7 @@ export class NpcActionHandlerPf2e {
     _getSkillsListNpc(actor, tokenId) {
         let result = this.baseHandler.initializeEmptyCategory('skills');
         
-        let loreItems = actor.items.filter(i => i.data.type === 'lore');
+        let loreItems = actor.items.filter(i => i.data.type === 'lore').sort(this._foundrySort);;
         let lore = this.baseHandler.initializeEmptySubcategory();
         lore.actions = this.baseHandler._produceMap(tokenId, loreItems, 'lore');
         
@@ -127,5 +127,13 @@ export class NpcActionHandlerPf2e {
         this.baseHandler._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.attributes'), attributes);
 
         return result;
+    }
+    
+    /** @protected */
+    _foundrySort(a, b) {
+        if (!(a?.data?.sort || b?.data?.sort))
+            return 0;
+
+        return a.data.sort - b.data.sort;
     }
 }
