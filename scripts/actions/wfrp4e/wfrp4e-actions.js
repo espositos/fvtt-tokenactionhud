@@ -88,7 +88,10 @@ export class ActionHandlerWfrp extends ActionHandler {
 
         result.choices = skills.length;
 
-        let meleeSkills = skills.filter(s => s.data.name.startsWith('Melee'));
+        let transMelee = game.i18n.localize('tokenactionhud.wfrp.melee');
+        let transRanged = game.i18n.localize('tokenactionhud.wfrp.ranged');
+
+        let meleeSkills = skills.filter(s => s.data.name.startsWith(transMelee));
         let meleeId = `${categoryId}_melee`;
         this._setFilterSuggestions(meleeId, meleeSkills);
         let meleeCat = this.initializeEmptySubcategory(meleeId);
@@ -96,7 +99,7 @@ export class ActionHandlerWfrp extends ActionHandler {
         let filteredMeleeSkills = this._filterElements(meleeId, meleeSkills);
         meleeCat.actions = this._produceMap(tokenId, filteredMeleeSkills, macroType);
 
-        let rangedSkills = skills.filter(s => s.data.name.startsWith('Ranged'));
+        let rangedSkills = skills.filter(s => s.data.name.startsWith(transRanged));
         let rangedId = `${categoryId}_ranged`;
         this._setFilterSuggestions(rangedId, rangedSkills);
         let rangedCat = this.initializeEmptySubcategory(rangedId);
@@ -104,7 +107,7 @@ export class ActionHandlerWfrp extends ActionHandler {
         let filteredRangedSkills = this._filterElements(rangedId, rangedSkills);        
         rangedCat.actions = this._produceMap(tokenId, filteredRangedSkills, macroType);
 
-        let basicSkills = skills.filter(s => !(s.data.name.startsWith('Melee') || s.data.name.startsWith('Ranged'))  && s.data.data.grouped.value !== 'isSpec');
+        let basicSkills = skills.filter(s => !(s.data.name.startsWith(transMelee) || s.data.name.startsWith(transRanged))  && s.data.data.grouped.value !== 'isSpec');
         let basicId = `${categoryId}_basic`;
         this._setFilterSuggestions(basicId, basicSkills);
         let basicSkillsCat = this.initializeEmptySubcategory(basicId);
@@ -112,7 +115,7 @@ export class ActionHandlerWfrp extends ActionHandler {
         basicSkillsCat.canFilter = basicSkills.length > 0 ? true : false;
         basicSkillsCat.actions = this._produceMap(tokenId, filteredBasicSkills, macroType);
 
-        let advancedSkills = skills.filter(s => !(s.data.name.startsWith('Melee') || s.data.name.startsWith('Ranged')) && s.data.data.grouped.value === 'isSpec');
+        let advancedSkills = skills.filter(s => !(s.data.name.startsWith(transMelee) || s.data.name.startsWith(transRanged)) && s.data.data.grouped.value === 'isSpec');
         let advancedId = `${categoryId}_advanced`;
         this._setFilterSuggestions(advancedId, advancedSkills);
         let advancedSkillsCat = this.initializeEmptySubcategory(advancedId);

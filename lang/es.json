@@ -111,5 +111,8 @@
     "tokenactionhud.settings.pf2e.abbreviateSkills.hint": "Si está activo, las habilidades serán abreviadas a 3 caracteres.",
 
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "Mostrar los compendios del DJ",
-    "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Si está activo, y el usuario es un DJ, el HUD incluirá los movimientos del DJ, las tablas aleatorias de tesoro y las cartas."
+    "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Si está activo, y el usuario es un DJ, el HUD incluirá los movimientos del DJ, las tablas aleatorias de tesoro y las cartas.",
+
+    "tokenactionhud.wfrp.melee" : "Melee",
+    "tokenactionhud.wfrp.ranged" : "Ranged"
 }

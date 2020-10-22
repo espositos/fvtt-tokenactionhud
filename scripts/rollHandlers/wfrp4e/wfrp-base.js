@@ -20,32 +20,37 @@ export class RollHandlerBaseWfrp4e extends RollHandler {
         let bypassData = {bypass: !!event.shiftKey};
 
         if (macroType === 'characteristic')
-            return actor.setupCharacteristic(actionId, bypassData);
+            return actor.setupCharacteristic(actionId, bypassData)
+                    .then(setupData => actor.basicTest(setupData));
 
         if (this.isRenderItem())
             return this.doRenderItem(tokenId, actionId);
 
         let item = actor.getOwnedItem(actionId);
-        let itemData = item.data;
+        let itemData = duplicate(item.data);
         
         if (this.rightClick)
             return item.postItem();
 
         switch (macroType) {
             case 'weapon':
-                return actor.setupWeapon(itemData, bypassData);
+                return actor.setupWeapon(itemData, bypassData)
+                    .then(setupData => actor.weaponTest(setupData));
             case 'spell':
                 return actor.spellDialog(itemData, bypassData);
             case 'prayer':
-                return actor.setupPrayer(itemData, bypassData);
+                return actor.setupPrayer(itemData, bypassData)
+                    .then(setupData => actor.prayerTest(setupData));
             case 'trait':
             case 'talent':
                 if (itemData.data.rollable?.value)
-                    return actor.setupTrait(itemData, bypassData);
+                    return actor.setupTrait(itemData, bypassData)
+                        .then(setupData => actor.traitTest(setupData));
                 else 
                     return item.postItem();
             case 'skill':
-                return actor.setupSkill(itemData, bypassData);
+                return actor.setupSkill(itemData, bypassData)
+                    .then(setupData => actor.basicTest(setupData));
         }
     }
 }

@@ -187,5 +187,8 @@
     "tokenactionhud.settings.demonlord.attributeagility": "Agility",
     "tokenactionhud.settings.demonlord.attributeintellect": "Intellect",
     "tokenactionhud.settings.demonlord.attributewill": "Will",
-    "tokenactionhud.settings.demonlord.attributeperception": "Perception"
-}
+    "tokenactionhud.settings.demonlord.attributeperception": "Perception",
+
+    "tokenactionhud.wfrp.melee" : "Melee",
+    "tokenactionhud.wfrp.ranged" : "Ranged"
+  }
