@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.1] 2020-10-22
+### Bugfix
+- DND5e/SW5e - During multi-select, tokens without actors would cause the multiselect to fail.
+
 ## [0.8.0] 2020-10-15
 ### Changed
 - PF2E - Order of items, feats, and lore skills should now reflect sheet ordering.
