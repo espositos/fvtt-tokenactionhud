@@ -534,9 +534,9 @@ export class ActionHandlerSw5e extends ActionHandler {
             let visbilityValue = [macroType, tokenId, 'toggleVisibility'].join(this.delimiter);
             let visibilityAction = {id:'toggleVisibility', encodedValue: visbilityValue, name: this.i18n('tokenactionhud.toggleVisibility')};
             visibilityAction.cssClass = actors.every(a => {
-                let token = canvas.tokens.placeables.find(t => t.data._id === a.token?.data._id);
+                let token = canvas.tokens.placeables.find(t => t.data?._id === a.token?.data._id);
                 if (!token)
-                    token = canvas.tokens.placeables.find(t => t.actor.id === a.id);
+                    token = canvas.tokens.placeables.find(t => t.actor?.id === a.id);
                 return !token.data.hidden;
             }) ? 'active' : '';
             gm.actions.push(visibilityAction);
@@ -711,7 +711,7 @@ export class ActionHandlerSw5e extends ActionHandler {
             //action: `<i class="fas fa-fist-raised"></i>`,
             bonus: `<i class="fas fa-plus"></i>`,
             crew: `<i class="fas fa-users"></i>`,
-            legendary: `<i class="fas fa-dragon"></i>`,
+            legendary: `<i class="fas fa-jedi"></i>`,
             reaction: `<i class="fas fa-bolt"></i>`,
             //none: `<i class="far fa-circle"></i>`,
             special: `<i class="fas fa-star"></i>`,

@@ -6,6 +6,7 @@ import { ActionHandlerPf2e } from './actions/pf2e/pf2e-actions.js';
 import { ActionHandlerDw } from './actions/dungeonworld/dw-actions.js';
 import { ActionHandlerSfrpg } from './actions/sfrpg/sfrpg-actions.js';
 import { ActionHandlerSw5e } from './actions/sw5e/sw5e-actions.js';
+import { ActionHandlerDemonlord } from './actions/demonlord/demonlord-actions.js';
 import { ActionHandlerPf1 } from './actions/pf1/pf1-actions.js';
 import { CompendiumMacroPreHandler } from './rollHandlers/compendiumMacroPreHandler.js';
 
@@ -15,6 +16,7 @@ import * as rollPf2e from './rollHandlers/pf2e/pf2e-factory.js';
 import * as rollDw from './rollHandlers/dungeonworld/dw-factory.js';
 import * as rollSf from './rollHandlers/sfrpg/sfrpg-factory.js';
 import * as rollSw from './rollHandlers/sw5e/sw5e-factory.js';
+import * as rollDemonlord from './rollHandlers/demonlord/demonlord-factory.js';
 import * as rollPf1 from './rollHandlers/pf1/pf1-factory.js';
 import { ItemMacroPreRollHandler } from './rollHandlers/pre-itemMacro.js';
 
@@ -23,7 +25,7 @@ export class HandlersManager {
     // Currently only planning for one kind of action handler for each system
     static getActionHandler(system, filterManager, categoryManager) {
         let handler;
-        
+
         switch (system) {
             case 'dnd5e':
                 handler = HandlersManager.getActionHandler5e(filterManager, categoryManager);
@@ -42,6 +44,9 @@ export class HandlersManager {
                 break;
             case 'sw5e':
                 handler = new ActionHandlerSw5e(filterManager, categoryManager);
+                break;
+            case 'demonlord':
+                handler = new ActionHandlerDemonlord(filterManager, categoryManager);
                 break;
             case 'pf1':
                 handler = new ActionHandlerPf1(filterManager, categoryManager);
@@ -72,19 +77,22 @@ export class HandlersManager {
                 handler = roll5e.getRollHandler(handlerId)
                 break;
             case 'pf2e':
-                handler =  rollPf2e.getRollHandler(handlerId);
+                handler = rollPf2e.getRollHandler(handlerId);
                 break;
             case 'wfrp4e':
-                handler =  rollWfrp.getRollHandler(handlerId);
+                handler = rollWfrp.getRollHandler(handlerId);
                 break;
             case 'dungeonworld':
-                handler =  rollDw.getRollHandler(handlerId);
+                handler = rollDw.getRollHandler(handlerId);
                 break;
             case 'sfrpg':
-                handler =  rollSf.getRollHandler(handlerId);
+                handler = rollSf.getRollHandler(handlerId);
                 break;
             case 'sw5e':
-                handler =  rollSw.getRollHandler(handlerId);
+                handler = rollSw.getRollHandler(handlerId);
+                break;
+            case 'demonlord':
+                handler = rollDemonlord.getRollHandler(handlerId);
                 break;
             case 'pf1':
                 handler =  rollPf1.getRollHandler(handlerId);
@@ -108,24 +116,27 @@ export class HandlersManager {
                 let coreTitle = 'Core 5e';
                 if (HandlersManager.isModuleActive('midi-qol'))
                     coreTitle += ` [supports ${HandlersManager.getModuleTitle('midi-qol')}]`;
-                choices = {core: coreTitle};
+                choices = { core: coreTitle };
                 this.addModule(choices, 'betterrolls5e');
                 this.addModule(choices, 'minor-qol');
                 break;
             case 'pf2e':
-                choices = {'core': 'Core PF2E'};
+                choices = { 'core': 'Core PF2E' };
                 break;
             case 'wfrp4e':
-                choices = {'core': 'Core Wfrp'};
+                choices = { 'core': 'Core Wfrp' };
                 break;
             case 'dungeonworld':
-                choices = {'core': 'Core DungeonWorld'};
+                choices = { 'core': 'Core DungeonWorld' };
                 break;
             case 'sfrpg':
-                choices = {'core': 'Core Starfinder'};
+                choices = { 'core': 'Core Starfinder' };
                 break;
             case 'sw5e':
-                choices = {'core': 'Core Star Wars RPG'};
+                choices = { 'core': 'Core Star Wars RPG' };
+                break;
+            case 'demonlord':
+                choices = { 'core': 'Core Shadow of the Demon Lord' };
                 break;
             case 'pf1':
                 choices = {'core': 'Core PF1'};

@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.8.1] 2020-10-22
+### Bugfix
+- DND5e/SW5e - During multi-select, tokens without actors would cause the multiselect to fail.
+
+## [0.8.0] 2020-10-15
+### Changed
+- PF2E - Order of items, feats, and lore skills should now reflect sheet ordering.
+
+## [0.7.20] 2020-10-15
+### Added
+- SFRPG - Add miscellaneous category and setting for unassigned feats.
+
+## [0.7.19] 2020-10-14
+### Added
+- SotDL - Support for Shadow of the Demonlord, thanks to Xacus.
+
+## [0.7.18] 2020-10-12
+### Added
+- SW5E - Support for Star Wars 5e
+
 ## [0.7.17] 2020-09-28
 ### Added
 - Pf2e - Support for Familiars

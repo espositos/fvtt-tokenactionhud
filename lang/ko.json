@@ -84,6 +84,7 @@
     "tokenactionhud.rwa": "원거리 무기 공격",
     "tokenactionhud.msa": "근거리 주문 공격",
     "tokenactionhud.rsa": "원거리 주문 공격",
+    "tokenactionhud.attack": "공격",
     "tokenactionhud.healing": "회복",
 
     "tokenactionhud.blocklistLabel": "차단 목록: 숨김 / 허가 목록: 보임",
@@ -154,6 +155,8 @@
     "tokenactionhud.settings.pf2e.printSpellCard.hint": "비활성화 될 경우 마우스 왼쪽 클릭을 하면 공격이 굴려지고(보너스 대화 상자의 경우 Shift+오른 클릭) 마우스 오른 클릭을 하면 피해가 굴려진다.(보너스 대화 상자의 경우 Ctrl+오른 클릭). 해당되지 않는 경우 주문 카드가 채팅에 출력된다.",
     "tokenactionhud.settings.pf2e.abbreviateSkills.name": "기술 및 능력치 이름을 줄임",
     "tokenactionhud.settings.pf2e.abbreviateSkills.hint": "활성화할 경우 기술 및 능력치는 3 글자 약어로 표시된다.",
+    "tokenactionhud.settings.pf2e.ignorePassiveActions.name": "패시브 액션 무시",
+    "tokenactionhud.settings.pf2e.ignorePassiveActions.hint": "활성화될 경우 패시브 액션이 표시되지 않는다.",
 
     "tokenactionhud.settings.sfrpg.showSpellInfo.name": "주문 정보 표시",
     "tokenactionhud.settings.sfrpg.showSpellInfo.hint": "활성화될 경우 주문 이름 옆에 주문 저항, 차단, 집중, 내성 굴림 정보가 표기된다.",

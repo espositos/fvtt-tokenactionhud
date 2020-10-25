@@ -64,14 +64,17 @@ export class ActionHandlerSfrpg extends ActionHandler {
         var itemsCategoryName = this.i18n('tokenactionhud.features');
         var itemsMacroType = "feat";
         let itemsCategory = this.initializeEmptyCategory(itemsCategoryName);
-        
-        console.log(itemList.map(item => item.data.actionType));
 
         itemsCategory = this._addSubcategoryByActionType(this.i18n('tokenactionhud.mwa'), "mwak", itemsMacroType, itemList, tokenId, itemsCategory);
         itemsCategory = this._addSubcategoryByActionType(this.i18n('tokenactionhud.rwa'), "rwak", itemsMacroType, itemList, tokenId, itemsCategory);
         itemsCategory = this._addSubcategoryByActionType(this.i18n('tokenactionhud.msa'), "msak", itemsMacroType, itemList, tokenId, itemsCategory);
         itemsCategory = this._addSubcategoryByActionType(this.i18n('tokenactionhud.rsa'), "rsak", itemsMacroType, itemList, tokenId, itemsCategory);
         itemsCategory = this._addSubcategoryByActionType(this.i18n('tokenactionhud.healing'), "heal", itemsMacroType, itemList, tokenId, itemsCategory);
+
+        if (settings.get('showMiscFeats')) {
+            const miscFeats = itemList.filter(i => !['mwak', 'rwak', 'msak', 'rsak', 'heal'].includes(i.data.actionType));
+            itemsCategory = this._addSubcategoryByItemList(this.i18n('tokenactionhud.misc'), itemsMacroType, miscFeats, tokenId, itemsCategory);
+        }
 
         this._combineCategoryWithList(actionList, itemsCategoryName, itemsCategory);
     
@@ -168,13 +171,21 @@ export class ActionHandlerSfrpg extends ActionHandler {
         return actionList;
     }
 
-    _addSubcategoryByActionType(subCategoryName, actionType, macroType, itemList, tokenId, category){
-        
-        
+    _addSubcategoryByActionType(subCategoryName, actionType, macroType, itemList, tokenId, category) {  
         let subCategory = this.initializeEmptySubcategory();    
 
         let itemsOfType = itemList.filter(item => item.data.actionType == actionType);
         subCategory.actions = itemsOfType.map(item => this._buildItemAction(tokenId, macroType, item));
+                  
+        this._combineSubcategoryWithCategory(category, subCategoryName, subCategory);
+        
+        return category;
+    }
+
+    _addSubcategoryByItemList(subCategoryName, macroType, itemList, tokenId, category) {  
+        let subCategory = this.initializeEmptySubcategory();
+
+        subCategory.actions = itemList.map(item => this._buildItemAction(tokenId, macroType, item));
                   
         this._combineSubcategoryWithCategory(category, subCategoryName, subCategory);
         
