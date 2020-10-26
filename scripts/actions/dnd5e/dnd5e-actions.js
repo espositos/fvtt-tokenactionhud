@@ -551,10 +551,16 @@ export class ActionHandler5e extends ActionHandler {
             utility.actions.push(inspirationAction)
         }
             
-        // let combatStateValue = [macroType, tokenId, 'toggleCombat'].join(this.delimiter);
-        // let combatAction = {id:'toggleCombat', encodedValue: combatStateValue, name: this.i18n('tokenactionhud.toggleCombatState')};
-        // combatAction.cssClass = actors.every(a => canvas.tokens.placeables.find(t => t.data._id === a.token.data._id).inCombat) ? 'active' : '';
-        // utility.actions.push(combatAction);
+        let combatStateValue = [macroType, tokenId, 'toggleCombat'].join(this.delimiter);
+        let combatAction = {id:'toggleCombat', encodedValue: combatStateValue, name: this.i18n('tokenactionhud.toggleCombatState')};
+        combatAction.cssClass = actors.every(a => {
+            let token = a.token;
+            if (!token)
+                token = a.getActiveTokens()[0];
+
+            return canvas.tokens.placeables.find(t => t.data._id === token.data._id).inCombat;
+        }) ? 'active' : '';
+        utility.actions.push(combatAction);
         
         if (game.user.isGM) {
             let gm = this.initializeEmptySubcategory();

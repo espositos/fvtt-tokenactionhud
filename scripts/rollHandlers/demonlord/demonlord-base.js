@@ -87,7 +87,7 @@ export class RollHandlerBaseDemonlord extends RollHandler {
         }
 
         if (actionId === 'toggleCombat') {
-            const allInCombat = canvas.tokens.controlled.every(t => t.data.inCombat);
+            const allInCombat = canvas.tokens.controlled.every(t => t.inCombat);
             for (let t of canvas.tokens.controlled) {
                 if (allInCombat)
                     await t.toggleCombat();
