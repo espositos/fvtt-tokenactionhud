@@ -4,6 +4,7 @@ import {ActionSubcategory} from './entities/actionSubcategory.js';
 import {ActionSet} from './entities/actionSet.js';
 import {Action} from './entities/action.js';
 import * as settings from '../settings.js';
+import { GenericActionHandler } from './genericActionHandler.js';
 
 export class ActionHandler {
     i18n = (toTranslate) => game.i18n.localize(toTranslate);
@@ -18,6 +19,7 @@ export class ActionHandler {
     constructor(filterManager, categoryManager) {
         this.filterManager = filterManager;
         this.categoryManager = categoryManager;
+        this.genericActionHandler = new GenericActionHandler(this);
     }
 
     /** @public */
@@ -28,6 +30,7 @@ export class ActionHandler {
     /** @public */
     async buildActionList(token, multipleTokens) {
         let actionList = await this.doBuildActionList(token, multipleTokens);
+        this._addGenericUtilities(token, actionList, multipleTokens);
         this._doBuildFurtherActions(token, actionList, multipleTokens);
         this.registerCoreCategories(actionList.categories);
         await this.categoryManager.addCategoriesToActionList(this, actionList);
@@ -36,6 +39,12 @@ export class ActionHandler {
 
     /** @public */
     doBuildActionList(token) {};
+
+    /** @protected */
+    _addGenericUtilities(token, actionList, multipleTokens) {
+        if (token || multipleTokens)
+            this.genericActionHandler.addGenericUtilities(token, actionList, multipleTokens);
+    }
 
     /** @protected */
     _doBuildFurtherActions(token, actionList, multipleTokens) {

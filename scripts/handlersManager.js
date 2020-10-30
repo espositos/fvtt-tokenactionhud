@@ -7,6 +7,7 @@ import { ActionHandlerDw } from './actions/dungeonworld/dw-actions.js';
 import { ActionHandlerSfrpg } from './actions/sfrpg/sfrpg-actions.js';
 import { ActionHandlerSw5e } from './actions/sw5e/sw5e-actions.js';
 import { ActionHandlerDemonlord } from './actions/demonlord/demonlord-actions.js';
+import { ActionHandlerPf1 } from './actions/pf1/pf1-actions.js';
 import { CompendiumMacroPreHandler } from './rollHandlers/compendiumMacroPreHandler.js';
 
 import * as roll5e from './rollHandlers/dnd5e/dnd5e-factory.js';
@@ -16,6 +17,7 @@ import * as rollDw from './rollHandlers/dungeonworld/dw-factory.js';
 import * as rollSf from './rollHandlers/sfrpg/sfrpg-factory.js';
 import * as rollSw from './rollHandlers/sw5e/sw5e-factory.js';
 import * as rollDemonlord from './rollHandlers/demonlord/demonlord-factory.js';
+import * as rollPf1 from './rollHandlers/pf1/pf1-factory.js';
 import { ItemMacroPreRollHandler } from './rollHandlers/pre-itemMacro.js';
 
 
@@ -45,6 +47,9 @@ export class HandlersManager {
                 break;
             case 'demonlord':
                 handler = new ActionHandlerDemonlord(filterManager, categoryManager);
+                break;
+            case 'pf1':
+                handler = new ActionHandlerPf1(filterManager, categoryManager);
                 break;
             default:
                 throw new Error('System not supported by Token Action HUD');
@@ -89,6 +94,9 @@ export class HandlersManager {
             case 'demonlord':
                 handler = rollDemonlord.getRollHandler(handlerId);
                 break;
+            case 'pf1':
+                handler =  rollPf1.getRollHandler(handlerId);
+                break;
         }
 
         handler.addPreRollHandler(new CompendiumMacroPreHandler())
@@ -129,6 +137,9 @@ export class HandlersManager {
                 break;
             case 'demonlord':
                 choices = { 'core': 'Core Shadow of the Demon Lord' };
+                break;
+            case 'pf1':
+                choices = {'core': 'Core PF1'};
                 break;
         }
 

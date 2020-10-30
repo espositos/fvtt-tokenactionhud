@@ -73,8 +73,10 @@
     "tokenactionhud.exploration": "Exploration",
     "tokenactionhud.downtime": "Downtime",
     "tokenactionhud.misc": "Misc",
+    "tokenactionhud.buffs": "Buffs",
         
     "tokenactionhud.utility": "Utility",
+    "tokenactionhud.token": "Token",
     "tokenactionhud.toggleCombatState": "Toggle Combat State",
     "tokenactionhud.toggleVisibility": "Toggle Visibility",
     "tokenactionhud.shortRest": "Short rest",

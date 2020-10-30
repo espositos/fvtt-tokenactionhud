@@ -23,7 +23,7 @@ export class RollHandler {
         throw new Error(`Error handling button click: unexpected button value/payload`);
     }
 
-    handleActionEvent(event, encodedValue) {
+    async handleActionEvent(event, encodedValue) {
         settings.Logger.debug(encodedValue);
 
         this.registerKeyPresses(event);
@@ -38,6 +38,11 @@ export class RollHandler {
 
         if (handled)
             return;
+
+        if(this._isMultiGenericAction(encodedValue)) {
+            await this._doMultiGenericAction(encodedValue);
+            return;
+        }
             
         this.doHandleActionEvent(event, encodedValue);
     }
@@ -80,5 +85,31 @@ export class RollHandler {
 
     isShift(event) {
         return event?.shiftKey;
+    }
+
+    /** @private */
+    _isMultiGenericAction(encodedValue) {
+        let payload = encodedValue.split('|');
+        
+        let macroType = payload[0];
+        let actionId = payload[2];
+
+        return (macroType === 'utility' && actionId.includes('toggle'))
+    }
+
+    /** @private */
+    async _doMultiGenericAction(encodedValue) {
+        let payload = encodedValue.split('|');
+        let actionId = payload[2];
+
+        if (actionId === 'toggleVisibility') {
+            await canvas.tokens.controlled[0].toggleVisibility();
+        }
+    
+        if (actionId === 'toggleCombat') {
+            await canvas.tokens.controlled[0].toggleCombat();
+        }
+
+        Hooks.callAll('forceUpdateTokenActionHUD')
     }
 }
