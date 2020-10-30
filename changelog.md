@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.3] 2020-10-30
+### Removed
+- PF1 rests - I'll reimplement it when I know how but for now better not to show it
+
 ## [0.8.2] 2020-10-30
 ### Added
 - PF1 support - Early days, pretty rough and ready, but please provide feedback
