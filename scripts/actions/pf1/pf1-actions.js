@@ -361,7 +361,7 @@ export class ActionHandlerPf1 extends ActionHandler {
         let abbr = settings.get('abbreviateSkills');
         
         let skillsActions = Object.entries(skills).map(e => {
-            let name = CONFIG.PF1.skills[e[0]];
+            let name = abbr ? e[0] : CONFIG.PF1.skills[e[0]];
             name = name.charAt(0).toUpperCase() + name.slice(1);
             let encodedValue = [macroType, tokenId, e[0]].join(this.delimiter);
             let info1 = this._getSkillRankInfo(e[1].rank);
