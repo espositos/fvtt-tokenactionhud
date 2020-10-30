@@ -480,17 +480,9 @@ export class ActionHandlerPf1 extends ActionHandler {
         let rests = this.initializeEmptySubcategory()
         let utility = this.initializeEmptySubcategory();
 
-        if (actor.data.type === 'character') {          
-            let shortRestValue = [macroType, tokenId, 'shortRest'].join(this.delimiter);
-            rests.actions.push({id:'shortRest', encodedValue: shortRestValue, name: this.i18n('tokenactionhud.shortRest')})
-            let longRestValue = [macroType, tokenId, 'longRest'].join(this.delimiter);
-            rests.actions.push({id:'longRest', encodedValue: longRestValue, name: this.i18n('tokenactionhud.longRest')})
-            
-            if (actor.data.data.attributes.hp.value <= 0) {
-                let deathSaveValue = [macroType, tokenId, 'deathSave'].join(this.delimiter);
-                let deathSaveAction = {id:'deathSave', encodedValue: deathSaveValue, name: this.i18n('tokenactionhud.deathSave')};
-                utility.actions.push(deathSaveAction)
-            }
+        if (actor.data.type === 'character') {   
+            // let longRestValue = [macroType, tokenId, 'longRest'].join(this.delimiter);
+            // rests.actions.push({id:'longRest', encodedValue: longRestValue, name: this.i18n('tokenactionhud.longRest')})
         }
         
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.rests'), rests);
