@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.2] 2020-10-30
+### Added
+- PF1 support - Early days, pretty rough and ready, but please provide feedback
+
 ## [0.8.1] 2020-10-22
 ### Bugfix
 - DND5e/SW5e - During multi-select, tokens without actors would cause the multiselect to fail.
