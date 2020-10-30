@@ -481,8 +481,8 @@ export class ActionHandlerPf1 extends ActionHandler {
         let utility = this.initializeEmptySubcategory();
 
         if (actor.data.type === 'character') {   
-            let longRestValue = [macroType, tokenId, 'longRest'].join(this.delimiter);
-            rests.actions.push({id:'longRest', encodedValue: longRestValue, name: this.i18n('tokenactionhud.longRest')})
+            // let longRestValue = [macroType, tokenId, 'longRest'].join(this.delimiter);
+            // rests.actions.push({id:'longRest', encodedValue: longRestValue, name: this.i18n('tokenactionhud.longRest')})
         }
         
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.rests'), rests);
