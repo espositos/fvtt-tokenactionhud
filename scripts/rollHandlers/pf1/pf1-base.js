@@ -102,15 +102,8 @@ export class RollHandlerBasePf1 extends RollHandler {
         let token = super.getToken(tokenId);
 
         switch(actionId) {
-            case 'shortRest':
-                actor.shortRest();
-                break;
             case 'longRest':
-                actor.longRest();
-                break;
-            case 'inspiration':
-                let update = !actor.data.data.attributes.inspiration;
-                actor.update({"data.attributes.inspiration": update});
+                //new ActorRestDialog(this.actor).render(true);
                 break;
             case 'toggleCombat':
                 token.toggleCombat();
@@ -118,9 +111,6 @@ export class RollHandlerBasePf1 extends RollHandler {
                 break;
             case 'toggleVisibility':
                 token.toggleVisibility();
-                break;
-            case 'deathSave':
-                actor.rollDeathSave();
                 break;
         }
     }
