@@ -469,26 +469,6 @@ export class ActionHandlerPf2e extends ActionHandler {
             this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.rests'), rests);
         }
 
-        let utility = this.initializeEmptySubcategory();
-            
-        let combatStateValue = [macroType, tokenId, 'toggleCombat'].join(this.delimiter);
-        let combatAction = {id:'toggleCombat', encodedValue: combatStateValue, name: this.i18n('tokenactionhud.toggleCombatState')};
-        combatAction.cssClass = canvas.tokens.placeables.find(t => t.data._id === tokenId).inCombat ? 'active' : '';
-        utility.actions.push(combatAction);
-
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.utility'), utility);
-        
-        if (game.user.isGM) {
-            let gm = this.initializeEmptySubcategory('gm');
-
-            let visbilityValue = [macroType, tokenId, 'toggleVisibility'].join(this.delimiter);
-            let visibilityAction = {id:'toggleVisibility', encodedValue: visbilityValue, name: this.i18n('tokenactionhud.toggleVisibility')};
-            visibilityAction.cssClass = !canvas.tokens.placeables.find(t => t.data._id === tokenId).data.hidden ? 'active' : '';
-            gm.actions.push(visibilityAction);
-            
-            this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.gm'), gm);
-        }
-
         return result;
     }
 

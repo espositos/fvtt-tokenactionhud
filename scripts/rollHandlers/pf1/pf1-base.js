@@ -7,7 +7,7 @@ export class RollHandlerBasePf1 extends RollHandler {
     }
 
     /** @override */
-    doHandleActionEvent(event, encodedValue) {
+    async doHandleActionEvent(event, encodedValue) {
         let payload = encodedValue.split('|');
         
         if (payload.length != 3) {
@@ -19,21 +19,16 @@ export class RollHandlerBasePf1 extends RollHandler {
         let actionId = payload[2];
 
         if (tokenId === 'multi') {
-            if (macroType === 'utility' && actionId.includes('toggle')) {
-                this.performMultiToggleUtilityMacro(actionId);
-            }
-            else {
-                canvas.tokens.controlled.forEach(t => {
-                    let idToken = t.data._id;
-                    this._handleMacros(event, macroType, idToken, actionId);
-                });
-            }
+            canvas.tokens.controlled.forEach(t => {
+                let idToken = t.data._id;
+                this._handleMacros(event, macroType, idToken, actionId);
+            });
         } else {
-            this._handleMacros(event, macroType, tokenId, actionId);
+            await this._handleMacros(event, macroType, tokenId, actionId);
         }
     }
 
-    _handleMacros(event, macroType, tokenId, actionId) {
+    async _handleMacros(event, macroType, tokenId, actionId) {
         switch (macroType) {
             case "ability":
                 this.rollAbilityMacro(event, tokenId, actionId);
@@ -47,9 +42,13 @@ export class RollHandlerBasePf1 extends RollHandler {
             case "abilityCheck":
                 this.rollAbilityCheckMacro(event, tokenId, actionId);
                 break;
+            case 'buff':
+                await this.adjustBuff(event, tokenId, actionId);
+                break;
             case "item":
             case "spell":
-            case "feat": 
+            case "feat":
+            case "attack":
                 if (this.isRenderItem())
                     this.doRenderItem(tokenId, actionId);
                 else
@@ -64,46 +63,38 @@ export class RollHandlerBasePf1 extends RollHandler {
     
     rollAbilityMacro(event, tokenId, checkId) {
         const actor = super.getActor(tokenId);
-       actor.rollAbility(...this.getRollBody(event, actor, checkId));
+       actor.rollAbility(checkId, {event: event});
     }
     
     rollAbilityCheckMacro(event, tokenId, checkId) {
         const actor = super.getActor(tokenId);
-        actor.rollAbilityTest(...this.getRollBody(event, actor, checkId));
+        actor.rollAbilityTest(checkId, {event: event});
     }
 
     rollAbilitySaveMacro(event, tokenId, checkId) {
         const actor = super.getActor(tokenId);
-        actor.rollAbilitySave(...this.getRollBody(event, actor, checkId));
+        actor.rollSavingThrow(checkId, {event: event});
     }
     
     rollSkillMacro(event, tokenId, checkId) {
         const actor = super.getActor(tokenId);
-        actor.rollSkill(...this.getRollBody(event, actor, checkId));
-    }
-
-    getRollBody(event, actor, checkId) {
-        const speaker = ChatMessage.getSpeaker({scene: canvas.scene, token: actor.token});
-        return [checkId, {speaker: speaker, event, event}];
+        actor.rollSkill(checkId, {event: event});
     }
     
     rollItemMacro(event, tokenId, itemId) {
         let actor = super.getActor(tokenId);
         let item = super.getItem(actor, itemId);
 
-        if (this.needsRecharge(item)) {
-            item.rollRecharge();
-            return;
-        }
-        
-        if (item.data.type === "spell")
-            return actor.useSpell(item);
-            
-        return item.roll({event});
+        item.use({ev: event, skipDialog: false});
     }
 
-    needsRecharge(item) {
-        return (item.data.data.recharge && !item.data.data.recharge.charged && item.data.data.recharge.value);
+    async adjustBuff(event, tokenId, buffId) {
+        let actor = super.getActor(tokenId);
+        let buff = super.getItem(actor, buffId);
+
+        let update = {data: {active: !buff.data.data.active}};
+
+        await buff.update(update);
     }
     
     performUtilityMacro(event, tokenId, actionId) {
@@ -131,29 +122,6 @@ export class RollHandlerBasePf1 extends RollHandler {
             case 'deathSave':
                 actor.rollDeathSave();
                 break;
-        }
-    }
-
-    async performMultiToggleUtilityMacro(actionId) {
-        if (actionId === 'toggleVisibility') {
-            const allVisible = canvas.tokens.controlled.every(t => !t.data.hidden);
-            canvas.tokens.controlled.forEach(t => {
-                if (allVisible)
-                    t.toggleVisibility();
-                else if (t.data.hidden)
-                    t.toggleVisibility();
-            })
-        }
-
-        if (actionId === 'toggleCombat') {
-            const allInCombat = canvas.tokens.controlled.every(t => t.data.inCombat);
-            for (let t of canvas.tokens.controlled) {
-                if (allInCombat)
-                    await t.toggleCombat();
-                else if (!t.data.inCombat)
-                    await t.toggleCombat();
-            }
-            Hooks.callAll('forceUpdateTokenActionHUD')
         }
     }
 }

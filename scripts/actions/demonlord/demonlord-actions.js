@@ -191,29 +191,13 @@ export class ActionHandlerDemonlord extends ActionHandler {
         let macroType = 'utility';
 
         let rests = this.initializeEmptySubcategory()
-        let utility = this.initializeEmptySubcategory();
 
         if (actor.data.type === 'character') {
             let shortRestValue = [macroType, tokenId, 'rest', ''].join(this.delimiter);
             rests.actions.push({ id: 'rest', encodedValue: shortRestValue, name: this.i18n('tokenactionhud.settings.demonlord.rest') })
         }
 
-        let combatStateValue = [macroType, tokenId, 'toggleCombat', ''].join(this.delimiter);
-        let combatAction = { id: 'toggleCombat', encodedValue: combatStateValue, name: this.i18n('tokenactionhud.toggleCombatState') };
-        combatAction.cssClass = canvas.tokens.placeables.find(t => t.data._id === tokenId).inCombat ? 'active' : '';
-        utility.actions.push(combatAction);
-
-        if (game.user.isGM) {
-            let gm = this.initializeEmptySubcategory();
-            let visbilityValue = [macroType, tokenId, 'toggleVisibility', ''].join(this.delimiter);
-            let visibilityAction = { id: 'toggleVisibility', encodedValue: visbilityValue, name: this.i18n('tokenactionhud.toggleVisibility') };
-            visibilityAction.cssClass = !canvas.tokens.placeables.find(t => t.data._id === tokenId).data.hidden ? 'active' : '';
-            gm.actions.push(visibilityAction);
-            this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.gm'), gm);
-        }
-
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.settings.demonlord.rest'), rests);
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.utility'), utility);
 
         return result;
     }
@@ -223,29 +207,13 @@ export class ActionHandlerDemonlord extends ActionHandler {
         let macroType = 'utility';
 
         let rests = this.initializeEmptySubcategory();
-        let utility = this.initializeEmptySubcategory();
 
         if (actors.every(actor => actor.data.type === 'character')) {
             let shortRestValue = [macroType, tokenId, 'rest', ''].join(this.delimiter);
             rests.actions.push({ id: 'rest', encodedValue: shortRestValue, name: this.i18n('tokenactionhud.settings.demonlord.rest') })
         }
 
-        if (game.user.isGM) {
-            let gm = this.initializeEmptySubcategory();
-            let visbilityValue = [macroType, tokenId, 'toggleVisibility', ''].join(this.delimiter);
-            let visibilityAction = { id: 'toggleVisibility', encodedValue: visbilityValue, name: this.i18n('tokenactionhud.toggleVisibility') };
-            visibilityAction.cssClass = actors.every(a => {
-                let token = canvas.tokens.placeables.find(t => t.data._id === a.token?.data._id);
-                if (!token)
-                    token = canvas.tokens.placeables.find(t => t.actor.id === a.id);
-                return !token.data.hidden;
-            }) ? 'active' : '';
-            gm.actions.push(visibilityAction);
-            this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.gm'), gm);
-        }
-
         this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.settings.demonlord.rest'), rests);
-        this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.utility'), utility);
         this._combineCategoryWithList(list, this.i18n('tokenactionhud.utility'), category)
     }
 

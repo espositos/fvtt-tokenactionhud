@@ -483,20 +483,6 @@ export class ActionHandlerSw5e extends ActionHandler {
             inspirationAction.cssClass = actor.data.data.attributes?.inspiration ? 'active' : '';
             utility.actions.push(inspirationAction)
         }
-            
-        let combatStateValue = [macroType, tokenId, 'toggleCombat'].join(this.delimiter);
-        let combatAction = {id:'toggleCombat', encodedValue: combatStateValue, name: this.i18n('tokenactionhud.toggleCombatState')};
-        combatAction.cssClass = canvas.tokens.placeables.find(t => t.data._id === tokenId).inCombat ? 'active' : '';
-        utility.actions.push(combatAction);    
-        
-        if (game.user.isGM) {
-            let gm = this.initializeEmptySubcategory();
-            let visbilityValue = [macroType, tokenId, 'toggleVisibility'].join(this.delimiter);
-            let visibilityAction = {id:'toggleVisibility', encodedValue: visbilityValue, name: this.i18n('tokenactionhud.toggleVisibility')};
-            visibilityAction.cssClass = !canvas.tokens.placeables.find(t => t.data._id === tokenId).data.hidden ? 'active' : '';
-            gm.actions.push(visibilityAction);
-            this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.gm'), gm);
-        }
         
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.rests'), rests);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.utility'), utility);
@@ -522,31 +508,6 @@ export class ActionHandlerSw5e extends ActionHandler {
             let inspirationAction = {id:'inspiration', encodedValue: inspirationValue, name: this.i18n('tokenactionhud.inspiration')};
             inspirationAction.cssClass = actors.every(a => a.data.data.attributes?.inspiration) ? 'active' : '';
             utility.actions.push(inspirationAction)
-        }
-            
-        let combatStateValue = [macroType, tokenId, 'toggleCombat'].join(this.delimiter);
-        let combatAction = {id:'toggleCombat', encodedValue: combatStateValue, name: this.i18n('tokenactionhud.toggleCombatState')};
-        combatAction.cssClass = actors.every(a => {
-            let token = a.token;
-            if (!token)
-                token = a.getActiveTokens()[0];
-
-            return canvas.tokens.placeables.find(t => t.data._id === token.data._id).inCombat;
-        }) ? 'active' : '';
-        utility.actions.push(combatAction);
-        
-        if (game.user.isGM) {
-            let gm = this.initializeEmptySubcategory();
-            let visbilityValue = [macroType, tokenId, 'toggleVisibility'].join(this.delimiter);
-            let visibilityAction = {id:'toggleVisibility', encodedValue: visbilityValue, name: this.i18n('tokenactionhud.toggleVisibility')};
-            visibilityAction.cssClass = actors.every(a => {
-                let token = canvas.tokens.placeables.find(t => t.data?._id === a.token?.data._id);
-                if (!token)
-                    token = canvas.tokens.placeables.find(t => t.actor?.id === a.id);
-                return !token.data.hidden;
-            }) ? 'active' : '';
-            gm.actions.push(visibilityAction);
-            this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.gm'), gm);
         }
         
         this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.rests'), rests);
