@@ -102,8 +102,8 @@ export class RollHandlerBasePf1 extends RollHandler {
         let token = super.getToken(tokenId);
 
         switch(actionId) {
-            case 'longRest':
-                //new ActorRestDialog(this.actor).render(true);
+            case 'rest':
+                actor.sheet._onRest(event);
                 break;
             case 'toggleCombat':
                 token.toggleCombat();

@@ -247,7 +247,7 @@ export class ActionHandlerPf1 extends ActionHandler {
                 return;
             
             let spellbookName = sb.charAt(0).toUpperCase() + sb.slice(1);
-            
+
             const sbSpells = spells.filter(s => s.data.spellbook === sb)
                 .sort((a, b) => a.name.toUpperCase().localeCompare(b.name.toUpperCase(), undefined, {sensitivity: 'base'}))
                 .sort((a, b) => a.data.level - b.data.level);
@@ -264,7 +264,13 @@ export class ActionHandlerPf1 extends ActionHandler {
             var firstLevelOfBook = true;
             Object.entries(spellsByLevel).forEach(level => {
                 var category = this.initializeEmptySubcategory();
+
                 var categoryName = level[0] > 0 ? `${this.i18n('tokenactionhud.level')} ${level[0]}` : this.i18n('tokenactionhud.cantrips');
+                var spellInfo = actor.data.data.attributes?.spells?.spellbooks[sb]['spells']['spell'+level[0]];
+                if (spellInfo && spellInfo.max > 0) {
+                    var categoryInfo = `${spellInfo.value}/${spellInfo.max}`;
+                    category.info1 = categoryInfo;
+                }
                 
                 if (firstLevelOfBook) {
                     categoryName = `${spellbookName} - ${categoryName}`;
@@ -272,11 +278,14 @@ export class ActionHandlerPf1 extends ActionHandler {
                 }
 
                 level[1].forEach(spell => {
+                    if (!this._isSpellCastable(actor, spell))
+                        return;
+
                     let name = spell.name;
                     name = name.charAt(0).toUpperCase() + name.slice(1);
                     let id = spell._id;
                     let encodedValue = [macroType, tokenId, id].join(this.delimiter);
-                    var action = { name: name, id: id, encodedValue: encodedValue, info1: '', info2: '' }; 
+                    var action = { name: name, id: id, encodedValue: encodedValue, info2: '' }; 
                     action.img = this._getImage(spell);
                     this._addSpellInfo(spell, action);
 
@@ -294,17 +303,37 @@ export class ActionHandlerPf1 extends ActionHandler {
     _addSpellInfo(s, spell) {
         let c = s.data.components;
 
+        if (s.data.preparation) {
+            let prep = s.data.preparation;
+            if (prep.maxAmount)
+                spell.info1 = `${prep.preparedAmount}/${prep.maxAmount}`;
+        }
+
         if (c?.verbal)
-            spell.info1 += this.i18n('PF1.SpellComponentVerbal').charAt(0).toUpperCase();
+            spell.info2 += this.i18n('PF1.SpellComponentVerbal').charAt(0).toUpperCase();
 
         if (c?.somatic)
-            spell.info1 += this.i18n('PF1.SpellComponentSomatic').charAt(0).toUpperCase();
+            spell.info2 += this.i18n('PF1.SpellComponentSomatic').charAt(0).toUpperCase();
         
         if (c?.material)
-            spell.info1 += this.i18n('PF1.SpellComponentMaterial').charAt(0).toUpperCase();
+            spell.info2 += this.i18n('PF1.SpellComponentMaterial').charAt(0).toUpperCase();
 
         if (c?.focus)
-            spell.info2 += this.i18n('PF1.SpellComponentFocus').charAt(0).toUpperCase();
+            spell.info3 = this.i18n('PF1.SpellComponentFocus').charAt(0).toUpperCase();
+    }
+
+    /** @private */
+    _isSpellCastable(actor, spell) {
+        if (actor.data.type !== 'character')
+            return true;
+
+        if (spell.data.atWill)
+            return true;
+            
+        if (spell.data.preparation.preparedAmount === 0)
+            return false;
+
+        return true;
     }
     
     /** FEATS **/
@@ -359,13 +388,33 @@ export class ActionHandlerPf1 extends ActionHandler {
         let macroType = 'skill';
         
         let abbr = settings.get('abbreviateSkills');
+
+        let allSkills = new Set();
         
-        let skillsActions = Object.entries(skills).map(e => {
-            let name = abbr ? e[0] : CONFIG.PF1.skills[e[0]];
+        Object.entries(skills).forEach(s => {
+            allSkills.add(s);
+
+            if (!s[1].subSkills)
+                return;
+            
+            Object.entries(s[1].subSkills).forEach(ss => {
+                ss[1].isSubSkill = true;
+                allSkills.add(ss);
+            })
+        });
+        
+        let skillsActions = [...allSkills].map(e => {
+            let id = e[0];
+            let data = e[1];
+            let name = abbr ? id : CONFIG.PF1.skills[id];
+
+            if (data.isSubSkill)
+                name = data.name ?? '?';
+
             name = name.charAt(0).toUpperCase() + name.slice(1);
-            let encodedValue = [macroType, tokenId, e[0]].join(this.delimiter);
-            let info1 = this._getSkillRankInfo(e[1].rank);
-            return { name: name, id: e[0], encodedValue: encodedValue, info1: info1 }; 
+            let encodedValue = [macroType, tokenId, id].join(this.delimiter);
+            let info1 = this._getSkillRankInfo(data.rank);
+            return { name: name, id: id, encodedValue: encodedValue, info1: info1 }; 
         });
         let skillsCategory = this.initializeEmptySubcategory();
         skillsCategory.actions = skillsActions;
@@ -478,15 +527,13 @@ export class ActionHandlerPf1 extends ActionHandler {
         let macroType = 'utility';
         
         let rests = this.initializeEmptySubcategory()
-        let utility = this.initializeEmptySubcategory();
 
-        if (actor.data.type === 'character') {   
-            // let longRestValue = [macroType, tokenId, 'longRest'].join(this.delimiter);
-            // rests.actions.push({id:'longRest', encodedValue: longRestValue, name: this.i18n('tokenactionhud.longRest')})
+        if (actor.data.type === 'character') {       
+            let longRestValue = [macroType, tokenId, 'rest'].join(this.delimiter);
+            rests.actions.push({id:'rest', encodedValue: longRestValue, name: this.i18n('tokenactionhud.rest')})
         }
         
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.rests'), rests);
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.utility'), utility);
         
         return result;
     }
@@ -498,15 +545,12 @@ export class ActionHandlerPf1 extends ActionHandler {
         
         let rests = this.initializeEmptySubcategory();
 
-        if (actors.every(a => a.data.type === 'character')) {          
-            let shortRestValue = [macroType, tokenId, 'shortRest'].join(this.delimiter);
-            rests.actions.push({id:'shortRest', encodedValue: shortRestValue, name: this.i18n('tokenactionhud.shortRest')})
-            let longRestValue = [macroType, tokenId, 'longRest'].join(this.delimiter);
-            rests.actions.push({id:'longRest', encodedValue: longRestValue, name: this.i18n('tokenactionhud.longRest')})
+        if (actors.every(a => a.data.type === 'character')) {       
+            let longRestValue = [macroType, tokenId, 'rest'].join(this.delimiter);
+            rests.actions.push({id:'rest', encodedValue: longRestValue, name: this.i18n('tokenactionhud.rest')})
         }
         
         this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.rests'), rests);
-        this._combineCategoryWithList(list, this.i18n('tokenactionhud.utility'), category)
     }
 
 
