@@ -81,6 +81,7 @@
     "tokenactionhud.toggleVisibility": "Toggle Visibility",
     "tokenactionhud.shortRest": "Short rest",
     "tokenactionhud.longRest": "Long rest",
+    "tokenactionhud.rest": "Rest",
     "tokenactionhud.deathSave": "Death Save",
     "tokenactionhud.rests": "Rests",
     "tokenactionhud.inspiration": "Inspiration",    
