@@ -3,6 +3,7 @@
 ## [0.8.6] 2020-11-02
 ### Added
 - Chinese localization thanks to hmqgg
+- Polish localization thanks to silentmark
 
 ## [0.8.5] 2020-11-02
 ### Bugfix
