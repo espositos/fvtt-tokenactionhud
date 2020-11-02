@@ -131,5 +131,8 @@
     "tokenactionhud.settings.pf2e.abbreviateSkills.hint": "Si activé les caractéristiques et les compétences utiliserons une abréviation de 3 caractères.",
 
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "Afficher les compendiums du MJ",
-    "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Si activé, et que l'utilisateur est MJ, la barre HUD inclura les actions de MJ, les tables aléatoires et les graphiques."
-}
+    "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Si activé, et que l'utilisateur est MJ, la barre HUD inclura les actions de MJ, les tables aléatoires et les graphiques.",
+
+    "tokenactionhud.wfrp.meleeSkillPrefix" : "Melee",
+    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged"
+  }
