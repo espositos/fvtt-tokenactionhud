@@ -32,10 +32,14 @@ export class ActionHandler5e extends ActionHandler {
         result.actorId = actor._id;
 
         let items = this._getItemList(actor, tokenId);
-        let spells = this._getSpellsList(actor, tokenId);
         let feats = this._getFeatsList(actor, tokenId);
-        let skills = this._getSkillsList(actor.data.data.skills, tokenId);
         let utility = this._getUtilityList(actor, tokenId);
+
+        let spells, skills;
+        if (actor.data.type !== 'vehicle') {
+            spells = this._getSpellsList(actor, tokenId);
+            skills = this._getSkillsList(actor.data.data.skills, tokenId);
+        }
 
         let itemsTitle = this.i18n('tokenactionhud.inventory');
         let spellsTitle = this.i18n('tokenactionhud.spells');
@@ -401,8 +405,8 @@ export class ActionHandler5e extends ActionHandler {
         
         let abbr = settings.get('abbreviateSkills');
         
-        let skillsActions = Object.entries(game.dnd5e.config.skills).map(e => {
-            let name = abbr ? e[0] : e[1];
+        let skillsActions = Object.entries(skills).map(e => {
+            let name = abbr ? e[0] : game.dnd5e.config.skills[e[1]];
             name = name.charAt(0).toUpperCase() + name.slice(1);
             let encodedValue = [macroType, tokenId, e[0]].join(this.delimiter);
             let icon = this._getProficiencyIcon(skills[e[0]].value);
