@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.7] 2020-11-02
+### Bugfix
+- DND5e - do not attempt to add skills or spells to a vehicle actor
+
 ## [0.8.6] 2020-11-02
 ### Added
 - Chinese localization thanks to hmqgg
