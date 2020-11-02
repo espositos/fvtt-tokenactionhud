@@ -14,6 +14,9 @@ Once activated, selecting a token that has an actor/character sheet associated w
 Offers a variety of settings including support for third-party roll handlers (Please contact me if you'd like to add yours, or improve the functionality of those offered), and can be repositioned.
 ![Customizable settings](.github/readme/tah-settings_and_repositioning.gif)
 
+## Custom Categories
+[Using custom categories](custom_categories.md)
+
 ## Support for WFRP
 ![Warhammer Fantasy Roleplay 4E](.github/readme/tah-wfrp.gif)
 
