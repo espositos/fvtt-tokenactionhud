@@ -406,10 +406,11 @@ export class ActionHandler5e extends ActionHandler {
         let abbr = settings.get('abbreviateSkills');
         
         let skillsActions = Object.entries(skills).map(e => {
-            let name = abbr ? e[0] : game.dnd5e.config.skills[e[1]];
+            let skillId = e[0];
+            let name = abbr ? skillId : game.dnd5e.config.skills[skillId];
             name = name.charAt(0).toUpperCase() + name.slice(1);
             let encodedValue = [macroType, tokenId, e[0]].join(this.delimiter);
-            let icon = this._getProficiencyIcon(skills[e[0]].value);
+            let icon = this._getProficiencyIcon(skills[skillId].value);
             return { name: name, id: e[0], encodedValue: encodedValue, icon: icon }; 
         });
         let skillsCategory = this.initializeEmptySubcategory();
