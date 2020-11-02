@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.8] 2020-11-02
+### Bugfix
+- DND5e - using wrong variable to look up skill names
+
 ## [0.8.7] 2020-11-02
 ### Bugfix
 - DND5e - do not attempt to add skills or spells to a vehicle actor
