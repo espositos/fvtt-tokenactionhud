@@ -135,6 +135,6 @@
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "Show GM Compendiums",
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "If enabled, and if the user is a GM, the HUD bar will include GM moves, treasure rollable-tables, and charts.",
 
-    "tokenactionhud.wfrp.melee" : "Melee",
-    "tokenactionhud.wfrp.ranged" : "Ranged"
+    "tokenactionhud.wfrp.meleeSkillPrefix" : "Melee",
+    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged"
 }

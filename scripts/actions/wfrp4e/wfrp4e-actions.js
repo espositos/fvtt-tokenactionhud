@@ -88,8 +88,8 @@ export class ActionHandlerWfrp extends ActionHandler {
 
         result.choices = skills.length;
 
-        let transMelee = game.i18n.localize('tokenactionhud.wfrp.melee');
-        let transRanged = game.i18n.localize('tokenactionhud.wfrp.ranged');
+        let transMelee = game.i18n.localize('tokenactionhud.wfrp.meleeSkillPrefix');
+        let transRanged = game.i18n.localize('tokenactionhud.wfrp.rangedSkillPrefix');
 
         let meleeSkills = skills.filter(s => s.data.name.startsWith(transMelee));
         let meleeId = `${categoryId}_melee`;

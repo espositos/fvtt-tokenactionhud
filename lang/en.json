@@ -192,6 +192,6 @@
     "tokenactionhud.settings.demonlord.attributewill": "Will",
     "tokenactionhud.settings.demonlord.attributeperception": "Perception",
 
-    "tokenactionhud.wfrp.melee" : "Melee",
-    "tokenactionhud.wfrp.ranged" : "Ranged"
+    "tokenactionhud.wfrp.meleeSkillPrefix" : "Melee",
+    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged"
   }

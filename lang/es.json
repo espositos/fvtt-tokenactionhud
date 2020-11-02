@@ -113,6 +113,6 @@
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "Mostrar los compendios del DJ",
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Si está activo, y el usuario es un DJ, el HUD incluirá los movimientos del DJ, las tablas aleatorias de tesoro y las cartas.",
 
-    "tokenactionhud.wfrp.melee" : "Melee",
-    "tokenactionhud.wfrp.ranged" : "Ranged"
+    "tokenactionhud.wfrp.meleeSkillPrefix" : "Melee",
+    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged"
 }

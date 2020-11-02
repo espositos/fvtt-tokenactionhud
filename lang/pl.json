@@ -189,6 +189,6 @@
   "tokenactionhud.settings.demonlord.attributewill": "Will",
   "tokenactionhud.settings.demonlord.attributeperception": "Perception",
 
-  "tokenactionhud.wfrp.melee" : "Broń Biała",
-  "tokenactionhud.wfrp.ranged" : "Broń Zasięgowa"
+  "tokenactionhud.wfrp.meleeSkillPrefix" : "Broń Biała",
+  "tokenactionhud.wfrp.rangedSkillPrefix" : "Broń Zasięgowa"
 } 
