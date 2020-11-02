@@ -392,15 +392,17 @@ export class ActionHandlerPf1 extends ActionHandler {
         let allSkills = new Set();
         
         Object.entries(skills).forEach(s => {
+            if (s[0].startsWith('skill'))
+                s[1].isCustomSkill = true;
+
             allSkills.add(s);
 
-            if (!s[1].subSkills)
-                return;
-            
-            Object.entries(s[1].subSkills).forEach(ss => {
-                ss[1].isSubSkill = true;
-                allSkills.add(ss);
-            })
+            if (s[1].subSkills) {
+                Object.entries(s[1].subSkills).forEach(ss => {
+                    ss[1].isCustomSkill = true;
+                    allSkills.add(ss);
+                })
+            }
         });
         
         let skillsActions = [...allSkills].map(e => {
@@ -408,7 +410,7 @@ export class ActionHandlerPf1 extends ActionHandler {
             let data = e[1];
             let name = abbr ? id : CONFIG.PF1.skills[id];
 
-            if (data.isSubSkill)
+            if (data.isCustomSkill || !name)
                 name = data.name ?? '?';
 
             name = name.charAt(0).toUpperCase() + name.slice(1);

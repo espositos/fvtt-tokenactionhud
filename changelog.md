@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.5] 2020-11-02
+### Bugfix
+- PF1 - Custom skills that aren't subskills are now accounted for
+
 ## [0.8.4] 2020-11-01
 ### Changed
 - PF1 - General improvements
