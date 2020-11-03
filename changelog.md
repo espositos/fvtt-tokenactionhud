@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.9] 2020-11-03
+### Changed
+- Filter for categories now only appears on right-click (not left-click)
+
 ## [0.8.8] 2020-11-02
 ### Bugfix
 - DND5e - using wrong variable to look up skill names
