@@ -118,7 +118,6 @@ export class TokenActionHUD extends Application {
             TagDialogHelper.showFilterDialog(game.tokenActionHUD.filterManager, id);
         }
 
-        html.find('.tah-title-button').click('click', e => handlePossibleFilterButtonClick(e));
         html.find('.tah-title-button').contextmenu('click', e => handlePossibleFilterButtonClick(e));      
         
         html.find('.tah-subtitle').click('click', e => handlePossibleFilterSubtitleClick(e));
