@@ -117,31 +117,50 @@ export class TokenActionHUD extends Application {
 
             TagDialogHelper.showFilterDialog(game.tokenActionHUD.filterManager, id);
         }
+        
+        function closeCategory(event) {
+            if (game.tokenActionHUD.rendering)
+                return;
+            let category = $(this)[0];
+            $(category).removeClass('hover');
+            let id = category.id;
+            game.tokenActionHUD.clearHoveredCategory(id);
+        }
 
-        html.find('.tah-title-button').contextmenu('click', e => handlePossibleFilterButtonClick(e));      
+        function openCategory(event) {
+            let category = $(this)[0];
+            $(category).addClass('hover');
+            let id = category.id;
+            game.tokenActionHUD.setHoveredCategory(id);
+            CategoryResizer.resizeHoveredCategory(id);
+        }
+
+        function toggleCategory(event) {
+            if (game.tokenActionHUD.rendering)
+                return;
+
+            let category = $(this)[0];
+            let boundClick;
+            if (!$(category).hasClass('hover')) {
+                boundClick = openCategory.bind(this);            
+                boundClick = boundClick(event);
+            }                
+            else {
+                boundClick = closeCategory.bind(this);
+                boundClick(event);
+            }
+        }
+
+        html.find('.tah-title-button').contextmenu('click', e => handlePossibleFilterButtonClick(e));
         
         html.find('.tah-subtitle').click('click', e => handlePossibleFilterSubtitleClick(e));
         html.find('.tah-subtitle').contextmenu('click', e => handlePossibleFilterSubtitleClick(e));
 
-        html.find('.tah-category').hover(
-            // mouseenter    
-            function() {
-                let category = $(this)[0];
-                $(category).addClass('hover');
-                let id = category.id;
-                game.tokenActionHUD.setHoveredCategory(id);
-                CategoryResizer.resizeHoveredCategory(id);
-            },
-            // mouseleave
-            function() {
-                if (game.tokenActionHUD.rendering)
-                    return;
-                let category = $(this)[0];
-                $(category).removeClass('hover');
-                let id = category.id;
-                game.tokenActionHUD.clearHoveredCategory(id);
-            }
-        );
+        if (settings.get('clickOpenCategory')) {
+            html.find('.tah-category').click('click', toggleCategory);
+        } else {
+            html.find('.tah-category').hover(openCategory,closeCategory);
+        }
 
         html.find(categoriesIcon).mousedown(ev => {
             ev.preventDefault();
