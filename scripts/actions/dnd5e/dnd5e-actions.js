@@ -615,13 +615,12 @@ export class ActionHandler5e extends ActionHandler {
             let consumeId = item.data.consume.target;
             let parentId = consumeId.substr(0, consumeId.lastIndexOf('.'));
             if (consumeType === 'attribute') {
-                let target = getProperty(actor, `data.data.${consumeId}`);
+                let target = getProperty(actor, `data.data.${parentId}`);
 
                 if (target) {
-                    let parent = getProperty(actor, `data.data.${parentId}`)
-                    result = target;
-                    if (!!parent.max)
-                        result += `/${parent.max}`
+                    result = target.value ?? 0;
+                    if (!!target.max)
+                        result += `/${target.max}`
                 }
             }
 
