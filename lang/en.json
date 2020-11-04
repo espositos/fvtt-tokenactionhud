@@ -132,6 +132,8 @@
     "tokenactionhud.settings.alwaysShowAdditionalCategories.hint": "If enabled, custom categories will be shown even when no token is selected.",
     "tokenactionhud.settings.showIcons.name": "Show action icons",
     "tokenactionhud.settings.showIcons.hint": "If enabled, the action image will be displayed on the HUD button where available.",
+    "tokenactionhud.settings.clickOpenCategory.name": "Click-to-open categories",
+    "tokenactionhud.settings.clickOpenCategory.hint": "If enabled, categories will open on click instead of hover.",
 
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.name": "Ignore passive feats",
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.hint": "If enabled, passive feats are not shown.",

@@ -76,6 +76,16 @@ export const registerSettings = function(system, rollHandlers) {
         default : false,
         onChange: value => { updateSettings(value); }
     });
+
+    game.settings.register(app,'clickOpenCategory', {
+        name : game.i18n.localize('tokenactionhud.settings.clickOpenCategory.name'),
+        hint : game.i18n.localize('tokenactionhud.settings.clickOpenCategory.hint'),
+        scope : 'client',
+        config : true,
+        type : Boolean,
+        default : false,
+        onChange: value => { updateSettings(value); }
+    });
    
     systemSettings.setSettings(system, app, updateSettings);
 
