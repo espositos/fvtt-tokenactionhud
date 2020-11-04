@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.12] 2020-11-04
+### Bugfix
+- DND5e - Consume tip on action would show nothing if value was 0
+
 ## [0.8.11] 2020-11-04
 ### Changed
 - Try to ensure only one category can be opened at a time
