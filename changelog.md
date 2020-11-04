@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.10] 2020-11-04
+### Added
+- Setting for click-to-open categories (that also need to be clicked to close) mainly for touch/tablet users
+
 ## [0.8.9] 2020-11-03
 ### Changed
 - Filter for categories now only appears on right-click (not left-click)
