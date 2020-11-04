@@ -358,7 +358,7 @@ export class ActionHandlerPf1 extends ActionHandler {
 
             let feat = this._buildItem(tokenId, actor, macroType, f);
             
-            if (!activationType || activationType === '') {
+            if (!activationType || activationType === '' || activationType === 'passive') {
                 passive.actions.push(feat);
                 return;
             } 
