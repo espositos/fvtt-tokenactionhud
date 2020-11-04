@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.11] 2020-11-04
+### Changed
+- Try to ensure only one category can be opened at a time
+
 ## [0.8.10] 2020-11-04
 ### Added
 - Setting for click-to-open categories (that also need to be clicked to close) mainly for touch/tablet users
