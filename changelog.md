@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.13] 2020-11-04
+### Bugfix
+- PF1 - Check for 'passive' feats
+
 ## [0.8.12] 2020-11-04
 ### Bugfix
 - DND5e - Consume tip on action would show nothing if value was 0
