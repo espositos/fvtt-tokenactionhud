@@ -129,10 +129,15 @@ export class TokenActionHUD extends Application {
 
         function openCategory(event) {
             let category = $(this)[0];
+            closeAllCategories(event);
             $(category).addClass('hover');
             let id = category.id;
             game.tokenActionHUD.setHoveredCategory(id);
             CategoryResizer.resizeHoveredCategory(id);
+        }
+
+        function closeAllCategories(event) {
+            html.find('.tah-category').removeClass('hover');
         }
 
         function toggleCategory(event) {
