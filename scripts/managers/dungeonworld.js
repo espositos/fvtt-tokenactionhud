@@ -3,7 +3,7 @@ import { ActionHandlerDw as ActionHandler } from '../actions/dungeonworld/dw-act
 import { RollHandlerBaseDw as Core } from '../rollHandlers/dungeonworld/dw-base.js';
 import * as settings from '../settings/dungeonworld-settings.js'
 
-export class Pf2eSystemManager extends SystemManager {
+export class DungeonWorldSystemManager extends SystemManager {
     
     constructor(appName) {
         super(appName);

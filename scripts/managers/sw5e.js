@@ -3,7 +3,7 @@ import { ActionHandlerSw5e as ActionHandler } from '../actions/sw5e/sw5e-actions
 import { RollHandlerBaseSw5e as Core } from '../rollHandlers/sw5e/sw5e-base.js';
 import * as settings from '../settings/sw5e-settings.js'
 
-export class DemonlordSystemManager extends SystemManager {
+export class Sw5eSystemManager extends SystemManager {
     
     constructor(appName) {
         super(appName);
