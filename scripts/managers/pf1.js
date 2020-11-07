@@ -1,7 +1,7 @@
 import { SystemManager } from './manager.js';
-import { ActionHandlerPf1 as ActionHandler } from '../actions/pf1/pf1-actions.js'
-import * as roll from '../rollHandlers/pf1/pf1-factory.js';
-import * as settings from '../settings/pf1-settings.js'
+import { ActionHandlerPf1 as ActionHandler } from '../actions/pf1/pf1-actions.js';
+import { RollHandlerBasePf1 as Core} from './pf1-base.js';
+import * as settings from '../settings/pf1-settings.js';
 
 export class Pf1SystemManager extends SystemManager {
 
@@ -24,9 +24,7 @@ export class Pf1SystemManager extends SystemManager {
 
     /** @override */
     doGetRollHandler(handlerId) {
-        let handler = roll.getRollHandler(handlerId)
-
-        return handler;
+        return new Core();
     }
 
     /** @override */

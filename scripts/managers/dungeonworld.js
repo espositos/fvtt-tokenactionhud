@@ -1,6 +1,6 @@
 import { SystemManager } from './manager.js';
 import { ActionHandlerDw as ActionHandler } from '../actions/dungeonworld/dw-actions.js'
-import * as roll from '../rollHandlers/dungeonworld/dw-factory.js';
+import { RollHandlerBaseDw as Core } from '../rollHandlers/dungeonworld/dw-base.js';
 import * as settings from '../settings/dungeonworld-settings.js'
 
 export class Pf2eSystemManager extends SystemManager {
@@ -24,9 +24,7 @@ export class Pf2eSystemManager extends SystemManager {
 
     /** @override */
     doGetRollHandler(handlerId) {
-        let handler = roll.getRollHandler(handlerId)
-
-        return handler;
+        return new Core();
     }
 
     /** @override */

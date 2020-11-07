@@ -1,6 +1,6 @@
 import { SystemManager } from './manager.js';
-import { ActionHandlerWfrp as ActionHandler } from '../actions/wfrp4e/wfrp4e-actions.js'
-import * as roll from '../rollHandlers/wfrp4e/wfrp4e-factory.js';
+import { ActionHandlerWfrp as ActionHandler } from '../actions/wfrp4e/wfrp4e-actions.js';
+import { RollHandlerWfrp as Core } from '../rollHandlers/wfrp4e/wfrp-base.js';
 import * as settings from '../settings/wfrp4e-settings.js'
 
 export class Wfrp4eSystemManager extends SystemManager {
@@ -24,9 +24,7 @@ export class Wfrp4eSystemManager extends SystemManager {
 
     /** @override */
     doGetRollHandler(handlerId) {
-        let handler = roll.getRollHandler(handlerId)
-
-        return handler;
+        return new Core();
     }
 
     /** @override */

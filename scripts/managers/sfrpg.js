@@ -1,7 +1,7 @@
 import { SystemManager } from './manager.js';
-import { ActionHandlerSfrpg as ActionHandler } from '../actions/sfrpg/sfrpg-actions.js'
-import * as roll from '../rollHandlers/sfrpg/sfrpg-factory.js';
-import * as settings from '../settings/sfrpg-settings.js'
+import { ActionHandlerSfrpg as ActionHandler } from '../actions/sfrpg/sfrpg-actions.js';
+import { RollHandlerBaseSfrpg as Core } from '../rollHandlers/sfrpg/sfrpg-base.js';
+import * as settings from '../settings/sfrpg-settings.js';
 
 export class SfrpgSystemManager extends SystemManager {
     
@@ -24,9 +24,7 @@ export class SfrpgSystemManager extends SystemManager {
 
     /** @override */
     doGetRollHandler(handlerId) {
-        let handler = roll.getRollHandler(handlerId)
-
-        return handler;
+        return new Core();
     }
 
     /** @override */

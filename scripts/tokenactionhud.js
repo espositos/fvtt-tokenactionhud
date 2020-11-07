@@ -1,5 +1,4 @@
 import * as settings from './settings.js';
-import { HandlersManager } from './handlersManager.js';
 import { TagDialogHelper } from './utilities/tagDialogHelper.js';
 import { CategoryResizer } from './utilities/categoryResizer.js';
 
@@ -30,9 +29,7 @@ export class TokenActionHUD extends Application {
     }
 
     updateRollHandler() {
-        let handlerId = settings.get('rollHandler');
-        let system = game.data.system.id;
-        this.rollHandler = HandlersManager.getRollHandler(system, handlerId);
+        this.rollHandler = this.systemManager.getRollHandler();
     }
 
     setTokensReference(tokens) {

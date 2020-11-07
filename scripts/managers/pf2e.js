@@ -1,6 +1,6 @@
 import { SystemManager } from './manager.js';
-import { ActionHandlerPf2e as ActionHandler } from '../actions/pf2e/pf2e-actions.js'
-import * as roll from '../rollHandlers/pf2e/pf2e-factory.js';
+import { ActionHandlerPf2e as ActionHandler } from '../actions/pf2e/pf2e-actions.js';
+import { RollHandlerBasePf2e as Core} from '../rollHandlers/pf2e/pf2e-base.js';
 import * as settings from '../settings/pf2e-settings.js'
 
 export class Pf2eSystemManager extends SystemManager {
@@ -24,9 +24,7 @@ export class Pf2eSystemManager extends SystemManager {
 
     /** @override */
     doGetRollHandler(handlerId) {
-        let handler = roll.getRollHandler(handlerId)
-
-        return handler;
+        return new Core();
     }
 
     /** @override */

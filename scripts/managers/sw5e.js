@@ -1,6 +1,6 @@
 import { SystemManager } from './manager.js';
 import { ActionHandlerSw5e as ActionHandler } from '../actions/sw5e/sw5e-actions.js'
-import * as roll from '../rollHandlers/sw5e/sw5e-factory.js';
+import { RollHandlerBaseSw5e as Core } from '../rollHandlers/sw5e/sw5e-base.js';
 import * as settings from '../settings/sw5e-settings.js'
 
 export class DemonlordSystemManager extends SystemManager {
@@ -24,9 +24,7 @@ export class DemonlordSystemManager extends SystemManager {
 
     /** @override */
     doGetRollHandler(handlerId) {
-        let handler = roll.getRollHandler(handlerId)
-
-        return handler;
+        return new Core();
     }
 
     /** @override */
