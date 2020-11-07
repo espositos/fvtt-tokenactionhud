@@ -1,12 +1,13 @@
 import { Logger } from './logger.js';
 export { Logger } from './logger.js';
-import * as systemSettings from './settings/systemSettings.js'
 
-const updateSettings = (value) => { Logger.debug('Settings updated. Refreshing HUD'); if (game.tokenActionHUD)game.tokenActionHUD.updateSettings(); }
+const updateFunc = (value) => { Logger.debug('Settings updated. Refreshing HUD'); if (game.tokenActionHUD)game.tokenActionHUD.updateSettings(); }
+let appName;
 
-const app = 'token-action-hud';
-export const registerSettings = function(system, rollHandlers) {
-    game.settings.register(app,'rollHandler', {
+export const registerSettings = function(app, systemManager, rollHandlers) {
+    appName = app;
+
+    game.settings.register(appName,'rollHandler', {
         name : game.i18n.localize('tokenactionhud.settings.rollHandler.name'),
         hint : game.i18n.localize('tokenactionhud.settings.rollHandler.hint'),
         scope : 'world',
@@ -14,130 +15,130 @@ export const registerSettings = function(system, rollHandlers) {
         type : String,
         choices : rollHandlers,
         default : 'core',
-        onChange: value => { updateSettings(value); }
+        onChange: value => { updateFunc(value); }
     });
     
-    game.settings.register(app,'enabledForUser', {
+    game.settings.register(appName,'enabledForUser', {
         name : game.i18n.localize('tokenactionhud.settings.enabledForUser.name'),
         hint : game.i18n.localize('tokenactionhud.settings.enabledForUser.hint'),
         scope : 'client',
         config : true,
         type : Boolean,
         default : true,
-        onChange: value => { updateSettings(value); }
+        onChange: value => { updateFunc(value); }
     });
     
-    game.settings.register(app,'alwaysShowHud', {
+    game.settings.register(appName,'alwaysShowHud', {
         name : game.i18n.localize('tokenactionhud.settings.alwaysShowHud.name'),
         hint : game.i18n.localize('tokenactionhud.settings.alwaysShowHud.hint'),
         scope : 'client',
         config : true,
         type : Boolean,
         default : true,
-        onChange: value => { updateSettings(value); }
+        onChange: value => { updateFunc(value); }
     });
     
-    game.settings.register(app,'showHudTitle', {
+    game.settings.register(appName,'showHudTitle', {
         name : game.i18n.localize('tokenactionhud.settings.showHudTitle.name'),
         hint : game.i18n.localize('tokenactionhud.settings.showHudTitle.hint'),
         scope : 'client',
         config : true,
         type : Boolean,
         default : true,
-        onChange: value => { updateSettings(value); }
+        onChange: value => { updateFunc(value); }
     });
 
-    game.settings.register(app,'showIcons', {
+    game.settings.register(appName,'showIcons', {
         name : game.i18n.localize('tokenactionhud.settings.showIcons.name'),
         hint : game.i18n.localize('tokenactionhud.settings.showIcons.hint'),
         scope : 'client',
         config : true,
         type : Boolean,
         default : true,
-        onChange: value => { updateSettings(value); }
+        onChange: value => { updateFunc(value); }
     });
 
-    game.settings.register(app,'alwaysShowAdditionalCategories', {
+    game.settings.register(appName,'alwaysShowAdditionalCategories', {
         name : game.i18n.localize('tokenactionhud.settings.alwaysShowAdditionalCategories.name'),
         hint : game.i18n.localize('tokenactionhud.settings.alwaysShowAdditionalCategories.hint'),
         scope : 'client',
         config : true,
         type : Boolean,
         default : true,
-        onChange: value => { updateSettings(value); }
+        onChange: value => { updateFunc(value); }
     });
 
-    game.settings.register(app,'onTokenHover', {
+    game.settings.register(appName,'onTokenHover', {
         name : game.i18n.localize('tokenactionhud.settings.onTokenHover.name'),
         hint : game.i18n.localize('tokenactionhud.settings.onTokenHover.hint'),
         scope : 'client',
         config : true,
         type : Boolean,
         default : false,
-        onChange: value => { updateSettings(value); }
+        onChange: value => { updateFunc(value); }
     });
 
-    game.settings.register(app,'clickOpenCategory', {
+    game.settings.register(appName,'clickOpenCategory', {
         name : game.i18n.localize('tokenactionhud.settings.clickOpenCategory.name'),
         hint : game.i18n.localize('tokenactionhud.settings.clickOpenCategory.hint'),
         scope : 'client',
         config : true,
         type : Boolean,
         default : false,
-        onChange: value => { updateSettings(value); }
+        onChange: value => { updateFunc(value); }
     });
    
-    systemSettings.setSettings(system, app, updateSettings);
+    systemManager.doRegisterSettings(appName, updateFunc);
 
     if (game.modules.get('itemacro')?.active) {
-        game.settings.register(app,'itemMacroReplace', {
+        game.settings.register(appName,'itemMacroReplace', {
             name: game.i18n.localize('tokenactionhud.settings.dnd5e.itemMacroReplace.name'),
             hint: game.i18n.localize('tokenactionhud.settings.dnd5e.itemMacroReplace.hint'),
             scope: "client",
             config: true,
             type: Boolean,
             default: true,
-            onChange: value => { updateSettings(value); }
+            onChange: value => { updateFunc(value); }
         });
     }
             
-    game.settings.register(app,'playerPermission', {
+    game.settings.register(appName,'playerPermission', {
         name : game.i18n.localize('tokenactionhud.settings.playerPermission.name'),
         hint : game.i18n.localize('tokenactionhud.settings.playerPermission.hint'),
         scope : 'world',
         config : true,
         type : Boolean,
         default : true,
-        onChange: value => { updateSettings(value); }
+        onChange: value => { updateFunc(value); }
     });
     
-    game.settings.register(app,'renderItemOnRightClick', {
+    game.settings.register(appName,'renderItemOnRightClick', {
         name : game.i18n.localize('tokenactionhud.settings.renderItemOnRightClick.name'),
         hint : game.i18n.localize('tokenactionhud.settings.renderItemOnRightClick.hint'),
         scope : 'client',
         config : true,
         type : Boolean,
         default : true,
-        onChange: value => { updateSettings(value); }
+        onChange: value => { updateFunc(value); }
     });
     
-    game.settings.register(app,'debug', {
+    game.settings.register(appName,'debug', {
         name : game.i18n.localize('tokenactionhud.settings.debug.name'),
         hint : game.i18n.localize('tokenactionhud.settings.debug.hint'),
         scope : 'client',
         config : true,
         type : Boolean,
         default : false,
-        onChange: value => { updateSettings(value); }
+        onChange: value => { updateFunc(value); }
     });
 
     Logger.debug('available rollHandlers: ', rollHandlers);
 }
 
 export function get(setting) {
-    return game.settings.get(app, setting);
+    return game.settings.get(appName, setting);
 }
 
 export function set(setting, value) {
-    game.settings.set(app, setting, value);
+    game.settings.set(appName, setting, value);
 }

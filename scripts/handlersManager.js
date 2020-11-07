@@ -1,5 +1,5 @@
 import { ActionHandler5e } from './actions/dnd5e/dnd5e-actions.js';
-import { MagicItemActionListExtender } from './actions/dnd5e/magicItemsExtender.js';
+import { MagicItemActionListExtender } from './actions/magicItemsExtender.js';
 import { ItemMacroActionListExtender } from './actions/itemMacroExtender.js';
 import { ActionHandlerWfrp } from './actions/wfrp4e/wfrp4e-actions.js';
 import { ActionHandlerPf2e } from './actions/pf2e/pf2e-actions.js';
@@ -57,14 +57,15 @@ export class HandlersManager {
 
         if (HandlersManager.isModuleActive('itemacro'))
             handler.addFurtherActionHandler(new ItemMacroActionListExtender())
+            
+        if (HandlersManager.isModuleActive('magicitems'))
+            actionHandler.addFurtherActionHandler(new MagicItemActionListExtender())
 
         return handler;
     }
 
     static getActionHandler5e(filterManager, categoryManager) {
         let actionHandler = new ActionHandler5e(filterManager, categoryManager);
-        if (HandlersManager.isModuleActive('magicitems'))
-            actionHandler.addFurtherActionHandler(new MagicItemActionListExtender())
         return actionHandler;
     }
 
@@ -117,8 +118,8 @@ export class HandlersManager {
                 if (HandlersManager.isModuleActive('midi-qol'))
                     coreTitle += ` [supports ${HandlersManager.getModuleTitle('midi-qol')}]`;
                 choices = { core: coreTitle };
-                this.addModule(choices, 'betterrolls5e');
-                this.addModule(choices, 'minor-qol');
+                this.addHandler(choices, 'betterrolls5e');
+                this.addHandler(choices, 'minor-qol');
                 break;
             case 'pf2e':
                 choices = { 'core': 'Core PF2E' };
@@ -146,7 +147,7 @@ export class HandlersManager {
         return choices;
     }
 
-    static addModule(choices, id) {
+    static addHandler(choices, id) {
         if (HandlersManager.isModuleActive(id)) {
             let title = HandlersManager.getModuleTitle(id);
             mergeObject(choices, { [id]: title })

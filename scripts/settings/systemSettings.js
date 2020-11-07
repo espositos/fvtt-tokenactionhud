@@ -12,7 +12,7 @@ import * as demonlordSettings from "./demonlord-settings.js"
 export function setSettings(system, app, updateSettings) {
     switch (system) {
         case "dnd5e":
-            dnd5eSettings.registerSettings(app, updateSettings);
+            dnd5eSettings.register(app, updateSettings);
             break;
         case "dungeonworld":
             dwSettings.registerSettings(app, updateSettings);

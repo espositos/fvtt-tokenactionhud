@@ -1,5 +1,5 @@
 import {Filter} from './filter.js';
-import * as settings from '../../settings.js';
+import {Logger} from '../../logger.js';
 
 export class FilterManager {
     filters = [];
@@ -12,7 +12,7 @@ export class FilterManager {
         if (!savedFilters)
             return;
 
-        settings.Logger.debug('saved filters:', savedFilters);
+        Logger.debug('saved filters:', savedFilters);
 
         Object.entries(savedFilters).forEach(f => {
             let filter = new Filter(f[0]);

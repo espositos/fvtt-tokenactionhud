@@ -1,81 +1,30 @@
-import * as settings from './settings.js';
-import { HandlersManager } from './handlersManager.js';
-import { CategoryManager } from './actions/categories/categoryManager.js';
-import { FilterManager } from './actions/filter/filterManager.js';
 import { TokenActionHUD } from './tokenactionhud.js';
+import * as SystemManagerFactory from './managers/factory.js';
+import { registerHandlerbars } from './utilities/handlebars.js';
+
+const appName = 'token-action-hud';
+
+let systemManager;
 
 Hooks.on('init', () => {
-    Handlebars.registerHelper('cap', function(string) {
-        if (!string || string.length < 1)
-            return '';
-        return string[0].toUpperCase() + string.slice(1); 
-    });
+    registerHandlerbars();
     
-    Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
-
-        switch (operator) {
-            case '==':
-                return (v1 == v2) ? options.fn(this) : options.inverse(this);
-            case '===':
-                return (v1 === v2) ? options.fn(this) : options.inverse(this);
-            case '!=':
-                return (v1 != v2) ? options.fn(this) : options.inverse(this);
-            case '!==':
-                return (v1 !== v2) ? options.fn(this) : options.inverse(this);
-            case '<':
-                return (v1 < v2) ? options.fn(this) : options.inverse(this);
-            case '<=':
-                return (v1 <= v2) ? options.fn(this) : options.inverse(this);
-            case '>':
-                return (v1 > v2) ? options.fn(this) : options.inverse(this);
-            case '>=':
-                return (v1 >= v2) ? options.fn(this) : options.inverse(this);
-            case '&&':
-                return (v1 && v2) ? options.fn(this) : options.inverse(this);
-            case '||':
-                return (v1 || v2) ? options.fn(this) : options.inverse(this);
-            default:
-                return options.inverse(this);
-        }
-    });
-
-    loadTemplates([
-        'modules/token-action-hud/templates/category.hbs',
-        'modules/token-action-hud/templates/subcategory.hbs',
-        'modules/token-action-hud/templates/actionSet.hbs',
-        'modules/token-action-hud/templates/action.hbs',
-        'modules/token-action-hud/templates/tagdialog.hbs'
-    ]);
-
     let system = game.data.system.id;
-    let rollHandlers = HandlersManager.getRollHandlerChoices(system);
-
-    settings.registerSettings(system, rollHandlers);
+    
+    systemManager = SystemManagerFactory.create(system, appName);
+    systemManager.registerSettings();
 });
 
 Hooks.on('canvasReady', async () => {
 
+    let user = game.user;
+
+    if (!user)
+        throw new Error('Token Action HUD | No user found.')
+
     if (!game.tokenActionHUD) {
-        let system = game.data.system.id;
-        let user = game.user;
-
-        let filterManager = new FilterManager(user);
-        let categoryManager = new CategoryManager(user, filterManager);
-        await categoryManager.init();
-
-        let actionHandler = HandlersManager.getActionHandler(system, filterManager, categoryManager);
-        
-        let handlerId = settings.get('rollHandler');
-        
-        if (! (handlerId === 'core' || game.modules.get(handlerId).active) ) {
-            settings.Logger.error(handlerId, game.i18n.localize('tokenactionhud.handlerNotFound'));
-            handlerId = 'core';
-            settings.set('rollHandler', handlerId);
-        }
-
-        let rollHandler = HandlersManager.getRollHandler(system, handlerId);
-        
-        game.tokenActionHUD = new TokenActionHUD(actionHandler, rollHandler, filterManager, categoryManager);
+        game.tokenActionHUD = new TokenActionHUD(systemManager);
+        await game.tokenActionHUD.init(user);
     }
     
     game.tokenActionHUD.setTokensReference(canvas.tokens);

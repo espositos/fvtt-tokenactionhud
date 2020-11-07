@@ -6,16 +6,22 @@ import { CategoryResizer } from './utilities/categoryResizer.js';
 export class TokenActionHUD extends Application {
     i18n = (toTranslate) => game.i18n.localize(toTranslate);
 
-    constructor(actions, rollHandler, filterManager, categoryManager) {
+    refresh_timeout = null;
+    tokens = null;
+    rendering = false;
+    categoryHovered = '';
+
+    constructor(systemManager) {
         super();
-        this.refresh_timeout = null;
-        this.tokens = null;
-        this.actions = actions;
-        this.rollHandler = rollHandler;
-        this.filterManager = filterManager;
-        this.categoryManager = categoryManager;
-        this.rendering = false;
-        this.categoryHovered = '';
+        this.systemManager = systemManager;
+    }
+
+    async init(user) {
+        this.actions = await this.systemManager.getActionHandler(user);
+
+        this.rollHandler = this.systemManager.getRollHandler();
+        this.filterManager = this.systemManager.getFilterManager();
+        this.categoryManager = this.systemManager.getCategoryManager();
     }
 
     updateSettings() {
