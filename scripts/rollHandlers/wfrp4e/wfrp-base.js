@@ -37,7 +37,7 @@ export class RollHandlerBaseWfrp4e extends RollHandler {
                 return actor.setupWeapon(itemData, bypassData)
                     .then(setupData => actor.weaponTest(setupData));
             case 'spell':
-                return actor.spellDialog(itemData, bypassData);
+                return this.castSpell(actor, itemData, bypassData);
             case 'prayer':
                 return actor.setupPrayer(itemData, bypassData)
                     .then(setupData => actor.prayerTest(setupData));
@@ -52,5 +52,12 @@ export class RollHandlerBaseWfrp4e extends RollHandler {
                 return actor.setupSkill(itemData, bypassData)
                     .then(setupData => actor.basicTest(setupData));
         }
+    }
+
+    castSpell(actor, itemData, bypassData) {
+        if (actor.spellDialog)
+            return actor.spellDialog(itemData, bypassData);
+        else
+            return actor.sheet.spellDialog(itemData, bypassData);
     }
 }

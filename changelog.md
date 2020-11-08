@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.15] 2020-11-08
+### Bugfix
+- WFRP - show only equipped weapons for characters and fix spellDialog call
+
 ## [0.8.14] 2020-11-08
 ### Bugfix
 - PF2E - Lore skills appeared twice
