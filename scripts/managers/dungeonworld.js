@@ -29,6 +29,6 @@ export class DungeonWorldSystemManager extends SystemManager {
 
     /** @override */
     doRegisterSettings(appName, updateFunc) {
-        settings.register(appName, updateFunc);
+        settings.registerSettings(appName, updateFunc);
     }
 }
