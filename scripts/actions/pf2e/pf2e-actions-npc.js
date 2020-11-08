@@ -73,7 +73,7 @@ export class NpcActionHandlerPf2e {
             }
             
             variantsMap[0].img = s.data.img;
-            subcategory.actions = this.baseHandler._produceMap(tokenId, variantsMap, macroType);
+            subcategory.actions = this.baseHandler._produceActionMap(tokenId, variantsMap, macroType);
             
             let damageEncodedValue = [macroType, tokenId, encodeURIComponent(s.data._id+'>damage')].join(this.baseHandler.delimiter);
             let critEncodedValue = [macroType, tokenId, encodeURIComponent(s.data._id+'>critical')].join(this.baseHandler.delimiter);
@@ -101,7 +101,7 @@ export class NpcActionHandlerPf2e {
         
         let loreItems = actor.items.filter(i => i.data.type === 'lore').sort(this._foundrySort);;
         let lore = this.baseHandler.initializeEmptySubcategory();
-        lore.actions = this.baseHandler._produceMap(tokenId, loreItems, 'lore');
+        lore.actions = this.baseHandler._produceActionMap(tokenId, loreItems, 'lore');
         
         let abbr = settings.get('abbreviateSkills');
         if (abbr)
@@ -122,7 +122,7 @@ export class NpcActionHandlerPf2e {
 
         let attributesMap = [{_id: 'perception', name: 'Perception'},{_id: 'initiative', name: 'Initiative'}]
         
-        attributes.actions = this.baseHandler._produceMap(tokenId, attributesMap, macroType);
+        attributes.actions = this.baseHandler._produceActionMap(tokenId, attributesMap, macroType);
         
         this.baseHandler._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.attributes'), attributes);
 

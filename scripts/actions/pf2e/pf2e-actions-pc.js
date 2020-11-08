@@ -93,7 +93,7 @@ export class PcActionHandlerPf2e {
             }.bind(s));
 
             variantsMap[0].img = s.imageUrl;
-            subcategory.actions = this.baseHandler._produceMap(tokenId, variantsMap, macroType);
+            subcategory.actions = this.baseHandler._produceActionMap(tokenId, variantsMap, macroType);
             
             let damageEncodedValue = [macroType, tokenId, encodeURIComponent(s.name+'>damage')].join(this.baseHandler.delimiter);
             let critEncodedValue = [macroType, tokenId, encodeURIComponent(s.name+'>critical')].join(this.baseHandler.delimiter);
@@ -133,25 +133,46 @@ export class PcActionHandlerPf2e {
     _getSkillsList(actor, tokenId) {
         let result = this.baseHandler.initializeEmptyCategory('skills');
         
-        let abbr = settings.get('abbreviateSkills');
+        let abbreviated = settings.get('abbreviateSkills');
 
-        let actorSkills = actor.data.data.skills;
-        let skillMap = Object.keys(actorSkills).map(k => { 
-            let name = abbr ? k.charAt(0).toUpperCase()+k.slice(1) : CONFIG.PF2E.skills[k];
-            return {'_id': k, 'name': name}
-        });
+        let actorSkills = Object.entries(actor.data.data.skills);
+        let skillMap = actorSkills.filter(s => !s[1].lore)
+            .map(s => this._createSkillMap(tokenId, 'skill', s, abbreviated));
 
+        let loreMap = actorSkills.filter(s => s[1].lore)
+            .sort(this._foundrySort)
+            .map(s => this._createSkillMap(tokenId, 'lore', s, abbreviated));
+        
         let skills = this.baseHandler.initializeEmptySubcategory();
-        skills.actions = this.baseHandler._produceMap(tokenId, skillMap, 'skill');
+        skills.actions = skillMap;
 
-        let loreItems = actor.items.filter(i => i.data.type === 'lore').sort(this._foundrySort);;
         let lore = this.baseHandler.initializeEmptySubcategory();
-        lore.actions = this.baseHandler._produceMap(tokenId, loreItems, 'lore');
+        lore.actions = loreMap;
 
         this.baseHandler._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.skills'), skills);
         this.baseHandler._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.lore'), lore);
 
         return result;
+    }
+
+    _createSkillMap(tokenId, macroType, skillEntry, abbreviated) {
+            let key = skillEntry[0];
+            let data = skillEntry[1];
+
+            let name = abbreviated ? key.charAt(0).toUpperCase()+key.slice(1) : data.name.charAt(0).toUpperCase()+key.slice(1);
+
+            let value = data.value;
+            let info = '';
+            if (value != 0) {
+                if (value > 0)
+                    info = `+${value}`;
+                else
+                    info = `${value}`;
+            }
+
+            let action = this.baseHandler._produceActionMap(tokenId, [{'_id': key, 'name': name}], macroType);
+            action[0].info1 = info;
+            return action[0];
     }
 
     /** @private */
@@ -166,7 +187,7 @@ export class PcActionHandlerPf2e {
             return { _id: a[0], name: name } 
         });
         
-        attributes.actions = this.baseHandler._produceMap(tokenId, attributesMap, macroType);
+        attributes.actions = this.baseHandler._produceActionMap(tokenId, attributesMap, macroType);
         
         this.baseHandler._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.attributes'), attributes);
 

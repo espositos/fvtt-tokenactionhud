@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.14] 2020-11-08
+### Bugfix
+- PF2E - Lore skills appeared twice
+
 ## [0.8.13] 2020-11-04
 ### Bugfix
 - PF1 - Check for 'passive' feats
