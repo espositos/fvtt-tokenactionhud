@@ -23,7 +23,7 @@ export function create(system, appName) {
             return new SfrpgSystemManager(appName);
         case 'sw5e':
             return new Sw5eSystemManager(appName);
-        case 'wfrp':
+        case 'wfrp4e':
             return new Wfrp4eSystemManager(appName);
     }
 }

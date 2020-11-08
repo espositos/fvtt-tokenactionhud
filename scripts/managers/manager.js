@@ -2,6 +2,7 @@ import * as settings from '../settings.js';
 import {Logger} from '../logger.js';
 import {FilterManager} from '../actions/filter/filterManager.js';
 import {CategoryManager} from '../actions/categories/categoryManager.js';
+import {ItemMacroActionListExtender} from '../actions/itemMacroExtender.js';
 import {CompendiumMacroPreHandler} from '../rollHandlers/compendiumMacroPreHandler.js';
 import {ItemMacroPreRollHandler} from '../rollHandlers/pre-itemMacro.js';
 
@@ -33,9 +34,6 @@ export class SystemManager {
     addActionExtenders(handler) {
         if (SystemManager.isModuleActive('itemacro'))
             handler.addFurtherActionHandler(new ItemMacroActionListExtender())
-            
-        if (SystemManager.isModuleActive('magicitems'))
-            actionHandler.addFurtherActionHandler(new MagicItemActionListExtender())
     }
     
     filterManager;
