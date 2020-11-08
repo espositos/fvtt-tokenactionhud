@@ -92,19 +92,19 @@ export class ActionHandlerPf2e extends ActionHandler {
             filteredActions = filteredActions.filter(a => a.data.data.actionType.value !== 'passive');
 
         let actions = this.initializeEmptySubcategory();
-        actions.actions = this._produceMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'action' && this._actionIsShort(a)), macroType);
+        actions.actions = this._produceActionMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'action' && this._actionIsShort(a)), macroType);
 
         let reactions = this.initializeEmptySubcategory();
-        reactions.actions = this._produceMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'reaction' && this._actionIsShort(a)), macroType);
+        reactions.actions = this._produceActionMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'reaction' && this._actionIsShort(a)), macroType);
 
         let free = this.initializeEmptySubcategory();
-        free.actions = this._produceMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'free' && this._actionIsShort(a)), macroType);
+        free.actions = this._produceActionMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'free' && this._actionIsShort(a)), macroType);
 
         let exploration = this.initializeEmptySubcategory();
-        exploration.actions = this._produceMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.traits?.value.includes('exploration')), macroType);
+        exploration.actions = this._produceActionMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.traits?.value.includes('exploration')), macroType);
 
         let downtime = this.initializeEmptySubcategory();
-        downtime.actions = this._produceMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.traits?.value.includes('downtime')), macroType);
+        downtime.actions = this._produceActionMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.traits?.value.includes('downtime')), macroType);
 
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.actions'), actions);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.reactions'), reactions);
@@ -374,10 +374,10 @@ export class ActionHandlerPf2e extends ActionHandler {
         let items = (actor.items ?? []).filter(a => filter.includes(a.type)).sort(this._foundrySort);;
 
         let active = this.initializeEmptySubcategory();
-        active.actions = this._produceMap(tokenId, (items ?? []).filter(a => a.data.data.actionType.value !== 'passive'), macroType);
+        active.actions = this._produceActionMap(tokenId, (items ?? []).filter(a => a.data.data.actionType.value !== 'passive'), macroType);
 
         let passive = this.initializeEmptySubcategory();
-        passive.actions = this._produceMap(tokenId, (items ?? []).filter(a => a.data.data.actionType.value === 'passive'), macroType, true);
+        passive.actions = this._produceActionMap(tokenId, (items ?? []).filter(a => a.data.data.actionType.value === 'passive'), macroType, true);
 
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.active'), active);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.passive'), passive);
@@ -393,7 +393,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let saveMap = Object.keys(actorSaves).map(k => { return {_id: k, name: CONFIG.PF2E.saves[k]}});
 
         let saves = this.initializeEmptySubcategory();
-        saves.actions = this._produceMap(tokenId, saveMap, 'save');
+        saves.actions = this._produceActionMap(tokenId, saveMap, 'save');
 
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.saves'), saves);
 
@@ -412,7 +412,7 @@ export class ActionHandlerPf2e extends ActionHandler {
             return {_id: k, name: name}});
 
         let abilities = this.initializeEmptySubcategory();
-        abilities.actions = this._produceMap(tokenId, abilityMap, 'ability');
+        abilities.actions = this._produceActionMap(tokenId, abilityMap, 'ability');
 
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.abilities'), abilities);
 
@@ -484,7 +484,7 @@ export class ActionHandlerPf2e extends ActionHandler {
 
     /** @private */
     _buildItemActions(tokenId, macroType, itemList, isPassive = false) {
-        let result = this._produceMap(tokenId, itemList, macroType, isPassive);
+        let result = this._produceActionMap(tokenId, itemList, macroType, isPassive);
 
         result.forEach(i => this._addItemInfo( itemList.find(item => item.data._id === i.id), i));
 
@@ -508,18 +508,21 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
     
     /** @private */
-    _produceMap(tokenId, itemSet, type, isPassive = false) {
-        return itemSet.map(i => {
-            let encodedValue = [type, tokenId, i._id].join(this.delimiter);
-            let icon;
-            let actions = i.data?.data?.actions;
-            if (actions && !isPassive) {
-                let actionValue = parseInt((actions || {}).value, 10) || 1;
-                icon = this._getActionIcon(actionValue);
-            }
-            let img = this._getImage(i);
-            return { name: i.name, encodedValue: encodedValue, id: i._id, img: img, icon: icon };
-        });
+    _produceActionMap(tokenId, itemSet, type, isPassive = false) {
+        return itemSet.map(i => this._produceAction(tokenId, i, type, isPassive));
+    }
+
+    /** @private */
+    _produceAction(tokenId, item, type, isPassive = false) {
+        let encodedValue = [type, tokenId, item._id].join(this.delimiter);
+        let icon;
+        let actions = item.data?.data?.actions;
+        if (actions && !isPassive) {
+            let actionValue = parseInt((actions || {}).value, 10) || 1;
+            icon = this._getActionIcon(actionValue);
+        }
+        let img = this._getImage(item);
+        return { name: item.name, encodedValue: encodedValue, id: item._id, img: img, icon: icon };
     }
     
     _getActionIcon(action) {
