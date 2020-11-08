@@ -55,7 +55,10 @@ export class ActionHandlerWfrp extends ActionHandler {
         let result = this.initializeEmptyCategory('items');
 
         let subcategory = this.initializeEmptySubcategory();
-        subcategory.actions = this._produceMap(tokenId ,actor.items.filter(i => i.type == type), type);
+        
+        let items = actor.items.filter(i => i.type === type);
+        let filtered = actor.data.type === 'character' ? items.filter(i => i.data.data.equipped) : items;
+        subcategory.actions = this._produceMap(tokenId, filtered, type);
 
         this._combineSubcategoryWithCategory(result, types, subcategory);
 
