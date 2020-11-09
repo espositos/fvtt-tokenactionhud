@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.16] 2020-11-09
+### Bugfix
+- PF2E - Handling of lore skills has changed in PF2E API so that is now fixed
+
 ## [0.8.15] 2020-11-08
 ### Bugfix
 - WFRP - show only equipped weapons for characters and fix spellDialog call
