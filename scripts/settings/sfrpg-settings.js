@@ -1,4 +1,4 @@
-export function registerSettings(app, updateSettings) {
+export function register(app, updateSettings) {
     game.settings.register(app,'showSpellInfo', {
         name: game.i18n.localize('tokenactionhud.settings.sfrpg.showSpellInfo.name'),
         hint: game.i18n.localize('tokenactionhud.settings.sfrpg.showSpellInfo.hint'),

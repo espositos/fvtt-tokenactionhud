@@ -29,6 +29,6 @@ export class Pf2eSystemManager extends SystemManager {
 
     /** @override */
     doRegisterSettings(appName, updateFunc) {
-        settings.registerSettings(appName, updateFunc);
+        settings.register(appName, updateFunc);
     }
 }

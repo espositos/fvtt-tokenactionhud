@@ -39,27 +39,28 @@ export class Dnd5eSystemManager extends SystemManager {
 
     /** @override */
     doGetRollHandler(handlerId) {
+        let rollHandler;
         switch (handlerId) {
             case 'betterrolls5e':
-                handler = new BetterRolls5e();
+                rollHandler = new BetterRolls5e();
                 break;
             case 'minor-qol':
-                handler = new MinorQol5e();
+                rollHandler = new MinorQol5e();
                 break;
             case "core":
             default:
-                handler = new Core();
+                rollHandler = new Core();
                 break;
         }
         
         if (SystemManager.isModuleActive('magicitems'))
-            handler.addPreRollHandler(new MagicItemsPreRollHandler());
+            rollHandler.addPreRollHandler(new MagicItemsPreRollHandler());
 
-        return handler;
+        return rollHandler;
     }
 
     /** @override */
     doRegisterSettings(appName, updateFunc) {
-        settings.registerSettings(appName, updateFunc);
+        settings.register(appName, updateFunc);
     }
 }

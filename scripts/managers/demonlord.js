@@ -29,6 +29,6 @@ export class DemonlordSystemManager extends SystemManager {
 
     /** @override */
     doRegisterSettings(appName, updateFunc) {
-        settings.registerSettings(appName, updateFunc);
+        settings.register(appName, updateFunc);
     }
 }

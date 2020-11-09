@@ -29,6 +29,6 @@ export class Wfrp4eSystemManager extends SystemManager {
 
     /** @override */
     doRegisterSettings(appName, updateFunc) {
-        settings.registerSettings(appName, updateFunc);
+        settings.register(appName, updateFunc);
     }
 }

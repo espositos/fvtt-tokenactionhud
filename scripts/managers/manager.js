@@ -24,16 +24,16 @@ export class SystemManager {
 
         await this.categoryManager.init();
 
-        let handler = this.doGetActionHandler(this.filterManager, this.categoryManager);
-        this.addActionExtenders(handler);
-        return handler;
+        let actionHandler = this.doGetActionHandler(this.filterManager, this.categoryManager);
+        this.addActionExtenders(actionHandler);
+        return actionHandler;
     }
 
     doGetActionHandler() {}
 
-    addActionExtenders(handler) {
+    addActionExtenders(actionHandler) {
         if (SystemManager.isModuleActive('itemacro'))
-            handler.addFurtherActionHandler(new ItemMacroActionListExtender())
+            actionHandler.addFurtherActionHandler(new ItemMacroActionListExtender())
     }
     
     filterManager;
@@ -50,26 +50,26 @@ export class SystemManager {
     /** ROLL HANDLERS */
 
     getRollHandler() {
-        let handlerId = settings.get('rollHandler');
+        let rollHandlerId = settings.get('rollHandler');
         
-        if (! (handlerId === 'core' || SystemManager.isModuleActive(handlerId)) ) {
-            Logger.error(handlerId, this.i18n('tokenactionhud.handlerNotFound'));
-            handlerId = 'core';
-            settings.set('rollHandler', handlerId);
+        if (! (rollHandlerId === 'core' || SystemManager.isModuleActive(rollHandlerId)) ) {
+            Logger.error(rollHandlerId, this.i18n('tokenactionhud.handlerNotFound'));
+            rollHandlerId = 'core';
+            settings.set('rollHandler', rollHandlerId);
         }
 
-        let handler = this.doGetRollHandler(handlerId);
-        this.addPreHandlers(handler);
-        return handler;
+        let rollHandler = this.doGetRollHandler(rollHandlerId);
+        this.addPreHandlers(rollHandler);
+        return rollHandler;
     }
 
     doGetRollHandler(handlerId) {}
 
-    addPreHandlers(handler) {
-        handler.addPreRollHandler(new CompendiumMacroPreHandler())
+    addPreHandlers(rollHandler) {
+        rollHandler.addPreRollHandler(new CompendiumMacroPreHandler())
 
         if (SystemManager.isModuleActive('itemacro'))
-            handler.addPreRollHandler(new ItemMacroPreRollHandler())
+            rollHandler.addPreRollHandler(new ItemMacroPreRollHandler())
     }
 
     getAvailableRollHandlers() {}
