@@ -46,9 +46,6 @@ export class RollHandlerBasePf2e extends RollHandler {
                 break;
             case 'skill':
                 this._rollSkill(event, actor, actionId);
-                break;  
-            case 'lore':
-                this._rollLoreSkill(event, actor, actionId);
                 break;
             case 'action':
             case 'feat':
@@ -189,13 +186,6 @@ export class RollHandlerBasePf2e extends RollHandler {
     /** @private */
     _rollSaveNpc(event, actor, actionId) {
         actor.rollSave(event, actionId);
-    }
-
-    /** @private */
-    _rollLoreSkill(event, actor, actionId) {
-        let item = actor.getOwnedItem(actionId);
-
-        actor.rollLoreSkill(event, item);
     }
 
     /** @private */

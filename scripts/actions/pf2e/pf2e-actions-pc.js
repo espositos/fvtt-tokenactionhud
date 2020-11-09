@@ -141,7 +141,7 @@ export class PcActionHandlerPf2e {
 
         let loreMap = actorSkills.filter(s => s[1].lore)
             .sort(this._foundrySort)
-            .map(s => this._createSkillMap(tokenId, 'lore', s, abbreviated));
+            .map(s => this._createSkillMap(tokenId, 'skill', s, abbreviated));
         
         let skills = this.baseHandler.initializeEmptySubcategory();
         skills.actions = skillMap;
@@ -159,7 +159,7 @@ export class PcActionHandlerPf2e {
             let key = skillEntry[0];
             let data = skillEntry[1];
 
-            let name = abbreviated ? key.charAt(0).toUpperCase()+key.slice(1) : data.name.charAt(0).toUpperCase()+key.slice(1);
+            let name = abbreviated ? key.charAt(0).toUpperCase()+key.slice(1) : data.name.charAt(0).toUpperCase()+data.name.slice(1);
 
             let value = data.value;
             let info = '';
