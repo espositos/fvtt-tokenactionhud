@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.0] 2020-11-10
+### Changed
+- Refactored where systems store their action and roll handlers away from one blob class.
+
 ## [0.8.16] 2020-11-09
 ### Bugfix
 - PF2E - Handling of lore skills has changed in PF2E API so that is now fixed
