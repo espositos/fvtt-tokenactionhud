@@ -50,6 +50,7 @@ export class RollHandler {
     doHandleActionEvent(event, encodedValue) {}
 
     addPreRollHandler(handler) {
+        settings.Logger.debug(`Adding pre-roll handler: ${handler.constructor.name}`)
         this.preRollHandlers.push(handler);
     }
 

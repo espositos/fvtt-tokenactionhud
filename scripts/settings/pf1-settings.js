@@ -1,4 +1,4 @@
-export function registerSettings(app, updateSettings) {
+export function register(app, updateSettings) {
     
 
     game.settings.register(app,'ignorePassiveFeats', {

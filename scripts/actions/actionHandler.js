@@ -53,6 +53,7 @@ export class ActionHandler {
 
     /** @public */
     addFurtherActionHandler(handler) {
+        settings.Logger.debug(`Adding further action handler: ${handler.constructor.name}`)
         this.furtherActionHandlers.push(handler);
     }
 
