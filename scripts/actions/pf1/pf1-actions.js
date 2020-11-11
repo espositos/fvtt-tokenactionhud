@@ -248,15 +248,16 @@ export class ActionHandlerPf1 extends ActionHandler {
     _categoriseSpells(actor, tokenId, spells) {
         const macroType = 'spell';
         let result = this.initializeEmptySubcategory('spells');
+        let concentrationSubcategory = this.initializeEmptySubcategory('concentration');
+        concentrationSubcategory.name = this.i18n('tokenactionhud.concentration');
 
         const spellbooks = [...new Set(spells.map(i => i.data.spellbook))].sort();
 
         spellbooks.forEach(sb => {
-            if (!sb)
-                return;
-            
             const isSpontaneous = actor.data.data.attributes.spells.spellbooks[sb].spontaneous;
             let spellbookName = sb.charAt(0).toUpperCase() + sb.slice(1);
+
+            concentrationSubcategory.actions.push(this._createConcentrationAction(tokenId, spellbookName))
 
             const sbSpells = spells.filter(s => s.data.spellbook === sb)
                 .sort((a, b) => a.name.toUpperCase().localeCompare(b.name.toUpperCase(), undefined, {sensitivity: 'base'}))
@@ -306,7 +307,8 @@ export class ActionHandlerPf1 extends ActionHandler {
             })
         });
 
-        this._addConcentrationSubcategory(tokenId, result);
+        if (concentrationSubcategory.actions?.length > 0)
+            result.subcategories.unshift(concentrationSubcategory);
 
         return result;
     }
@@ -355,18 +357,11 @@ export class ActionHandlerPf1 extends ActionHandler {
         return true;
     }
 
-    _addConcentrationSubcategory(tokenId, category) {
-        if (!(category.subcategories && category.subcategories.length > 0))
-            return;
-
-        let concentrationCat = this.initializeEmptySubcategory();
+    _createConcentrationAction(tokenId, school) {
         let concentrationMacro = 'concentration';
-        let name = this.i18n('tokenactionhud.concentration');
-        let encodedValue = [concentrationMacro, tokenId, concentrationMacro].join(this.delimiter);
-        let concentrationAction = [{ name: name, encodedValue: encodedValue, id: concentrationMacro }]
-        concentrationCat.actions = concentrationAction;
-        concentrationCat.name = this.i18n('tokenactionhud.concentration');
-        category.subcategories.unshift(concentrationCat);
+        let name = school;
+        let encodedValue = [concentrationMacro, tokenId, school.toLowerCase()].join(this.delimiter);
+        return { name: name, encodedValue: encodedValue, id: concentrationMacro }
     }
     
     /** FEATS **/

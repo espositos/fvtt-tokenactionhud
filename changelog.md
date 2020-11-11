@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.2] 2020-11-11
+### Added
+- PF1E - added rolls for Concentration for spellbooks other than primary
+
 ## [0.9.1] 2020-11-11
 ### Bugfix
 - PF2E - NPC skills should work again
