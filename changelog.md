@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.9.1] 2020-11-11
+### Bugfix
+- PF2E - NPC skills should work again
+### Added
+- PF1E - added rolls for Concentration (uses primary caster level) under spells, Combat Maneuver Bonus under Attacks, and Defenses under Saves.
+
 ## [0.9.0] 2020-11-10
 ### Changed
 - Refactored where systems store their action and roll handlers away from one blob class.

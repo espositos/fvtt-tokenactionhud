@@ -86,6 +86,9 @@
     "tokenactionhud.rests": "Rests",
     "tokenactionhud.inspiration": "Inspiration",    
     "tokenactionhud.gm": "GM",    
+    "tokenactionhud.cmb": "CMB",    
+    "tokenactionhud.concentration": "Concentration",
+    "tokenactionhud.defenses": "Defenses",
 
     "tokenactionhud.mwa": "Melee Weapon Attacks",
     "tokenactionhud.rwa": "Ranged Weapon Attacks",

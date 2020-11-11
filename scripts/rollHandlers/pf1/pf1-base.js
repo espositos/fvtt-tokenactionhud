@@ -1,5 +1,5 @@
-import { RollHandler } from "../rollHandler.js"
-import * as settings from "../../settings.js";
+import { RollHandler } from '../rollHandler.js'
+import * as settings from '../../settings.js';
 
 export class RollHandlerBasePf1 extends RollHandler {
     constructor() {
@@ -30,40 +30,59 @@ export class RollHandlerBasePf1 extends RollHandler {
 
     async _handleMacros(event, macroType, tokenId, actionId) {
         switch (macroType) {
-            case "ability":
+            case 'ability':
                 this.rollAbilityMacro(event, tokenId, actionId);
                 break;
-            case "skill":
+            case 'concentration':
+                this.rollConcentrationMacro(event, tokenId, actionId);
+                break;
+            case 'cmb':
+                this.rollCmbMacro(event, tokenId, actionId);
+                break;
+            case 'skill':
                 this.rollSkillMacro(event, tokenId, actionId);
                 break;
-            case "abilitySave":
+            case 'abilitySave':
                 this.rollAbilitySaveMacro(event, tokenId, actionId);
                 break;
-            case "abilityCheck":
+            case 'abilityCheck':
                 this.rollAbilityCheckMacro(event, tokenId, actionId);
                 break;
             case 'buff':
                 await this.adjustBuff(event, tokenId, actionId);
                 break;
-            case "item":
-            case "spell":
-            case "feat":
-            case "attack":
+            case 'item':
+            case 'spell':
+            case 'feat':
+            case 'attack':
                 if (this.isRenderItem())
                     this.doRenderItem(tokenId, actionId);
                 else
                     this.rollItemMacro(event, tokenId, actionId);
                 break;
-            case "utility":
+            case 'defenses':
+                    this.rollDefenses(event, tokenId, actionId);
+                    break;
+            case 'utility':
                 this.performUtilityMacro(event, tokenId, actionId);
             default:
                 break;
         }
     }
+
+    rollCmbMacro(event, tokenId, checkId) {
+        const actor = super.getActor(tokenId);
+        actor.rollCMB(event);
+    }
+
+    rollConcentrationMacro(event, tokenId, checkId) {
+        const actor = super.getActor(tokenId);
+        actor.rollConcentration('primary');
+    }
     
     rollAbilityMacro(event, tokenId, checkId) {
         const actor = super.getActor(tokenId);
-       actor.rollAbility(checkId, {event: event});
+        actor.rollAbility(checkId, {event: event});
     }
     
     rollAbilityCheckMacro(event, tokenId, checkId) {
@@ -82,10 +101,15 @@ export class RollHandlerBasePf1 extends RollHandler {
     }
     
     rollItemMacro(event, tokenId, itemId) {
-        let actor = super.getActor(tokenId);
-        let item = super.getItem(actor, itemId);
+        const actor = super.getActor(tokenId);
+        const item = super.getItem(actor, itemId);
 
         item.use({ev: event, skipDialog: false});
+    }
+
+    rollDefenses(event, tokenId, itemId) {
+        const actor = super.getActor(tokenId);
+        actor.rollDefenses();
     }
 
     async adjustBuff(event, tokenId, buffId) {
