@@ -136,16 +136,15 @@ export class PcActionHandlerPf2e {
         let abbreviated = settings.get('abbreviateSkills');
 
         let actorSkills = Object.entries(actor.data.data.skills);
-        let skillMap = actorSkills.filter(s => !s[1].lore)
-            .map(s => this._createSkillMap(tokenId, 'skill', s, abbreviated));
-
-        let loreMap = actorSkills.filter(s => s[1].lore)
-            .sort(this._foundrySort)
-            .map(s => this._createSkillMap(tokenId, 'skill', s, abbreviated));
         
+        let skillMap = actorSkills.filter(s => !s[1].lore)
+            .map(s => this.baseHandler.createSkillMap(tokenId, 'skill', s, abbreviated));
         let skills = this.baseHandler.initializeEmptySubcategory();
         skills.actions = skillMap;
 
+        let loreMap = actorSkills.filter(s => s[1].lore)
+            .sort(this._foundrySort)
+            .map(s => this.baseHandler.createSkillMap(tokenId, 'skill', s, abbreviated));
         let lore = this.baseHandler.initializeEmptySubcategory();
         lore.actions = loreMap;
 
@@ -153,26 +152,6 @@ export class PcActionHandlerPf2e {
         this.baseHandler._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.lore'), lore);
 
         return result;
-    }
-
-    _createSkillMap(tokenId, macroType, skillEntry, abbreviated) {
-            let key = skillEntry[0];
-            let data = skillEntry[1];
-
-            let name = abbreviated ? key.charAt(0).toUpperCase()+key.slice(1) : data.name.charAt(0).toUpperCase()+data.name.slice(1);
-
-            let value = data.value;
-            let info = '';
-            if (value != 0) {
-                if (value > 0)
-                    info = `+${value}`;
-                else
-                    info = `${value}`;
-            }
-
-            let action = this.baseHandler._produceActionMap(tokenId, [{'_id': key, 'name': name}], macroType);
-            action[0].info1 = info;
-            return action[0];
     }
 
     /** @private */
