@@ -32,7 +32,6 @@ export class MagicItemActionListExtender extends ActionListExtender {
         let magicItemsIds = magicItems.map(item => item.id);
         
         itemCategories.subcategories.forEach(s => {
-            let magicItemActions = [];
             
             s.actions.forEach(action => {
                 if (!magicItemsIds.includes(action.id))
