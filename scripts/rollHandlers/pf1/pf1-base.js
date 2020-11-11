@@ -77,7 +77,7 @@ export class RollHandlerBasePf1 extends RollHandler {
 
     rollConcentrationMacro(event, tokenId, checkId) {
         const actor = super.getActor(tokenId);
-        actor.rollConcentration('primary');
+        actor.rollConcentration(checkId);
     }
     
     rollAbilityMacro(event, tokenId, checkId) {
