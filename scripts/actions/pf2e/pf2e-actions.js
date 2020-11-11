@@ -419,6 +419,27 @@ export class ActionHandlerPf2e extends ActionHandler {
         return result;
     }
 
+    /** @protected */
+    createSkillMap(tokenId, macroType, skillEntry, abbreviated) {
+            let key = skillEntry[0];
+            let data = skillEntry[1];
+
+            let name = abbreviated ? key.charAt(0).toUpperCase()+key.slice(1) : data.name.charAt(0).toUpperCase()+data.name.slice(1);
+
+            let value = data.value;
+            let info = '';
+            if (value != 0) {
+                if (value > 0)
+                    info = `+${value}`;
+                else
+                    info = `${value}`;
+            }
+
+            let action = this._produceActionMap(tokenId, [{'_id': key, 'name': name}], macroType);
+            action[0].info1 = info;
+            return action[0];
+    }
+
     /** @private */
     _getUtilityList(actor, tokenId) {
         let result = this.initializeEmptyCategory('utility');

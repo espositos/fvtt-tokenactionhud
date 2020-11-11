@@ -128,13 +128,22 @@ export class ActionHandlerPf1 extends ActionHandler {
         let validAttacks = actor.data.items.filter(i => i.type === 'attack');
         let sortedAttacks = this._sortByItemSort(validAttacks);
         let macroType = 'attack';
+        
+        let result = this.initializeEmptyCategory('attacks');
+
+        let cmbCat = this.initializeEmptySubcategory();
+        let cmbMacro = 'cmb';
+        let name = this.i18n('tokenactionhud.cmb');
+        let encodedValue = [cmbMacro, tokenId, cmbMacro].join(this.delimiter);
+        let cmbAction = [{ name: name, encodedValue: encodedValue, id: cmbMacro }]
+        cmbCat.actions = cmbAction;
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.cmb'), cmbCat);
 
         let weaponActions = sortedAttacks.map(w => this._buildItem(tokenId, actor, macroType, w));
         let weaponsCat = this.initializeEmptySubcategory();
         weaponsCat.actions = weaponActions;
         let weaponsTitle = this.i18n('tokenactionhud.attack');
         
-        let result = this.initializeEmptyCategory('attacks');
         this._combineSubcategoryWithCategory(result, weaponsTitle, weaponsCat);
         
         return result;
@@ -296,6 +305,8 @@ export class ActionHandlerPf1 extends ActionHandler {
             })
         });
 
+        this._addConcentrationSubcategory(tokenId, result);
+
         return result;
     }
 
@@ -334,6 +345,20 @@ export class ActionHandlerPf1 extends ActionHandler {
             return false;
 
         return true;
+    }
+
+    _addConcentrationSubcategory(tokenId, category) {
+        if (!(category.subcategories && category.subcategories.length > 0))
+            return;
+
+        let concentrationCat = this.initializeEmptySubcategory();
+        let concentrationMacro = 'concentration';
+        let name = this.i18n('tokenactionhud.concentration');
+        let encodedValue = [concentrationMacro, tokenId, concentrationMacro].join(this.delimiter);
+        let concentrationAction = [{ name: name, encodedValue: encodedValue, id: concentrationMacro }]
+        concentrationCat.actions = concentrationAction;
+        concentrationCat.name = this.i18n('tokenactionhud.concentration');
+        category.subcategories.unshift(concentrationCat);
     }
     
     /** FEATS **/
@@ -500,6 +525,14 @@ export class ActionHandlerPf1 extends ActionHandler {
        savesCategory.actions = actions.filter(a => !!a);
 
        this._combineSubcategoryWithCategory(result, categoryName, savesCategory);
+       
+       let defensesCat = this.initializeEmptySubcategory();
+       let defensesMacro = 'defenses';
+       let defensesName = this.i18n('tokenactionhud.defenses');
+       let defensesValue = [defensesMacro, tokenId, defensesMacro].join(this.delimiter);
+       let defensesAction = [{ name: defensesName, encodedValue: defensesValue, id: defensesMacro }]
+       defensesCat.actions = defensesAction;
+       this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.defenses'), defensesCat);
 
        return result;
    }
