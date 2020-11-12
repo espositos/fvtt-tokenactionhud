@@ -243,7 +243,7 @@ export class ActionHandlerPf1 extends ActionHandler {
     
         return spells;
     }
-    
+
     /** @private */
     _categoriseSpells(actor, tokenId, spells) {
         const macroType = 'spell';
@@ -254,6 +254,7 @@ export class ActionHandlerPf1 extends ActionHandler {
         const spellbooks = [...new Set(spells.map(i => i.data.spellbook))].sort();
 
         spellbooks.forEach(sb => {
+            const isSpontaneous = actor.data.data.attributes.spells.spellbooks[sb].spontaneous;
             let spellbookName = sb.charAt(0).toUpperCase() + sb.slice(1);
 
             concentrationSubcategory.actions.push(this._createConcentrationAction(tokenId, spellbookName))
@@ -297,7 +298,7 @@ export class ActionHandlerPf1 extends ActionHandler {
                     let encodedValue = [macroType, tokenId, id].join(this.delimiter);
                     var action = { name: name, id: id, encodedValue: encodedValue, info2: '' }; 
                     action.img = this._getImage(spell);
-                    this._addSpellInfo(spell, action);
+                    this._addSpellInfo(spell, isSpontaneous, action);
 
                     category.actions.push(action);
                 });
@@ -313,36 +314,43 @@ export class ActionHandlerPf1 extends ActionHandler {
     }
 
     /** @private */
-    _addSpellInfo(s, spell) {
-        let c = s.data.components;
+    _addSpellInfo(spell, isSpontaneous, spellAction) {
 
-        if (s.data.preparation) {
-            let prep = s.data.preparation;
+        let c = spell.data.components;
+
+        if (!isSpontaneous && spell.data.preparation) {
+            let prep = spell.data.preparation;
             if (prep.maxAmount)
-                spell.info1 = `${prep.preparedAmount}/${prep.maxAmount}`;
+                spellAction.info1 = `${prep.preparedAmount}/${prep.maxAmount}`;
         }
 
         if (c?.verbal)
-            spell.info2 += this.i18n('PF1.SpellComponentVerbal').charAt(0).toUpperCase();
+            spellAction.info2 += this.i18n('PF1.SpellComponentVerbal').charAt(0).toUpperCase();
 
         if (c?.somatic)
-            spell.info2 += this.i18n('PF1.SpellComponentSomatic').charAt(0).toUpperCase();
+            spellAction.info2 += this.i18n('PF1.SpellComponentSomatic').charAt(0).toUpperCase();
         
         if (c?.material)
-            spell.info2 += this.i18n('PF1.SpellComponentMaterial').charAt(0).toUpperCase();
+            spellAction.info2 += this.i18n('PF1.SpellComponentMaterial').charAt(0).toUpperCase();
 
         if (c?.focus)
-            spell.info3 = this.i18n('PF1.SpellComponentFocus').charAt(0).toUpperCase();
+            spellAction.info3 = this.i18n('PF1.SpellComponentFocus').charAt(0).toUpperCase();
     }
 
     /** @private */
     _isSpellCastable(actor, spell) {
+        const spellbook = spell.data.spellbook;
+        const isSpontaneous = actor.data.data.attributes.spells.spellbooks[spellbook].spontaneous;
+        
         if (actor.data.type !== 'character')
             return true;
 
         if (spell.data.atWill)
             return true;
             
+        if (isSpontaneous && spell.data.preparation.spontaneousPrepared)
+            return true;
+
         if (spell.data.preparation.preparedAmount === 0)
             return false;
 
