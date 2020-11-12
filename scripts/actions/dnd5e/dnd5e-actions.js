@@ -130,7 +130,7 @@ export class ActionHandler5e extends ActionHandler {
         let otherCat = this.initializeEmptySubcategory();
         otherCat.actions = otherActions;
     
-        let allConsumables = sortedItems.filter(i => i.type == 'consumable');
+        let allConsumables = this._getActiveEquipment(sortedItems.filter(i => i.type == 'consumable'));
         
         let expendedFiltered = this._filterExpendedItems(allConsumables);
         let consumable = expendedFiltered.filter(c => (c.data.uses?.value && c.data.uses?.value >= 0) || (c.data.uses?.max && c.data.uses?.max >= 0) );
@@ -169,13 +169,14 @@ export class ActionHandler5e extends ActionHandler {
 
     /** @private */
     _getActiveEquipment(equipment) {
-        const activationTypes = Object.keys(game.dnd5e.config.abilityActivationTypes);
+        const activationTypes = Object.keys(game.dnd5e.config.abilityActivationTypes).filter(at => at !== 'none');
     
         let activeEquipment = equipment.filter(e => {
-            if (!e.data.activation)
+            let activation = e.data.activation;
+            if (!activation)
                 return false;
     
-            return activationTypes.includes(e.data.activation.type)
+            return activationTypes.includes(e.data.activation.type);
         });
     
         return activeEquipment;

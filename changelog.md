@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.9.3] 2020-11-11
+### Changed
+- PF1E - Spontaneous spellbooks should no longer slots to be shown
+- DND5e - consumables and items without an action (or the 'none' action) should also be filtered out of the HUD inventory.
+
 ## [0.9.2] 2020-11-11
 ### Added
 - PF1E - added rolls for Concentration for spellbooks other than primary
