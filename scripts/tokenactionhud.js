@@ -371,7 +371,7 @@ export class TokenActionHUD extends Application {
     validTokenChange(token) {
         let controlled = this.tokens?.controlled;
 
-        return controlled.some(t => t.id === token._id) || (controlled?.length === 0 && canvas.tokens.placeables.some(t => t.id === this.targetActions?.tokenId));
+        return controlled.some(t => t.id === token._id) || (controlled?.length === 0 && canvas?.tokens?.placeables?.some(t => t.id === this.targetActions?.tokenId));
     }
 
     // Is something being hovered on, is the setting on, and is it the token you're currently selecting.
@@ -422,7 +422,7 @@ export class TokenActionHUD extends Application {
                 return null;
             
             let character = game.user.character
-            let token = canvas.tokens.placeables.find(t => t.actor._id === character._id)
+            let token = canvas?.tokens?.placeables.find(t => t.actor?._id === character?._id)
             if (token)
                 return token;
             
@@ -444,6 +444,6 @@ export class TokenActionHUD extends Application {
     _userHasPermission(token = '') {
         let actor = token.actor;
         let user = game.user;
-        return game.user.isGM || actor.hasPerm(user, "OWNER");
+        return game.user.isGM || actor?.hasPerm(user, "OWNER");
     }
 }
