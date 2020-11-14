@@ -39,6 +39,12 @@ export class MagicItemActionListExtender extends ActionListExtender {
 
                 let magicItem = magicItems.find(item => item.id === action.id);
 
+                if (magicItem.attuned && !this._isItemAttuned(magicItem))
+                    return;
+
+                if (magicItem.equipped && !this._isItemEquipped(magicItem))
+                    return;
+
                 let subcategory = this.initializeEmptySubcategory();
                 subcategory.info1 = `${magicItem.uses}/${magicItem.charges}`;
 
@@ -68,5 +74,13 @@ export class MagicItemActionListExtender extends ActionListExtender {
             result = item.img ?? '';
 
         return !result?.includes('icons/svg/mystery-man.svg') ? result : '';
+    }
+
+    _isItemEquipped(magicItem) {
+        return magicItem.item.data.data.equipped;
+    }
+
+    _isItemAttuned(magicItem) {
+        return magicItem.item.data.data.attuned;
     }
 }
