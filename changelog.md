@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.5] 2020-11-14
+### Bugfix
+- Magic Items now correctly hide themselves if they do not meet attuned or equipped requirement.
+
 ## [0.9.4] 2020-11-14
 ### Bugfix
 - Add some cursory checks to protect against tokens with no actors.
