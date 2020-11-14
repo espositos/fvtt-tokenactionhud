@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.4] 2020-11-14
+### Bugfix
+- Add some cursory checks to protect against tokens with no actors.
+
 ## [0.9.3] 2020-11-11
 ### Changed
 - PF1E - Spontaneous spellbooks should no longer slots to be shown
