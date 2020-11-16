@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.7] 2020-11-16
+### Added
+- LANCER RPG support thanks to Khaos#6127.
+
 ## [0.9.6] 2020-11-14
 ### Bugfix
 - PF1 - Non-GM players now see the unidentified item name in their HUD until item is identified.
