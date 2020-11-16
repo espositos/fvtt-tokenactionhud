@@ -20,6 +20,10 @@ export class RollHandlerBaseLancer extends RollHandler {
 
         let actor = super.getActor(tokenId);
 
+        let hasSheet = ['item']
+        if (this.isRenderItem() && hasSheet.includes(macroType))
+            return this.doRenderItem(tokenId, actionId);
+
         switch (macroType) {
             case "hase":
                 this._rollHaseMacro(actor, actionId);
