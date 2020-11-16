@@ -76,7 +76,7 @@ export class ActionHandlerDemonlord extends ActionHandler {
 
         let rollableAttributes = Object.entries(actor.data.data.attributes);
         let attributesMap = rollableAttributes.map(c => {
-            let name = this.i18n('tokenactionhud.settings.demonlord.attribute' + c[0]);
+            let name = this.i18n('tokenactionhud.attribute.' + c[0]);
             let encodedValue = [macroType, tokenId, c[0]].join(this.delimiter);
             return { name: name, encodedValue: encodedValue, id: c[0] }
         });
