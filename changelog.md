@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.8] 2020-11-16
+### Bugfix
+- LANCER RPG fix delimiter
+
 ## [0.9.7] 2020-11-16
 ### Added
 - LANCER RPG support thanks to Khaos#6127.
