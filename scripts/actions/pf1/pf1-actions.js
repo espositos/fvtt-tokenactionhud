@@ -597,7 +597,8 @@ export class ActionHandlerPf1 extends ActionHandler {
         let encodedValue = [macroType, tokenId, item._id].join(this.delimiter);
         let img = this._getImage(item);
         let icon = this._getActionIcon(item.data?.activation?.type);
-        let result = { name: item.name, id: item._id, encodedValue: encodedValue, img: img, icon: icon }
+        let name = this._getItemName(item);
+        let result = { name: name, id: item._id, encodedValue: encodedValue, img: img, icon: icon }
         
         if (item.data.recharge && !item.data.recharge.charged && item.data.recharge.value) {
             result.name += ` (${this.i18n('tokenactionhud.recharge')})`;
@@ -610,6 +611,20 @@ export class ActionHandlerPf1 extends ActionHandler {
         result.info3 = this._getConsumeData(item, actor)
 
         return result;
+    }
+
+    _getItemName(item) {
+        let name;
+        
+        if (item.data.identified || game.user.isGM)
+            name = item.data.identifiedName
+        else
+            name = item.data.unidentified?.name;
+        
+        if (!name)
+            name = item.name;
+
+        return name;
     }
 
     _getImage(item) {
