@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.9] 2020-11-16
+### Added
+- LANCER RPG - render item sheet with right click
+
 ## [0.9.8] 2020-11-16
 ### Bugfix
 - LANCER RPG fix delimiter
