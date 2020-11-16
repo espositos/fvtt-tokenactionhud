@@ -100,6 +100,7 @@
     "tokenactionhud.defenses": "Defenses",
     "tokenactionhud.pilot": "Pilot",
     "tokenactionhud.mech": "Mech",
+    "tokenactionhud.hull": "Hull",
     "tokenactionhud.systems": "Systems",
     "tokenactionhud.stats": "Stats",
     "tokenactionhud.stat": "Stat",
