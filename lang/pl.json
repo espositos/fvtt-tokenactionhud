@@ -183,11 +183,11 @@
   "tokenactionhud.settings.demonlord.attackoptions": "Attack Options",
   "tokenactionhud.settings.demonlord.specialattacks": "Special Attacks",
   "tokenactionhud.settings.demonlord.rest": "Rest",
-  "tokenactionhud.settings.demonlord.attributestrength": "Strength",
-  "tokenactionhud.settings.demonlord.attributeagility": "Agility",
-  "tokenactionhud.settings.demonlord.attributeintellect": "Intellect",
-  "tokenactionhud.settings.demonlord.attributewill": "Will",
-  "tokenactionhud.settings.demonlord.attributeperception": "Perception",
+  "tokenactionhud.attribute.strength": "Strength",
+  "tokenactionhud.attribute.agility": "Agility",
+  "tokenactionhud.attribute.intellect": "Intellect",
+  "tokenactionhud.attribute.will": "Will",
+  "tokenactionhud.attribute.perception": "Perception",
 
   "tokenactionhud.wfrp.meleeSkillPrefix" : "Broń Biała",
   "tokenactionhud.wfrp.rangedSkillPrefix" : "Broń Zasięgowa"
