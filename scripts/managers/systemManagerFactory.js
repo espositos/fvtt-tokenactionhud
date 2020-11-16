@@ -6,6 +6,7 @@ import { Pf2eSystemManager } from './pf2e.js';
 import { SfrpgSystemManager } from './sfrpg.js';
 import { Sw5eSystemManager } from './sw5e.js';
 import { Wfrp4eSystemManager } from './wfrp4e.js';
+import { LancerSystemManager } from './lancer.js';
 
 export class SystemManagerFactory {
     static create(system, appName) {
@@ -26,6 +27,8 @@ export class SystemManagerFactory {
                 return new Sw5eSystemManager(appName);
             case 'wfrp4e':
                 return new Wfrp4eSystemManager(appName);
+            case 'lancer':
+                return new LancerSystemManager(appName);
         }
     }
 }

@@ -23,7 +23,8 @@
         "sfrpg",
         "sw5e",
         "demonlord",
-        "pf1"
+        "pf1",
+        "lancer"
     ],
     "languages": [
         {
@@ -69,6 +70,6 @@
     ],
     "url": "https://github.com/espositos/fvtt-tokenactionhud",
     "manifest": "https://github.com/espositos/fvtt-tokenactionhud/raw/master/module.json",
-    "version": "0.8.8",
-    "download": "https://github.com/espositos/fvtt-tokenactionhud/releases/download/0.7.18/release_0.7.18.zip"
+    "version": "0.9.6",
+    "download": "https://github.com/espositos/fvtt-tokenactionhud/releases/download/0.9.6/release_0.9.6.zip"
 }
