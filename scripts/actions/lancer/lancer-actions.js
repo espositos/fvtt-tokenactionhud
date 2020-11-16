@@ -44,7 +44,7 @@ export class ActionHandlerLancer extends ActionHandler {
     _makeAction(actionName, macroType, tokenId, actionId, option) {
         let action = this.initializeEmptyAction();
         action.name = actionName;
-        action.encodedValue = [macroType, tokenId, actionId, JSON.stringify(option ? option : {})].join(this.delimter);
+        action.encodedValue = [macroType, tokenId, actionId, JSON.stringify(option ? option : {})].join(this.delimiter);
         return action;
     }
 
