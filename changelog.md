@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.10] 2020-11-16
+### Bugfix
+- PF1 Bugfix for subskills
+
 ## [0.9.9] 2020-11-16
 ### Added
 - LANCER RPG - render item sheet with right click

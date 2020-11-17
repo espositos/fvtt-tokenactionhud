@@ -428,6 +428,7 @@ export class ActionHandlerPf1 extends ActionHandler {
             if (s[1].subSkills) {
                 Object.entries(s[1].subSkills).forEach(ss => {
                     ss[1].isCustomSkill = true;
+                    ss[1].mainSkill = s[0];
                     allSkills.add(ss);
                 })
             }
@@ -438,8 +439,10 @@ export class ActionHandlerPf1 extends ActionHandler {
             let data = e[1];
             let name = abbr ? id : CONFIG.PF1.skills[id];
 
-            if (data.isCustomSkill || !name)
+            if (data.isCustomSkill || !name) {
                 name = data.name ?? '?';
+                id = `${data.mainSkill}.subSkills.${id}`
+            }
 
             name = name.charAt(0).toUpperCase() + name.slice(1);
             let encodedValue = [macroType, tokenId, id].join(this.delimiter);
