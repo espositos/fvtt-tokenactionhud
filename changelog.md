@@ -1,6 +1,10 @@
 # Changelog
 
-## [0.9.10] 2020-11-16
+## [0.9.11] 2020-11-17
+### Added
+- DungeonWorld support for special and uncategoriesd moves
+
+## [0.9.10] 2020-11-17
 ### Bugfix
 - PF1 Bugfix for subskills
 
