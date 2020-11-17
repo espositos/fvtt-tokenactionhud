@@ -13,8 +13,8 @@ jobs:
         persist-credentials: false
         fetch-depth: 0
     - name: Get tag
-      uses: olegtarasov/get-tag@v2
       id: tagName
+      uses: dawidd6/action-get-tag@v1
     - name: Patch files
       uses: onlyutkarsh/patch-files-action@v1.0.2
       env:
