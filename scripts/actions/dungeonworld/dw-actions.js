@@ -47,6 +47,8 @@ export class ActionHandlerDw extends ActionHandler {
             let startingMoves = this._getMovesByType(actor, tokenId, 'starting');
             let advancedMoves = this._getMovesByType(actor, tokenId, 'advanced');
             let basicMoves = this._getMovesByType(actor, tokenId, 'basic');
+            let specialMoves = this._getMovesByType(actor, tokenId, 'special');
+            let otherMoves = this._getMovesByType(actor, tokenId, '');
             let spells = this._getSpells(actor, tokenId, 'spells', this.i18n('tokenactionhud.spells'), 'spell');
             let equipment = this._getSubcategoryByType(actor, tokenId, 'equipment', this.i18n('tokenactionhud.equipment'), 'equipment');
             let abilities = this._getAbilities(actor, tokenId);
@@ -54,7 +56,9 @@ export class ActionHandlerDw extends ActionHandler {
             this._combineCategoryWithList(result, this.i18n('tokenactionhud.damage'), damage);
             this._combineCategoryWithList(result, this.i18n('tokenactionhud.starting'), startingMoves);
             this._combineCategoryWithList(result, this.i18n('tokenactionhud.advanced'), advancedMoves);
-            this._combineCategoryWithList(result, this.i18n('tokenactionhud.other'), basicMoves);
+            this._combineCategoryWithList(result, this.i18n('tokenactionhud.special'), specialMoves);
+            this._combineCategoryWithList(result, this.i18n('tokenactionhud.basic'), basicMoves);
+            this._combineCategoryWithList(result, this.i18n('tokenactionhud.other'), otherMoves);
             this._combineCategoryWithList(result, this.i18n('tokenactionhud.spells'), spells);
             this._combineCategoryWithList(result, this.i18n('tokenactionhud.equipment'), equipment);
             this._combineCategoryWithList(result, this.i18n('tokenactionhud.abilities'), abilities);
