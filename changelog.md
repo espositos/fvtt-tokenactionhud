@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.12] 2020-11-18
+### Bugfix
+- SFRPG - prevent HUD crashing when used with character with unnamed profession
+
 ## [0.9.11] 2020-11-17
 ### Added
 - DungeonWorld support for special and uncategoriesd moves

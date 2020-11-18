@@ -113,10 +113,20 @@ export class ActionHandlerSfrpg extends ActionHandler {
         const coreSkills = CONFIG.SFRPG.skills;
 
         let skillsActions = actorSkills.map(s => {
-            let name = !!s[1].subname ? `${this.i18n('tokenactionhud.profession')} (${s[1].subname})` : coreSkills[s[0]];
-            let encodedValue = [macroType, token.data._id, s[0]].join(this.delimiter);
-            let icon = this._getClassSkillIcon(s[1].value)
-            return { name: name, id: s[0], encodedValue: encodedValue, icon: icon };
+            let key = s[0];
+            let data = s[1];
+            let name;
+            if (key.startsWith('pro')) {
+                name = coreSkills['pro'];
+                if (!!data.subname)
+                    name += ` (${data.subname})`;
+            } else {
+                name = coreSkills[key];
+            }
+
+            let encodedValue = [macroType, token.data._id, key].join(this.delimiter);
+            let icon = this._getClassSkillIcon(data.value)
+            return { name: name, id: key, encodedValue: encodedValue, icon: icon };
         }).sort((a,b) => {
             return a.name.toUpperCase().localeCompare(b.name.toUpperCase(), undefined, {sensitivity: 'base'})
         });
