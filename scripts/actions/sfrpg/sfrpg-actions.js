@@ -117,13 +117,13 @@ export class ActionHandlerSfrpg extends ActionHandler {
             let data = s[1];
             let name;
             if (key.startsWith('pro')) {
-                name = this.i18n('tokenactionhud.profession');
+                name = coreSkills['pro'];
                 if (!!data.subname)
                     name += ` (${data.subname})`;
             } else {
                 name = coreSkills[key];
             }
-            
+
             let encodedValue = [macroType, token.data._id, key].join(this.delimiter);
             let icon = this._getClassSkillIcon(data.value)
             return { name: name, id: key, encodedValue: encodedValue, icon: icon };
