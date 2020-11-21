@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.14] 2020-11-21
+### Changed
+- DND5e - Restrict showing initative to current active encounter
+
 ## [0.9.13] 2020-11-21
 ### Added
 - DND5e - Initiative rolls under Utilities

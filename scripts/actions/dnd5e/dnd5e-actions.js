@@ -499,7 +499,7 @@ export class ActionHandler5e extends ActionHandler {
         let rests = this.initializeEmptySubcategory()
         let utility = this.initializeEmptySubcategory();
 
-        this._addIntiativeSubcategory(result, tokenId);
+        this._addIntiativeSubcategory(macroType, result, tokenId);
         
         if (actor.data.type === 'character') {          
             let shortRestValue = [macroType, tokenId, 'shortRest'].join(this.delimiter);
@@ -526,34 +526,26 @@ export class ActionHandler5e extends ActionHandler {
     }
 
     /** @private */
-    _addIntiativeSubcategory(category, tokenId) {
+    _addIntiativeSubcategory(macroType, category, tokenId) {
+        const combat = game.combat;
+        const combatant = combat.combatants.find(c => c.tokenId === tokenId);
+        if (!combatant)
+            return;
+
         let initiative = this.initializeEmptySubcategory();
+        
+        let initiativeValue = [macroType, tokenId, 'initiative'].join(this.delimiter);
+        let currentInitiative = combatant.initiative;
+        let initiativeName = `${this.i18n('tokenactionhud.encounter')}`;
+        
+        let initiativeAction = {id:'toggleVisibility', encodedValue: initiativeValue, name: initiativeName};
+        
+        let hasInitiative = currentInitiative !== null;
+        if (hasInitiative)
+            initiativeAction.info1 = currentInitiative;
+        initiativeAction.cssClass = hasInitiative ? 'active' : '';
 
-        const sceneCombats = game.combats.filter(c => c.data.scene === canvas.scene.id);
-        let i = 0;
-        sceneCombats.forEach(c => {
-            i++;
-            c.tahName =  `${this.i18n('tokenactionhud.encounter')} ${i}`;
-        });
-
-        const tokenCombats = sceneCombats.filter(c => c.combatants.some(c => c.tokenId === tokenId));
-
-        tokenCombats.forEach(c => {
-
-            const combatToken = c.combatants.find(c => c.tokenId === tokenId);
-            let initiativeValue = ['initiative', tokenId, c.id].join(this.delimiter);
-            let currentInitiative = combatToken.initiative;
-            let initiativeName = c.tahName;
-            
-            let initiativeAction = {id:'toggleVisibility', encodedValue: initiativeValue, name: initiativeName};
-            
-            let hasInitiative = currentInitiative !== null;
-            if (hasInitiative)
-                initiativeAction.info1 = currentInitiative;
-            initiativeAction.cssClass = hasInitiative ? 'active' : '';
-
-            initiative.actions.push(initiativeAction);
-        });
+        initiative.actions.push(initiativeAction);
 
         this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.initiative'), initiative);
     }
