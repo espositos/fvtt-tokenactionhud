@@ -1,5 +1,5 @@
-import { RollHandler } from "../rollHandler.js"
-import * as settings from "../../settings.js";
+import { RollHandler } from '../rollHandler.js'
+import * as settings from '../../settings.js';
 
 export class RollHandlerBase5e extends RollHandler {
     constructor() {
@@ -7,7 +7,7 @@ export class RollHandlerBase5e extends RollHandler {
     }
 
     /** @override */
-    doHandleActionEvent(event, encodedValue) {
+    async doHandleActionEvent(event, encodedValue) {
         let payload = encodedValue.split('|');
         
         if (payload.length != 3) {
@@ -19,39 +19,42 @@ export class RollHandlerBase5e extends RollHandler {
         let actionId = payload[2];
 
         if (tokenId === 'multi') {
-            canvas.tokens.controlled.forEach(t => {
+            for (let t of canvas.tokens.controlled) {
                 let idToken = t.data._id;
-                this._handleMacros(event, macroType, idToken, actionId);
-            });
+                await this._handleMacros(event, macroType, idToken, actionId);
+            };
         } else {
-            this._handleMacros(event, macroType, tokenId, actionId);
+            await this._handleMacros(event, macroType, tokenId, actionId);
         }
     }
 
-    _handleMacros(event, macroType, tokenId, actionId) {
+    async _handleMacros(event, macroType, tokenId, actionId) {
         switch (macroType) {
-            case "ability":
+            case 'ability':
                 this.rollAbilityMacro(event, tokenId, actionId);
                 break;
-            case "skill":
+            case 'skill':
                 this.rollSkillMacro(event, tokenId, actionId);
                 break;
-            case "abilitySave":
+            case 'abilitySave':
                 this.rollAbilitySaveMacro(event, tokenId, actionId);
                 break;
-            case "abilityCheck":
+            case 'abilityCheck':
                 this.rollAbilityCheckMacro(event, tokenId, actionId);
                 break;
-            case "item":
-            case "spell":
-            case "feat": 
+            case 'item':
+            case 'spell':
+            case 'feat': 
                 if (this.isRenderItem())
                     this.doRenderItem(tokenId, actionId);
                 else
                     this.rollItemMacro(event, tokenId, actionId);
                 break;
-            case "utility":
+            case 'utility':
                 this.performUtilityMacro(event, tokenId, actionId);
+                break;
+            case 'initiative':
+                await this.performInitiativeMacro(event, tokenId, actionId);
             default:
                 break;
         }
@@ -86,7 +89,7 @@ export class RollHandlerBase5e extends RollHandler {
             return;
         }
         
-        if (item.data.type === "spell")
+        if (item.data.type === 'spell')
             return actor.useSpell(item);
             
         return item.roll({event});
@@ -109,7 +112,7 @@ export class RollHandlerBase5e extends RollHandler {
                 break;
             case 'inspiration':
                 let update = !actor.data.data.attributes.inspiration;
-                actor.update({"data.attributes.inspiration": update});
+                actor.update({'data.attributes.inspiration': update});
                 break;
             case 'toggleCombat':
                 token.toggleCombat();
@@ -122,5 +125,19 @@ export class RollHandlerBase5e extends RollHandler {
                 actor.rollDeathSave();
                 break;
         }
+    }
+
+    async performInitiativeMacro(event, tokenId, actionId) {
+        const combat = game.combats.find(c => c.id === actionId);
+        if (!combat)
+            return;
+
+        const combatant = combat.combatants.find(c => c.tokenId === tokenId);
+        if (!combatant  || (combatant.initiative && !game.user.isGM))
+            return;
+
+        await combat.rollInitiative([combatant._id]);
+        
+        Hooks.callAll('forceUpdateTokenActionHUD')
     }
 }

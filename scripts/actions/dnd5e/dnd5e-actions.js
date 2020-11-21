@@ -499,6 +499,8 @@ export class ActionHandler5e extends ActionHandler {
         let rests = this.initializeEmptySubcategory()
         let utility = this.initializeEmptySubcategory();
 
+        this._addIntiativeSubcategory(result, tokenId);
+        
         if (actor.data.type === 'character') {          
             let shortRestValue = [macroType, tokenId, 'shortRest'].join(this.delimiter);
             rests.actions.push({id:'shortRest', encodedValue: shortRestValue, name: this.i18n('tokenactionhud.shortRest')})
@@ -521,6 +523,39 @@ export class ActionHandler5e extends ActionHandler {
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.utility'), utility);
         
         return result;
+    }
+
+    /** @private */
+    _addIntiativeSubcategory(category, tokenId) {
+        let initiative = this.initializeEmptySubcategory();
+
+        const sceneCombats = game.combats.filter(c => c.data.scene === canvas.scene.id);
+        let i = 0;
+        sceneCombats.forEach(c => {
+            i++;
+            c.tahName =  `${this.i18n('tokenactionhud.encounter')} ${i}`;
+        });
+
+        const tokenCombats = sceneCombats.filter(c => c.combatants.some(c => c.tokenId === tokenId));
+
+        tokenCombats.forEach(c => {
+
+            const combatToken = c.combatants.find(c => c.tokenId === tokenId);
+            let initiativeValue = ['initiative', tokenId, c.id].join(this.delimiter);
+            let currentInitiative = combatToken.initiative;
+            let initiativeName = c.tahName;
+            
+            let initiativeAction = {id:'toggleVisibility', encodedValue: initiativeValue, name: initiativeName};
+            
+            let hasInitiative = currentInitiative !== null;
+            if (hasInitiative)
+                initiativeAction.info1 = currentInitiative;
+            initiativeAction.cssClass = hasInitiative ? 'active' : '';
+
+            initiative.actions.push(initiativeAction);
+        });
+
+        this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.initiative'), initiative);
     }
 
     /** @private */
