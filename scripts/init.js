@@ -83,16 +83,28 @@ Hooks.on('canvasReady', async () => {
         game.tokenActionHUD.trySetPos();
     });
 
-    Hooks.on('renderCompendium', (source, html, ) => {
+    Hooks.on('renderCompendium', (source, html) => {
         let metadata = source?.metadata;
         if (game.tokenActionHUD.isLinkedCompendium(`${metadata?.package}.${metadata?.name}`))
             game.tokenActionHUD.update();
     });
 
-    Hooks.on('deleteCompendium', (source, html, ) => {
+    Hooks.on('deleteCompendium', (source, html) => {
         let metadata = source?.metadata;
         if (game.tokenActionHUD.isLinkedCompendium(`${metadata?.package}.${metadata?.name}`))
             game.tokenActionHUD.update();
+    });
+
+    Hooks.on('createCombat', (combat) => {
+        game.tokenActionHUD.update();
+    });
+    
+    Hooks.on('deleteCombat', (combat) => {
+        game.tokenActionHUD.update();
+    });
+
+    Hooks.on('updateCombat', (combat) => {
+        game.tokenActionHUD.update();
     });
 
     Hooks.on('forceUpdateTokenActionHUD', () => {

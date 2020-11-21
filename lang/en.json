@@ -106,6 +106,8 @@
     "tokenactionhud.stats": "Stats",
     "tokenactionhud.stat": "Stat",
     "tokenactionhud.rank": "Rank",
+    "tokenactionhud.encounter": "Encounter",
+    "tokenactionhud.initiative": "Initiative",
 
     "tokenactionhud.mwa": "Melee Weapon Attacks",
     "tokenactionhud.rwa": "Ranged Weapon Attacks",
