@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.15] 2020-11-21
+### Bugfix
+- PF1 - Multi token saves now roll correctly.
+
 ## [0.9.14] 2020-11-21
 ### Changed
 - DND5e - Restrict showing initative to current active encounter
