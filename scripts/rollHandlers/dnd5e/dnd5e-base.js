@@ -51,10 +51,8 @@ export class RollHandlerBase5e extends RollHandler {
                     this.rollItemMacro(event, tokenId, actionId);
                 break;
             case 'utility':
-                this.performUtilityMacro(event, tokenId, actionId);
+                await this.performUtilityMacro(event, tokenId, actionId);
                 break;
-            case 'initiative':
-                await this.performInitiativeMacro(event, tokenId, actionId);
             default:
                 break;
         }
@@ -99,7 +97,7 @@ export class RollHandlerBase5e extends RollHandler {
         return (item.data.data.recharge && !item.data.data.recharge.charged && item.data.data.recharge.value);
     }
     
-    performUtilityMacro(event, tokenId, actionId) {
+    async performUtilityMacro(event, tokenId, actionId) {
         let actor = super.getActor(tokenId);
         let token = super.getToken(tokenId);
 
@@ -124,11 +122,14 @@ export class RollHandlerBase5e extends RollHandler {
             case 'deathSave':
                 actor.rollDeathSave();
                 break;
+            case 'initiative':
+                await this.performInitiativeMacro(tokenId);
+                break;
         }
     }
 
-    async performInitiativeMacro(event, tokenId, actionId) {
-        const combat = game.combats.find(c => c.id === actionId);
+    async performInitiativeMacro(tokenId) {
+        const combat = game.combat;
         if (!combat)
             return;
 
