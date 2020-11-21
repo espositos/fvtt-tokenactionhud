@@ -56,15 +56,11 @@ export class ActionHandlerPf1 extends ActionHandler {
 
         this._addMultiSkills(list, tokenId);
 
-        if (settings.get('splitAbilities')) {
-            let savesTitle = this.i18n('tokenactionhud.saves');
-            let checksTitle = this.i18n('tokenactionhud.checks');
-            this._addMultiAbilities(list, tokenId, 'saves', savesTitle, 'abilitySave');
-            this._addMultiAbilities(list, tokenId, 'checks', checksTitle, 'abilityCheck');
-        } else {
-            let abilitiesTitle = this.i18n('tokenactionhud.abilities');
-            this._addMultiAbilities(list, tokenId, 'abilities', abilitiesTitle, 'ability');
-        }
+        let savesTitle = this.i18n('tokenactionhud.saves');
+        let checksTitle = this.i18n('tokenactionhud.checks');
+
+        this._addMultiSaves(list, tokenId, 'saves', savesTitle, 'abilitySave');
+        this._addMultiAbilities(list, tokenId, 'checks', checksTitle, 'abilityCheck');
 
         this._addMultiUtilities(list, tokenId, actors);
     }
@@ -559,6 +555,26 @@ export class ActionHandlerPf1 extends ActionHandler {
         abilityCategory.actions = actions;
 
         this._combineSubcategoryWithCategory(cat, categoryName, abilityCategory);
+        this._combineCategoryWithList(list, categoryName, cat, true);
+    }
+
+    _addMultiSaves(list, tokenId, categoryId, categoryName, macroType) {
+        let cat = this.initializeEmptyCategory(categoryId);
+        let savesCategory = this.initializeEmptySubcategory();
+
+        let abbr = settings.get('abbreviateSkills');
+
+        let actions = Object.entries(CONFIG.PF1.savingThrows).map(e => {
+            let name = abbr ? e[0] : e[1];
+            name = name.charAt(0).toUpperCase() + name.slice(1);
+            let encodedValue = [macroType, tokenId, e[0]].join(this.delimiter);
+ 
+            return { name: name, id: e[0], encodedValue: encodedValue }; 
+        });
+
+        savesCategory.actions = actions.filter(a => !!a);
+        
+        this._combineSubcategoryWithCategory(cat, categoryName, savesCategory);
         this._combineCategoryWithList(list, categoryName, cat, true);
     }
 
