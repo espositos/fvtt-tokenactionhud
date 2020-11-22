@@ -528,6 +528,8 @@ export class ActionHandler5e extends ActionHandler {
     /** @private */
     _addIntiativeSubcategory(macroType, category, tokenId) {
         const combat = game.combat;
+        if (!combat)
+            return;
         const combatant = combat.combatants.find(c => c.tokenId === tokenId);
         if (!combatant)
             return;
