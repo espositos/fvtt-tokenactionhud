@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.16] 2020-11-21
+### Bugfix
+- DND Check for null combat
+
 ## [0.9.15] 2020-11-21
 ### Bugfix
 - PF1 - Multi token saves now roll correctly.
