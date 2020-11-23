@@ -323,7 +323,8 @@ export class TokenActionHUD extends Application {
             return;
 
         if (settings.get('clickOpenCategory')) {
-            category.click();
+            let button = category.find('.tah-title-button')[0];
+            button.click();
         } else {
             category.mouseenter();
         }
