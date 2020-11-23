@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.20] 2020-11-23
+### Bugfix
+- Again, categories should remain open if option is enabled
+
 ## [0.9.19] 2020-11-23
 ### Bugfix
 - Click on category should only operate on title button not on empty space between actions
