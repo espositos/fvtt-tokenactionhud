@@ -76,6 +76,9 @@ export class TokenActionHUD extends Application {
         const action = '.tah-action';   
 
         const handleClick = e => {
+            if (settings.get('clickOpenCategory') && !settings.get('clickCloseCategory'))
+                e.stopPropagation();
+
             let target = e.target;
 
             if (target.tagName !== 'BUTTON')
@@ -149,12 +152,12 @@ export class TokenActionHUD extends Application {
 
             let category = $(this)[0];
             let boundClick;
-            if (!$(category).hasClass('hover')) {
-                boundClick = openCategory.bind(this);            
-                boundClick = boundClick(event);
-            }                
-            else {
+            if ($(category).hasClass('hover')) {
                 boundClick = closeCategory.bind(this);
+                boundClick(event);
+            }             
+            else {
+                boundClick = openCategory.bind(this);            
                 boundClick(event);
             }
         }

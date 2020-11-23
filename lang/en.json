@@ -156,6 +156,8 @@
     "tokenactionhud.settings.showIcons.hint": "If enabled, the action image will be displayed on the HUD button where available.",
     "tokenactionhud.settings.clickOpenCategory.name": "Click-to-open categories",
     "tokenactionhud.settings.clickOpenCategory.hint": "If enabled, categories will open on click instead of hover.",
+    "tokenactionhud.settings.clickCloseCategory.name": "Close categories on action",
+    "tokenactionhud.settings.clickCloseCategory.hint": "If enabled, categories will close when an action is chosen. Has no effect is click-to-open (above) is disabled.",
 
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.name": "Ignore passive feats",
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.hint": "If enabled, passive feats are not shown.",

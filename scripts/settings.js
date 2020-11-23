@@ -87,6 +87,16 @@ export const registerSettings = function(app, systemManager, rollHandlers) {
         default : false,
         onChange: value => { updateFunc(value); }
     });
+
+    game.settings.register(appName,'clickCloseCategory', {
+        name : game.i18n.localize('tokenactionhud.settings.clickCloseCategory.name'),
+        hint : game.i18n.localize('tokenactionhud.settings.clickCloseCategory.hint'),
+        scope : 'client',
+        config : true,
+        type : Boolean,
+        default : false,
+        onChange: value => { updateFunc(value); }
+    });
    
     systemManager.doRegisterSettings(appName, updateFunc);
 

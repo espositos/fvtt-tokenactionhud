@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.17] 2020-11-23
+### Changed/added
+- Added option to keep categories open (if click-to-open is enabled) when an action is pressed, so categories don't have to be constantly reopened
+
 ## [0.9.16] 2020-11-21
 ### Bugfix
 - DND Check for null combat
