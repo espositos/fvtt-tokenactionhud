@@ -147,9 +147,6 @@ export class TokenActionHUD extends Application {
         }
 
         function toggleCategory(event) {
-            if (game.tokenActionHUD.rendering)
-                return;
-
             let category = $(this)[0];
             let boundClick;
             if ($(category).hasClass('hover')) {
@@ -157,7 +154,7 @@ export class TokenActionHUD extends Application {
                 boundClick(event);
             }             
             else {
-                boundClick = openCategory.bind(this);            
+                boundClick = openCategory.bind(this);
                 boundClick(event);
             }
         }
@@ -319,13 +316,17 @@ export class TokenActionHUD extends Application {
         if (this.categoryHovered === '')
             return;
 
-        let id = `#${this.categoryHovered}`
+        let id = `#${this.categoryHovered}`;
         let category = $(id);
         
         if (!category[0])
             return;
 
-        category.mouseenter();
+        if (settings.get('clickOpenCategory')) {
+            category.click();
+        } else {
+            category.mouseenter();
+        }
     }
 
     resetHud() {
