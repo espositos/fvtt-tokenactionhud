@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.19] 2020-11-23
+### Bugfix
+- Click on category should only operate on title button not on empty space between actions
+
 ## [0.9.18] 2020-11-23
 ### Changed
 - Category should no longer close when token is updated

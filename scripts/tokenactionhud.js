@@ -147,14 +147,14 @@ export class TokenActionHUD extends Application {
         }
 
         function toggleCategory(event) {
-            let category = $(this)[0];
+            let category = $(this.parentElement);
             let boundClick;
             if ($(category).hasClass('hover')) {
-                boundClick = closeCategory.bind(this);
+                boundClick = closeCategory.bind(this.parentElement);
                 boundClick(event);
             }             
             else {
-                boundClick = openCategory.bind(this);
+                boundClick = openCategory.bind(this.parentElement);
                 boundClick(event);
             }
         }
@@ -165,7 +165,7 @@ export class TokenActionHUD extends Application {
         html.find('.tah-subtitle').contextmenu('click', e => handlePossibleFilterSubtitleClick(e));
 
         if (settings.get('clickOpenCategory')) {
-            html.find('.tah-category').click('click', toggleCategory);
+            html.find('.tah-title-button').click('click', toggleCategory);
         } else {
             html.find('.tah-category').hover(openCategory,closeCategory);
         }
