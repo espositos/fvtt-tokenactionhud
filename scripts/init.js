@@ -107,6 +107,10 @@ Hooks.on('canvasReady', async () => {
         game.tokenActionHUD.update();
     });
 
+    Hooks.on('updateCombatant', (combat, combatant) => {
+        game.tokenActionHUD.update();
+    });
+
     Hooks.on('forceUpdateTokenActionHUD', () => {
         game.tokenActionHUD.update();
     })

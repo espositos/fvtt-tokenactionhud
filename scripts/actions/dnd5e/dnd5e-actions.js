@@ -528,25 +528,22 @@ export class ActionHandler5e extends ActionHandler {
     /** @private */
     _addIntiativeSubcategory(macroType, category, tokenId) {
         const combat = game.combat;
-        if (!combat)
-            return;
-            
-        const combatant = combat.combatants.find(c => c.tokenId === tokenId);
-        if (!combatant)
-            return;
+        let combatant, currentInitiative;
+        if (combat) {
+            combatant = combat.combatants.find(c => c.tokenId === tokenId);
+            currentInitiative = combatant?.initiative;
+        }
 
         let initiative = this.initializeEmptySubcategory();
         
         let initiativeValue = [macroType, tokenId, 'initiative'].join(this.delimiter);
-        let currentInitiative = combatant.initiative;
-        let initiativeName = `${this.i18n('tokenactionhud.encounter')}`;
+        let initiativeName = `${this.i18n('tokenactionhud.rollInitiative')}`;
         
         let initiativeAction = {id:'toggleVisibility', encodedValue: initiativeValue, name: initiativeName};
         
-        let hasInitiative = currentInitiative !== null;
-        if (hasInitiative)
+        if (currentInitiative)
             initiativeAction.info1 = currentInitiative;
-        initiativeAction.cssClass = hasInitiative ? 'active' : '';
+        initiativeAction.cssClass = currentInitiative ? 'active' : '';
 
         initiative.actions.push(initiativeAction);
 
@@ -557,6 +554,8 @@ export class ActionHandler5e extends ActionHandler {
     _addMultiUtilities(list, tokenId, actors) {
         let category = this.initializeEmptyCategory('utility');
         let macroType = 'utility';
+
+        this._addMultiIntiativeSubcategory(macroType, tokenId, category);
         
         let rests = this.initializeEmptySubcategory();
         let utility = this.initializeEmptySubcategory();
@@ -576,6 +575,31 @@ export class ActionHandler5e extends ActionHandler {
         this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.rests'), rests);
         this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.utility'), utility);
         this._combineCategoryWithList(list, this.i18n('tokenactionhud.utility'), category)
+    }
+
+    /** @private */
+    _addMultiIntiativeSubcategory(macroType, tokenId, category) {
+        const combat = game.combat;
+
+        let initiative = this.initializeEmptySubcategory();
+        
+        let initiativeValue = [macroType, tokenId, 'initiative'].join(this.delimiter);
+        let initiativeName = `${this.i18n('tokenactionhud.rollInitiative')}`;
+        
+        let initiativeAction = {id:'toggleVisibility', encodedValue: initiativeValue, name: initiativeName};
+        
+        let isActive;
+        if (combat) {
+            let tokenIds = canvas.tokens.controlled.map(t => t.id);
+            let tokenCombatants = tokenIds.map(id => combat.combatants.find(c => c.tokenId === id));
+            isActive = tokenCombatants.every(c => !!c?.initiative)
+        }
+
+        initiativeAction.cssClass = isActive ? 'active' : '';
+
+        initiative.actions.push(initiativeAction);
+
+        this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.initiative'), initiative);
     }
 
 
