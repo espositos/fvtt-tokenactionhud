@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.21] 2020-11-24
+### Changed
+- Add multi rolling for initiative and update text on button
+
 ## [0.9.20] 2020-11-23
 ### Bugfix
 - Again, categories should remain open if option is enabled

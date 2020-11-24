@@ -129,16 +129,10 @@ export class RollHandlerBase5e extends RollHandler {
     }
 
     async performInitiativeMacro(tokenId) {
-        const combat = game.combat;
-        if (!combat)
-            return;
-
-        const combatant = combat.combatants.find(c => c.tokenId === tokenId);
-        if (!combatant  || (combatant.initiative && !game.user.isGM))
-            return;
-
-        await combat.rollInitiative([combatant._id]);
+        let actor = super.getActor(tokenId);
         
+        await actor.rollInitiative({createCombatants: true});
+            
         Hooks.callAll('forceUpdateTokenActionHUD')
     }
 }
