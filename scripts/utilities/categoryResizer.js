@@ -54,8 +54,12 @@ export class CategoryResizer {
         let maxWidth = 0;
 
         actions.each(function() {
+            let action = $(this);
+            if (action.hasClass('excludeFromWidthCalculation'))
+                return;
+
             let totalWidth = 0;
-            Array.from($(this).children()).forEach(c => {
+            Array.from(action.children()).forEach(c => {
                 let child = $(c);
                 let childWidth = child.width();
                 let marginWidth = parseInt(child.css('marginLeft')) + parseInt(child.css('marginRight'));

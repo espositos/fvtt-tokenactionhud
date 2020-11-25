@@ -108,6 +108,7 @@
     "tokenactionhud.rank": "Rank",
     "tokenactionhud.rollInitiative": "Roll initiative",
     "tokenactionhud.initiative": "Initiative",
+    "tokenactionhud.toggles": "Toggles",
 
     "tokenactionhud.mwa": "Melee Weapon Attacks",
     "tokenactionhud.rwa": "Ranged Weapon Attacks",
