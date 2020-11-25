@@ -26,7 +26,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         if (renderable.includes(macroType) && this.isRenderItem())
             return this.doRenderItem(tokenId, actionId);
 
-        let sharedActions = ['ability', 'spell', 'item', 'skill', 'lore', 'utility']
+        let sharedActions = ['ability', 'spell', 'item', 'skill', 'lore', 'utility', 'toggle']
 
         if (!sharedActions.includes(macroType)) {
             switch (charType) {
@@ -57,6 +57,9 @@ export class RollHandlerBasePf2e extends RollHandler {
                 break;
             case 'utility':
                 this._performUtilityMacro(event, tokenId, actionId);
+                break;
+            case 'toggle':
+                await this._performToggleMacro(event, tokenId, actionId);
                 break;
         }
     }
@@ -445,5 +448,19 @@ export class RollHandlerBasePf2e extends RollHandler {
         let update = {data: {attributes: {[property]: {[valueName]: value}}}};
 
         await actor.update(update);
+    }
+
+    async _performToggleMacro(event, tokenId, actionId) {
+        const actor = super.getActor(tokenId);
+
+        const input = actionId.split('.');
+
+        if (input?.length !== 2)
+            return;
+
+        const rollName = input[0];
+        const optionName = input[1];
+
+        await actor.toggleRollOption(rollName, optionName);
     }
 }

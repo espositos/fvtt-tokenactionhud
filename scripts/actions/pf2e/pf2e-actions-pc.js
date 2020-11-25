@@ -58,10 +58,56 @@ export class PcActionHandlerPf2e {
 
     /** @private */
     _getStrikesList(actor, tokenId) {
-        let macroType = 'strike';
         let result = this.baseHandler.initializeEmptyCategory('strikes');
         result.cssClass = 'oneLine';
+        
+        this._addTogglesCategories(actor, tokenId, result);
+        this._addStrikesCategories(actor, tokenId, result);
 
+        return result;
+    }
+
+    /** @private */
+    _addTogglesCategories(actor, tokenId, category) {
+        const macroType = 'toggle';
+        const toggleActions = actor.data.data.toggles?.actions;
+
+        if (!toggleActions)
+            return;
+
+        let subcategory = this.baseHandler.initializeEmptySubcategory();
+        subcategory.actionsClass = 'excludeFromWidthCalculation';
+
+        toggleActions.forEach(t => {
+            let toggleKey = this._getToggleKey(t.inputName);
+            if (!toggleKey)
+                return;
+
+            let id = toggleKey;
+            let encodedValue = [macroType, tokenId, toggleKey].join(this.baseHandler.delimiter);
+            let name = t.label.startsWith('PF2E.') ? this.baseHandler.i18n(t.label) : t.label;
+            let cssClass = t.checked ? 'active': '';
+
+            let action = {id: id, encodedValue: encodedValue, name: name, cssClass: cssClass};
+
+            subcategory.actions.push(action);
+        });
+        
+        this.baseHandler._combineSubcategoryWithCategory(category, this.baseHandler.i18n('tokenactionhud.toggles'), subcategory);
+    }
+
+    /** @private */
+    _getToggleKey(inputName) {
+        const rollOptionPrefix = 'flags.pf2e.rollOptions.';
+        if (!inputName.includes(rollOptionPrefix))
+            return '';
+
+        return inputName.substring(rollOptionPrefix.length);
+    }
+
+    /** @private */
+    _addStrikesCategories(actor, tokenId, category) {
+        let macroType = 'strike';
         let strikes = actor.data.data.actions.filter(a => a.type === macroType);
         
         let calculateAttackPenalty = settings.get('calculateAttackPenalty');
@@ -100,10 +146,8 @@ export class PcActionHandlerPf2e {
             subcategory.actions.push({name: this.i18n('tokenactionhud.damage'), encodedValue: damageEncodedValue, id: encodeURIComponent(s.name+'>damage')})
             subcategory.actions.push({name: this.i18n('tokenactionhud.critical'), encodedValue: critEncodedValue, id: encodeURIComponent(s.name+'>critical')})
 
-            this.baseHandler._combineSubcategoryWithCategory(result, s.name, subcategory);
+            this.baseHandler._combineSubcategoryWithCategory(category, s.name, subcategory);
         });
-
-        return result;
     }
 
     /** @private */

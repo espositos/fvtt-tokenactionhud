@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.22] 2020-11-25
+### Added
+- PF2E - Added subcategory for toggles under Strikes
+
 ## [0.9.21] 2020-11-24
 ### Changed
 - Add multi rolling for initiative and update text on button
