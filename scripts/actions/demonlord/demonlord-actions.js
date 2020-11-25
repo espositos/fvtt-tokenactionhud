@@ -88,6 +88,31 @@ export class ActionHandlerDemonlord extends ActionHandler {
         return result;
     }
 
+    _addMultiAttributes(list, tokenId, actors) {
+        let result = this.initializeEmptyCategory('attributes');
+        let attributes = this.initializeEmptySubcategory();
+        let macroType = 'challenge';
+
+        let attributesMap = null;
+
+        if (actors.every(actor => {
+            let rollableAttributes = Object.entries(actor.data.data.attributes);
+
+            attributesMap = rollableAttributes.map(c => {
+                let name = this.i18n('tokenactionhud.attribute.' + c[0]);
+                let encodedValue = [macroType, tokenId, c[0]].join(this.delimiter);
+                return { name: name, encodedValue: encodedValue, id: c[0] }
+            });
+        }));
+
+        if (attributesMap != null) {
+            attributes.actions = this._produceMap(tokenId, attributesMap, macroType);
+
+            this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.settings.demonlord.challenge'), attributes);
+            this._combineCategoryWithList(list, this.i18n('tokenactionhud.settings.demonlord.challenge'), result)
+        }
+    }
+
     _getTalents(actor, tokenId) {
         let macroType = 'talent';
         let result = this.initializeEmptyCategory('talents');
@@ -180,9 +205,10 @@ export class ActionHandlerDemonlord extends ActionHandler {
         list.tokenId = 'multi';
         list.actorId = 'multi';
 
-        const allowedTypes = ['monster', 'character'];
+        const allowedTypes = ['creature', 'character'];
         let actors = canvas.tokens.controlled.map(t => t.actor).filter(a => allowedTypes.includes(a.data.type));
 
+        this._addMultiAttributes(list, list.tokenId, actors);
         this._addMultiUtilities(list, list.tokenId, actors);
     }
 

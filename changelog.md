@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.23] 2020-11-25
+### Added
+- SotDL - Added attribute rolls for multiple token selection thanks to Xacas
+
 ## [0.9.22] 2020-11-25
 ### Added
 - PF2E - Added subcategory for toggles under Strikes
