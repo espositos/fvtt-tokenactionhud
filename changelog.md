@@ -2,7 +2,7 @@
 
 ## [0.9.23] 2020-11-25
 ### Added
-- SotDL - Added attribute rolls for multiple token selection thanks to Xacas
+- SotDL - Added attribute rolls for multiple token selection thanks to Xacus
 
 ## [0.9.22] 2020-11-25
 ### Added
