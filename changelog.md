@@ -3,6 +3,7 @@
 ## [0.9.25] 2020-11-27
 ### Changed
 - PF2E - PC initiative label now reflects skill chosen
+- PF2E - Toggles by default go in a separate category but there is a setting to place them above strikes.
 
 ## [0.9.24] 2020-11-27
 ### Changed

@@ -43,12 +43,14 @@ export class PcActionHandlerPf2e {
 
     /** @private */
     _forCharacter(result, tokenId, actor) {
+        let toggles = this._getTogglesCategory(actor, tokenId);
         let strikes = this._getStrikesList(actor, tokenId);
         let actions = this.baseHandler._getActionsList(actor, tokenId);
         let spells = this.baseHandler._getSpellsList(actor, tokenId);
         let feats = this.baseHandler._getFeatsList(actor, tokenId);
         let items = this.baseHandler._getItemsList(actor, tokenId);
         
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.toggles'), toggles);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.strikes'), strikes);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.actions'), actions);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.inventory'), items);
@@ -57,11 +59,24 @@ export class PcActionHandlerPf2e {
     }
 
     /** @private */
+    _getTogglesCategory(actor, tokenId) {
+        if (!settings.get('separateTogglesCategory'))
+            return;
+
+        let result = this.baseHandler.initializeEmptyCategory('toggles');
+        this._addTogglesCategories(actor, tokenId, result);
+
+        return result;
+    }
+
+    /** @private */
     _getStrikesList(actor, tokenId) {
         let result = this.baseHandler.initializeEmptyCategory('strikes');
         result.cssClass = 'oneLine';
         
-        this._addTogglesCategories(actor, tokenId, result);
+        if (!settings.get('separateTogglesCategory'))
+            this._addTogglesCategories(actor, tokenId, result);
+            
         this._addStrikesCategories(actor, tokenId, result);
 
         return result;

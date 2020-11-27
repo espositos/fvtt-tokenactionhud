@@ -29,6 +29,16 @@ export function register(app, updateSettings) {
         onChange: value => { updateSettings(value); }
     });
 
+    game.settings.register(app,'separateTogglesCategory', {
+        name: game.i18n.localize('tokenactionhud.settings.pf2e.separateTogglesCategory.name'),
+        hint: game.i18n.localize('tokenactionhud.settings.pf2e.separateTogglesCategory.hint'),
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: false,
+        onChange: value => { updateSettings(value); }
+    });
+
     game.settings.register(app,'calculateAttackPenalty', {
         name: game.i18n.localize('tokenactionhud.settings.pf2e.calculateAttackPenalty.name'),
         hint: game.i18n.localize('tokenactionhud.settings.pf2e.calculateAttackPenalty.hint'),
