@@ -204,9 +204,11 @@ export class PcActionHandlerPf2e {
         let result = this.baseHandler.initializeEmptyCategory('attributes');
         let attributes = this.baseHandler.initializeEmptySubcategory();
 
-        let rollableAttributes = Object.entries(actor.data.data.attributes).filter(a => { if(a[1]) return !!a[1].roll });
+        let rollableAttributes = Object.entries(actor.data.data.attributes).filter(a => !!a[1]?.roll );
         let attributesMap = rollableAttributes.map(a => {
-            let name = a[0].charAt(0).toUpperCase()+a[0].slice(1);
+            let key = a[0];
+            let data = a[1];
+            let name = data.label ? data.label : key.charAt(0).toUpperCase()+key.slice(1);
             return { _id: a[0], name: name } 
         });
         
