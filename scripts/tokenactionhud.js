@@ -76,9 +76,6 @@ export class TokenActionHUD extends Application {
         const action = '.tah-action';   
 
         const handleClick = e => {
-            if (settings.get('clickOpenCategory') && !settings.get('clickCloseCategory'))
-                e.stopPropagation();
-
             let target = e.target;
 
             if (target.tagName !== 'BUTTON')

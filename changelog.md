@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.24] 2020-11-27
+### Changed
+- Removed unnecessary setting for keeping categories open when clicked
+
 ## [0.9.23] 2020-11-25
 ### Added
 - SotDL - Added attribute rolls for multiple token selection thanks to Xacus
