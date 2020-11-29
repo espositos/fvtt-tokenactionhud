@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.26] 2020-11-29
+### Changed
+- Add background to active buttons to distinguish them during mouseover
+
 ## [0.9.25] 2020-11-27
 ### Changed
 - PF2E - PC initiative label now reflects skill chosen
