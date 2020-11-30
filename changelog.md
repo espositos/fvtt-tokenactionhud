@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.27] 2020-11-30
+### Bugfix
+- Icon style overriding all icons, so specified inside TAH
+
 ## [0.9.26] 2020-11-29
 ### Changed
 - Add background to active buttons to distinguish them during mouseover
