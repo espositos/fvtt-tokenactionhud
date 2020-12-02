@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.27] 2020-12-02
+### Bugfix
+- Forgot to await some calls when adding custom subcategories
+
 ## [0.9.27] 2020-11-30
 ### Bugfix
 - Icon style overriding all icons, so specified inside TAH
