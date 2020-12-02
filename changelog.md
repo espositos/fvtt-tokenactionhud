@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.29] 2020-12-02
+### Bugfix
+- More attempts to improve async behaviour for custom subcategories
+
 ## [0.9.28] 2020-12-02
 ### Bugfix
 - Forgot to await some calls when adding custom subcategories

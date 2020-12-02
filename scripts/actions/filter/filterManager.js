@@ -65,9 +65,9 @@ export class FilterManager {
         return filter.getFilteredIds();
     }
 
-    setFilteredElements(filterId, elements, isBlocklist) {
+    async setFilteredElements(filterId, elements, isBlocklist) {
         let filter = this._getFilter(filterId);        
-        filter.setFilteredElements(elements, isBlocklist);
+        await filter.setFilteredElements(elements, isBlocklist);
     }
 
     async clearFilter(filterId) {
