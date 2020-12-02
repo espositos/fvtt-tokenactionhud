@@ -20,14 +20,14 @@ export class TagDialog extends Dialog {
                 accept: {
                 icon: '<i class="fas fa-check"></i>',
                 label: game.i18n.localize("tokenactionhud.accept"),
-                callback: (html) => {
+                callback: (async (html) => {
                     let selection = TagDialog.tagify.value.map(c => {return {id: c.id, value: c.value, type: c.type}});
                     let index = html.find('select[id="token-action-hud-index"]');
                     let indexValue;
                     if (index.length > 0)
                         indexValue = index[0]?.value;
-                    submitFunc(selection, indexValue);
-                }
+                    await submitFunc(selection, indexValue);
+                })
                 },
                 cancel: {
                 icon: '<i class="fas fa-times"></i>',

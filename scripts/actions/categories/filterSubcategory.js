@@ -22,8 +22,8 @@ export class FilterSubcategory {
         this.filterManager.clearFilter(this.id);
     }
 
-    setFilteredElements(elements, isBlocklist) {
-        this.filterManager.setFilteredElements(this.id, elements, isBlocklist);
+    async setFilteredElements(elements, isBlocklist) {
+        await this.filterManager.setFilteredElements(this.id, elements, isBlocklist);
     }
 
     asTagifyEntry() {
