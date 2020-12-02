@@ -70,13 +70,13 @@ export class FilterManager {
         filter.setFilteredElements(elements, isBlocklist);
     }
 
-    clearFilter(filterId) {
+    async clearFilter(filterId) {
         let filter = this.filters.find(f => f.id === filterId);
 
         if (!filter)
             return;
 
-        filter.clearFlag();
+        await filter.clearFlag();
         
         this.filters.splice(this.filters.indexOf(filter), 1);
     }

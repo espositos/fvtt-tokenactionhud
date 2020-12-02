@@ -33,7 +33,7 @@ export class CategoryManager {
                 let subcategories = cat.subcategories;
                 if (subcategories) {
                     subcategories = Object.values(subcategories);
-                    category.selectSubcategories(subcategories);
+                    await category.selectSubcategories(subcategories);
                 }
                 this.categories.push(category);
             }
@@ -65,7 +65,7 @@ export class CategoryManager {
         }
     }
 
-    submitCategories(selections, push) {
+    async submitCategories(selections, push) {
         selections = selections.map(s => { return {id: s.value.slugify({replacement: '_', strict: true}), value: s.value}})
         for (let choice of selections) {
             let category = this.categories.find(c => c.id === choice.id);
@@ -83,7 +83,7 @@ export class CategoryManager {
         for (var i = this.categories.length - 1; i >= 0; i--) {
             let category = this.categories[i];
             if (!(idMap.includes(category.id) || category.core))
-                this.deleteCategory(i);
+                await this.deleteCategory(i);
         }
     }
 
@@ -112,9 +112,9 @@ export class CategoryManager {
         category.updateFlag();
     }
 
-    deleteCategory(index) {
+    async deleteCategory(index) {
         let category = this.categories[index];
-        category.prepareForDelete();
+        await category.prepareForDelete();
         this.categories.splice(index, 1);
     }
 
