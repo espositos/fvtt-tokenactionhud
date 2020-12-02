@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.9.27] 2020-12-02
+## [0.9.28] 2020-12-02
 ### Bugfix
 - Forgot to await some calls when adding custom subcategories
 
