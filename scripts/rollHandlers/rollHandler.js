@@ -111,6 +111,6 @@ export class RollHandler {
             await canvas.tokens.controlled[0].toggleCombat();
         }
 
-        Hooks.callAll('forceUpdateTokenActionHUD')
+        Hooks.callAll('forceUpdateTokenActionHUD');
     }
 }

@@ -118,13 +118,13 @@ export class CategoryManager {
         this.categories.splice(index, 1);
     }
 
-    submitSubcategories(categoryId, choices) {
+    async submitSubcategories(categoryId, choices) {
         let category = this.categories.find(c => c.id === categoryId);
 
         if (!category)
             return;
 
-        category.selectSubcategories(choices);
+        await category.selectSubcategories(choices);
     }
 
     getExistingCategories() {

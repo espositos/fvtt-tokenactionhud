@@ -72,7 +72,7 @@ export class FilterCategory {
         await this.updateFlag();
     }
 
-    addCompendiumSubcategory(compendium) {
+    async addCompendiumSubcategory(compendium) {
         if (this.subcategories.some(c => c.compendiumId === compendium.id))
             return;
 
@@ -81,7 +81,7 @@ export class FilterCategory {
 
         let hudCompendium = new CompendiumSubcategory(this.filterManager, this.key, compendium.id, compendium.title);
         hudCompendium.createFilter();
-        hudCompendium.submitFilterSuggestions();
+        await hudCompendium.submitFilterSuggestions();
 
         this.subcategories.push(hudCompendium);
     }

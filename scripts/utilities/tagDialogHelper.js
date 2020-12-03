@@ -17,17 +17,17 @@ export class TagDialogHelper {
 
     static async submitCategories(categoryManager, choices, push) {
         await categoryManager.submitCategories(choices, push);
-        game.tokenActionHUD.update()
+        Hooks.callAll('forceUpdateTokenActionHUD');
     }
 
     static async submitSubcategories(categoryManager, categoryId, choices) {
         await categoryManager.submitSubcategories(categoryId, choices);
-        game.tokenActionHUD.update();
+        Hooks.callAll('forceUpdateTokenActionHUD');
     }
 
     static async submitFilter(filterManager, categoryId, elements, isBlocklist) {
         await filterManager.setFilteredElements(categoryId, elements, isBlocklist);
-        game.tokenActionHUD.update();
+        Hooks.callAll('forceUpdateTokenActionHUD');
     }
 
     static _showFilterDialog(filterManager, subcategoryId) {

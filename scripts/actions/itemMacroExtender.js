@@ -1,4 +1,5 @@
 import {ActionListExtender} from './actionListExtender.js';
+import {SystemManager} from '../managers/manager.js';
 import * as settings from '../settings.js';
 
 export class ItemMacroActionListExtender extends ActionListExtender {
@@ -15,7 +16,14 @@ export class ItemMacroActionListExtender extends ActionListExtender {
         if (!actorId)
             return;
 
-        let itemIds = ItemMacro.getTokenItems(tokenId).map(item => item.data._id);
+        let items = ItemMacro.getTokenItems(tokenId);
+
+        let itemIds;
+        if (SystemManager.isModuleActive('midi-qol')) {
+            itemIds = items.filter(this.isUnsupportedByMidiQoL).map(item => item.data._id);
+        } else {
+            itemIds = items.map(item => item.data._id);
+        }
 
         if (!itemIds)
             return;
@@ -44,12 +52,11 @@ export class ItemMacroActionListExtender extends ActionListExtender {
                 return;
 
             let macroAction = this.createItemMacroAction(action, replace)
-            macroActions.push(macroAction);
-        })
 
-        // if replacing, actions should have already been edited in place, no need to add.
-        if (replace)
-            return;
+            // if replacing, actions should have already been edited in place, no need to add.
+            if (!replace)
+                macroActions.push(macroAction);
+        })
 
         this.addActionsToSubcategory(subcategory, macroActions);
     }
@@ -77,5 +84,10 @@ export class ItemMacroActionListExtender extends ActionListExtender {
             let index = subcategory.actions.findIndex(a => a.id === ma.id) + 1;
             subcategory.actions.splice(index, 0, ma);
         })
+    }
+
+    isUnsupportedByMidiQoL(item) {
+        let flag = item.getFlag('midi-qol', 'onUseMacroName');
+        return !flag;
     }
 }
