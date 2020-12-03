@@ -23,8 +23,8 @@ export class ActionHandler {
     }
 
     /** @public */
-    registerCoreCategories(categories) {
-        this.categoryManager.addCoreCategories(categories);
+    async registerCoreCategories(categories) {
+        await this.categoryManager.addCoreCategories(categories);
     }
 
     /** @public */
@@ -32,7 +32,7 @@ export class ActionHandler {
         let actionList = await this.doBuildActionList(token, multipleTokens);
         this._addGenericUtilities(token, actionList, multipleTokens);
         this._doBuildFurtherActions(token, actionList, multipleTokens);
-        this.registerCoreCategories(actionList.categories);
+        await this.registerCoreCategories(actionList.categories);
         await this.categoryManager.addCategoriesToActionList(this, actionList);
         return actionList;
     }

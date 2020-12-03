@@ -327,8 +327,8 @@ export class TokenActionHUD extends Application {
         }
     }
 
-    resetHud() {
-        this.resetFlags();
+    async resetHud() {
+        await this.resetFlags();
         this.resetPosition();
     }
 
@@ -338,10 +338,10 @@ export class TokenActionHUD extends Application {
         this.update();
     }
 
-    resetFlags() {
+    async resetFlags() {
         settings.Logger.info(`Resetting Token Action HUD filter and category flags`);
-        this.categoryManager.reset();
-        this.filterManager.reset();
+        await this.categoryManager.reset();
+        await this.filterManager.reset();
         this.update();
     }
 

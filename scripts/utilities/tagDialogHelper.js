@@ -17,17 +17,17 @@ export class TagDialogHelper {
 
     static async submitCategories(categoryManager, choices, push) {
         await categoryManager.submitCategories(choices, push);
-        game.tokenActionHUD.update()
+        Hooks.callAll('forceUpdateTokenActionHUD');
     }
 
     static async submitSubcategories(categoryManager, categoryId, choices) {
         await categoryManager.submitSubcategories(categoryId, choices);
-        game.tokenActionHUD.update();
+        Hooks.callAll('forceUpdateTokenActionHUD');
     }
 
     static async submitFilter(filterManager, categoryId, elements, isBlocklist) {
         await filterManager.setFilteredElements(categoryId, elements, isBlocklist);
-        game.tokenActionHUD.update();
+        Hooks.callAll('forceUpdateTokenActionHUD');
     }
 
     static _showFilterDialog(filterManager, subcategoryId) {
@@ -48,10 +48,10 @@ export class TagDialogHelper {
             ]
         }
 
-        let submitFunc = (choices, indexValue) => {
+        let submitFunc = (async (choices, indexValue) => {
             let isBlocklist = parseInt(indexValue) != 0 ? true : false;
-            TagDialogHelper.submitFilter(filterManager, subcategoryId, choices, isBlocklist);
-        }
+            await TagDialogHelper.submitFilter(filterManager, subcategoryId, choices, isBlocklist);
+        });
 
         TagDialog.showDialog(suggestions, selected, indexChoice, title, hbsData, submitFunc);
     }
@@ -68,10 +68,10 @@ export class TagDialogHelper {
             clearButtonText: game.i18n.localize('tokenactionhud.clearButton'),
         }
 
-        let submitFunc = (choices, indexValue) => {
+        let submitFunc = (async (choices, indexValue) => {
             let subcats = choices.map(c => {return {id: c.id, title: c.value, type: c.type}})
-            TagDialogHelper.submitSubcategories(categoryManager, categoryId, subcats);
-        }
+            await TagDialogHelper.submitSubcategories(categoryManager, categoryId, subcats);
+        });
 
         TagDialog.showDialog(suggestions, selected, null, title, hbsData, submitFunc);
     }
@@ -92,10 +92,10 @@ export class TagDialogHelper {
             ]
         }
 
-        let submitFunc = (choices, indexValue) => {
+        let submitFunc = (async (choices, indexValue) => {
             let push = parseInt(indexValue) != 0 ? true : false;
-            TagDialogHelper.submitCategories(categoryManager, choices, push);
-        }
+            await TagDialogHelper.submitCategories(categoryManager, choices, push);
+        });
 
         TagDialog.showDialog(null, selected, indexChoice, title, hbsData, submitFunc);
     }

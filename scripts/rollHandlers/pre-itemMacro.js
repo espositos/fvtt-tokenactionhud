@@ -21,8 +21,10 @@ export class ItemMacroPreRollHandler extends PreRollHandler {
         if (macroType != 'itemMacro')
             return false;
         
-        if (this.isRenderItem())
+        if (this.isRenderItem()) {
             this.doRenderItem(tokenId, actionId);
+            return true;
+        }
 
         return this._tryExecuteItemMacro(event, tokenId, actionId);
     }

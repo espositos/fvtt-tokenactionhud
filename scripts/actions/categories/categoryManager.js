@@ -87,17 +87,17 @@ export class CategoryManager {
         }
     }
 
-    addCoreCategories(categories) {
+    async addCoreCategories(categories) {
         for (let core of categories) {
             let existing = this.categories.find(cat => cat.id === core.id);
             if (existing && !existing.core) {
                 existing.core = true;
-                existing.updateFlag();
+                await existing.updateFlag();
                 continue;
             } else if (existing) {
                 continue;
             }
-            this._createCategory({ id: core.id, value: core.name }, false, true);
+            await this._createCategory({ id: core.id, value: core.name }, false, true);
         }
     }
 
@@ -118,13 +118,13 @@ export class CategoryManager {
         this.categories.splice(index, 1);
     }
 
-    submitSubcategories(categoryId, choices) {
+    async submitSubcategories(categoryId, choices) {
         let category = this.categories.find(c => c.id === categoryId);
 
         if (!category)
             return;
 
-        category.selectSubcategories(choices);
+        await category.selectSubcategories(choices);
     }
 
     getExistingCategories() {
