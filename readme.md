@@ -1,9 +1,8 @@
+[![Support me on Patreon](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3Dcaret_and_stick%26type%3Dpledges%26suffix%3D%252Fmo%2520wasted&style=flat)](https://patreon.com/caret_and_stick)
+
 # Token Action HUD
 This module populates a repositionable HUD showing the most common basic actions for a selected token. Currently the HUD supports DND5e, WFRP4e, Dungeon World, Pathfinder 2E, Pathfinder 1E, Star Wars 5e, Shadow of the Demonlord (thanks to Xacus#7239) and SFRPG (thanks to Rainer#5041).
 ![Easy action access](.github/readme/tah-dnd5e.gif)
-
-# Donations
-[![Support me on Patreon](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3Dcaret_and_stick%26type%3Dpledges%26suffix%3D%252Fmo%2520wasted&style=flat)](https://patreon.com/caret_and_stick) - It is completely unnecessary, but if you would like to show your support for the HUD I do have a Patreon page.
 
 # Installation
 1. Inside Foundry's Configuration and Setup screen, go to **Add-on Modules**
