@@ -1,8 +1,8 @@
 # Changelog
 
-## [0.9.30] 2020-12-03
-### Bugfix
-- Adding awaits in further places where custom subcategories are involved
+## [0.10.0] 2020-12-03
+### Changed
+- DND5e - Removed inconsumables category and roll everything into consumables.
 
 ## [0.9.29] 2020-12-02
 ### Bugfix

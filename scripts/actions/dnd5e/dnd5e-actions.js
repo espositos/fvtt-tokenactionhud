@@ -133,15 +133,10 @@ export class ActionHandler5e extends ActionHandler {
         let allConsumables = this._getActiveEquipment(sortedItems.filter(i => i.type == 'consumable'));
         
         let expendedFiltered = this._filterExpendedItems(allConsumables);
-        let consumable = expendedFiltered.filter(c => (c.data.uses?.value && c.data.uses?.value >= 0) || (c.data.uses?.max && c.data.uses?.max >= 0) );
+        let consumable = expendedFiltered;
         let consumableActions = consumable.map(c => this._buildItem(tokenId, actor, macroType, c));
         let consumablesCat = this.initializeEmptySubcategory();
         consumablesCat.actions = consumableActions;
-        
-        let inconsumable = allConsumables.filter(c => !(c.data.uses?.max || c.data.uses?.value) && c.data.consumableType != 'ammo')
-        let incomsumableActions = inconsumable.map(i => this._buildItem(tokenId, actor, macroType, i));
-        let inconsumablesCat = this.initializeEmptySubcategory();
-        inconsumablesCat.actions = incomsumableActions;
 
         let tools = validItems.filter(t => t.type === 'tool');
         let toolsActions = tools.map(i => this._buildItem(tokenId, actor, macroType, i));
@@ -152,7 +147,6 @@ export class ActionHandler5e extends ActionHandler {
         let equipmentTitle = this.i18n('tokenactionhud.equipment');
         let otherTitle = this.i18n('tokenactionhud.other');
         let consumablesTitle = this.i18n('tokenactionhud.consumables');
-        let incomsumablesTitle = this.i18n('tokenactionhud.inconsumables');
         let toolsTitle = this.i18n('tokenactionhud.tools');
 
         let result = this.initializeEmptyCategory('inventory');
@@ -161,7 +155,6 @@ export class ActionHandler5e extends ActionHandler {
         this._combineSubcategoryWithCategory(result, equipmentTitle, equipmentCat);
         this._combineSubcategoryWithCategory(result, otherTitle, otherCat);
         this._combineSubcategoryWithCategory(result, consumablesTitle, consumablesCat);
-        this._combineSubcategoryWithCategory(result, incomsumablesTitle, inconsumablesCat);
         this._combineSubcategoryWithCategory(result, toolsTitle, toolsCat);
         
         return result;
@@ -634,8 +627,9 @@ export class ActionHandler5e extends ActionHandler {
     /** @private */
     _getQuantityData(item) {
         let result = '';
-        if (item.data.quantity > 1) {
-            result = item.data.quantity;
+        let quantity = item.data.quantity;
+        if (quantity > 1) {
+            result = quantity;
         }
 
         return result;
@@ -649,10 +643,7 @@ export class ActionHandler5e extends ActionHandler {
         if (!uses)
             return result;
 
-        if (!(uses.max || uses.value))
-            return result;
-
-        result = uses.value ?? 0;
+        result = uses.value === 0 && uses.max ? '0' : uses.value;
 
         if (uses.max > 0) {
             result += `/${uses.max}`
