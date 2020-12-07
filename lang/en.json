@@ -125,6 +125,7 @@
     "tokenactionhud.cancel": "Cancel",
     "tokenactionhud.blocklist": "Blocklist",
     "tokenactionhud.allowlist": "Allowlist",
+    "tokenactionhud.experimental": "Experimental",
 
     "tokenactionhud.categoryTagTitle": "Add/remove categories",
     "tokenactionhud.subcategoryTagTitle": "Add/remove subcategories",
@@ -200,6 +201,8 @@
     "tokenactionhud.settings.pf2e.abbreviateSkills.hint": "If enabled, skills and abilities will use a three-character abbreviation.",
     "tokenactionhud.settings.pf2e.ignorePassiveActions.name": "Ignore passive actions",
     "tokenactionhud.settings.pf2e.ignorePassiveActions.hint": "If enabled, passive actions are not shown.",
+    "tokenactionhud.settings.pf2e.showOldNpcStrikes.name": "Show old NPC Strikes",
+    "tokenactionhud.settings.pf2e.showOldNpcStrikes.hint": "If enabled, the HUD will show the old NPC strike actions as well as the new (experimental) strikes for NPCs.",
 
     "tokenactionhud.settings.sfrpg.showSpellInfo.name": "Display spell information",
     "tokenactionhud.settings.sfrpg.showSpellInfo.hint": "If enabled, spell resistance, dismissible, concentration and save information noted next to the spell name.",

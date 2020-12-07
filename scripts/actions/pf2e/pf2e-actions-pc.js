@@ -77,7 +77,7 @@ export class PcActionHandlerPf2e {
         if (!settings.get('separateTogglesCategory'))
             this._addTogglesCategories(actor, tokenId, result);
             
-        this._addStrikesCategories(actor, tokenId, result);
+        this.baseHandler._addStrikesCategories(actor, tokenId, result);
 
         return result;
     }
@@ -118,51 +118,6 @@ export class PcActionHandlerPf2e {
             return '';
 
         return inputName.substring(rollOptionPrefix.length);
-    }
-
-    /** @private */
-    _addStrikesCategories(actor, tokenId, category) {
-        let macroType = 'strike';
-        let strikes = actor.data.data.actions.filter(a => a.type === macroType);
-        
-        let calculateAttackPenalty = settings.get('calculateAttackPenalty');
-
-        strikes.forEach(s => {
-            let subcategory = this.baseHandler.initializeEmptySubcategory();
-            let glyph = s.glyph;
-            if (glyph)
-                subcategory.icon = `<span style='font-family: "Pathfinder2eActions"'>${glyph}</span>`
-
-            let map = Math.abs(parseInt(s.variants[1].label.split(' ')[1]));
-            let attackMod = s.totalModifier;
-            
-            let currentMap = 0;
-            let currentBonus = attackMod;
-            let calculatePenalty = calculateAttackPenalty;
-
-            let variantsMap = s.variants.map(function (v) {
-                let name;
-                if (currentBonus === attackMod || calculatePenalty) {
-                    name = currentBonus >= 0 ? `+${currentBonus}` : `${currentBonus}`;
-                }
-                else {
-                    name = currentMap >= 0 ? `+${currentMap}` : `${currentMap}`;
-                }
-                currentMap -= map;
-                currentBonus -= map;
-                return {_id: encodeURIComponent(`${this.name}>${this.variants.indexOf(v)}`), name: name }
-            }.bind(s));
-
-            variantsMap[0].img = s.imageUrl;
-            subcategory.actions = this.baseHandler._produceActionMap(tokenId, variantsMap, macroType);
-            
-            let damageEncodedValue = [macroType, tokenId, encodeURIComponent(s.name+'>damage')].join(this.baseHandler.delimiter);
-            let critEncodedValue = [macroType, tokenId, encodeURIComponent(s.name+'>critical')].join(this.baseHandler.delimiter);
-            subcategory.actions.push({name: this.i18n('tokenactionhud.damage'), encodedValue: damageEncodedValue, id: encodeURIComponent(s.name+'>damage')})
-            subcategory.actions.push({name: this.i18n('tokenactionhud.critical'), encodedValue: critEncodedValue, id: encodeURIComponent(s.name+'>critical')})
-
-            this.baseHandler._combineSubcategoryWithCategory(category, s.name, subcategory);
-        });
     }
 
     /** @private */

@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.10.1] 2020-12-07
+### Added
+- PF2E - Added support for new NPC strikes.
+
 ## [0.10.0] 2020-12-03
 ### Changed
 - DND5e - Removed inconsumables category and roll everything into consumables.

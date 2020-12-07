@@ -19,6 +19,16 @@ export function register(app, updateSettings) {
         onChange: value => { updateSettings(value); }
     });
     
+    game.settings.register(app,'showOldNpcStrikes', {
+        name: game.i18n.localize('tokenactionhud.settings.pf2e.showOldNpcStrikes.name'),
+        hint: game.i18n.localize('tokenactionhud.settings.pf2e.showOldNpcStrikes.hint'),
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: true,
+        onChange: value => { updateSettings(value); }
+    });
+    
     game.settings.register(app,'ignorePassiveActions', {
         name: game.i18n.localize('tokenactionhud.settings.pf2e.ignorePassiveActions.name'),
         hint: game.i18n.localize('tokenactionhud.settings.pf2e.ignorePassiveActions.hint'),
