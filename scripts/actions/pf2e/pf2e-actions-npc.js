@@ -1,4 +1,3 @@
-import {ActionHandlerPf2e} from './pf2e-actions.js';
 import * as settings from '../../settings.js';
 
 export class NpcActionHandlerPf2e {
@@ -36,14 +35,27 @@ export class NpcActionHandlerPf2e {
 
     /** @private */
     _getStrikesListNpc(actor, tokenId) {
-        let macroType = 'strike';
         let result = this.baseHandler.initializeEmptyCategory('strikes');
         result.cssClass = 'oneLine';
+        
+        if (settings.get('showOldNpcStrikes')) {
+            this._addStrikesCategories(actor, tokenId, result);
+        }
 
-        let strikes = actor.items.filter(a => a.type === 'melee').sort(this._foundrySort);;
+        const info = this.baseHandler.i18n('tokenactionhud.experimental');
 
+        this.baseHandler._addStrikesCategories(actor, tokenId, result, info);
+        
+        return result;
+    }
+
+    /** @private */
+    _addStrikesCategories(actor, tokenId, category) {
+        let strikes = actor.items.filter(a => a.type === 'melee').sort(this._foundrySort);
+        
         let calculateAttackPenalty = settings.get('calculateAttackPenalty')
-
+        
+        const macroType = 'npcStrike';
         strikes.forEach(s => {
             let subcategory = this.baseHandler.initializeEmptySubcategory();
             let actionIcon = parseInt((s.data.data.actions || {}).value, 10) || 1;
@@ -89,10 +101,8 @@ export class NpcActionHandlerPf2e {
                 });
             }
             
-            this.baseHandler._combineSubcategoryWithCategory(result, s.name, subcategory);
+            this.baseHandler._combineSubcategoryWithCategory(category, s.name, subcategory);
         });
-
-        return result;
     }
 
     /** @private */

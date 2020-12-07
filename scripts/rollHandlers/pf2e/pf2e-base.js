@@ -26,7 +26,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         if (renderable.includes(macroType) && this.isRenderItem())
             return this.doRenderItem(tokenId, actionId);
 
-        let sharedActions = ['ability', 'spell', 'item', 'skill', 'lore', 'utility', 'toggle']
+        let sharedActions = ['ability', 'spell', 'item', 'skill', 'lore', 'utility', 'toggle', 'strike']
 
         if (!sharedActions.includes(macroType)) {
             switch (charType) {
@@ -61,6 +61,9 @@ export class RollHandlerBasePf2e extends RollHandler {
             case 'toggle':
                 await this._performToggleMacro(event, tokenId, actionId);
                 break;
+            case 'strike':
+                this._rollStrikeChar(event, tokenId, actor, actionId);
+                break;  
         }
     }
 
@@ -70,9 +73,6 @@ export class RollHandlerBasePf2e extends RollHandler {
             case 'save':
                 this._rollSaveChar(event, actor, actionId);
                 break;
-            case 'strike':
-                this._rollStrikeChar(event, tokenId, actor, actionId);
-                break;  
             case 'attribute':
                 this._rollAttributeChar(event, actor, actionId);
                 break;
@@ -99,7 +99,7 @@ export class RollHandlerBasePf2e extends RollHandler {
             case 'save':
                 this._rollSaveNpc(event, actor, actionId);
                 break;
-            case 'strike':
+            case 'npcStrike':
                 this._rollStrikeNpc(event, tokenId, actor, actionId);
                 break;  
             case 'attribute':
