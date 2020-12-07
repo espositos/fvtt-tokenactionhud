@@ -39,7 +39,7 @@ export class NpcActionHandlerPf2e {
         result.cssClass = 'oneLine';
         
         if (settings.get('showOldNpcStrikes')) {
-            this._addStrikesCategories(actor, tokenId, result);
+            this._addNpcStrikesCategories(actor, tokenId, result);
         }
 
         const info = this.baseHandler.i18n('tokenactionhud.experimental');
@@ -50,7 +50,7 @@ export class NpcActionHandlerPf2e {
     }
 
     /** @private */
-    _addStrikesCategories(actor, tokenId, category) {
+    _addNpcStrikesCategories(actor, tokenId, category) {
         let strikes = actor.items.filter(a => a.type === 'melee').sort(this._foundrySort);
         
         let calculateAttackPenalty = settings.get('calculateAttackPenalty')

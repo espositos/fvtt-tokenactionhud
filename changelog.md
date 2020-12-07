@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.10.2] 2020-12-07
+### Changed
+- PF2E - Check for null actions just in cases
+
 ## [0.10.1] 2020-12-07
 ### Added
 - PF2E - Added support for new NPC strikes.

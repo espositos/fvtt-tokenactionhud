@@ -84,7 +84,10 @@ export class ActionHandlerPf2e extends ActionHandler {
     /** @private */
     _addStrikesCategories(actor, tokenId, category, info) {
         let macroType = 'strike';
-        let strikes = actor.data.data.actions.filter(a => a.type === macroType);
+        let strikes = actor.data.data.actions?.filter(a => a.type === macroType);
+
+        if (!strikes)
+            return;
         
         let calculateAttackPenalty = settings.get('calculateAttackPenalty');
 
