@@ -768,8 +768,8 @@ export class ActionHandlerPf1 extends ActionHandler {
     _getActionIcon(action) {
         const img = {
             //standard: `<i class="fas fa-fist-raised"></i>`,
-            immediate: `<i class="fas fa-plus"></i>`,
-            swift: `<i class="fas fa-bolt"></i>`,
+            immediate: `<i class="fas fa-bolt"></i>`,
+            swift: `<i class="fas fa-plus"></i>`,
             full: `<i class="far fa-circle"></i>`,
             round: `<i class="fas fa-hourglass-start"></i>`,
             minute: `<i class="fas fa-hourglass-half"></i>`,
