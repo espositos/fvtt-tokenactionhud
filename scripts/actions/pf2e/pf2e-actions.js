@@ -147,19 +147,24 @@ export class ActionHandlerPf2e extends ActionHandler {
 
         let reactions = this.initializeEmptySubcategory();
         reactions.actions = this._produceActionMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'reaction' && this._actionIsShort(a)), macroType);
-
+        
         let free = this.initializeEmptySubcategory();
         free.actions = this._produceActionMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'free' && this._actionIsShort(a)), macroType);
+        
+        let passive = this.initializeEmptySubcategory();
+        passive.actions = this._produceActionMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'passive' && this._actionIsShort(a)), macroType);
 
         let exploration = this.initializeEmptySubcategory();
         exploration.actions = this._produceActionMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.traits?.value.includes('exploration')), macroType);
 
         let downtime = this.initializeEmptySubcategory();
         downtime.actions = this._produceActionMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.traits?.value.includes('downtime')), macroType);
+        
 
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.actions'), actions);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.reactions'), reactions);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.free'), free);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.passive'), passive);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.exploration'), exploration);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.downtime'), downtime);
 
@@ -422,7 +427,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let result = this.initializeEmptyCategory('feats');
 
         let filter = [macroType];
-        let items = (actor.items ?? []).filter(a => filter.includes(a.type)).sort(this._foundrySort);;
+        let items = (actor.items ?? []).filter(a => filter.includes(a.type)).sort(this._foundrySort);
 
         let active = this.initializeEmptySubcategory();
         active.actions = this._produceActionMap(tokenId, (items ?? []).filter(a => a.data.data.actionType.value !== 'passive'), macroType);
