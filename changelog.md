@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.3] 2020-12-07
+### Bugfix
+- PF2E - Passive actions should correctly show when setting is disabled
+
+### Changed
+- PF1E - swapped icons for immediate and swift actions
+
 ## [0.10.2] 2020-12-07
 ### Changed
 - PF2E - Check for null actions just in cases

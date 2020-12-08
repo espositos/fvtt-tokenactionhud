@@ -1,4 +1,4 @@
-[![Support me on Patreon](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3Dcaret_and_stick%26type%3Dpledges%26suffix%3D%252Fmo%2520wasted&style=flat)](https://patreon.com/caret_and_stick)
+[![Support this project on Patreon](https://img.shields.io/badge/Patreon-donate-red.svg)](https://patreon.com/caret_and_stick) Patreon donations welcome.
 
 # Token Action HUD
 This module populates a repositionable HUD showing the most common basic actions for a selected token. Currently the HUD supports DND5e, WFRP4e, Dungeon World, Pathfinder 2E, Pathfinder 1E, Star Wars 5e, Shadow of the Demonlord (thanks to Xacus#7239) and SFRPG (thanks to Rainer#5041).
