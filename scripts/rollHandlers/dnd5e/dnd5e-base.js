@@ -53,6 +53,9 @@ export class RollHandlerBase5e extends RollHandler {
             case 'utility':
                 await this.performUtilityMacro(event, tokenId, actionId);
                 break;
+            case 'effect':
+                await this.toggleEffect(event, tokenId, actionId);
+                break;
             default:
                 break;
         }
@@ -133,6 +136,17 @@ export class RollHandlerBase5e extends RollHandler {
         
         await actor.rollInitiative({createCombatants: true});
             
+        Hooks.callAll('forceUpdateTokenActionHUD')
+    }
+
+    async toggleEffect(event, tokenId, effectId) {
+        const actor = super.getActor(tokenId);
+        const effect = actor.effects.entries.find(e => e.id === effectId);
+
+        if (!effect)
+            return;
+
+        await effect.update({disabled: !effect.data.disabled});
         Hooks.callAll('forceUpdateTokenActionHUD')
     }
 }

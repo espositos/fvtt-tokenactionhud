@@ -33,6 +33,7 @@ export class ActionHandler5e extends ActionHandler {
 
         let items = this._getItemList(actor, tokenId);
         let feats = this._getFeatsList(actor, tokenId);
+        let effects = this._getEffectsList(actor, tokenId);
         let utility = this._getUtilityList(actor, tokenId);
 
         let spells, skills;
@@ -45,9 +46,11 @@ export class ActionHandler5e extends ActionHandler {
         let spellsTitle = this.i18n('tokenactionhud.spells');
         let featsTitle = this.i18n('tokenactionhud.features');
         let skillsTitle = this.i18n('tokenactionhud.skills');
+        let effectsTitle = this.i18n('tokenactionhud.effects');
         
         this._combineCategoryWithList(result, itemsTitle, items);
         this._combineCategoryWithList(result, spellsTitle, spells);
+        this._combineCategoryWithList(result, effectsTitle, effects);
         this._combineCategoryWithList(result, featsTitle, feats);
         this._combineCategoryWithList(result, skillsTitle, skills);
         
@@ -515,6 +518,33 @@ export class ActionHandler5e extends ActionHandler {
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.rests'), rests);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.utility'), utility);
         
+        return result;
+    }
+
+    /** @private */
+    _getEffectsList(actor, tokenId) {
+        let result = this.initializeEmptyCategory('effects');
+        const macroType = 'effect';
+
+        const effects = actor.effects.entries;
+
+        let tempCategory = this.initializeEmptySubcategory();
+        let passiveCategory = this.initializeEmptySubcategory();
+
+        effects.forEach(e => {
+
+            const name = e.data.label;
+            const encodedValue = [macroType, tokenId, e.id].join(this.delimiter);
+            const cssClass = e.data.disabled ? '' : 'active';
+            const image = e.data.icon;
+            let action = {name: name, id: e.id, encodedValue: encodedValue, img: image, cssClass: cssClass}
+
+            e.isTemporary ? tempCategory.actions.push(action) : passiveCategory.actions.push(action);
+        });
+
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.temporary'), tempCategory);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.passive'), passiveCategory);
+
         return result;
     }
 
