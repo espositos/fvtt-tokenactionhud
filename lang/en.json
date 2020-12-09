@@ -126,6 +126,7 @@
     "tokenactionhud.blocklist": "Blocklist",
     "tokenactionhud.allowlist": "Allowlist",
     "tokenactionhud.experimental": "Experimental",
+    "tokenactionhud.conditions": "Conditions",
 
     "tokenactionhud.categoryTagTitle": "Add/remove categories",
     "tokenactionhud.subcategoryTagTitle": "Add/remove subcategories",
