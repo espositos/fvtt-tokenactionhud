@@ -31,6 +31,7 @@ export class ActionHandlerPf1 extends ActionHandler {
         
         this._addAttacksList(result, actor, tokenId);
         this._addBuffsList(result, actor, tokenId);
+        this._addConditionsList(result, actor, tokenId);
         this._addItemsList(result, actor, tokenId);
         this._addSpellsList(result, actor, tokenId);
         this._addFeatsList(result, actor, tokenId);
@@ -75,6 +76,12 @@ export class ActionHandlerPf1 extends ActionHandler {
         let buffs = this._getBuffsList(actor, tokenId);
         let buffsTitle = this.i18n('tokenactionhud.buffs');
         this._combineCategoryWithList(result, buffsTitle, buffs);
+    }
+    
+    _addConditionsList(result, actor, tokenId) {
+        let conditionsTitle = this.i18n('tokenactionhud.conditions');
+        let conditionsCategory = this._getConditionsList(tokenId, actor.data.data.attributes.conditions, 'conditions', conditionsTitle, 'condition');
+        this._combineCategoryWithList(result, conditionsTitle, conditionsCategory);
     }
 
     _addItemsList(result, actor, tokenId) {
@@ -539,6 +546,36 @@ export class ActionHandlerPf1 extends ActionHandler {
        return result;
    }
 
+    _getConditionsList(tokenId, conditions, categoryId, categoryName, macroType) {
+        if (!conditions)
+            return;
+
+        let result = this.initializeEmptyCategory(categoryId);
+        let subcategory = this.initializeEmptySubcategory();   
+        const entries = Object.entries(conditions);
+
+        entries.forEach(c => {
+            const key = c[0];
+            const value = c[1];
+
+            let name = CONFIG.PF1.conditions[key];
+            let img;
+            if (settings.get('showIcons'))
+                img = CONFIG.PF1.conditionTextures[key];
+
+            let encodedValue = [macroType, tokenId, key].join(this.delimiter);
+
+            let action = {name: name, id: key, encodedValue: encodedValue, img: img};
+            action.cssClass = value ? 'active' : '';
+
+            subcategory.actions.push(action);
+        });
+
+        this._combineSubcategoryWithCategory(result, categoryName, subcategory);
+
+        return result;
+   }
+
     _addMultiAbilities(list, tokenId, categoryId, categoryName, macroType) {        
         let cat = this.initializeEmptyCategory(categoryId);
         
@@ -769,11 +806,15 @@ export class ActionHandlerPf1 extends ActionHandler {
         const img = {
             //standard: `<i class="fas fa-fist-raised"></i>`,
             immediate: `<i class="fas fa-bolt"></i>`,
+            reaction: `<i class="fas fa-bolt"></i>`,
+            free: `<i class="fas fa-plus"></i>`,
             swift: `<i class="fas fa-plus"></i>`,
             full: `<i class="far fa-circle"></i>`,
             round: `<i class="fas fa-hourglass-start"></i>`,
             minute: `<i class="fas fa-hourglass-half"></i>`,
-            hour: `<i class="fas fa-hourglass-end"></i>`
+            hour: `<i class="fas fa-hourglass-end"></i>`,
+            special: `<i class="fas fa-star"></i>`
+          
         };
         return img[action];
     }

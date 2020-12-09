@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.10.4] 2020-12-07
+### Added
+- PF1 - Support for toggling conditions
+
 ## [0.10.3] 2020-12-07
 ### Bugfix
 - PF2E - Passive actions should correctly show when setting is disabled

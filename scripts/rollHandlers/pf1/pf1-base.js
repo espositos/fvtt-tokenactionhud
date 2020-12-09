@@ -51,6 +51,9 @@ export class RollHandlerBasePf1 extends RollHandler {
             case 'buff':
                 await this.adjustBuff(event, tokenId, actionId);
                 break;
+            case 'condition':
+                await this.adjustCondition(event, tokenId, actionId);
+                break;
             case 'item':
             case 'spell':
             case 'feat':
@@ -119,6 +122,17 @@ export class RollHandlerBasePf1 extends RollHandler {
         let update = {data: {active: !buff.data.data.active}};
 
         await buff.update(update);
+    }
+
+    async adjustCondition(event, tokenId, conditionKey) {
+        let actor = super.getActor(tokenId);
+
+        const value = actor.data.data.attributes.conditions[conditionKey];
+
+        let update = {data: {attributes: {conditions: {}}}}
+        update.data.attributes.conditions[conditionKey] = !value;
+
+        await actor.update(update);
     }
     
     performUtilityMacro(event, tokenId, actionId) {
