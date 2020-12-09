@@ -1,6 +1,10 @@
 # Changelog
 
-## [0.10.4] 2020-12-07
+## [0.10.5] 2020-12-09
+### Added
+- DND5e - Support for toggling active effects
+
+## [0.10.4] 2020-12-09
 ### Added
 - PF1 - Support for toggling conditions
 

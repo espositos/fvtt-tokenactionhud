@@ -127,6 +127,8 @@
     "tokenactionhud.allowlist": "Allowlist",
     "tokenactionhud.experimental": "Experimental",
     "tokenactionhud.conditions": "Conditions",
+    "tokenactionhud.effects": "Effects",
+    "tokenactionhud.temporary": "Temporary",
 
     "tokenactionhud.categoryTagTitle": "Add/remove categories",
     "tokenactionhud.subcategoryTagTitle": "Add/remove subcategories",
