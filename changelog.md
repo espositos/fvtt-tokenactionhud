@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.10.3] 2020-12-07
+## [0.10.4] 2020-12-07
 ### Added
 - PF1 - Support for toggling conditions
 
