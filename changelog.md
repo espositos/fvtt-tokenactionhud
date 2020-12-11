@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.10.6] 2020-12-09
+### Added
+- PF2E - Blind roll with ctrl click
+
 ## [0.10.5] 2020-12-09
 ### Added
 - DND5e - Support for toggling active effects

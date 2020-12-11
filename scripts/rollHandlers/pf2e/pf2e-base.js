@@ -2,6 +2,8 @@ import { RollHandler } from '../rollHandler.js';
 import * as settings from '../../settings.js';
 
 export class RollHandlerBasePf2e extends RollHandler {
+    BLIND_ROLL_MODE = 'blindroll';
+
     constructor() {
         super();
     }
@@ -26,45 +28,68 @@ export class RollHandlerBasePf2e extends RollHandler {
         if (renderable.includes(macroType) && this.isRenderItem())
             return this.doRenderItem(tokenId, actionId);
 
-        let sharedActions = ['ability', 'spell', 'item', 'skill', 'lore', 'utility', 'toggle', 'strike']
+            
+        let currentRollMode;
+        if (this._isBlindRollClick(event)) {
+            currentRollMode = game.settings.get('core', 'rollMode');
+            await this._updateRollMode(this.BLIND_ROLL_MODE);
+        }
 
-        if (!sharedActions.includes(macroType)) {
-            switch (charType) {
-                case 'npc':
-                    this._handleUniqueActionsNpc(macroType, event, tokenId, actor, actionId);
+        try {
+            let sharedActions = ['ability', 'spell', 'item', 'skill', 'lore', 'utility', 'toggle', 'strike']
+            if (!sharedActions.includes(macroType)) {
+                switch (charType) {
+                    case 'npc':
+                        this._handleUniqueActionsNpc(macroType, event, tokenId, actor, actionId);
+                        break;
+                    case 'character':
+                    case 'familiar':
+                        await this._handleUniqueActionsChar(macroType, event, tokenId, actor, actionId);
+                        break;
+                }
+            }
+    
+            switch (macroType) {
+                case 'ability':
+                    this._rollAbility(event, actor, actionId);
                     break;
-                case 'character':
-                case 'familiar':
-                    await this._handleUniqueActionsChar(macroType, event, tokenId, actor, actionId);
+                case 'skill':
+                    await this._rollSkill(event, actor, actionId);
                     break;
+                case 'action':
+                case 'feat':
+                case 'item':
+                    this._rollItem(event, actor, actionId);
+                    break;
+                case 'spell':
+                    this._rollSpell(event, tokenId, actor, actionId);
+                    break;
+                case 'utility':
+                    this._performUtilityMacro(event, tokenId, actionId);
+                    break;
+                case 'toggle':
+                    await this._performToggleMacro(event, tokenId, actionId);
+                    break;
+                case 'strike':
+                    this._rollStrikeChar(event, tokenId, actor, actionId);
+                    break;  
+            }
+
+        } catch (e) {
+            throw e;
+
+        } finally {
+            if (this._isBlindRollClick(event)) {
+                if (currentRollMode) {
+                    await this._updateRollMode(currentRollMode);
+                }
             }
         }
+    }
 
-        switch (macroType) {
-            case 'ability':
-                this._rollAbility(event, actor, actionId);
-                break;
-            case 'skill':
-                this._rollSkill(event, actor, actionId);
-                break;
-            case 'action':
-            case 'feat':
-            case 'item':
-                this._rollItem(event, actor, actionId);
-                break;
-            case 'spell':
-                this._rollSpell(event, tokenId, actor, actionId);
-                break;
-            case 'utility':
-                this._performUtilityMacro(event, tokenId, actionId);
-                break;
-            case 'toggle':
-                await this._performToggleMacro(event, tokenId, actionId);
-                break;
-            case 'strike':
-                this._rollStrikeChar(event, tokenId, actor, actionId);
-                break;  
-        }
+    /** @private */
+    _isBlindRollClick(event) {
+        return this.isCtrl(event) && !(this.isRightClick(event) || this.isAlt(event) || this.isShift(event));
     }
 
     /** @private */
@@ -192,8 +217,9 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
 
     /** @private */
-    _rollSkill(event, actor, actionId) {
+    async _rollSkill(event, actor, actionId) {
         let skill = actor.data.data.skills[actionId];
+
         if (!skill) {
             actor.rollSkill(event, actionId);
         }
@@ -202,6 +228,10 @@ export class RollHandlerBasePf2e extends RollHandler {
             const opts = actor.getRollOptions(['all', 'skill-check', abilityBased, CONFIG.PF2E.skills[actionId] ?? actionId]);
             skill.roll(event, opts);
         }
+    }
+
+    async _updateRollMode(rollMode) {
+        await game.settings.set('core', 'rollMode', rollMode);
     }
 
     /** @private */
