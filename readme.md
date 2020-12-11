@@ -1,4 +1,5 @@
 [![Support this project on Patreon](https://img.shields.io/badge/Patreon-donate-red.svg)](https://patreon.com/caret_and_stick)
+or
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/G2G82WXLF)
 
 # Token Action HUD
