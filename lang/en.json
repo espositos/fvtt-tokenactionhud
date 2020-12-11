@@ -226,5 +226,7 @@
     "tokenactionhud.attribute.perception": "Perception",
 
     "tokenactionhud.wfrp.meleeSkillPrefix" : "Melee",
-    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged"
+    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged",
+
+    "tokenactionhud.d35e.grapple" : "Grapple"
   }

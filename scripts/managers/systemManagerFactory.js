@@ -2,6 +2,7 @@ import { Dnd5eSystemManager } from './dnd5e.js';
 import { DemonlordSystemManager } from './demonlord.js';
 import { DungeonWorldSystemManager } from './dungeonworld.js';
 import { Pf1SystemManager } from './pf1.js';
+import { D35ESystemManager } from './d35e.js';
 import { Pf2eSystemManager } from './pf2e.js';
 import { SfrpgSystemManager } from './sfrpg.js';
 import { Sw5eSystemManager } from './sw5e.js';
@@ -19,6 +20,8 @@ export class SystemManagerFactory {
                 return new DungeonWorldSystemManager(appName);
             case 'pf1':
                 return new Pf1SystemManager(appName);
+            case 'D35E':
+                return new D35ESystemManager(appName);
             case 'pf2e':
                 return new Pf2eSystemManager(appName);
             case 'sfrpg':
