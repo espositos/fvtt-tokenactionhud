@@ -1,4 +1,5 @@
 import { ActionHandler } from '../actionHandler.js';
+import * as settings from '../../settings.js';
 
 export class ActionHandlerLancer extends ActionHandler {
     constructor (filterManager, categoryManager) {
