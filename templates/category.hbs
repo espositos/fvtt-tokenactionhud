@@ -1,6 +1,10 @@
 
 <div class="tah-category{{#if cssClass}} {{cssClass}}{{/if}}" {{#if this.id}}id="tah-category-{{this.id}}"{{/if}}>
-    <button class="tah-title-button" value="{{this.id}}">{{cap this.name}} <i class="fa fa-filter" aria-hidden="true"></i></button>
+    <button class="tah-title-button" value="{{this.id}}">
+        {{cap this.name}}
+        <i class="fa fa-filter" aria-hidden="true"></i>
+        {{#if this.info1}}<div class="tah-info1">{{this.info1}}</div>{{/if}}
+    </button>
     <div class="tah-content">
         {{#each subcategories}}
         {{>"modules/token-action-hud/templates/subcategory.hbs"}}
