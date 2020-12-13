@@ -238,5 +238,8 @@
     "tokenactionhud.attribute.perception": "Perception",
 
     "tokenactionhud.wfrp.meleeSkillPrefix" : "Melee",
-    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged"
+    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged",
+
+    "tokenactionhud.settings.swade.abbreviateAttributes.name": "Abbreviate skill and ability names",
+    "tokenactionhud.settings.swade.abbreviateAttributes.hint": "If enabled, skills and abilities will use a three-character abbreviation."
   }

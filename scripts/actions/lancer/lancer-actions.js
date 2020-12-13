@@ -35,8 +35,9 @@ export class ActionHandlerLancer extends ActionHandler {
                 this._combineCategoryWithList(result, this.i18n('tokenactionhud.features'), this._npcFeatureCategory(actor, tokenId));
                 break;
         }
-        
-
+            
+        if (settings.get('showHudTitle'))
+            result.hudTitle = token.data?.name;
 
         return result;
     }

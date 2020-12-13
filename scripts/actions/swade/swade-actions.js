@@ -1,4 +1,5 @@
 import { ActionHandler } from '../actionHandler.js';
+import * as settings from '../../settings.js';
 
 export class ActionHandlerSwade extends ActionHandler {
     constructor (filterManager, categoryManager) {
@@ -32,6 +33,9 @@ export class ActionHandlerSwade extends ActionHandler {
         this._addInventory(result, tokenId, actor);
         this._addEdgesAndHinderances(result, tokenId, actor);
         this._addUtilities(result, tokenId, actor);
+    
+        if (settings.get('showHudTitle'))
+            result.hudTitle = token.data?.name;
 
         return result;
     }
@@ -48,7 +52,11 @@ export class ActionHandlerSwade extends ActionHandler {
 
             const nameData = CONFIG.SWADE.attributes[key];
 
-            const name = this.i18n(nameData.long);
+            let name;
+            if (settings.get('abbreviateAttributes'))
+                name = this.i18n(nameData.short);
+            else
+                name = this.i18n(nameData.long);
 
             const encodedValue = [macroType, tokenId, key].join(this.delimiter);
             const action = {name: name, encodedValue: encodedValue, id: key};
