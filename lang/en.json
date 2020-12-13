@@ -129,6 +129,18 @@
     "tokenactionhud.conditions": "Conditions",
     "tokenactionhud.effects": "Effects",
     "tokenactionhud.temporary": "Temporary",
+    "tokenactionhud.bennies": "Bennies",
+    "tokenactionhud.status": "Status",
+    "tokenactionhud.wounds": "Wounds",
+    "tokenactionhud.fatigue": "Fatigue",
+    "tokenactionhud.woundsAndFatigue": "Wounds/Fatigue",
+    "tokenactionhud.edges": "Edges",
+    "tokenactionhud.hindrances": "Hindrances",
+    "tokenactionhud.edgesAndHindrances": "Edges/Hindrances",
+    "tokenactionhud.shields": "Shields",
+    "tokenactionhud.spend": "Spend",
+    "tokenactionhud.get": "Get",
+    "tokenactionhud.points": "Points",
 
     "tokenactionhud.categoryTagTitle": "Add/remove categories",
     "tokenactionhud.subcategoryTagTitle": "Add/remove subcategories",
@@ -227,6 +239,9 @@
 
     "tokenactionhud.wfrp.meleeSkillPrefix" : "Melee",
     "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged",
+
+    "tokenactionhud.settings.swade.abbreviateAttributes.name": "Abbreviate skill and ability names",
+    "tokenactionhud.settings.swade.abbreviateAttributes.hint": "If enabled, skills and abilities will use a three-character abbreviation.",
 
     "tokenactionhud.d35e.grapple" : "Grapple"
   }

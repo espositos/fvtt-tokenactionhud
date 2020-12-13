@@ -1,5 +1,9 @@
 # ChangelogChangelog
 
+## [0.10.8] 2020-12-13
+### Added
+- SWADE - Support for SWADE
+
 ## [0.10.7] 2020-12-11
 ### Added
 - D35E - Support for D&D 3.5 SRD thanks to Rughalt

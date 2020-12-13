@@ -1,4 +1,5 @@
 import { ActionHandler } from '../actionHandler.js';
+import * as settings from '../../settings.js';
 
 export class ActionHandlerLancer extends ActionHandler {
     constructor (filterManager, categoryManager) {
@@ -35,8 +36,9 @@ export class ActionHandlerLancer extends ActionHandler {
                 this._combineCategoryWithList(result, this.i18n('tokenactionhud.features'), this._npcFeatureCategory(actor, tokenId));
                 break;
         }
-        
-
+            
+        if (settings.get('showHudTitle'))
+            result.hudTitle = token.data?.name;
 
         return result;
     }
