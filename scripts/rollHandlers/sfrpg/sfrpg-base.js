@@ -135,7 +135,8 @@ export class RollHandlerBaseSfrpg extends RollHandler {
         return shield.value + possibleChange;
     }
 
-    async _handleCrewAction(event, tokenId, actionId) {
-
+    _handleCrewAction(event, tokenId, actionId) {
+        const actor = super.getActor(tokenId);
+        actor.useStarshipAction(actionId);
     }
 }
