@@ -266,11 +266,13 @@ export class ActionHandlerSwade extends ActionHandler {
 
     /** @private */
     _addBennies(list, tokenId, actor) {
+        const bennies = actor.data.data.bennies;
+        if (!bennies)
+            return;
+
         const cat = this.initializeEmptyCategory('bennies');
         const macroType = 'benny';
         const benniesName = this.i18n('tokenactionhud.bennies');
-
-        const bennies = actor.data.data.bennies;
         
         const spendName = this.i18n('tokenactionhud.spend');
         const spendValue = [macroType, tokenId, 'spend'].join(this.delimiter);
@@ -280,14 +282,36 @@ export class ActionHandlerSwade extends ActionHandler {
         const getValue = [macroType, tokenId, 'get'].join(this.delimiter);
         const getAction = {name: getName, encodedValue: getValue, id:`bennyGet`};
                   
-        const subcat = this.initializeEmptySubcategory(macroType);
-        subcat.name = benniesName;
-        subcat.info1 = `${bennies.value}`;
+        const tokenSubcat = this.initializeEmptySubcategory(macroType);
+        tokenSubcat.name = benniesName;
+        tokenSubcat.info1 = bennies.value.toString();
+        cat.info1 = bennies.value.toString();
 
-        subcat.actions.push(spendAction);
-        subcat.actions.push(getAction);
+        tokenSubcat.actions.push(spendAction);
+        tokenSubcat.actions.push(getAction);
 
-        this._combineSubcategoryWithCategory(cat, benniesName, subcat);
+        this._combineSubcategoryWithCategory(cat, benniesName, tokenSubcat);
+
+        if (game.user.isGM) {
+            const gmBennies = game.user.getFlag('swade', 'bennies');
+            if (gmBennies !== null) {
+                const gmMacroType = 'gmBenny';
+                const gmSpend = [gmMacroType, tokenId, 'spend'].join(this.delimiter);
+                const gmSpendAction = {name: spendName, encodedValue: gmSpend, id:`gmBennySpend`};
+        
+                const gmGet = [gmMacroType, tokenId, 'get'].join(this.delimiter);
+                const gmGetAction = {name: getName, encodedValue: gmGet, id:`gmBennyGet`};
+                          
+                const gmSubcat = this.initializeEmptySubcategory(gmMacroType);
+                gmSubcat.actions.push(gmSpendAction);
+                gmSubcat.actions.push(gmGetAction);
+                const gmName = `${this.i18n('tokenactionhud.gm')} ${benniesName}`;
+                gmSubcat.info2 = gmBennies.toString();
+                cat.info2 = gmBennies.toString();
+                this._combineSubcategoryWithCategory(cat, gmName, gmSubcat);
+            }
+        }
+
         this._combineCategoryWithList(list, benniesName, cat);
     }
 
