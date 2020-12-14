@@ -393,6 +393,9 @@ export class ActionHandlerSfrpg extends ActionHandler {
 
     /** @private */
     async _addCrewActions(token, actor, actionList) {
+        if (!actor.useStarshipAction)
+            return;
+            
         const macroType = 'crewAction';
         const category = this.initializeEmptyCategory(macroType);
         const actions = await game.packs.get("sfrpg.starship-actions").getContent();
@@ -458,7 +461,8 @@ export class ActionHandlerSfrpg extends ActionHandler {
             {name: '-1', value: '-1'},
             {name: '+1', value: '+1'},
             {name: '+5', value: '+5'},
-            {name: '+10', value: '+10'}];
+            {name: '+10', value: '+10'}
+        ];
 
         sides.forEach(side => {
             const currShields = shields[side];
