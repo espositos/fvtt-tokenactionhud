@@ -54,7 +54,7 @@ export class FilterCategory {
     async selectSubcategories(selection) {
         for (let subcat of selection) {
             if (subcat.type === SubcategoryType.COMPENDIUM)
-                this.addCompendiumSubcategory(subcat);
+                await this.addCompendiumSubcategory(subcat);
             else
                 this.addMacroSubcategory(subcat);
         }

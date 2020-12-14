@@ -1,5 +1,10 @@
 # ChangelogChangelog
 
+## [0.10.9] 2020-12-14
+### Added
+- SWADE - Support for GM Bennies
+- SFRPG - Support for Starship Sheets
+
 ## [0.10.8] 2020-12-13
 ### Added
 - SWADE - Support for SWADE
