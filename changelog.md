@@ -1,5 +1,9 @@
 # ChangelogChangelog
 
+## [0.10.10] 2020-12-15
+### Added
+- PF2e - Ability and save support for multiple tokens at once
+
 ## [0.10.9] 2020-12-14
 ### Added
 - SWADE - Support for GM Bennies

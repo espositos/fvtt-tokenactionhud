@@ -19,11 +19,6 @@ export class RollHandlerBasePf2e extends RollHandler {
         let tokenId = payload[1];
         let actionId = payload[2];
 
-        let actor = super.getActor(tokenId);
-        let charType;
-        if (actor)
-            charType = actor.data.type;
-
         let renderable = ['item', 'feat', 'action', 'lore'];
         if (renderable.includes(macroType) && this.isRenderItem())
             return this.doRenderItem(tokenId, actionId);
@@ -36,45 +31,16 @@ export class RollHandlerBasePf2e extends RollHandler {
         }
 
         try {
-            let sharedActions = ['ability', 'spell', 'item', 'skill', 'lore', 'utility', 'toggle', 'strike']
-            if (!sharedActions.includes(macroType)) {
-                switch (charType) {
-                    case 'npc':
-                        this._handleUniqueActionsNpc(macroType, event, tokenId, actor, actionId);
-                        break;
-                    case 'character':
-                    case 'familiar':
-                        await this._handleUniqueActionsChar(macroType, event, tokenId, actor, actionId);
-                        break;
+            const knownCharacters = ['character', 'familiar', 'npc'];
+            if (tokenId === 'multi') {
+                const controlled = canvas.tokens.controlled.filter(t => knownCharacters.includes(t.actor?.data.type));
+                for (let token of controlled) {
+                    let idToken = token.data._id;
+                    await this._handleMacros(event, macroType, idToken, actionId);
                 }
+            } else {
+                await this._handleMacros(event, macroType, tokenId, actionId);
             }
-    
-            switch (macroType) {
-                case 'ability':
-                    this._rollAbility(event, actor, actionId);
-                    break;
-                case 'skill':
-                    await this._rollSkill(event, actor, actionId);
-                    break;
-                case 'action':
-                case 'feat':
-                case 'item':
-                    this._rollItem(event, actor, actionId);
-                    break;
-                case 'spell':
-                    this._rollSpell(event, tokenId, actor, actionId);
-                    break;
-                case 'utility':
-                    this._performUtilityMacro(event, tokenId, actionId);
-                    break;
-                case 'toggle':
-                    await this._performToggleMacro(event, tokenId, actionId);
-                    break;
-                case 'strike':
-                    this._rollStrikeChar(event, tokenId, actor, actionId);
-                    break;  
-            }
-
         } catch (e) {
             throw e;
 
@@ -84,6 +50,52 @@ export class RollHandlerBasePf2e extends RollHandler {
                     await this._updateRollMode(currentRollMode);
                 }
             }
+        }
+    }
+
+    async _handleMacros(event, macroType, tokenId, actionId) {
+        let actor = super.getActor(tokenId);
+        let charType;
+        if (actor)
+            charType = actor.data.type;
+
+        let sharedActions = ['ability', 'spell', 'item', 'skill', 'lore', 'utility', 'toggle', 'strike']
+        if (!sharedActions.includes(macroType)) {
+            switch (charType) {
+                case 'npc':
+                    this._handleUniqueActionsNpc(macroType, event, tokenId, actor, actionId);
+                    break;
+                case 'character':
+                case 'familiar':
+                    await this._handleUniqueActionsChar(macroType, event, tokenId, actor, actionId);
+                    break;
+            }
+        }
+
+        switch (macroType) {
+            case 'ability':
+                this._rollAbility(event, actor, actionId);
+                break;
+            case 'skill':
+                await this._rollSkill(event, actor, actionId);
+                break;
+            case 'action':
+            case 'feat':
+            case 'item':
+                this._rollItem(event, actor, actionId);
+                break;
+            case 'spell':
+                this._rollSpell(event, tokenId, actor, actionId);
+                break;
+            case 'utility':
+                this._performUtilityMacro(event, tokenId, actionId);
+                break;
+            case 'toggle':
+                await this._performToggleMacro(event, tokenId, actionId);
+                break;
+            case 'strike':
+                this._rollStrikeChar(event, tokenId, actor, actionId);
+                break;  
         }
     }
 
