@@ -14,6 +14,11 @@ export class ActionHandlerPf2e extends ActionHandler {
     async doBuildActionList(token, multipleTokens) {
         let result = this.initializeEmptyActionList();
 
+        if (multipleTokens) {
+            this._buildMultipleTokenList(result);
+            return result;
+        }
+
         if (!token)
             return result;
 
@@ -24,9 +29,9 @@ export class ActionHandlerPf2e extends ActionHandler {
         if (!actor)
             return result;
 
-        let legitimateActors = ['character', 'npc', 'familiar'];
+        let knownActors = ['character', 'npc', 'familiar'];
         let actorType = actor.data.type;
-        if (!legitimateActors.includes(actorType))
+        if (!knownActors.includes(actorType))
             return result;
         
         result.actorId = actor._id;
@@ -41,6 +46,75 @@ export class ActionHandlerPf2e extends ActionHandler {
             result.hudTitle = token.data?.name;
 
         return result;
+    }
+
+    _buildMultipleTokenList(list) {
+        list.tokenId = 'multi';
+        list.actorId = 'multi';
+
+        const allowedTypes = ['npc', 'character', 'familiar'];
+        let actors = canvas.tokens.controlled.map(t => t.actor).filter(a => allowedTypes.includes(a.data.type));
+
+        const tokenId = list.tokenId;
+
+        //this._addMultiSkills(list, tokenId);
+        this._addMultiSaves(list, tokenId);
+        this._addMultiAbilities(list, tokenId);
+        //this._addMultiUtilities(list, tokenId);
+    }
+
+    _addMultiSkills(list, tokenId) {
+        const macroType = 'skill';
+        const category = this.initializeEmptyCategory(macroType);
+        const subcategory = this.initializeEmptySubcategory(macroType);
+
+        Object.entries(CONFIG.PF2E.skills).forEach(skill => {
+            const key = skill[0];
+            const name = skill[1];
+            const encodedValue = [macroType, tokenId, key].join(this.delimiter);
+            const action = {name: name, encodedValue: encodedValue, id: key};
+            subcategory.actions.push(action);
+        })
+
+        const skillsName = this.i18n('tokenactionhud.skills');
+        this._combineSubcategoryWithCategory(category, skillsName, subcategory);
+        this._combineCategoryWithList(list, skillsName, category);
+    }
+
+    _addMultiAbilities(list, tokenId) {
+        const macroType = 'ability';
+        const category = this.initializeEmptyCategory(macroType);
+        const subcategory = this.initializeEmptySubcategory(macroType);
+
+        Object.entries(CONFIG.PF2E.abilities).forEach(ability => {
+            const key = ability[0];
+            const name = ability[1];
+            const encodedValue = [macroType, tokenId, key].join(this.delimiter);
+            const action = {name: name, encodedValue: encodedValue, id: key};
+            subcategory.actions.push(action);
+        })
+
+        const skillsName = this.i18n('tokenactionhud.abilities');
+        this._combineSubcategoryWithCategory(category, skillsName, subcategory);
+        this._combineCategoryWithList(list, skillsName, category);
+    }
+
+    _addMultiSaves(list, tokenId) {
+        const macroType = 'save';
+        const category = this.initializeEmptyCategory(macroType);
+        const subcategory = this.initializeEmptySubcategory(macroType);
+
+        Object.entries(CONFIG.PF2E.saves).forEach(save => {
+            const key = save[0];
+            const name = save[1];
+            const encodedValue = [macroType, tokenId, key].join(this.delimiter);
+            const action = {name: name, encodedValue: encodedValue, id: key};
+            subcategory.actions.push(action);
+        })
+
+        const skillsName = this.i18n('tokenactionhud.saves');
+        this._combineSubcategoryWithCategory(category, skillsName, subcategory);
+        this._combineCategoryWithList(list, skillsName, category);
     }
 
     /** @private */
