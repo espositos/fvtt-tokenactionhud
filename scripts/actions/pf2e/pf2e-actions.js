@@ -57,31 +57,42 @@ export class ActionHandlerPf2e extends ActionHandler {
 
         const tokenId = list.tokenId;
 
-        //this._addMultiSkills(list, tokenId);
-        this._addMultiSaves(list, tokenId);
-        this._addMultiAbilities(list, tokenId);
-        //this._addMultiUtilities(list, tokenId);
+        this._addMultiSkills(list, tokenId, actors);
+        this._addMultiSaves(list, tokenId, actors);
+        this._addMultiAbilities(list, tokenId, actors);
+        this._addMultiUtilities(list, tokenId, actors);
     }
 
-    _addMultiSkills(list, tokenId) {
+    _addMultiSkills(list, tokenId, actors) {
         const macroType = 'skill';
         const category = this.initializeEmptyCategory(macroType);
         const subcategory = this.initializeEmptySubcategory(macroType);
 
-        Object.entries(CONFIG.PF2E.skills).forEach(skill => {
+        const allSkillSets = actors.map(a => Object.entries(a.data.data.skills)
+            .filter(s => !!s[1].roll));
+        const minSkillSetSize = Math.min(...allSkillSets.map(s => s.length));
+        const smallestSkillSet = allSkillSets.find(set => set.length === minSkillSetSize);
+        const finalSharedSkills = smallestSkillSet.filter(skill => allSkillSets.every(set => set.some(setSkill => setSkill[0] === skill[0])));
+
+        finalSharedSkills.forEach(skill => {
             const key = skill[0];
-            const name = skill[1];
+            const data = skill[1];
+
+            let name = CONFIG.PF2E.skills[key];
+            if (!name)
+                name = data.name;
+
             const encodedValue = [macroType, tokenId, key].join(this.delimiter);
             const action = {name: name, encodedValue: encodedValue, id: key};
             subcategory.actions.push(action);
         })
 
-        const skillsName = this.i18n('tokenactionhud.skills');
+        const skillsName = this.i18n('tokenactionhud.commonSkills');
         this._combineSubcategoryWithCategory(category, skillsName, subcategory);
         this._combineCategoryWithList(list, skillsName, category);
     }
 
-    _addMultiAbilities(list, tokenId) {
+    _addMultiAbilities(list, tokenId, actors) {
         const macroType = 'ability';
         const category = this.initializeEmptyCategory(macroType);
         const subcategory = this.initializeEmptySubcategory(macroType);
@@ -99,7 +110,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         this._combineCategoryWithList(list, skillsName, category);
     }
 
-    _addMultiSaves(list, tokenId) {
+    _addMultiSaves(list, tokenId, actors) {
         const macroType = 'save';
         const category = this.initializeEmptyCategory(macroType);
         const subcategory = this.initializeEmptySubcategory(macroType);
@@ -115,6 +126,30 @@ export class ActionHandlerPf2e extends ActionHandler {
         const skillsName = this.i18n('tokenactionhud.saves');
         this._combineSubcategoryWithCategory(category, skillsName, subcategory);
         this._combineCategoryWithList(list, skillsName, category);
+    }
+
+    _addMultiUtilities(list, tokenId, actors) {
+        if (!actors.every(actor => actor.data.type === 'character'))
+            return;
+        
+        let result = this.initializeEmptyCategory('utility');
+        let macroType = 'utility';
+        
+        let rests = this.initializeEmptySubcategory();
+
+        let restActions = [];
+        let shortRestValue = ['utility', tokenId, 'shortRest'].join(this.delimiter);
+        let shortRestAction = {id: 'shortRest', name: this.i18n('tokenactionhud.treatWounds'), encodedValue: shortRestValue}
+        restActions.push(shortRestAction)
+
+        let longRestValue = ['utility', tokenId, 'longRest'].join(this.delimiter);
+        let longRestAction = {id: 'longRest', name: this.i18n('tokenactionhud.restNight'), encodedValue: longRestValue}
+        restActions.push(longRestAction)
+        rests.actions = restActions;
+
+        const utilityName = this.i18n('tokenactionhud.utility');
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.rests'), rests);
+        this._combineCategoryWithList(list, utilityName, result);
     }
 
     /** @private */

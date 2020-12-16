@@ -146,6 +146,20 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
 
     /** @private */
+    _rollSkill(event, actor, actionId) {
+        let skill = actor.data.data.skills[actionId];
+
+        if (!skill || !skill.roll) {
+            actor.rollSkill(event, actionId);
+        }
+        else {
+            var abilityBased = `${skill.ability}-based`;
+            const opts = actor.getRollOptions(['all', 'skill-check', abilityBased, CONFIG.PF2E.skills[actionId] ?? actionId]);
+            skill.roll(event, opts);
+        }
+    }    
+
+    /** @private */
     _rollAbility(event, actor, actionId) {
         actor.rollAbility(event, actionId);
     }
@@ -226,20 +240,6 @@ export class RollHandlerBasePf2e extends RollHandler {
     /** @private */
     _rollSaveNpc(event, actor, actionId) {
         actor.rollSave(event, actionId);
-    }
-
-    /** @private */
-    async _rollSkill(event, actor, actionId) {
-        let skill = actor.data.data.skills[actionId];
-
-        if (!skill) {
-            actor.rollSkill(event, actionId);
-        }
-        else {
-            var abilityBased = `${skill.ability}-based`;
-            const opts = actor.getRollOptions(['all', 'skill-check', abilityBased, CONFIG.PF2E.skills[actionId] ?? actionId]);
-            skill.roll(event, opts);
-        }
     }
 
     async _updateRollMode(rollMode) {
