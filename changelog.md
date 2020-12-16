@@ -1,5 +1,10 @@
 # ChangelogChangelog
 
+## [0.10.11] 2020-12-16
+### Added
+- PF2e - Rest utilities for multiple tokens if all tokens are characters
+- PF2e - Skills for multiple tokens if skill is shared among all tokens
+
 ## [0.10.10] 2020-12-15
 ### Added
 - PF2e - Ability and save support for multiple tokens at once
