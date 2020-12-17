@@ -34,6 +34,9 @@ export class ActionHandler5e extends ActionHandler {
         let items = this._getItemList(actor, tokenId);
         let feats = this._getFeatsList(actor, tokenId);
         let effects = this._getEffectsList(actor, tokenId);
+        let conditions;
+        if (settings.get('showConditionsCategory'))
+            conditions = this._getConditionsList(actor, tokenId);
         let utility = this._getUtilityList(actor, tokenId);
 
         let spells, skills;
@@ -47,10 +50,10 @@ export class ActionHandler5e extends ActionHandler {
         let featsTitle = this.i18n('tokenactionhud.features');
         let skillsTitle = this.i18n('tokenactionhud.skills');
         let effectsTitle = this.i18n('tokenactionhud.effects');
+        let conditionsTitle = this.i18n('tokenactionhud.conditions');
         
         this._combineCategoryWithList(result, itemsTitle, items);
         this._combineCategoryWithList(result, spellsTitle, spells);
-        this._combineCategoryWithList(result, effectsTitle, effects);
         this._combineCategoryWithList(result, featsTitle, feats);
         this._combineCategoryWithList(result, skillsTitle, skills);
         
@@ -69,6 +72,8 @@ export class ActionHandler5e extends ActionHandler {
             this._combineCategoryWithList(result, abilitiesTitle, abilities);
         }
         
+        this._combineCategoryWithList(result, effectsTitle, effects);
+        this._combineCategoryWithList(result, conditionsTitle, conditions);
         let utilityTitle = this.i18n('tokenactionhud.utility');
         this._combineCategoryWithList(result, utilityTitle, utility);
         
@@ -88,7 +93,7 @@ export class ActionHandler5e extends ActionHandler {
         const tokenId = list.tokenId;
 
         this._addMultiSkills(list, tokenId);
-
+        
         if (settings.get('splitAbilities')) {
             let savesTitle = this.i18n('tokenactionhud.saves');
             let checksTitle = this.i18n('tokenactionhud.checks');
@@ -98,6 +103,9 @@ export class ActionHandler5e extends ActionHandler {
             let abilitiesTitle = this.i18n('tokenactionhud.abilities');
             this._addMultiAbilities(list, tokenId, 'abilities', abilitiesTitle, 'ability');
         }
+        
+        if (settings.get('showConditionsCategory'))
+            this._addMultiConditions(list, tokenId);
 
         this._addMultiUtilities(list, tokenId, actors);
     }
@@ -524,6 +532,21 @@ export class ActionHandler5e extends ActionHandler {
     /** @private */
     _getEffectsList(actor, tokenId) {
         let result = this.initializeEmptyCategory('effects');
+        
+        this._addEffectsSubcategories(actor, tokenId, result);
+
+        return result;
+    }
+
+    /** @private */
+    _getConditionsList(actor, tokenId) {
+        let result = this.initializeEmptyCategory('conditions');
+        this._addConditionsSubcategory(actor, tokenId, result);
+        return result;
+    }
+
+    /** @private */
+    _addEffectsSubcategories(actor, tokenId, category) {
         const macroType = 'effect';
 
         const effects = actor.effects.entries;
@@ -542,10 +565,60 @@ export class ActionHandler5e extends ActionHandler {
             e.isTemporary ? tempCategory.actions.push(action) : passiveCategory.actions.push(action);
         });
 
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.temporary'), tempCategory);
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.passive'), passiveCategory);
+        this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.temporary'), tempCategory);
+        this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.passive'), passiveCategory);
+    }
 
-        return result;
+    /** @private */
+    _addMultiConditions(list, tokenId) {
+        const category = this.initializeEmptyCategory('conditions');
+        const macroType = 'condition';
+
+        const availableConditions = CONFIG.statusEffects.filter(condition => condition.id !== '');
+        const actors = canvas.tokens.controlled.filter(t => !!t.actor).map(t => t.actor);
+
+        if (!availableConditions)
+            return;
+
+        let conditions = this.initializeEmptySubcategory();
+
+        availableConditions.forEach(c => {
+            const name = this.i18n(c.label);
+            const encodedValue = [macroType, tokenId, c.id].join(this.delimiter);
+            const cssClass = actors.every(actor => actor.effects.entries.some(e => e.data.flags.core?.statusId === c.id)) ? 'active' : '';
+            const image = c.icon;
+            const action = {name: name, id: c.id, encodedValue: encodedValue, img: image, cssClass: cssClass}
+
+            conditions.actions.push(action);
+        });
+
+        const conName = this.i18n('tokenactionhud.conditions');
+        this._combineSubcategoryWithCategory(category, conName, conditions);
+        this._combineCategoryWithList(list, conName, category);
+    }
+
+    /** @private */
+    _addConditionsSubcategory(actor, tokenId, category) {
+        const macroType = 'condition';
+
+        const availableConditions = CONFIG.statusEffects.filter(condition => condition.id !== '');
+
+        if (!availableConditions)
+            return;
+
+        let conditions = this.initializeEmptySubcategory();
+
+        availableConditions.forEach(c => {
+            const name = this.i18n(c.label);
+            const encodedValue = [macroType, tokenId, c.id].join(this.delimiter);
+            const cssClass = actor.effects.entries.some(e => e.data.flags.core?.statusId === c.id) ? 'active' : '';
+            const image = c.icon;
+            const action = {name: name, id: c.id, encodedValue: encodedValue, img: image, cssClass: cssClass}
+
+            conditions.actions.push(action);
+        });
+
+        this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.conditions'), conditions);
     }
 
     /** @private */

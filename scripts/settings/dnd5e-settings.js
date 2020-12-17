@@ -79,4 +79,14 @@ export function register(appName, updateFunc) {
         default: false,
         onChange: value => { updateFunc(value); }
     });
+
+    game.settings.register(appName,'showConditionsCategory', {
+        name: game.i18n.localize('tokenactionhud.settings.dnd5e.showConditionsCategory.name'),
+        hint: game.i18n.localize('tokenactionhud.settings.dnd5e.showConditionsCategory.hint'),
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: true,
+        onChange: value => { updateFunc(value); }
+    });
 }
