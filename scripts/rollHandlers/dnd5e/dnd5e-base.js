@@ -56,6 +56,8 @@ export class RollHandlerBase5e extends RollHandler {
             case 'effect':
                 await this.toggleEffect(event, tokenId, actionId);
                 break;
+            case 'condition':
+                await this.toggleCondition(event, tokenId, actionId);
             default:
                 break;
         }
@@ -146,7 +148,40 @@ export class RollHandlerBase5e extends RollHandler {
         if (!effect)
             return;
 
+        const statusId = effect.data.flags.core?.statusId;
+        if (statusId) {
+            await this.toggleCondition(event, tokenId, statusId);
+            return;
+        }
+            
         await effect.update({disabled: !effect.data.disabled});
         Hooks.callAll('forceUpdateTokenActionHUD')
     }
+
+    async toggleCondition(event, tokenId, effectId) {
+        const token = super.getToken(tokenId);
+
+        if (effectId.includes('combat-utility-belt.') && game.cub) {
+            const cubCondition = this.findCondition(effectId)?.label;            
+            if (!cubCondition)
+                return;
+            
+            game.cub.hasCondition(cubCondition, token)
+                ? await game.cub.removeCondition(cubCondition, token) : await game.cub.addCondition(cubCondition, token);
+        } else {
+            const condition = this.findCondition(effectId);
+            if (!condition)
+                return;
+            
+            this.isRightClick(event) ? await token.toggleOverlay(condition) : await token.toggleEffect(condition);
+        }
+
+        Hooks.callAll('forceUpdateTokenActionHUD')
+    }
+
+    findCondition(id) {
+        return CONFIG.statusEffects.find(effect => effect.id === id);
+    }
+
+
 }

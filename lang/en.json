@@ -193,6 +193,8 @@
     "tokenactionhud.settings.dnd5e.showEmptyItems.hint": "If enabled, items are shown in the HUD even if they have no remaining charges.",
     "tokenactionhud.settings.dnd5e.itemMacroReplace.name": "Item-Macro: overwrite original item",
     "tokenactionhud.settings.dnd5e.itemMacroReplace.hint": "If enabled, items with an item macro will overwrite their original, otherwise both options will be shown.",
+    "tokenactionhud.settings.dnd5e.showConditionsCategory.name": "Show Conditions Category",
+    "tokenactionhud.settings.dnd5e.showConditionsCategory.hint": "If enabled, the HUD will present a category showing the available token conditions and status effects normally available in the regular Token HUD.",
 
     "tokenactionhud.settings.sw5e.ignorePassiveFeats.name": "Ignore passive feats",
     "tokenactionhud.settings.sw5e.ignorePassiveFeats.hint": "If enabled, passive feats are not shown.",

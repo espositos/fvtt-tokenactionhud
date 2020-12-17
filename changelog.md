@@ -1,5 +1,9 @@
 # ChangelogChangelog
 
+## [0.10.12] 2020-12-17
+### Added
+- D&D5e - Condition toggling for single and multiple tokens (this doesn't work correctly if there are multiple tokens sharing linked actor data, because it is toggled for each individually basically switching it on and off again repeatedly)
+
 ## [0.10.11] 2020-12-16
 ### Added
 - PF2e - Rest utilities for multiple tokens if all tokens are characters
