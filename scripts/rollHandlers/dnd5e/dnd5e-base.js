@@ -160,20 +160,21 @@ export class RollHandlerBase5e extends RollHandler {
 
     async toggleCondition(event, tokenId, effectId) {
         const token = super.getToken(tokenId);
-
-        if (effectId.includes('combat-utility-belt.') && game.cub) {
+        const isRightClick = this.isRightClick(event);
+        if (effectId.includes('combat-utility-belt.') && game.cub && !isRightClick) {
             const cubCondition = this.findCondition(effectId)?.label;            
             if (!cubCondition)
                 return;
             
-            game.cub.hasCondition(cubCondition, token)
-                ? await game.cub.removeCondition(cubCondition, token) : await game.cub.addCondition(cubCondition, token);
+            game.cub.hasCondition(cubCondition, token) ? 
+                await game.cub.removeCondition(cubCondition, token) : await game.cub.addCondition(cubCondition, token);
         } else {
             const condition = this.findCondition(effectId);
             if (!condition)
                 return;
             
-            this.isRightClick(event) ? await token.toggleOverlay(condition) : await token.toggleEffect(condition);
+            isRightClick ? 
+                await token.toggleOverlay(condition) : await token.toggleEffect(condition);
         }
 
         Hooks.callAll('forceUpdateTokenActionHUD')

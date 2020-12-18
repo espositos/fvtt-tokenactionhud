@@ -30,7 +30,7 @@ export class ActionHandler {
     /** @public */
     async buildActionList(token, multipleTokens) {
         let actionList = await this.doBuildActionList(token, multipleTokens);
-        this._addGenericUtilities(token, actionList, multipleTokens);
+        this._addGenericCategories(token, actionList, multipleTokens);
         this._doBuildFurtherActions(token, actionList, multipleTokens);
         await this.registerCoreCategories(actionList.categories);
         await this.categoryManager.addCategoriesToActionList(this, actionList);
@@ -41,9 +41,9 @@ export class ActionHandler {
     doBuildActionList(token) {};
 
     /** @protected */
-    _addGenericUtilities(token, actionList, multipleTokens) {
+    _addGenericCategories(token, actionList, multipleTokens) {
         if (token || multipleTokens)
-            this.genericActionHandler.addGenericUtilities(token, actionList, multipleTokens);
+            this.genericActionHandler.addGenericCategories(token, actionList, multipleTokens);
     }
 
     /** @protected */

@@ -5,7 +5,18 @@ export class GenericActionHandler {
         this.baseHandler = baseHandler;
     }
 
-    addGenericUtilities(token, actionList, isMultipleTokens) {
+    addGenericCategories(token, actionList, isMultipleTokens) {
+        this._addConditions(token, actionList, isMultipleTokens);
+        this._addUtilities(token, actionList, isMultipleTokens);
+    }
+
+    /** @private */
+    _addConditions(token, actionList, isMultipleTokens) {
+        
+    }
+
+    /** @private */
+    _addUtilities(token, actionList, isMultipleTokens) {
         let utilityCat = actionList.categories.find(c => c.id === 'utility');
         if (!utilityCat) {
             utilityCat = this.baseHandler.initializeEmptyCategory('utility');
