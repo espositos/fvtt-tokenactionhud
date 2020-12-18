@@ -1,5 +1,9 @@
 # ChangelogChangelog
 
+## [0.10.13] 2020-12-18
+### Added
+- D&D5e - CUB Conditions should now be overlayable
+
 ## [0.10.12] 2020-12-17
 ### Added
 - D&D5e - Condition toggling for single and multiple tokens (this doesn't work correctly if there are multiple tokens sharing linked actor data, because it is toggled for each individually basically switching it on and off again repeatedly)
