@@ -127,17 +127,17 @@ export class ActionHandler5e extends ActionHandler {
         let activeEquipped = this._getActiveEquipment(equipped);
         
         let weapons = activeEquipped.filter(i => i.type == 'weapon');
-        let weaponActions = weapons.map(w => this._buildItem(tokenId, actor, macroType, w));
+        let weaponActions = weapons.map(w => this._buildEquipmentItem(tokenId, actor, macroType, w));
         let weaponsCat = this.initializeEmptySubcategory();
         weaponsCat.actions = weaponActions;
     
         let equipment = activeEquipped.filter(i => i.type == 'equipment');
-        let equipmentActions = equipment.map(e => this._buildItem(tokenId, actor, macroType, e));
+        let equipmentActions = equipment.map(e => this._buildEquipmentItem(tokenId, actor, macroType, e));
         let equipmentCat = this.initializeEmptySubcategory();
         equipmentCat.actions = equipmentActions;
         
         let other = activeEquipped.filter(i => i.type != 'weapon' && i.type != 'equipment')
-        let otherActions = other.map(o => this._buildItem(tokenId, actor, macroType, o));
+        let otherActions = other.map(o => this._buildEquipmentItem(tokenId, actor, macroType, o));
         let otherCat = this.initializeEmptySubcategory();
         otherCat.actions = otherActions;
     
@@ -145,12 +145,12 @@ export class ActionHandler5e extends ActionHandler {
         
         let expendedFiltered = this._filterExpendedItems(allConsumables);
         let consumable = expendedFiltered;
-        let consumableActions = consumable.map(c => this._buildItem(tokenId, actor, macroType, c));
+        let consumableActions = consumable.map(c => this._buildEquipmentItem(tokenId, actor, macroType, c));
         let consumablesCat = this.initializeEmptySubcategory();
         consumablesCat.actions = consumableActions;
 
         let tools = validItems.filter(t => t.type === 'tool');
-        let toolsActions = tools.map(i => this._buildItem(tokenId, actor, macroType, i));
+        let toolsActions = tools.map(i => this._buildEquipmentItem(tokenId, actor, macroType, i));
         let toolsCat = this.initializeEmptySubcategory();
         toolsCat.actions = toolsActions;
         
@@ -325,6 +325,9 @@ export class ActionHandler5e extends ActionHandler {
     _addSpellInfo(s, spell) {
         let c = s.data.components;
 
+        spell.info1 = '';
+        spell.info2 = '';
+        spell.info3 = '';
         if (c?.vocal)
             spell.info1 += this.i18n('DND5E.ComponentVerbal').charAt(0).toUpperCase();
 
@@ -363,7 +366,7 @@ export class ActionHandler5e extends ActionHandler {
             const activationType = f.data.activation.type;
             const macroType = 'feat';
 
-            let feat = this._buildItem(tokenId, actor, macroType, f);
+            let feat = this._buildEquipmentItem(tokenId, actor, macroType, f);
             
             if (!activationType || activationType === '') {
                 passive.actions.push(feat);
@@ -698,6 +701,12 @@ export class ActionHandler5e extends ActionHandler {
         this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.initiative'), initiative);
     }
 
+    /** @private */
+    _buildEquipmentItem(tokenId, actor, macroType, item) {
+        let action = this._buildItem(tokenId, actor, macroType, item);
+        this._addItemInfo(actor, item, action);
+        return action;
+    }
 
     /** @private */
     _buildItem(tokenId, actor, macroType, item) {
@@ -710,13 +719,16 @@ export class ActionHandler5e extends ActionHandler {
             result.name += ` (${this.i18n('tokenactionhud.recharge')})`;
         }
 
-        result.info1 = this._getQuantityData(item);
-
-        result.info2 = this._getUsesData(item);
-
-        result.info3 = this._getConsumeData(item, actor)
-
         return result;
+    }
+
+    /** @private */
+    _addItemInfo(actor, item, action) {
+        action.info1 = this._getQuantityData(item);
+
+        action.info2 = this._getUsesData(item);
+
+        action.info3 = this._getConsumeData(item, actor)
     }
 
     _getImage(item) {
