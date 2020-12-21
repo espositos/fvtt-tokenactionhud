@@ -1,5 +1,9 @@
 # ChangelogChangelog
 
+## [0.10.14] 2020-12-21
+### Bugfix
+- D&D5e - Fixed concentration change that meant spells showing 0 uses
+
 ## [0.10.13] 2020-12-18
 ### Added
 - D&D5e - CUB Conditions should now be overlayable
