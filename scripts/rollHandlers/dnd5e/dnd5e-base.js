@@ -125,7 +125,7 @@ export class RollHandlerBase5e extends RollHandler {
                 token.toggleVisibility();
                 break;
             case 'deathSave':
-                actor.rollDeathSave();
+                actor.rollDeathSave({event});
                 break;
             case 'initiative':
                 await this.performInitiativeMacro(tokenId);
