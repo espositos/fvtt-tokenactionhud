@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.10.15] 2020-12-29
+## [0.10.16] 2020-12-29
 ### Changed
 - Pf2E - Hide unequipped items
 
