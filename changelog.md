@@ -1,4 +1,11 @@
-# ChangelogChangelog
+# Changelog
+
+## [0.10.15] 2020-12-29
+### Changed
+- D&D5e - Add event to death saving throw to overcome error thrown by MidiQoL
+
+### Bugfix
+- PF2E - Filter out unready strikes
 
 ## [0.10.14] 2020-12-21
 ### Bugfix
