@@ -42,7 +42,9 @@ export class NpcActionHandlerPf2e {
             this._addNpcStrikesCategories(actor, tokenId, result);
         }
 
-        this.baseHandler._addStrikesCategories(actor, tokenId, result, '');
+        const info = this.baseHandler.i18n('tokenactionhud.experimental');
+
+        this.baseHandler._addStrikesCategories(actor, tokenId, result, info);
         
         return result;
     }
