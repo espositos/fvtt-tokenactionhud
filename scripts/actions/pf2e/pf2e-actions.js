@@ -194,6 +194,8 @@ export class ActionHandlerPf2e extends ActionHandler {
     _addStrikesCategories(actor, tokenId, category, info) {
         let macroType = 'strike';
         let strikes = actor.data.data.actions?.filter(a => a.type === macroType);
+        if (actor.data.type === 'character')
+            strikes = strikes.filter(s => s.ready);
 
         if (!strikes)
             return;
