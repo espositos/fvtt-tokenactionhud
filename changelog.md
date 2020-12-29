@@ -2,6 +2,10 @@
 
 ## [0.10.15] 2020-12-29
 ### Changed
+- Pf2E - Hide unequipped items
+
+## [0.10.15] 2020-12-29
+### Changed
 - D&D5e - Add event to death saving throw to overcome error thrown by MidiQoL
 
 ### Bugfix
