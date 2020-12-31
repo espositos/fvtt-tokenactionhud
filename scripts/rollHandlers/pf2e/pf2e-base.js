@@ -448,7 +448,7 @@ export class RollHandlerBasePf2e extends RollHandler {
 
         switch(actionId) {
             case 'shortRest':
-                this._executeMacroByName('Treat Wounds Macro');
+                this._executeMacroByName('Treat Wounds');
                 break;
             case 'longRest':
                 this._executeMacroByName('Rest for the Night');
