@@ -63,7 +63,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         if (!sharedActions.includes(macroType)) {
             switch (charType) {
                 case 'npc':
-                    this._handleUniqueActionsNpc(macroType, event, tokenId, actor, actionId);
+                    await this._handleUniqueActionsNpc(macroType, event, tokenId, actor, actionId);
                     break;
                 case 'character':
                 case 'familiar':
@@ -131,7 +131,7 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
 
     /** @private */
-    _handleUniqueActionsNpc(macroType, event, tokenId, actor, actionId) {
+    async _handleUniqueActionsNpc(macroType, event, tokenId, actor, actionId) {
         switch (macroType) {
             case 'save':
                 this._rollSaveNpc(event, actor, actionId);
@@ -140,7 +140,7 @@ export class RollHandlerBasePf2e extends RollHandler {
                 this._rollStrikeNpc(event, tokenId, actor, actionId);
                 break;  
             case 'attribute':
-                this._rollAttributeNpc(event, actor, actionId);
+                await this._rollAttributeNpc(event, tokenId, actor, actionId);
                 break;
         }
     }
@@ -177,8 +177,11 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
 
     /** @private */
-    _rollAttributeNpc(event, actor, actionId) {
-        actor.rollAttribute(event, actionId);
+    async _rollAttributeNpc(event, tokenId, actor, actionId) {
+        if (actionId === 'initiative')
+            await actor.rollInitiative({createCombatants:true});
+        else
+            actor.rollAttribute(event, actionId);
     }
 
     /** @private */
@@ -447,8 +450,8 @@ export class RollHandlerBasePf2e extends RollHandler {
         let token = super.getToken(tokenId);
 
         switch(actionId) {
-            case 'shortRest':
-                this._executeMacroByName('Treat Wounds Macro');
+            case 'treatWounds':
+                this._executeMacroByName('Treat Wounds');
                 break;
             case 'longRest':
                 this._executeMacroByName('Rest for the Night');

@@ -60,6 +60,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         this._addMultiSkills(list, tokenId, actors);
         this._addMultiSaves(list, tokenId, actors);
         this._addMultiAbilities(list, tokenId, actors);
+        this._addMultiAttributes(list, tokenId, actors);
         this._addMultiUtilities(list, tokenId, actors);
     }
 
@@ -128,6 +129,20 @@ export class ActionHandlerPf2e extends ActionHandler {
         this._combineCategoryWithList(list, skillsName, category);
     }
 
+    _addMultiAttributes(list, tokenId, actors) {
+        let macroType = 'attribute';
+        let result = this.initializeEmptyCategory('attributes');
+        let attributes = this.initializeEmptySubcategory();
+
+        let attributesMap = [{_id: 'perception', name: 'Perception'},{_id: 'initiative', name: 'Initiative'}]
+        
+        attributes.actions = this._produceActionMap(tokenId, attributesMap, macroType);
+        
+        const attributesName = this.i18n('tokenactionhud.attributes');
+        this._combineSubcategoryWithCategory(result, attributesName, attributes);
+        this._combineCategoryWithList(list, attributesName, result);
+    }
+
     _addMultiUtilities(list, tokenId, actors) {
         if (!actors.every(actor => actor.data.type === 'character'))
             return;
@@ -138,9 +153,9 @@ export class ActionHandlerPf2e extends ActionHandler {
         let rests = this.initializeEmptySubcategory();
 
         let restActions = [];
-        let shortRestValue = ['utility', tokenId, 'shortRest'].join(this.delimiter);
-        let shortRestAction = {id: 'shortRest', name: this.i18n('tokenactionhud.treatWounds'), encodedValue: shortRestValue}
-        restActions.push(shortRestAction)
+        let treatWoundsValue = ['utility', tokenId, 'treatWounds'].join(this.delimiter);
+        let treatWoundsAction = {id: 'treatWounds', name: this.i18n('tokenactionhud.treatWounds'), encodedValue: treatWoundsValue}
+        restActions.push(treatWoundsAction)
 
         let longRestValue = ['utility', tokenId, 'longRest'].join(this.delimiter);
         let longRestAction = {id: 'longRest', name: this.i18n('tokenactionhud.restNight'), encodedValue: longRestValue}
@@ -158,7 +173,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let result = this.initializeEmptyCategory('items');
         
         let filter = ['weapon', 'equipment', 'consumable', 'armor'];
-        let items = (actor.items ?? []).filter(a => a.data.data.equipped?.value).filter(a => filter.includes(a.type)).sort(this._foundrySort);
+        let items = (actor.items ?? []).filter(a => a.data.data.equipped?.value && !a.data.data.containerId?.value.length).filter(a => filter.includes(a.type)).sort(this._foundrySort);
         
         let weaponList = items.filter(i => i.type === 'weapon');
         if (actor.data.type === 'character') weaponList = weaponList.filter(i => i.data.data.equipped.value);
@@ -181,13 +196,33 @@ export class ActionHandlerPf2e extends ActionHandler {
         let consumableActions = this._buildItemActions(tokenId, macroType, consumablesList);
         let consumables = this.initializeEmptySubcategory();
         consumables.actions = consumableActions;
- 
+
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.weapons'), weapons);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.armour'), armour);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.equipment'), equipment);
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.consumables'), consumables);
+        this._addContainerSubcategories(tokenId, macroType, result, actor, items);
 
         return result;
+    }
+
+    /** @private */
+    _addContainerSubcategories(tokenId, macroType, category, actor, items) {
+        const containers = (items ?? []).filter(i => i.data.data.bulkCapacity?.value);
+
+        containers.forEach(container => {
+            const containerId = container._id;
+            const contents = actor.items.filter(i => i.data.data.containerId?.value === containerId).sort(this._foundrySort);
+            if (contents.length === 0)
+                return;
+                
+            const containerCategory = this.initializeEmptySubcategory(containerId);
+            let containerActions = this._buildItemActions(tokenId, macroType, contents);
+            containerCategory.actions = containerActions;
+            containerCategory.info1 = container.data.data.bulkCapacity.value;
+
+            this._combineSubcategoryWithCategory(category, container.name, containerCategory);
+        })
     }
 
     /** @private */
@@ -248,7 +283,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let macroType = 'action';
         let result = this.initializeEmptyCategory('actions');
 
-        let filteredActions = (actor.items ?? []).filter(a => a.type === macroType).sort(this._foundrySort);;
+        let filteredActions = (actor.items ?? []).filter(a => a.type === macroType).sort(this._foundrySort);
 
         if (settings.get('ignorePassiveActions'))
             filteredActions = filteredActions.filter(a => a.data.data.actionType.value !== 'passive');
@@ -645,9 +680,9 @@ export class ActionHandlerPf2e extends ActionHandler {
             let rests = this.initializeEmptySubcategory();
 
             let restActions = [];
-            let shortRestValue = ['utility', tokenId, 'shortRest'].join(this.delimiter);
-            let shortRestAction = {id: 'shortRest', name: this.i18n('tokenactionhud.treatWounds'), encodedValue: shortRestValue}
-            restActions.push(shortRestAction)
+            let treatWoundsValue = ['utility', tokenId, 'treatWounds'].join(this.delimiter);
+            let treatWoundsAction = {id: 'treatWounds', name: this.i18n('tokenactionhud.treatWounds'), encodedValue: treatWoundsValue}
+            restActions.push(treatWoundsAction)
     
             let longRestValue = ['utility', tokenId, 'longRest'].join(this.delimiter);
             let longRestAction = {id: 'longRest', name: this.i18n('tokenactionhud.restNight'), encodedValue: longRestValue}
