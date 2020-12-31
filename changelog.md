@@ -1,6 +1,16 @@
 # Changelog
 
-## [0.10.15] 2020-12-29
+## [0.10.17] 2020-12-31
+### Bugfix
+- PF2E - Correct name of treat wounds macro
+
+### Added
+- PF2E - Mass rolling for perception and initiative
+
+### Changed
+- PF2E - Show contents of containers as separate subcategories
+
+## [0.10.16] 2020-12-29
 ### Changed
 - Pf2E - Hide unequipped items
 
