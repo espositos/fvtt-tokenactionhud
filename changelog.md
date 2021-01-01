@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.10.18] 2020-01-01
+### Bugfix
+- PF2E - Include backpacks in containers
+
 ## [0.10.17] 2020-12-31
 ### Bugfix
 - PF2E - Correct name of treat wounds macro
