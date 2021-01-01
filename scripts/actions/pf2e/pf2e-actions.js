@@ -172,8 +172,9 @@ export class ActionHandlerPf2e extends ActionHandler {
         let macroType = 'item';
         let result = this.initializeEmptyCategory('items');
         
-        let filter = ['weapon', 'equipment', 'consumable', 'armor'];
-        let items = (actor.items ?? []).filter(a => a.data.data.equipped?.value && !a.data.data.containerId?.value.length).filter(a => filter.includes(a.type)).sort(this._foundrySort);
+        let filter = ['weapon', 'equipment', 'consumable', 'armor', 'backpack'];
+        let items = (actor.items ?? []).filter(a => a.data.data.equipped?.value && !a.data.data.containerId?.value.length)
+            .filter(i => filter.includes(i.data.type)).sort(this._foundrySort);
         
         let weaponList = items.filter(i => i.type === 'weapon');
         if (actor.data.type === 'character') weaponList = weaponList.filter(i => i.data.data.equipped.value);
@@ -187,7 +188,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let armour = this.initializeEmptySubcategory();
         armour.actions = armourActions;
 
-        let equipmentList = items.filter(i => i.type === 'equipment');
+        let equipmentList = items.filter(i => i.type === 'equipment' || i.type === 'backpack');
         let equipmentActions = this._buildItemActions(tokenId, macroType, equipmentList);
         let equipment = this.initializeEmptySubcategory();
         equipment.actions = equipmentActions;
@@ -208,7 +209,8 @@ export class ActionHandlerPf2e extends ActionHandler {
 
     /** @private */
     _addContainerSubcategories(tokenId, macroType, category, actor, items) {
-        const containers = (items ?? []).filter(i => i.data.data.bulkCapacity?.value);
+        const allContainerIds = [...new Set(actor.items.filter(i => i.data.data.containerId?.value).map(i => i.data.data.containerId.value))];
+        const containers = (items ?? []).filter(i => allContainerIds.includes(i._id));
 
         containers.forEach(container => {
             const containerId = container._id;
