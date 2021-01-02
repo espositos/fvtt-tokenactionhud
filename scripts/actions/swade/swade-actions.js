@@ -145,7 +145,10 @@ export class ActionHandlerSwade extends ActionHandler {
     _addInventory(list, tokenId, actor) {
         const cat = this.initializeEmptyCategory('inventory');
 
-        const items = actor.data.items.filter(i => i.data.equipped)
+        let items = actor.data.items;
+
+        if (actor.data.type === 'character')
+            items = items.filter(i => i.data.equipped);
 
         const weapons = items.filter(i => i.type === 'weapon');
         const weaponsName = this.i18n('tokenactionhud.weapons');
@@ -159,7 +162,7 @@ export class ActionHandlerSwade extends ActionHandler {
         const shieldsName = this.i18n('tokenactionhud.shields');
         this._addItemSubcategory(tokenId, shieldsName, shields, 'shields', cat);
 
-        const misc = items.filter(i => i.type === 'misc');
+        const misc = items.filter(i => i.type === 'misc' || i.type === 'gear');
         const miscName = this.i18n('tokenactionhud.misc');
         this._addItemSubcategory(tokenId, miscName, misc, 'misc', cat);
 
