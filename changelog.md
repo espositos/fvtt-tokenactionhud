@@ -1,4 +1,8 @@
-# Changelog
+# Changelog# Changelog
+
+## [0.10.19] 2020-01-01
+### Changed
+- SWADE - Show all NPC items for categories not just equipped items.
 
 ## [0.10.18] 2020-01-01
 ### Bugfix
