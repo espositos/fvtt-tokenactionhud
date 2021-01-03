@@ -48,7 +48,7 @@ export class Dnd5eSystemManager extends SystemManager {
       case "minor-qol":
         rollHandler = new MinorQol5e();
         break;
-      case "obsidian-qol":
+      case "obsidian":
         rollHandler = new Obsidian5e();
         break;
       case "core":
