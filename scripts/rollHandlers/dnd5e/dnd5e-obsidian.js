@@ -6,27 +6,26 @@ export class RollHandlerObsidian extends RollHandlerBase5e {
   }
 
   /** @override */
-  rollAbilityCheckMacro(tokenId, checkId) {
+  rollAbilityCheckMacro(event, tokenId, checkId) {
     let actor = super.getActor(tokenId);
-    Rolls.create(actor, { roll: "abl", abl: checkId });
+    OBSIDIAN.Items.roll(actor, { roll: "abl", abl: checkId });
   }
 
   /** @override */
-  rollAbilitySaveMacro(tokenId, checkId) {
+  rollAbilitySaveMacro(event, tokenId, checkId) {
     let actor = super.getActor(tokenId);
-    Rolls.create(actor, { roll: "save", save: checkId });
+    OBSIDIAN.Items.roll(actor, { roll: "save", save: checkId });
   }
 
   /** @override */
-  rollSkillMacro(tokenId, checkId) {
+  rollSkillMacro(event, tokenId, checkId) {
     let actor = super.getActor(tokenId);
-    Rolls.create(actor, { roll: "skl", skl: checkId });
+    OBSIDIAN.Items.roll(actor, { roll: "skl", skl: checkId });
   }
 
   /** @override */
-
-  rollItemMacro(tokenId, itemId) {
+  rollItemMacro(event, tokenId, itemId) {
     let actor = super.getActor(tokenId);
-    ObsidianItems.roll(actor, { roll: "item", id: itemId });
+    OBSIDIAN.Items.roll(actor, { roll: "item", id: itemId });
   }
 }
