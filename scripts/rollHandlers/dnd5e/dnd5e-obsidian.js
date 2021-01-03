@@ -6,87 +6,27 @@ export class RollHandlerObsidian extends RollHandlerBase5e {
   }
 
   /** @override */
-  rollAbilityCheckMacro(event, tokenId, checkId) {
+  rollAbilityCheckMacro(tokenId, checkId) {
     let actor = super.getActor(tokenId);
-
-    let params = { adv: 0, disadv: 0 };
-    if (event.shiftKey) {
-      params.adv = 1;
-    }
-    if (keyboard.isCtrl(event)) {
-      params.disadv = 1;
-    }
-
-    //need to update function used once documentation is added.
-    BetterRolls.rollCheck(actor, checkId, params);
+    Rolls.create(actor, { roll: "abl", abl: checkId });
   }
 
   /** @override */
-  rollAbilitySaveMacro(event, tokenId, checkId) {
+  rollAbilitySaveMacro(tokenId, checkId) {
     let actor = super.getActor(tokenId);
-
-    let params = { adv: 0, disadv: 0 };
-    if (event.shiftKey) {
-      params.adv = 1;
-    }
-    if (keyboard.isCtrl(event)) {
-      params.disadv = 1;
-    }
-
-    //need to update function used once documentation is added.
-    BetterRolls.rollSave(actor, checkId, params);
+    Rolls.create(actor, { roll: "save", save: checkId });
   }
 
   /** @override */
-  rollSkillMacro(event, tokenId, checkId) {
+  rollSkillMacro(tokenId, checkId) {
     let actor = super.getActor(tokenId);
-
-    let params = { adv: 0, disadv: 0 };
-    if (event.shiftKey) {
-      params.adv = 1;
-    }
-    if (keyboard.isCtrl(event)) {
-      params.disadv = 1;
-    }
-
-    //need to update function used once documentation is added.
-    BetterRolls.rollSkill(actor, checkId, params);
+    Rolls.create(actor, { roll: "skl", skl: checkId });
   }
 
   /** @override */
-  rollItemMacro(event, tokenId, itemId) {
+
+  rollItemMacro(tokenId, itemId) {
     let actor = super.getActor(tokenId);
-    let item = actor.getOwnedItem(itemId);
-
-    if (this.needsRecharge(item)) {
-      item.rollRecharge();
-      return;
-    }
-
-    if (this.rightClick && this.ctrl) {
-      item.rollAttack();
-      return;
-    }
-
-    if (this.rightClick && this.alt) {
-      item.rollDamage();
-      return;
-    }
-
-    let params = {
-      adv: 0,
-      disadv: 0,
-    };
-
-    if (this.shift) {
-      params.adv = 1;
-    }
-    if (this.ctrl) {
-      params.disadv = 1;
-    }
-
-    params.preset = this.alt ? 1 : 0;
-
-    BetterRolls.rollItem(item, params).toMessage();
+    ObsidianItems.roll(actor, { roll: "item", id: itemId });
   }
 }
