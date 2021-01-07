@@ -1,5 +1,9 @@
 # Changelog# Changelog
 
+## [0.10.21] 2020-01-07
+### Bugfix
+- DND5e - Fix support for magic items with new attunement changes
+
 ## [0.10.20] 2020-01-04
 ### Added
 - DND5e - Adds support for Obsidian 5e thanks to Avelyne#3141 (select Obsidian Character Sheets in the setting's HUD roll handler)
