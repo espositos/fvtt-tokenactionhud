@@ -1,5 +1,9 @@
 # Changelog# Changelog
 
+## [0.10.22] 2020-01-07
+### Bugfix
+- DND5e - Apparently only latest version has config values for attunement so add manual fallback value;
+
 ## [0.10.21] 2020-01-07
 ### Bugfix
 - DND5e - Fix support for magic items with new attunement changes
