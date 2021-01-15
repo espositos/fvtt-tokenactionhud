@@ -371,9 +371,15 @@ export class TokenActionHUD extends Application {
 
     // Really just checks if only one token is being controlled. Not smart.
     validTokenChange(token) {
-        let controlled = this.tokens?.controlled;
+        if (settings.get('alwaysShowHud'))
+            return this.isRelevantToken(token) || token.actorId === game.user.character._id;
+        else
+            return this.isRelevantToken(token);
+    }
 
-        return controlled.some(t => t.id === token._id) || (controlled?.length === 0 && canvas?.tokens?.placeables?.some(t => t.id === this.targetActions?.tokenId));
+    isRelevantToken(token) {
+        let controlled = this.tokens?.controlled;
+        return controlled?.some(t => t.id === token._id) || (controlled?.length === 0 && canvas?.tokens?.placeables?.some(t => t.id === this.targetActions?.tokenId));
     }
 
     // Is something being hovered on, is the setting on, and is it the token you're currently selecting.

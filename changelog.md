@@ -1,4 +1,9 @@
-# Changelog# Changelog
+# Changelog
+
+## [0.10.23] 2020-01-15
+### Bugfix
+- General - Update HUD if unselected character token is removed from scene and 'always show HUD' is enabled
+- PF1 - Show correct charges for linked items
 
 ## [0.10.22] 2020-01-07
 ### Bugfix
