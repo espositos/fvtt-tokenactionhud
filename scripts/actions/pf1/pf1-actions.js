@@ -128,7 +128,7 @@ export class ActionHandlerPf1 extends ActionHandler {
     
     /** @private */
     _getAttacksList(actor, tokenId) {
-        let validAttacks = actor.data.items.filter(i => i.type === 'attack');
+        let validAttacks = actor.items.filter(i => i.type === 'attack').map(i => i.data);
         let sortedAttacks = this._sortByItemSort(validAttacks);
         let macroType = 'attack';
         
@@ -154,7 +154,7 @@ export class ActionHandlerPf1 extends ActionHandler {
     
     /** @private */
     _getBuffsList(actor, tokenId) {
-        let validBuff = actor.data.items.filter(i => i.type === 'buff');
+        let validBuff = actor.items.filter(i => i.type === 'buff').map(i => i.data);
         let sortedBuffs = this._sortByItemSort(validBuff);
         let macroType = 'buff';
 
@@ -177,7 +177,7 @@ export class ActionHandlerPf1 extends ActionHandler {
     
     /** @private */
     _getItemList(actor, tokenId) {
-        let validItems = actor.data.items.filter(i => i.data.quantity > 0);
+        let validItems = actor.items.filter(i => i.data.quantity > 0).map(i => i.data);
         let sortedItems = this._sortByItemSort(validItems);
         let macroType = 'item';
 
@@ -239,7 +239,7 @@ export class ActionHandlerPf1 extends ActionHandler {
     
     /** @private */
     _getSpellsList(actor, tokenId) {
-        let validSpells = actor.data.items.filter(i => i.type === 'spell');
+        let validSpells = actor.items.filter(i => i.type === 'spell').map(i => i.data);
         validSpells = this._filterExpendedItems(validSpells);
 
         let spells = this._categoriseSpells(actor, tokenId, validSpells);
@@ -371,7 +371,7 @@ export class ActionHandlerPf1 extends ActionHandler {
 
     /** @private */
     _getFeatsList(actor, tokenId) {
-        let validFeats = actor.data.items.filter(i => i.type == 'feat');
+        let validFeats = actor.items.filter(i => i.type == 'feat').map(i => i.data);
         let sortedFeats = this._sortByItemSort(validFeats);
         let feats = this._categoriseFeats(tokenId, actor, sortedFeats);
     
