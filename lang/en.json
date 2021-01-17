@@ -246,6 +246,9 @@
     "tokenactionhud.settings.swade.abbreviateAttributes.name": "Abbreviate skill and ability names",
     "tokenactionhud.settings.swade.abbreviateAttributes.hint": "If enabled, skills and abilities will use a three-character abbreviation.",
 
+    "tokenactionhud.symbaroum.abilities": "Abilities",
+    "tokenactionhud.symbaroum.mysticalPowers": "Mystical Powers",
+  
     "tokenactionhud.d35e.grapple" : "Grapple",
     "tokenactionhud.crewActions" : "Crew Actions"
   }

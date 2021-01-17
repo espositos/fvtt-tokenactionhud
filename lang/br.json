@@ -113,6 +113,9 @@
   "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "Exibir os Compêndios do MJ",
   "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Se ativado, e se o usuário for um MJ, a barra HUD incluirá movimentos do GM, tabelas de rolagem do tesouro e gráficos.",
 
+  "tokenactionhud.symbaroum.abilities": "Abilities",
+  "tokenactionhud.symbaroum.mysticalPowers": "Mystical Powers",
+
   "tokenactionhud.wfrp.meleeSkillPrefix" : "Melee",
   "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged"
 }

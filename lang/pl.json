@@ -189,6 +189,9 @@
   "tokenactionhud.attribute.will": "Will",
   "tokenactionhud.attribute.perception": "Perception",
 
+  "tokenactionhud.symbaroum.abilities": "Abilities",
+  "tokenactionhud.symbaroum.mysticalPowers": "Mystical Powers",
+
   "tokenactionhud.wfrp.meleeSkillPrefix" : "Broń Biała",
   "tokenactionhud.wfrp.rangedSkillPrefix" : "Broń Zasięgowa"
 } 
