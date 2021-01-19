@@ -57,7 +57,7 @@ export class ActionHandlerSymbaroum extends ActionHandler {
     }
 
     _getWeapons(actor, tokenId) {
-        let filteredItems = actor.items.filter(item => item.data?.type === "weapon");
+        let filteredItems = actor.items.filter(item => (item.data?.type === "weapon")&&(item.data.data?.state === "active"));
         let result = this.initializeEmptyCategory('actorWeapons');
         let weaponsCategory = this.initializeEmptySubcategory();
         weaponsCategory.actions = this._produceMap(tokenId, filteredItems, 'weapon');
@@ -89,7 +89,6 @@ export class ActionHandlerSymbaroum extends ActionHandler {
     _getAttributes(actor, tokenId) {
         let result = this.initializeEmptyCategory('attributes');
         let attributes = Object.entries(actor.data.data.attributes);
-        console.log(attributes);
         let attributesCategory = this.initializeEmptySubcategory();
         attributesCategory.actions = attributes.map(c => {
             let encodedValue = ['attribute', tokenId, c[0]].join(this.delimiter);
