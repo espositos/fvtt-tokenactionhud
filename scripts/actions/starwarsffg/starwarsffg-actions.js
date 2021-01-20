@@ -30,7 +30,7 @@ export class ActionHandlerStarWarsFFG extends ActionHandler {
         const data = actor.data.data
 
         data.skilltypes.forEach((type) => {
-            let skills = this._getSkills(type, actor, tokenId);
+            let skills = this._getSkills(type, data, tokenId);
             this._combineCategoryWithList(result, type.label, skills);
         })
         
@@ -41,28 +41,26 @@ export class ActionHandlerStarWarsFFG extends ActionHandler {
         return result;
     }
 
+    /** @private */
     _getItemsList(actor, tokenId, type) {
-        let types = type+'s';
         let result = this.initializeEmptyCategory('items');
 
         let subcategory = this.initializeEmptySubcategory();
         
         let items = actor.items.filter(i => i.type === type);
-        let filtered = actor.data.type === 'character' ? items.filter(i => i.data.data.equipped) : items;
-        subcategory.actions = this._produceMap(tokenId, filtered, type);
+        subcategory.actions = this._produceItemMap(tokenId, items, type);
 
-        this._combineSubcategoryWithCategory(result, types, subcategory);
+        this._combineSubcategoryWithCategory(result, "", subcategory);
 
         return result;
     }
 
-    _getSkills(type, actor, tokenId) {
+    /** @private */
+    _getSkills(type, data, tokenId) {
         let categoryId = 'skills';
         let macroType = 'skill';
         
         let result = this.initializeEmptyCategory(categoryId);
-        let data1 = actor.data
-        let data = data1.data
 
         const skills = Object.keys(data.skills)
             .filter((s) => data.skills[s].type === type.type)
@@ -77,17 +75,26 @@ export class ActionHandlerStarWarsFFG extends ActionHandler {
             });
         settings.Logger.debug(skills)
         let skillCat = this.initializeEmptySubcategory();
-        skillCat.actions = this._produceMap(tokenId, skills, macroType);
+        skillCat.actions = this._produceSkillMap(tokenId, data, skills, macroType);
         
-        this._combineSubcategoryWithCategory(result, type.label, skillCat);
+        this._combineSubcategoryWithCategory(result, "", skillCat);
 
         return result;
     }
 
-    _produceMap(tokenId, itemSet, type) {
+    /** @private */
+    _produceItemMap(tokenId, itemSet, type) {
         return itemSet.map(i => {
+            let encodedValue = [type, tokenId, i._id].join(this.delimiter);
+            return { name: i.name, encodedValue: encodedValue, id: i._id};
+        });
+    }
+
+    /** @private */
+    _produceSkillMap(tokenId, data, skills, type) {
+        return skills.map(i => {
             let encodedValue = [type, tokenId, i].join(this.delimiter);
-            return { name: i, encodedValue: encodedValue, id: i };
+            return { name: data.skills[i].label, encodedValue: encodedValue, id: i };
         });
     }
 }

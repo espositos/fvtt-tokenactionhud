@@ -16,7 +16,6 @@ export class TokenActionHUD extends Application {
     }
 
     async init(user) {
-        console.log("Token Action Hub init");
         this.actions = await this.systemManager.getActionHandler(user);
 
         this.rollHandler = this.systemManager.getRollHandler();

@@ -11,7 +11,6 @@ export class StarWarsFFGSystemManager extends SystemManager {
 
     /** @override */
     doGetActionHandler(filterManager, categoryManager) {
-        console.log("starwarsffg Token Action Hub startup");
         let actionHandler = new ActionHandler(filterManager, categoryManager);
         return actionHandler;
     }
@@ -19,7 +18,6 @@ export class StarWarsFFGSystemManager extends SystemManager {
     /** @override */
     getAvailableRollHandlers() {
         let choices = { 'core': 'Core starwarsffg' };
-
         return choices;
     }
 

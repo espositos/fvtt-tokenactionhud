@@ -20,17 +20,22 @@ export class RollHandlerBaseStarWarsFFG extends RollHandler {
 
         switch (macroType) {
             case 'weapon':
-                return actor.setupWeapon(itemData, bypassData)
-                    .then(setupData => actor.weaponTest(setupData));
+                return game.ffg.DiceHelpers.rollItem(actionId, actor.id);
             case 'skill':
-                this._rollSkill(actor, actionId);
+                return this._rollSkill(actor, actionId, event);
         }
     }
 
-    _rollSkill(actor, skillname) {
+    _rollSkill(actor, skillname, event) {
+        let difficulty = 2;
+        if (event.ctrlKey && !event.shiftKey) {
+            difficulty = 3;
+        } else if (!event.ctrlKey && event.shiftKey) {
+            difficulty = 1;
+        }
         const actorSheet = actor.sheet.getData();
         const skill = actor.data.data.skills[skillname];
         const characteristic = actorSheet.data.characteristics[skill.characteristic];
-        game.ffg.DiceHelpers.rollSkillDirect(skill, characteristic, 2, actorSheet);
+        game.ffg.DiceHelpers.rollSkillDirect(skill, characteristic, difficulty, actorSheet);
     }
 }
