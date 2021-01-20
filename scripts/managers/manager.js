@@ -78,6 +78,8 @@ export class SystemManager {
     /** SETTINGS */
 
     registerSettings() {
+        
+        console.log("Token Action Hub register Settings");
         let rollHandlers = this.getAvailableRollHandlers();
         settings.registerSettings(this.appName, this, rollHandlers)
     }
