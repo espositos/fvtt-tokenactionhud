@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.10.25] 2020-01-21
+### Bugfix
+- SWRPG - Fix shields category for starships
+
 ## [0.10.24] 2020-01-20
 ### Added
 - Pf1 - Initiative roller, may not work currently, but waiting for a PF1 update
