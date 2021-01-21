@@ -450,10 +450,10 @@ export class ActionHandlerSfrpg extends ActionHandler {
 
         const shields = actor.data.data.attributes?.shields;
         if (!shields)
-            return actionList;
-
+        return actionList;
+        
         category.info1 = `${shields.value}/${shields.max}`;
-
+        
         const sides = ['forward', 'starboard', 'aft', 'port'];
         const amounts = [
             {name: '-10', value:'-10'},
@@ -463,14 +463,15 @@ export class ActionHandlerSfrpg extends ActionHandler {
             {name: '+5', value: '+5'},
             {name: '+10', value: '+10'}
         ];
-
+        
+        const quadrants = actor.data.data.quadrants;
         sides.forEach(side => {
-            const currShields = shields[side];
+            const currShields = quadrants[side]['shields'];
             if (!currShields)
                 return;
             
             const subcategory = this.initializeEmptySubcategory(side);
-            subcategory.info1 = `${currShields.value}/${currShields.max}`;
+            subcategory.info1 = `${currShields.value}/${shields.limit}`;
 
             amounts.forEach(amount => {
                 const encodedValue = [macroType, token.id, `${side}.${amount.value}`].join(this.delimiter);
