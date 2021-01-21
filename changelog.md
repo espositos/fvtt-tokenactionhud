@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.27] 2020-01-21
+### Added
+- Pf2e - Add active feats to actions as well
+
+### Bugfix
+- PF2e - Correct icon for actions, reactions, and free actions
+
 ## [0.10.26] 2020-01-21
 ### Added
 - Pf2e - Effects Category
