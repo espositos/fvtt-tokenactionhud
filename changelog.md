@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.10.28] 2020-01-21
+### Added
+- Starwars FFG support thanks to @cvaliente
+
 ## [0.10.27] 2020-01-21
 ### Added
 - Pf2e - Add active feats to actions as well
