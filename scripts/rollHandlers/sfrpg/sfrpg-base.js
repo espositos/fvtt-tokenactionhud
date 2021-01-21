@@ -102,11 +102,11 @@ export class RollHandlerBaseSfrpg extends RollHandler {
             return;
 
         const shields = actor.data.data.attributes.shields;
-        const shield = shields[side];
+        const shield = actor.data.data.quadrants[side]['shields'];
 
         let newValue;
         if (shieldChange < 0) {
-            newValue = Math.clamped(shield.value + shieldChange, 0, shield.max);
+            newValue = Math.clamped(shield.value + shieldChange, 0, shields.max);
         } else {
             newValue = this._calcPossibleIncrease(shields, shield, shieldChange);
         }
@@ -114,15 +114,15 @@ export class RollHandlerBaseSfrpg extends RollHandler {
         if (newValue === shield.value)
             return;
 
-        const update = {data: {attributes: {shields: {}}}};
-        update.data.attributes.shields[side] = {value: newValue};
+        const update = {data: {quadrants: {}}};
+        update.data.quadrants[side] = {shields: {value: newValue}};
 
         await actor.update(update);
     }
     
     _calcPossibleIncrease(shields, shield, change) {
         const overallPossible = shields.max - shields.value >= 0 ? shields.max - shields.value : 0;
-        const localPossible = shield.max - shield.value >= 0 ? shield.max - shield.value : 0;
+        const localPossible = shields.limit - shield.value >= 0 ? shields.limit - shield.value : 0;
 
         let possibleChange = change;
 
