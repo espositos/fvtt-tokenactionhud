@@ -228,6 +228,24 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
+    _getEffectsList(actor, tokenId) {
+        let macroType = 'item';
+        let result = this.initializeEmptyCategory('effects');
+        
+        let filter = ['effect'];
+        let items = (actor.items ?? []).filter(i => filter.includes(i.data.type)).sort(this._foundrySort);
+        
+        let effectsList = items.filter(i => i.type === 'effect');
+        let effectActions = this._buildItemActions(tokenId, macroType, effectsList);
+        let effects = this.initializeEmptySubcategory();
+        effects.actions = effectActions;
+
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.weapons'), effects);
+
+        return result;
+    }
+
+    /** @private */
     _addStrikesCategories(actor, tokenId, category, info) {
         let macroType = 'strike';
         let strikes = actor.data.data.actions?.filter(a => a.type === macroType);

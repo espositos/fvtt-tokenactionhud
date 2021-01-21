@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.10.26] 2020-01-21
+### Added
+- Pf2e - Effects Category
+
 ## [0.10.25] 2020-01-21
 ### Bugfix
 - SWRPG - Fix shields category for starships
