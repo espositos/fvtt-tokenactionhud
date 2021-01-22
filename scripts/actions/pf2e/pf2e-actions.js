@@ -228,6 +228,24 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
+    _getEffectsList(actor, tokenId) {
+        let macroType = 'item';
+        let result = this.initializeEmptyCategory('effects');
+        
+        let filter = ['effect'];
+        let items = (actor.items ?? []).filter(i => filter.includes(i.data.type)).sort(this._foundrySort);
+        
+        let effectsList = items.filter(i => i.type === 'effect');
+        let effectActions = this._buildItemActions(tokenId, macroType, effectsList);
+        let effects = this.initializeEmptySubcategory();
+        effects.actions = effectActions;
+
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.weapons'), effects);
+
+        return result;
+    }
+
+    /** @private */
     _addStrikesCategories(actor, tokenId, category, info) {
         let macroType = 'strike';
         let strikes = actor.data.data.actions?.filter(a => a.type === macroType);
@@ -285,22 +303,24 @@ export class ActionHandlerPf2e extends ActionHandler {
         let macroType = 'action';
         let result = this.initializeEmptyCategory('actions');
 
-        let filteredActions = (actor.items ?? []).filter(a => a.type === macroType).sort(this._foundrySort);
+        let filteredActions = (actor.items ?? [])
+            .filter(a => a.type === macroType || a.type === 'feat').sort(this._foundrySort);
 
         if (settings.get('ignorePassiveActions'))
             filteredActions = filteredActions.filter(a => a.data.data.actionType.value !== 'passive');
 
         let actions = this.initializeEmptySubcategory();
-        actions.actions = this._produceActionMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'action' && this._actionIsShort(a)), macroType);
+        actions.actions = this._produceActionMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType?.value === 'action' && this._actionIsShort(a)), macroType);
 
         let reactions = this.initializeEmptySubcategory();
-        reactions.actions = this._produceActionMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'reaction' && this._actionIsShort(a)), macroType);
+        reactions.actions = this._produceActionMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType?.value === 'reaction' && this._actionIsShort(a)), macroType);
         
         let free = this.initializeEmptySubcategory();
-        free.actions = this._produceActionMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'free' && this._actionIsShort(a)), macroType);
+        free.actions = this._produceActionMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType?.value === 'free' && this._actionIsShort(a)), macroType);
         
         let passive = this.initializeEmptySubcategory();
-        passive.actions = this._produceActionMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.actionType.value === 'passive' && this._actionIsShort(a)), macroType);
+        passive.actions = this._produceActionMap(tokenId, (filteredActions ?? [])
+            .filter(a => a.data.data.actionType?.value === 'passive' && this._actionIsShort(a) && a.type !== 'feat'), macroType);
 
         let exploration = this.initializeEmptySubcategory();
         exploration.actions = this._produceActionMap(tokenId, (filteredActions ?? []).filter(a => a.data.data.traits?.value.includes('exploration')), macroType);
@@ -652,11 +672,11 @@ export class ActionHandlerPf2e extends ActionHandler {
         if (actor.data.type === 'character') {
                         
             let attributes = this.initializeEmptySubcategory();
-            let atrributeActions = [];
+            let attributeActions = [];
 
             let heroPoints = actor.data.data.attributes?.heroPoints;
             if (heroPoints)
-                atrributeActions.push(this._getAttributeAction(tokenId, 'heroPoint', this.i18n('tokenactionhud.heroPoints'), heroPoints.rank, heroPoints.max));
+                attributeActions.push(this._getAttributeAction(tokenId, 'heroPoint', this.i18n('tokenactionhud.heroPoints'), heroPoints.rank, heroPoints.max));
 
             let doomedPoints = actor.data.data.attributes?.doomed;
             let dyingPoints = actor.data.data.attributes?.dying;
@@ -665,17 +685,17 @@ export class ActionHandlerPf2e extends ActionHandler {
                 let dyingMax = dyingPoints.max;
                 if (doomedPoints)
                     dyingMax -= doomedPoints.value;
-                atrributeActions.push(this._getAttributeAction(tokenId, 'dying', this.i18n('tokenactionhud.dying'), dyingVal, dyingMax));
+                attributeActions.push(this._getAttributeAction(tokenId, 'dying', this.i18n('tokenactionhud.dying'), dyingVal, dyingMax));
             }
             
             let woundedPoints = actor.data.data.attributes?.wounded;
             if (woundedPoints)
-                atrributeActions.push(this._getAttributeAction(tokenId, 'wounded', this.i18n('tokenactionhud.wounded'), woundedPoints.value, woundedPoints.max));
+                attributeActions.push(this._getAttributeAction(tokenId, 'wounded', this.i18n('tokenactionhud.wounded'), woundedPoints.value, woundedPoints.max));
 
             if (doomedPoints)
-                atrributeActions.push(this._getAttributeAction(tokenId, 'doomed', this.i18n('tokenactionhud.doomed'), doomedPoints.value, doomedPoints.max));
+                attributeActions.push(this._getAttributeAction(tokenId, 'doomed', this.i18n('tokenactionhud.doomed'), doomedPoints.value, doomedPoints.max));
 
-            attributes.actions = atrributeActions;
+            attributes.actions = attributeActions;
 
             this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.attributes'), attributes);
             
@@ -742,10 +762,14 @@ export class ActionHandlerPf2e extends ActionHandler {
         let encodedValue = [type, tokenId, item._id].join(this.delimiter);
         let icon;
         let actions = item.data?.data?.actions;
-        if (actions && !isPassive) {
+        let actionType = item.data?.data?.actionType?.value;
+        if (['free', 'reaction', 'passive'].includes(actionType)) {
+            icon = this._getActionIcon(actionType);
+        } else if (actions && !isPassive) {
             let actionValue = parseInt((actions || {}).value, 10) || 1;
             icon = this._getActionIcon(actionValue);
         }
+
         let img = this._getImage(item);
         return { name: item.name, encodedValue: encodedValue, id: item._id, img: img, icon: icon };
     }
@@ -756,7 +780,8 @@ export class ActionHandlerPf2e extends ActionHandler {
           2: `<span style='font-family: "Pathfinder2eActions"'>D</span>`,
           3: `<span style='font-family: "Pathfinder2eActions"'>T</span>`,
           free: `<span style='font-family: "Pathfinder2eActions"'>F</span>`,
-          reaction: `<span style='font-family: "Pathfinder2eActions"'>R</span>`
+          reaction: `<span style='font-family: "Pathfinder2eActions"'>R</span>`,
+          passive: ``
         };
         return img[action];
     }
