@@ -9,7 +9,7 @@ export class ActionHandlerStarWarsFFG extends ActionHandler {
 
     /** @override */
     async doBuildActionList(token, multipleTokens) {
-        let result = this.initializeEmptyActionList();        
+        let result = this.initializeEmptyActionList();
 
         if (!token)
             return result;
@@ -29,6 +29,7 @@ export class ActionHandlerStarWarsFFG extends ActionHandler {
         
         let forcePowers = this._getItemsList(actor, tokenId, 'forcepower');
         this._combineCategoryWithList(result, this.i18n('SWFFG.ForcePower'), forcePowers);
+
 
         const data = actor.data.data
 
