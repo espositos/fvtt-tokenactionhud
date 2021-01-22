@@ -41,6 +41,7 @@ Offers a variety of settings including support for third-party roll handlers (Pl
 * SWRPG
 * SotDL
 * PF1
+* Star Wars FFG
 * Any other system? I believe the HUD is modular enough that anyone who understands what the players of their system want and how actions in their system are handled could quickly build it into the HUD. Please contact me if you'd like to add support for your favourite system.
 
 [Developing for your system or module](adding_systems.md)

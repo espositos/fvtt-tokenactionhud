@@ -372,7 +372,7 @@ export class TokenActionHUD extends Application {
     // Really just checks if only one token is being controlled. Not smart.
     validTokenChange(token) {
         if (settings.get('alwaysShowHud'))
-            return this.isRelevantToken(token) || token.actorId === game.user.character._id;
+            return this.isRelevantToken(token) || token.actorId === game.user.character?._id;
         else
             return this.isRelevantToken(token);
     }
