@@ -26,6 +26,10 @@ export class ActionHandlerStarWarsFFG extends ActionHandler {
         
         let weapons = this._getItemsList(actor, tokenId, 'weapon');
         this._combineCategoryWithList(result, this.i18n('tokenactionhud.weapons'), weapons);
+        
+        let forcePowers = this._getItemsList(actor, tokenId, 'forcepower');
+        this._combineCategoryWithList(result, this.i18n('SWFFG.ForcePower'), forcePowers);
+
 
         const data = actor.data.data
 
@@ -34,6 +38,9 @@ export class ActionHandlerStarWarsFFG extends ActionHandler {
             this._combineCategoryWithList(result, type.label, skills);
         })
         
+        if (game.user.isGM) {
+            this._combineCategoryWithList(result, 'utility', this._getGMList(multipleTokens));
+        }
         
         if (settings.get('showHudTitle'))
             result.hudTitle = token.data?.name;
@@ -42,8 +49,22 @@ export class ActionHandlerStarWarsFFG extends ActionHandler {
     }
 
     /** @private */
+    _getGMList(multipleTokens) {
+        let result = this.initializeEmptyCategory('utility');
+        let subcategory = this.initializeEmptySubcategory();
+        let items = [
+            {name: 'Destiny Pool Init', encodedValue: 'gm|destiny|destiny', id: 'gm_destiny'}
+        ]
+        subcategory.actions = items
+        
+        this._combineSubcategoryWithCategory(result, 'GM', subcategory);
+
+        return result;
+    }
+
+    /** @private */
     _getItemsList(actor, tokenId, type) {
-        let result = this.initializeEmptyCategory('items');
+        let result = this.initializeEmptyCategory(type);
 
         let subcategory = this.initializeEmptySubcategory();
         

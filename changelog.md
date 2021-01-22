@@ -1,8 +1,12 @@
 # Changelog
 
+## [0.10.29] 2020-01-22
+### Added
+- Further changes to Starwars FFG thanks to zaborontest#0241
+
 ## [0.10.28] 2020-01-21
 ### Added
-- Starwars FFG support thanks to @cvaliente
+- Starwars FFG support thanks to zaborontest#0241
 
 ## [0.10.27] 2020-01-21
 ### Added
