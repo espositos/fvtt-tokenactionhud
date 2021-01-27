@@ -413,9 +413,11 @@ export class ActionHandlerSfrpg extends ActionHandler {
         const order = ['captain', 'pilot', 'gunner', 'engineer', 'scienceOfficer', 'chiefMate', 'magicOfficer', 'openCrew', 'minorCrew'];
 
         order.forEach(role => {
-            const crew = actor.data.data.crew[role];
+            const crew = actor.data.data.crew;
+            const crewRole = crew[role];
+            const npcRole = crew.npcData[role];
 
-            if (crew && crew.actors.length === 0)
+            if (!this._shouldShowCrewOptions(crew, crewRole, npcRole))
                 return;
 
             const groupActions = groupedActions[role];
@@ -430,8 +432,12 @@ export class ActionHandlerSfrpg extends ActionHandler {
                 subcategory.actions.push(action);
             });
 
-            if (crew) {
-                subcategory.info1 = crew.limit > 0 ? `${crew.actors.length}/${crew.limit}` : crew.actors.length;
+            if (crewRole) {
+                if (crew.useNPCCrew) {
+                    subcategory.info1 = crew.npcData[role].numberOfUses;
+                } else {
+                    subcategory.info1 = crewRole.limit > 0 ? `${crewRole.actors.length}/${crewRole.limit}` : crewRole.actors.length;
+                }
             }
 
             const capitalRole = role.charAt(0).toUpperCase() + role.slice(1);
@@ -442,6 +448,20 @@ export class ActionHandlerSfrpg extends ActionHandler {
         const catName = this.i18n('tokenactionhud.crewActions');
         this._combineCategoryWithList(actionList, catName, category);
     }
+
+    _shouldShowCrewOptions(crew, crewRole, npcRole) {
+        if (!crewRole)
+            return true;
+
+        if (crewRole.actors?.length > 0 && !crew.useNPCCrew)
+            return true;
+
+        if (crew.useNPCCrew && npcRole?.numberOfUses > 0)
+            return true;
+
+        return false;
+    }
+
 
     /** @private */
     _addShields(token, actor, actionList) {

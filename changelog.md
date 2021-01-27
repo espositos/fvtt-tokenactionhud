@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.10.30] 2020-01-27
+### Bugfix
+- SFRPG fix crew actions
+
 ## [0.10.29] 2020-01-22
 ### Added
 - Further changes to Starwars FFG thanks to zaborontest#0241
