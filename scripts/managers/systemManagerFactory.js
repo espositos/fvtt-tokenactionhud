@@ -9,6 +9,7 @@ import { Sw5eSystemManager } from './sw5e.js';
 import { Wfrp4eSystemManager } from './wfrp4e.js';
 import { LancerSystemManager } from './lancer.js';
 import { SwadeSystemManager } from './swade.js';
+import { StarWarsFFGSystemManager } from './starwarsffg.js';
 import { SymbaroumSystemManager } from './symbaroum.js';
 
 export class SystemManagerFactory {
@@ -36,6 +37,8 @@ export class SystemManagerFactory {
                 return new LancerSystemManager(appName);
             case 'swade':
                 return new SwadeSystemManager(appName);
+            case 'starwarsffg':
+                return new StarWarsFFGSystemManager(appName);
             case 'symbaroum':
                 return new SymbaroumSystemManager(appName);
         }

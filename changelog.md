@@ -1,4 +1,43 @@
-# Changelog# Changelog
+# Changelog
+
+## [0.10.30] 2020-01-27
+### Bugfix
+- SFRPG fix crew actions
+
+## [0.10.29] 2020-01-22
+### Added
+- Further changes to Starwars FFG thanks to zaborontest#0241
+
+## [0.10.28] 2020-01-21
+### Added
+- Starwars FFG support thanks to zaborontest#0241
+
+## [0.10.27] 2020-01-21
+### Added
+- Pf2e - Add active feats to actions as well
+
+### Bugfix
+- PF2e - Correct icon for actions, reactions, and free actions
+
+## [0.10.26] 2020-01-21
+### Added
+- Pf2e - Effects Category
+
+## [0.10.25] 2020-01-21
+### Bugfix
+- SWRPG - Fix shields category for starships
+
+## [0.10.24] 2020-01-20
+### Added
+- Pf1 - Initiative roller, may not work currently, but waiting for a PF1 update
+
+### Bugfix
+- PF1 Readd missing inventory category
+
+## [0.10.23] 2020-01-15
+### Bugfix
+- General - Update HUD if unselected character token is removed from scene and 'always show HUD' is enabled
+- PF1 - Show correct charges for linked items
 
 ## [0.10.22] 2020-01-07
 ### Bugfix
