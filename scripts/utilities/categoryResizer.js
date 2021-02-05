@@ -29,25 +29,28 @@ export class CategoryResizer {
 
         let maxRequiredWidth = CategoryResizer.calculateMaxRequiredWidth(actions);
         while (CategoryResizer.shouldIncreaseWidth(content, actions, maxRequiredWidth, bottomLimit, rightLimit, isOneLineFit)) {
-            let actionRect = actions[0].getBoundingClientRect();
-            let width = actionRect.width;
-            let realWidth = actions.width();
+            let box = actions[0].getBoundingClientRect();
+            let boxWidth = box.width;
+            let cssWidth = actions.width();
+
+            if (boxWidth > maxRequiredWidth)
+                return;
             
-            let newWidth = width + step;
+            let newWidth = cssWidth + step;
             
             CategoryResizer.resizeActions(actions, newWidth);
         }
 
         let priorWidth;
         while (CategoryResizer.shouldShrinkWidth(content, actions, minWidth, bottomLimit, rightLimit, isOneLineFit)) {
-            let rect = actions[0].getBoundingClientRect();
-            let rectWidth = rect.width;
-            let realWidth = actions.width();
+            let box = actions[0].getBoundingClientRect();
+            let boxWidth = box.width;
+            let cssWidth = actions.width();
 
-            if (rectWidth < minWidth)
+            if (boxWidth < minWidth)
                 return;
 
-            let newWidth = realWidth - step;
+            let newWidth = cssWidth - step;
 
             CategoryResizer.resizeActions(actions, newWidth); 
         }

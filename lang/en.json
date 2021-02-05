@@ -161,6 +161,8 @@
     "tokenactionhud.settings.playerPermission.name": "Enable HUD for players",
     "tokenactionhud.settings.playerPermission.hint": "If enabled, players will be able to use the HUD.",
     "tokenactionhud.settings.debug.name": "Enable debugging",
+    "tokenactionhud.settings.scale.hint": "Adjust the scale of the HUD in percentage terms (100 being the default)",
+    "tokenactionhud.settings.scale.name": "HUD scale",
     "tokenactionhud.settings.renderItemOnRightClick.name": "Show Item Sheet on right-click",
     "tokenactionhud.settings.renderItemOnRightClick.hint": "If enabled, right-clicking on an item in the HUD will bring up the item's sheet (possibly conflicts with other settings that use right-click).",
     "tokenactionhud.settings.debug.hint": "Enable debug logging. (This has sort of fallen by the wayside, don't expect it to be very useful)",
