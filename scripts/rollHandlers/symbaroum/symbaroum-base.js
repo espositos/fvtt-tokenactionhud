@@ -39,7 +39,7 @@ export class RollHandlerBaseSymbaroum extends RollHandler {
 
     _handleWeapon(macroType, event, actor, actionId) {
 
-        let usedItem = actor.items.filter(item => item.data?._id === actionId);
+        let usedItem = actor.data.data.weapons.filter(item => item._id === actionId);
         actor.rollWeapon(usedItem[0]);
     }
 
