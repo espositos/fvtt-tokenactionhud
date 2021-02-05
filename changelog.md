@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.10.31] 2020-02-05
+### Changed
+- Extended Japanese localisation support thanks to touge
+
 ## [0.10.30] 2020-01-27
 ### Bugfix
 - SFRPG fix crew actions
