@@ -31,6 +31,7 @@ export class CategoryResizer {
         while (CategoryResizer.shouldIncreaseWidth(content, actions, maxRequiredWidth, bottomLimit, rightLimit, isOneLineFit)) {
             let actionRect = actions[0].getBoundingClientRect();
             let width = actionRect.width;
+            let realWidth = actions.width();
             
             let newWidth = width + step;
             
@@ -41,7 +42,7 @@ export class CategoryResizer {
         while (CategoryResizer.shouldShrinkWidth(content, actions, minWidth, bottomLimit, rightLimit, isOneLineFit)) {
             let rect = actions[0].getBoundingClientRect();
             let rectWidth = rect.width;
-            let realWidth = actions[0].width;
+            let realWidth = actions.width();
 
             if (rectWidth < minWidth)
                 return;
