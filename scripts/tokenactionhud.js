@@ -57,13 +57,25 @@ export class TokenActionHUD extends Application {
         });
     }
 
+    getScale() {
+        const scale = parseFloat(settings.get('scale'));
+        
+        if (scale < 0.8)
+            return 0.8;
+
+        if (scale > 2)
+            return 2;
+
+        return scale;
+    }
+
     /** @override */
     getData(options = {}) {
-        let hovering = settings.get('onTokenHover');
         const data = super.getData();
         data.actions = this.targetActions;
         data.id = 'token-action-hud';
-        data.hovering = hovering;
+        data.hovering = settings.get('onTokenHover');;
+        data.scale = this.getScale();
         settings.Logger.debug('HUD data:', data);
         return data;
     }

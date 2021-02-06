@@ -121,6 +121,21 @@ export const registerSettings = function(app, systemManager, rollHandlers) {
         default : true,
         onChange: value => { updateFunc(value); }
     });
+
+    game.settings.register(appName, 'scale', {
+      name: game.i18n.localize('tokenactionhud.settings.scale.name'),
+      hint: game.i18n.localize('tokenactionhud.settings.scale.hint'),
+      scope: 'client',
+      config: true,
+      type: Number,
+      range: {     
+        min: 0.8,
+        max: 2,
+        step: 0.1
+      },
+      default: 1,
+      onChange: value => { updateFunc(value); }
+    });
     
     game.settings.register(appName,'debug', {
         name : game.i18n.localize('tokenactionhud.settings.debug.name'),
