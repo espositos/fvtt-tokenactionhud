@@ -136,7 +136,8 @@
 
 /* Show the dropdown menu on hover */
 .tah-category.hover .tah-content {
-    display: block;
+    display: flex;
+    flex-direction: column;
     padding: 2px;
     position: absolute;
     left: -155px;

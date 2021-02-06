@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.10.33] 2020-02-06
+### Added
+- Option to toggle between drop-up and drop-down categories
+
 ## [0.10.32] 2020-02-06
 ### Added
 - Added a scale slider to adjust the size of the HUD (thanks to Alexis-Grimm for the suggestion)

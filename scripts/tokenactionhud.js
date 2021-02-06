@@ -249,6 +249,15 @@ export class TokenActionHUD extends Application {
         $(document).find('.tah-filterholder').parents('.tah-subcategory').css('cursor', 'pointer');
     }
 
+    applySettings() {
+        if (!settings.get('dropdown')) {
+            $(document).find('.tah-content').css({
+                    'bottom': '40px',
+                    'flex-direction': 'column-reverse'
+                });
+        }
+    }
+
     // Positioning
     trySetPos() {
         if (!(this.targetActions && this.targetActions.tokenId))
