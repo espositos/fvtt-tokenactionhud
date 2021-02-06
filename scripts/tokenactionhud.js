@@ -9,6 +9,8 @@ export class TokenActionHUD extends Application {
     tokens = null;
     rendering = false;
     categoryHovered = '';
+    defaultLeftPos = 150;
+    defaultTopPos = 80;
 
     constructor(systemManager) {
         super();
@@ -272,14 +274,16 @@ export class TokenActionHUD extends Application {
             return;
 
         let pos = game.user.data.flags['token-action-hud'].hudPos;
+        let defaultLeftPos = this.defaultLeftPos;
+        let defaultTopPos = this.defaultTopPos;
 
         return new Promise(resolve => {
             function check() {
                 let elmnt = document.getElementById('token-action-hud')
                 if (elmnt) {
                     elmnt.style.bottom = null;
-                    elmnt.style.top = (pos.top) + 'px';
-                    elmnt.style.left = (pos.left) + 'px';
+                    elmnt.style.top = pos.top < 5 || pos.top > window.innerHeight + 5 ? (defaultTopPos) + 'px' : (pos.top) + 'px';
+                    elmnt.style.left = pos.left < 5 || pos.left > window.innerWidth + 5 ? (defaultLeftPos) + 'px': (pos.left) + 'px';
                     elmnt.style.position = 'fixed';
                     elmnt.style.zIndex = 100;
                 resolve();
