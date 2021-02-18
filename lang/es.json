@@ -11,6 +11,7 @@
     "tokenactionhud.dmg": "Dañ",
     "tokenactionhud.feats": "Dotes",
     "tokenactionhud.features": "Dotes",
+	"tokenactionhud.classFeatures": "Características de clase",
     "tokenactionhud.inconsumables": "Consumibles",
     "tokenactionhud.instinct": "Instinto",
     "tokenactionhud.monsterMoves": "Movimientos de Monstruo",

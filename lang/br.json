@@ -57,6 +57,7 @@
   "tokenactionhud.tools": "Ferramentas",
 
   "tokenactionhud.features": "Talentos",
+  "tokenactionhud.classFeatures": "Características da aula",
   "tokenactionhud.levelAbbreviation": "Lvl",
   
   "tokenactionhud.blocklistLabel": "Lista Bloquiada (somente esconder) ou Lista Permitida (somente exibir)",

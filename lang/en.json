@@ -28,6 +28,7 @@
     "tokenactionhud.magicItems": "Magic Items",
     "tokenactionhud.feats": "Feats",
     "tokenactionhud.features": "Features",
+	"tokenactionhud.classFeatures": "Class Features",
     "tokenactionhud.free": "Free",
     "tokenactionhud.inconsumables": "Inconsumables",
     "tokenactionhud.instinct": "Instinct",

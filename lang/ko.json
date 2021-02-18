@@ -25,6 +25,7 @@
     "tokenactionhud.equipment": "장비",
     "tokenactionhud.magicItems": "매직 아이템",
     "tokenactionhud.feats": "피트",
+	"tokenactionhud.classFeatures": "Class Features",
     "tokenactionhud.features": "특징",
     "tokenactionhud.free": "자유",
     "tokenactionhud.inconsumables": "비소모품",
