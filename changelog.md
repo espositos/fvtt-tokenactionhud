@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.10.35] 2020-02-18
+### Changed
+- Add new options for the Item Macro to choose between keeping the original item, only the item macro item, or showing both.
+
 ## [0.10.34] 2020-02-18
 ### Added
 - SW5e class features thanks to Therasin/Zasshem
