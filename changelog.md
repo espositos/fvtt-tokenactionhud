@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.10.34] 2020-02-18
+### Added
+- SW5e class features thanks to Therasin/Zasshem
+
 ## [0.10.33] 2020-02-06
 ### Added
 - Option to toggle between drop-up and drop-down categories

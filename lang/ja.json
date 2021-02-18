@@ -28,6 +28,7 @@
     "tokenactionhud.magicItems": "魔法アイテム",
     "tokenactionhud.feats": "特技",
     "tokenactionhud.features": "特徴",
+	"tokenactionhud.classFeatures": "クラスの特徴",
     "tokenactionhud.free": "無料",
     "tokenactionhud.inconsumables": "非消耗品",
     "tokenactionhud.instinct": "直感",

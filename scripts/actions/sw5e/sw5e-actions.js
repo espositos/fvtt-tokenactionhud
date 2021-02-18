@@ -34,17 +34,20 @@ export class ActionHandlerSw5e extends ActionHandler {
         let items = this._getItemList(actor, tokenId);
         let powers = this._getPowersList(actor, tokenId);
         let feats = this._getFeatsList(actor, tokenId);
+		let classFeatures = this._getClassFeaturesList(actor, tokenId);
         let skills = this._getSkillsList(actor.data.data.skills, tokenId);
         let utility = this._getUtilityList(actor, tokenId);
 
         let itemsTitle = this.i18n('tokenactionhud.inventory');
         let powersTitle = this.i18n('tokenactionhud.powers');
         let featsTitle = this.i18n('tokenactionhud.features');
+		let classFeaturesTitle = this.i18n('tokenactionhud.classFeatures');
         let skillsTitle = this.i18n('tokenactionhud.skills');
         
         this._combineCategoryWithList(result, itemsTitle, items);
         this._combineCategoryWithList(result, powersTitle, powers);
         this._combineCategoryWithList(result, featsTitle, feats);
+		this._combineCategoryWithList(result, classFeaturesTitle, classFeatures);
         this._combineCategoryWithList(result, skillsTitle, skills);
 
         let savesTitle = this.i18n('tokenactionhud.saves');
@@ -305,7 +308,7 @@ export class ActionHandlerSw5e extends ActionHandler {
         if (c?.concentration)
             power.info2 += this.i18n('SW5E.Concentration').charAt(0).toUpperCase();
     }
-    
+	
     /** FEATS **/
 
     /** @private */
@@ -315,6 +318,15 @@ export class ActionHandlerSw5e extends ActionHandler {
         let feats = this._categoriseFeats(tokenId, actor, sortedFeats);
     
         return feats;
+    }
+	
+    /** @private */
+    _getClassFeaturesList(actor, tokenId) {
+        let validClassfeature = this._filterLongerActions(actor.data.items.filter(i => i.type == 'classfeature'));
+	    let sortedClassfeature = this._sortByItemSort(validClassfeature);
+        let classfeatures = this._categoriseFeats(tokenId, actor, sortedClassfeature);
+    
+        return classfeatures;
     }
     
     /** @private */

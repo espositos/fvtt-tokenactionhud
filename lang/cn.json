@@ -26,6 +26,7 @@
     "tokenactionhud.magicItems": "魔法物品",
     "tokenactionhud.feats": "专长",
     "tokenactionhud.features": "特性",
+	"tokenactionhud.classFeatures": "班级特色",
     "tokenactionhud.free": "自由",
     "tokenactionhud.inconsumables": "非消耗品",
     "tokenactionhud.instinct": "直感",
