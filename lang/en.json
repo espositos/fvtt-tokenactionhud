@@ -196,8 +196,8 @@
     "tokenactionhud.settings.dnd5e.showAllNpcItems.hint": "If enabled, all items are shown for NPCs, not just equipped items.",
     "tokenactionhud.settings.dnd5e.showEmptyItems.name": "Show empty items (includes items and spells)",
     "tokenactionhud.settings.dnd5e.showEmptyItems.hint": "If enabled, items are shown in the HUD even if they have no remaining charges.",
-    "tokenactionhud.settings.dnd5e.itemMacroReplace.name": "Item-Macro: overwrite original item",
-    "tokenactionhud.settings.dnd5e.itemMacroReplace.hint": "If enabled, items with an item macro will overwrite their original, otherwise both options will be shown.",
+    "tokenactionhud.settings.dnd5e.itemMacroReplace.name": "Item-Macro: item macro, original item, or both",
+    "tokenactionhud.settings.dnd5e.itemMacroReplace.hint": "Select which of the items will be shown in the inventory.",
     "tokenactionhud.settings.dnd5e.showConditionsCategory.name": "Show Conditions Category",
     "tokenactionhud.settings.dnd5e.showConditionsCategory.hint": "If enabled, the HUD will present a category showing the available token conditions and status effects normally available in the regular Token HUD.",
 
@@ -252,5 +252,9 @@
     "tokenactionhud.settings.swade.abbreviateAttributes.hint": "If enabled, skills and abilities will use a three-character abbreviation.",
 
     "tokenactionhud.d35e.grapple" : "Grapple",
-    "tokenactionhud.crewActions" : "Crew Actions"
+    "tokenactionhud.crewActions" : "Crew Actions",
+
+    "tokenactionhud.settings.itemMacroReplace.showBoth": "Show both original item and item macro item",
+    "tokenactionhud.settings.itemMacroReplace.showItemMacro": "Show the item macro item",
+    "tokenactionhud.settings.itemMacroReplace.showOriginal": "Show the original item"
   }

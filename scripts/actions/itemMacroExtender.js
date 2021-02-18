@@ -31,7 +31,12 @@ export class ItemMacroActionListExtender extends ActionListExtender {
         if (itemIds.length === 0)
             return;
 
-        let replace = settings.get('itemMacroReplace');
+        let itemMacroSetting = settings.get('itemMacroReplace');
+
+        if (itemMacroSetting === 'showOriginal')
+            return actionList;
+
+        let replace = itemMacroSetting === 'showItemMacro';
 
         actionList.categories.forEach(category => {
             category.subcategories.forEach(subcategory => {
