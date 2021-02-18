@@ -308,24 +308,6 @@ export class ActionHandlerSw5e extends ActionHandler {
         if (c?.concentration)
             power.info2 += this.i18n('SW5E.Concentration').charAt(0).toUpperCase();
     }
-    
-	/** Class Features **/
-		/** I Added a new category, but you can add Class Features to Feats category.
-		If you prefer that, just update _getFeatsList and replace:
-		i.type == 'feat'
-		by
-		i.type == 'feat' || i.type == 'classfeature'
-		**/
-	
-	    /** @private */
-    _getClassFeaturesList(actor, tokenId) {
-        let validClassfeature = this._filterLongerActions(actor.data.items.filter(i => i.type == 'classfeature'));
-		// We can use the same method use by feat, classFeatures are using same kind of data
-        let sortedClassfeature = this._sortByItemSort(validClassfeature);
-        let classfeatures = this._categoriseFeats(tokenId, actor, sortedClassfeature);
-    
-        return classfeatures;
-    }
 	
     /** FEATS **/
 
@@ -336,6 +318,15 @@ export class ActionHandlerSw5e extends ActionHandler {
         let feats = this._categoriseFeats(tokenId, actor, sortedFeats);
     
         return feats;
+    }
+	
+    /** @private */
+    _getClassFeaturesList(actor, tokenId) {
+        let validClassfeature = this._filterLongerActions(actor.data.items.filter(i => i.type == 'classfeature'));
+	    let sortedClassfeature = this._sortByItemSort(validClassfeature);
+        let classfeatures = this._categoriseFeats(tokenId, actor, sortedClassfeature);
+    
+        return classfeatures;
     }
     
     /** @private */
