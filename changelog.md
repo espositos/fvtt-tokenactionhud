@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.10.36] 2020-02-21
+## [0.10.37] 2020-02-21
 ### Bugfix
 - PF2E spells correctly categorise by heightened spell level (if necessary)
 
