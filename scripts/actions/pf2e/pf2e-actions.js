@@ -364,13 +364,17 @@ export class ActionHandlerPf2e extends ActionHandler {
         let result = Object.values(spells);
 
         result.sort((a,b) => {
-            if (a.data.data.level.value === b.data.data.level.value)
+            if (this._getSpellLevel(a) === this._getSpellLevel(b))
                 return a.name.toUpperCase().localeCompare(b.name.toUpperCase(), undefined, {sensitivity: 'base'});
-            return a.data.data.level.value - b.data.data.level.value;
+            return this._getSpellLevel(a) - this._getSpellLevel(b);
         });
 
         return result;
     }    
+
+    _getSpellLevel(spellItem) {
+        return !!spellItem.data.data.heightenedLevel?.value ? parseInt(spellItem.data.data.heightenedLevel.value) : parseInt(spellItem.data.data.level.value);
+    }
     
     /** @private */
     _categoriseSpells(actor, tokenId, spells) {
@@ -440,7 +444,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         })
 
         spells.forEach( function(s) {
-            var level = s.data.data.level.value;
+            var level = this._getSpellLevel(s);
             var spellbookId = s.data.data.location?.value;
 
             let spellbook;

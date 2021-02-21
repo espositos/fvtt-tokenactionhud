@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.10.36] 2020-02-21
+### Bugfix
+- PF2E spells correctly categorise by heightened spell level (if necessary)
+
 ## [0.10.36] 2020-02-20
 ### Added
 - SW5e conditions thanks to Therasin/Zasshem
