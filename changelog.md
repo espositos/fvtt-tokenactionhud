@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.0] 2020-02-23
+### Note
+- Getting tired of 0.10.*
+
+### Changed
+- PF1E untrained skills are no longer shown
+
 ## [0.10.37] 2020-02-21
 ### Bugfix
 - PF2E spells correctly categorise by heightened spell level (if necessary)
