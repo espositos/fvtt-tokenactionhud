@@ -4,6 +4,9 @@
 ### Note
 - Getting tired of 0.10.*
 
+### Bugfix
+- DnD5e - should no longer break when encountering custom skills.
+
 ### Changed
 - PF1E untrained skills are no longer shown
 
