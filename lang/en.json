@@ -167,6 +167,8 @@
     "tokenactionhud.settings.scale.name": "HUD scale",
     "tokenactionhud.settings.dropdown.name": "Dropdown Categories",
     "tokenactionhud.settings.dropdown.hint": "If enabled, sets categories to drop down, otherwise uses a (warning!) half-assed drop-up implementation. Feel free to report any bugs.",
+    "tokenactionhud.settings.activeCssAsText.name": "Mark Active CSS with Text",
+    "tokenactionhud.settings.activeCssAsText.hint": "If enabled, buttons that can be active will also be marked with an asterisk to indicate their activity. Inactive buttons will have no asterisk.",
     "tokenactionhud.settings.renderItemOnRightClick.name": "Show Item Sheet on right-click",
     "tokenactionhud.settings.renderItemOnRightClick.hint": "If enabled, right-clicking on an item in the HUD will bring up the item's sheet (possibly conflicts with other settings that use right-click).",
     "tokenactionhud.settings.alwaysShowHud.name": "Always display HUD",

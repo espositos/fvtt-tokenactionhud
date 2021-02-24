@@ -348,3 +348,7 @@
 .tah-action .active {
     background: rgba(85, 17, 0, 0.7);
 }
+
+.tah-action .activeText:after {
+    content: '*'
+}
