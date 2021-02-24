@@ -1,3 +1,5 @@
+import * as settings from '../settings.js';
+
 export function registerHandlerbars() {
     Handlebars.registerHelper('cap', function(string) {
         if (!string || string.length < 1)
@@ -31,6 +33,14 @@ export function registerHandlerbars() {
             default:
                 return options.inverse(this);
         }
+    });
+    
+    Handlebars.registerHelper('activeText', function(block) {
+        if (settings.get('activeCssAsText')) {
+            return block.fn(this);
+        }
+
+        return block.inverse(this);
     });
 
     loadTemplates([

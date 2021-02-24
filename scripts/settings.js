@@ -143,6 +143,16 @@ export const registerSettings = function(app, systemManager, rollHandlers) {
       onChange: value => { updateFunc(value); }
     });
     
+    game.settings.register(appName,'activeCssAsText', {
+        name : game.i18n.localize('tokenactionhud.settings.activeCssAsText.name'),
+        hint : game.i18n.localize('tokenactionhud.settings.activeCssAsText.hint'),
+        scope : 'client',
+        config : true,
+        type : Boolean,
+        default : false,
+        onChange: value => { updateFunc(value); }
+    });
+    
     game.settings.register(appName,'dropdown', {
         name : game.i18n.localize('tokenactionhud.settings.dropdown.name'),
         hint : game.i18n.localize('tokenactionhud.settings.dropdown.hint'),

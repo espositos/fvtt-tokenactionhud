@@ -1,6 +1,10 @@
 # Changelog
 
-## [1.0.1] 2020-02-23
+## [1.0.2] 2020-02-24
+### Added
+- Setting for marking 'active' buttons with an asterisk for a clearer indication that the button is active
+
+## [1.0.1] 2020-02-24
 ### Changed
 - PF2E Strikes now consume ammo if configured to do so in the sheet
 
