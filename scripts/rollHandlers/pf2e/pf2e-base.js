@@ -277,8 +277,24 @@ export class RollHandlerBasePf2e extends RollHandler {
             default:
                 options = actor.getRollOptions(['all', 'attack-roll']);
                 strike.variants[strikeType]?.roll(event, options);
+                this._consumeAmmo(actor, strike);
                 break;
         }
+    }
+
+    /** @private */
+    _consumeAmmo(actor, strike) {
+        if (!strike.selectedAmmoId)
+            return;
+            
+        const ammo = actor.getOwnedItem(strike.selectedAmmoId);
+
+        if (ammo.quantity < 1) {
+            ui.notifications.error(game.i18n.localize('PF2E.ErrorMessage.NotEnoughAmmo'));
+            return;
+        }
+            
+        ammo.consume();
     }
 
     /** @private */

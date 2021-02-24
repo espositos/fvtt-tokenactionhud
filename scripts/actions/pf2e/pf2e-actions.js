@@ -246,7 +246,7 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
-    _addStrikesCategories(actor, tokenId, category, info) {
+    _addStrikesCategories(actor, tokenId, category) {
         let macroType = 'strike';
         let strikes = actor.data.data.actions?.filter(a => a.type === macroType);
         if (actor.data.type === 'character')
@@ -285,17 +285,27 @@ export class ActionHandlerPf2e extends ActionHandler {
 
             variantsMap[0].img = s.imageUrl;
             subcategory.actions = this._produceActionMap(tokenId, variantsMap, macroType);
+            subcategory.info1 = this._getStrikeInfo(actor, s);
             
             let damageEncodedValue = [macroType, tokenId, encodeURIComponent(s.name+'>damage')].join(this.delimiter);
             let critEncodedValue = [macroType, tokenId, encodeURIComponent(s.name+'>critical')].join(this.delimiter);
             subcategory.actions.push({name: this.i18n('tokenactionhud.damage'), encodedValue: damageEncodedValue, id: encodeURIComponent(s.name+'>damage')})
             subcategory.actions.push({name: this.i18n('tokenactionhud.critical'), encodedValue: critEncodedValue, id: encodeURIComponent(s.name+'>critical')})
-            
-            if (info)
-                subcategory.info1 = info;
-                
+                            
             this._combineSubcategoryWithCategory(category, s.name, subcategory);
         });
+    }
+
+    /** @private */
+    _getStrikeInfo(actor, strike) {
+        if (!strike.selectedAmmoId)
+            return;
+        
+        const ammo = actor.getOwnedItem(strike.selectedAmmoId);
+
+        if (!!ammo?.quantity) {
+            return `${ammo.name}, ${ammo.quantity}`;
+        }
     }
 
     /** @private */
