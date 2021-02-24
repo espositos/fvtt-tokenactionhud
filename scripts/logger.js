@@ -1,10 +1,10 @@
 export class Logger {
     static info(...args) {
-        console.log("Token Action HUD |", ...args)
+        console.log("Token Action HUD info |", ...args)
     }
 
     static error(...args) {
-        console.error("Token Action HUD |", ...args)
+        console.error("Token Action HUD error |", ...args)
     }
 
     static debug(...args) {
