@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.1] 2020-02-23
+### Changed
+- PF2E Strikes now consume ammo if configured to do so in the sheet
+
 ## [1.0.0] 2020-02-23
 ### Note
 - Getting tired of 0.10.*
