@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.3] 2020-02-27
+### Bugfix
+- PF1 Show skills that do not require training 
+
 ## [1.0.2] 2020-02-24
 ### Added
 - Setting for marking 'active' buttons with an asterisk for a clearer indication that the button is active
