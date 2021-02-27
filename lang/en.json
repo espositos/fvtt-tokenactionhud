@@ -155,7 +155,6 @@
     "tokenactionhud.wounds": "Wounds",
     "tokenactionhud.woundsAndFatigue": "Wounds/Fatigue",
 
-    //Settings
     "tokenactionhud.settings.activeCssAsText.name": "Mark Active CSS with Text",
     "tokenactionhud.settings.activeCssAsText.hint": "If enabled, buttons that can be active will also be marked with an asterisk to indicate their activity. Inactive buttons will have no asterisk.",
     "tokenactionhud.settings.alwaysShowAdditionalCategories.hint": "If enabled, custom categories will be shown even when no token is selected.",
@@ -188,7 +187,6 @@
     "tokenactionhud.settings.showIcons.hint": "If enabled, the action image will be displayed on the HUD button where available.",
     "tokenactionhud.settings.showIcons.name": "Show action icons",
 
-    //System Specific
     "tokenactionhud.settings.demonlord.attackoptions": "Attack Options",
     "tokenactionhud.settings.demonlord.challenge": "Challenge Roll",
     "tokenactionhud.settings.demonlord.rest": "Rest",
@@ -253,5 +251,5 @@
     "tokenactionhud.settings.swade.abbreviateAttributes.name": "Abbreviate skill and ability names",
 
     "tokenactionhud.settings.wfrp.meleeSkillPrefix" : "Melee",
-    "tokenactionhud.settings.wfrp.rangedSkillPrefix" : "Ranged",
+    "tokenactionhud.settings.wfrp.rangedSkillPrefix" : "Ranged"
   }
