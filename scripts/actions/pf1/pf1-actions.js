@@ -441,7 +441,8 @@ export class ActionHandlerPf1 extends ActionHandler {
             let id = e[0];
             let data = e[1];
 
-            if (!data.rank) {
+            // rt: requires training
+            if (data.rt && !data.rank) {
                 return null;
             }
 
