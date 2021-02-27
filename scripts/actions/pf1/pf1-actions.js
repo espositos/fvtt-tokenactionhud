@@ -458,6 +458,7 @@ export class ActionHandlerPf1 extends ActionHandler {
             let info1 = this._getSkillRankInfo(data.rank);
             return { name: name, id: id, encodedValue: encodedValue, info1: info1 }; 
         }).filter(s => !!s);
+        
         let skillsCategory = this.initializeEmptySubcategory();
         skillsCategory.actions = skillsActions;
 
