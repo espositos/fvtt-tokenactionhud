@@ -248,5 +248,8 @@
     "tokenactionhud.wfrp.rangedSkillPrefix": "Ranged",
     "tokenactionhud.settings.swade.abbreviateAttributes.name": "Abbreviate skill and ability names",
     "tokenactionhud.settings.swade.abbreviateAttributes.hint": "If enabled, skills and abilities will use a three-character abbreviation.",
-    "tokenactionhud.d35e.grapple": "Grapple"
+    "tokenactionhud.d35e.grapple": "Grapple",
+
+    "tokenactionhud.symbaroum.abilities": "Abilities",
+    "tokenactionhud.symbaroum.mysticalPowers": "Mystical Powers"
 }

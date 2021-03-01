@@ -191,5 +191,8 @@
   "tokenactionhud.attribute.perception": "Perception",
 
   "tokenactionhud.wfrp.meleeSkillPrefix" : "Broń Biała",
-  "tokenactionhud.wfrp.rangedSkillPrefix" : "Broń Zasięgowa"
+  "tokenactionhud.wfrp.rangedSkillPrefix" : "Broń Zasięgowa",
+
+  "tokenactionhud.symbaroum.abilities": "Abilities",
+  "tokenactionhud.symbaroum.mysticalPowers": "Mystical Powers"
 } 

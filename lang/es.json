@@ -115,5 +115,8 @@
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Si está activo, y el usuario es un DJ, el HUD incluirá los movimientos del DJ, las tablas aleatorias de tesoro y las cartas.",
 
     "tokenactionhud.wfrp.meleeSkillPrefix" : "Melee",
-    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged"
+    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged",
+
+    "tokenactionhud.symbaroum.abilities": "Abilities",
+    "tokenactionhud.symbaroum.mysticalPowers": "Mystical Powers"
 }

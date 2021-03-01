@@ -166,5 +166,8 @@
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "활성화 했을 때 사용자가 GM인 경우 HUD바에 GM 이동, 전리품 굴림표, 차트가 포함된다.",
 
     "tokenactionhud.wfrp.meleeSkillPrefix" : "Melee",
-    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged"
+    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged",
+
+    "tokenactionhud.symbaroum.abilities": "Abilities",
+    "tokenactionhud.symbaroum.mysticalPowers": "Mystical Powers"
 }

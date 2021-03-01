@@ -251,5 +251,8 @@
     "tokenactionhud.settings.swade.abbreviateAttributes.name": "Abbreviate skill and ability names",
 
     "tokenactionhud.settings.wfrp.meleeSkillPrefix" : "Melee",
-    "tokenactionhud.settings.wfrp.rangedSkillPrefix" : "Ranged"
+    "tokenactionhud.settings.wfrp.rangedSkillPrefix" : "Ranged",
+
+    "tokenactionhud.symbaroum.abilities": "Abilities",
+    "tokenactionhud.symbaroum.mysticalPowers": "Mystical Powers"
   }

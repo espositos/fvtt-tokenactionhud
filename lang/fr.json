@@ -135,5 +135,8 @@
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Si activé, et que l'utilisateur est MJ, la barre HUD inclura les actions de MJ, les tables aléatoires et les graphiques.",
 
     "tokenactionhud.wfrp.meleeSkillPrefix" : "Melee",
-    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged"
+    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged",
+
+    "tokenactionhud.symbaroum.abilities": "Talents",
+    "tokenactionhud.symbaroum.mysticalPowers": "Pouvoirs"
   }
