@@ -1,4 +1,5 @@
 import { Logger } from './logger.js';
+import { ItemMacroOptions } from './settings/dnd5e/itemMacroOptions.js';
 export { Logger } from './logger.js';
 
 const updateFunc = (value) => { Logger.debug('Settings updated. Refreshing HUD'); if (game.tokenActionHUD)game.tokenActionHUD.updateSettings(); }
@@ -96,8 +97,13 @@ export const registerSettings = function(app, systemManager, rollHandlers) {
             hint: game.i18n.localize('tokenactionhud.settings.dnd5e.itemMacroReplace.hint'),
             scope: "client",
             config: true,
-            type: Boolean,
-            default: true,
+            type: String,
+            choices: {
+                showBoth: game.i18n.localize(ItemMacroOptions.SHOW_BOTH),
+                showItemMacro: game.i18n.localize(ItemMacroOptions.SHOW_ITEM_MACRO),
+                showOriginal: game.i18n.localize(ItemMacroOptions.SHOW_ORIGINAL_ITEM)
+            },
+            default: 'showBoth',
             onChange: value => { updateFunc(value); }
         });
     }
@@ -115,6 +121,41 @@ export const registerSettings = function(app, systemManager, rollHandlers) {
     game.settings.register(appName,'renderItemOnRightClick', {
         name : game.i18n.localize('tokenactionhud.settings.renderItemOnRightClick.name'),
         hint : game.i18n.localize('tokenactionhud.settings.renderItemOnRightClick.hint'),
+        scope : 'client',
+        config : true,
+        type : Boolean,
+        default : true,
+        onChange: value => { updateFunc(value); }
+    });
+
+    game.settings.register(appName, 'scale', {
+      name: game.i18n.localize('tokenactionhud.settings.scale.name'),
+      hint: game.i18n.localize('tokenactionhud.settings.scale.hint'),
+      scope: 'client',
+      config: true,
+      type: Number,
+      range: {     
+        min: 0.8,
+        max: 2,
+        step: 0.1
+      },
+      default: 1,
+      onChange: value => { updateFunc(value); }
+    });
+    
+    game.settings.register(appName,'activeCssAsText', {
+        name : game.i18n.localize('tokenactionhud.settings.activeCssAsText.name'),
+        hint : game.i18n.localize('tokenactionhud.settings.activeCssAsText.hint'),
+        scope : 'client',
+        config : true,
+        type : Boolean,
+        default : false,
+        onChange: value => { updateFunc(value); }
+    });
+    
+    game.settings.register(appName,'dropdown', {
+        name : game.i18n.localize('tokenactionhud.settings.dropdown.name'),
+        hint : game.i18n.localize('tokenactionhud.settings.dropdown.hint'),
         scope : 'client',
         config : true,
         type : Boolean,

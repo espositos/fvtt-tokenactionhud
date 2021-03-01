@@ -19,33 +19,39 @@ export class CategoryResizer {
         
         // reset content to original width
         let contentDefaultWidth = 300;
-        let minPossibleWidth = 200;
+        let minWidth = 200;
         CategoryResizer.resizeActions(actions, contentDefaultWidth);
 
-        let changeStep = 30;
+        let step = 30;
         
         let bottomLimit = $(document).find('#hotbar').offset().top - 20;
         let rightLimit = $(document).find('#sidebar').offset().left - 20;
 
         let maxRequiredWidth = CategoryResizer.calculateMaxRequiredWidth(actions);
         while (CategoryResizer.shouldIncreaseWidth(content, actions, maxRequiredWidth, bottomLimit, rightLimit, isOneLineFit)) {
-            let actionRect = actions[0].getBoundingClientRect();
-            let actionWidth = actionRect.width;
+            let box = actions[0].getBoundingClientRect();
+            let boxWidth = box.width;
+            let cssWidth = actions.width();
+
+            if (boxWidth > maxRequiredWidth)
+                return;
             
-            let newWidth = actionWidth + changeStep;
+            let newWidth = cssWidth + step;
             
-            CategoryResizer.resizeActions(actions, newWidth);          
+            CategoryResizer.resizeActions(actions, newWidth);
         }
 
-        while (CategoryResizer.shouldShrinkWidth(content, actions, minPossibleWidth, bottomLimit, rightLimit, isOneLineFit)) {
-            let actionRect = actions[0].getBoundingClientRect();
-            let actionWidth = actionRect.width;
+        let priorWidth;
+        while (CategoryResizer.shouldShrinkWidth(content, actions, minWidth, bottomLimit, rightLimit, isOneLineFit)) {
+            let box = actions[0].getBoundingClientRect();
+            let boxWidth = box.width;
+            let cssWidth = actions.width();
 
-            if (actionWidth < minPossibleWidth)
+            if (boxWidth < minWidth)
                 return;
 
-            let newWidth = actionWidth - changeStep;
-            
+            let newWidth = cssWidth - step;
+
             CategoryResizer.resizeActions(actions, newWidth); 
         }
     }

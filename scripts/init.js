@@ -80,6 +80,7 @@ Hooks.on('canvasReady', async () => {
     });
     
     Hooks.on('renderTokenActionHUD', () => {
+        game.tokenActionHUD.applySettings();
         game.tokenActionHUD.trySetPos();
     });
 

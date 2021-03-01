@@ -1,5 +1,55 @@
 # Changelog
 
+## [1.0.3] 2020-02-27
+### Bugfix
+- PF1 Show skills that do not require training 
+
+## [1.0.2] 2020-02-24
+### Added
+- Setting for marking 'active' buttons with an asterisk for a clearer indication that the button is active
+
+## [1.0.1] 2020-02-24
+### Changed
+- PF2E Strikes now consume ammo if configured to do so in the sheet
+
+## [1.0.0] 2020-02-23
+### Note
+- Getting tired of 0.10.*
+
+### Bugfix
+- DnD5e - should no longer break when encountering custom skills.
+
+### Changed
+- PF1E untrained skills are no longer shown
+
+## [0.10.37] 2020-02-21
+### Bugfix
+- PF2E spells correctly categorise by heightened spell level (if necessary)
+
+## [0.10.36] 2020-02-20
+### Added
+- SW5e conditions thanks to Therasin/Zasshem
+
+## [0.10.35] 2020-02-18
+### Changed
+- Add new options for the Item Macro to choose between keeping the original item, only the item macro item, or showing both.
+
+## [0.10.34] 2020-02-18
+### Added
+- SW5e class features thanks to Therasin/Zasshem
+
+## [0.10.33] 2020-02-06
+### Added
+- Option to toggle between drop-up and drop-down categories
+
+## [0.10.32] 2020-02-06
+### Added
+- Added a scale slider to adjust the size of the HUD (thanks to Alexis-Grimm for the suggestion)
+
+## [0.10.31] 2020-02-05
+### Changed
+- Extended Japanese localisation support thanks to touge
+
 ## [0.10.30] 2020-01-27
 ### Bugfix
 - SFRPG fix crew actions

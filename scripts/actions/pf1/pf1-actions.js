@@ -440,6 +440,12 @@ export class ActionHandlerPf1 extends ActionHandler {
         let skillsActions = [...allSkills].map(e => {
             let id = e[0];
             let data = e[1];
+
+            // rt: requires training
+            if (data.rt && !data.rank) {
+                return null;
+            }
+
             let name = abbr ? id : CONFIG.PF1.skills[id];
 
             if (data.isCustomSkill || !name) {
@@ -451,7 +457,8 @@ export class ActionHandlerPf1 extends ActionHandler {
             let encodedValue = [macroType, tokenId, id].join(this.delimiter);
             let info1 = this._getSkillRankInfo(data.rank);
             return { name: name, id: id, encodedValue: encodedValue, info1: info1 }; 
-        });
+        }).filter(s => !!s);
+        
         let skillsCategory = this.initializeEmptySubcategory();
         skillsCategory.actions = skillsActions;
 
