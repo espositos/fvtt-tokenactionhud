@@ -50,12 +50,12 @@ export class ActionHandlerT20 extends ActionHandler {
 		this._combineCategoryWithList(result, itemsTitle, items);
 		this._combineCategoryWithList(result, spellsTitle, spells);
 		this._combineCategoryWithList(result, featsTitle, feats);
-		this._combineCategoryWithList(result, skillsTitle, skills);
+		// this._combineCategoryWithList(result, skillsTitle, skills);
 		
 		let abilitiesTitle = this.i18n('tokenactionhud.abilities');
 		let abilities = this._getAbilityList(tokenId, actor.data.data.atributos, 'atributos', abilitiesTitle, 'atributo');
 			
-		this._combineCategoryWithList(result, abilitiesTitle, abilities);
+		// this._combineCategoryWithList(result, abilitiesTitle, abilities);
 		
 		// this._combineCategoryWithList(result, effectsTitle, effects);
 		// this._combineCategoryWithList(result, conditionsTitle, conditions);
@@ -222,17 +222,18 @@ export class ActionHandlerT20 extends ActionHandler {
 
 			if (!subcategory) {
 				subcategory = this.initializeEmptySubcategory();
-				subcategory.info1 = `${actor.data.data.attributes.pm.value}/${actor.data.data.attributes.pm.max}`;
+				// subcategory.info1 = `${actor.data.data.attributes.pm.value}/${actor.data.data.attributes.pm.max}`;
 			}
 			
 			subcategory.actions.push(spell);
 
-			this._combineSubcategoryWithCategory(book, levelName, subcategory);
+			if (book.subcategories.indexOf(subcategory) < 0)
+					this._combineSubcategoryWithCategory(book, levelName, subcategory);
 			
 			return dispose;
 		}.bind(this), {});
 	
-		let result = this.initializeEmptyCategory('spells');
+		let result = this.initializeEmptyCategory('magias');
 
 		let powersTitle = this.i18n('tokenactionhud.powers');
 		let booksTitle = this.i18n('tokenactionhud.books');
