@@ -2,7 +2,7 @@
   "tokenactionhud.title": "HUD de Ações de Token",
   "tokenactionhud.handlerNotFound": "não encontrado, revertendo as rolagens padrões.",
 
- "tokenactionhud.abilities": "Atributos",
+  "tokenactionhud.abilities": "Atributos",
   "tokenactionhud.actions": "Ações",
   "tokenactionhud.active": "Ativo",
   "tokenactionhud.advanced": "Avançado",
