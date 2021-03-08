@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.4] 2020-03-08
+### Added
+- Tormenta20 - support for Tormenta20 thanks to (mclemente)[https://github.com/mclemente]Show skills that do not require training 
+
 ## [1.0.3] 2020-02-27
 ### Bugfix
 - PF1 Show skills that do not require training 

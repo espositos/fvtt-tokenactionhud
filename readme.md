@@ -2,7 +2,7 @@
 [![ko-fi](https://img.shields.io/badge/-buy%20me%20a%20coffee-%23FF5E5B)](https://ko-fi.com/caret_and_stick) [![patreon](https://img.shields.io/badge/-support%20me%20on%20patreon-%235C5C5C)](https://patreon.com/caret_and_stick)
 
 # Token Action HUD
-This module populates a repositionable HUD showing the most common basic actions for a selected token. Currently the HUD supports DND5e, WFRP4e, Dungeon World, Pathfinder 2E, Pathfinder 1E, Star Wars FFG, Star Wars 5e, Shadow of the Demonlord (thanks to Xacus#7239) and SFRPG (thanks to Rainer#5041).
+This module populates a repositionable HUD showing the most common basic actions for a selected token. Currently the HUD supports DND5e, WFRP4e, Dungeon World, Pathfinder 2E, Pathfinder 1E, Star Wars FFG, Star Wars 5e, Shadow of the Demonlord (thanks to Xacus#7239) and SFRPG (thanks to Rainer#5041), Tormenta20 (thanks to mclemente#5524).
 ![Easy action access](.github/readme/tah-dnd5e.gif)
 
 # Installation
@@ -42,6 +42,7 @@ Offers a variety of settings including support for third-party roll handlers (Pl
 * SotDL
 * PF1
 * Star Wars FFG
+* Tormenta20
 * Any other system? I believe the HUD is modular enough that anyone who understands what the players of their system want and how actions in their system are handled could quickly build it into the HUD. Please contact me if you'd like to add support for your favourite system.
 
 [Developing for your system or module](adding_systems.md)

@@ -39,8 +39,8 @@ export class SystemManagerFactory {
                 return new SwadeSystemManager(appName);
             case 'starwarsffg':
                 return new StarWarsFFGSystemManager(appName);
-						case 'tormenta20':
-								return new Tormenta20SystemManager(appName);
+			case 'tormenta20':
+				return new Tormenta20SystemManager(appName);
         }
     }
 }
