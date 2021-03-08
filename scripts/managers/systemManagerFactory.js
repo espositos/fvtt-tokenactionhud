@@ -11,6 +11,7 @@ import { LancerSystemManager } from './lancer.js';
 import { SwadeSystemManager } from './swade.js';
 import { StarWarsFFGSystemManager } from './starwarsffg.js';
 import { SymbaroumSystemManager } from './symbaroum.js';
+import { Tormenta20SystemManager } from './tormenta20.js';
 
 export class SystemManagerFactory {
     static create(system, appName) {
@@ -41,6 +42,8 @@ export class SystemManagerFactory {
                 return new StarWarsFFGSystemManager(appName);
             case 'symbaroum':
                 return new SymbaroumSystemManager(appName);
+			case 'tormenta20':
+				return new Tormenta20SystemManager(appName);
         }
     }
 }
