@@ -131,7 +131,7 @@ export class RollHandlerBaseSw5e extends RollHandler {
                 token.toggleVisibility();
                 break;
             case 'deathSave':
-                actor.rollDeathSave();
+                actor.rollDeathSave({event});
                 break;
         }
     }
