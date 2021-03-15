@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.6] 2020-03-15
+### Added
+- Start of DE localization thanks to ksingvo
+
 ## [1.0.5] 2020-03-12
 ### Bugfix
 - SW5e fix from baccalla death save roll
