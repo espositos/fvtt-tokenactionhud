@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.7] 2020-03-16
+### Added
+- PF1E - support for BAB, Ranged, and Melee rolls
+
 ## [1.0.6] 2020-03-15
 ### Added
 - Start of DE localization thanks to ksingvo
