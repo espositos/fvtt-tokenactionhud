@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.6] 2020-03-16
+### Added
+- Start of DE localization thanks to ksingvo
+- PF1E - support for BAB, Ranged, and Melee rolls
+
 ## [1.0.5] 2020-03-12
 ### Bugfix
 - SW5e fix from baccalla death save roll
