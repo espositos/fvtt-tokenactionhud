@@ -1,3 +1,4 @@
+import { BitDSystemManager } from './bitd.js';
 import { Dnd5eSystemManager } from './dnd5e.js';
 import { DemonlordSystemManager } from './demonlord.js';
 import { DungeonWorldSystemManager } from './dungeonworld.js';
@@ -15,6 +16,8 @@ import { Tormenta20SystemManager } from './tormenta20.js';
 export class SystemManagerFactory {
     static create(system, appName) {
         switch(system) {
+            case 'blades-in-the-dark':
+                return new BitDSystemManager(appName);
             case 'demonlord':
                 return new DemonlordSystemManager(appName);
             case 'dnd5e':
