@@ -1,6 +1,10 @@
 # Changelog
 
-## [1.0.6] 2020-03-17
+## [1.0.8] 2020-03-17
+### Changed
+- PF2E - Show when no ammunition is chosen
+
+## [1.0.7] 2020-03-17
 ### Changed
 - PF2E - Show ammunition for strikes as an additional button that does nothing
 
