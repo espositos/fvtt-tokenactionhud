@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.9] 2020-03-17
+### Bugfix
+- SW5e fix for type error thanks to Zasshem
+### Added
+- Blades in the Dark support - Thanks to DarkWizarD24 
+
 ## [1.0.8] 2020-03-17
 ### Changed
 - PF2E - Show when no ammunition is chosen
