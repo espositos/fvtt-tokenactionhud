@@ -308,7 +308,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         const item = actor.getOwnedItem(strike.selectedAmmoId);
 
         if (!item) {
-            return;
+            return {name: this.i18n('tokenactionhud.noammo'), encodedValue: 'noammo', id: 'noammo'};
         }
 
         let encodedValue = ['ammo', tokenId, item._id].join(this.delimiter);
