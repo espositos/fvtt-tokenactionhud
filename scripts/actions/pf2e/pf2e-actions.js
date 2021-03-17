@@ -285,27 +285,38 @@ export class ActionHandlerPf2e extends ActionHandler {
 
             variantsMap[0].img = s.imageUrl;
             subcategory.actions = this._produceActionMap(tokenId, variantsMap, macroType);
-            subcategory.info1 = this._getStrikeInfo(actor, s);
             
             let damageEncodedValue = [macroType, tokenId, encodeURIComponent(s.name+'>damage')].join(this.delimiter);
             let critEncodedValue = [macroType, tokenId, encodeURIComponent(s.name+'>critical')].join(this.delimiter);
             subcategory.actions.push({name: this.i18n('tokenactionhud.damage'), encodedValue: damageEncodedValue, id: encodeURIComponent(s.name+'>damage')})
             subcategory.actions.push({name: this.i18n('tokenactionhud.critical'), encodedValue: critEncodedValue, id: encodeURIComponent(s.name+'>critical')})
-                            
+            
+            let ammoAction = this._ammoInfo(tokenId, actor, s);
+            if (!!ammoAction) {
+                subcategory.actions.push(ammoAction);   
+            }
+            
             this._combineSubcategoryWithCategory(category, s.name, subcategory);
         });
     }
 
     /** @private */
-    _getStrikeInfo(actor, strike) {
+    _ammoInfo(tokenId, actor, strike) {
         if (!strike.selectedAmmoId)
             return;
         
-        const ammo = actor.getOwnedItem(strike.selectedAmmoId);
+        const item = actor.getOwnedItem(strike.selectedAmmoId);
 
-        if (!!ammo?.quantity) {
-            return `${ammo.name}, ${ammo.quantity}`;
+        if (!item) {
+            return;
         }
+
+        let encodedValue = ['ammo', tokenId, item._id].join(this.delimiter);
+        let img = this._getImage(item);
+        let action = { name: item.name, encodedValue: encodedValue, id: item._id, img: img };
+        action.info1 = item.data.data.quantity?.value
+
+        return action;
     }
 
     /** @private */

@@ -19,7 +19,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         let tokenId = payload[1];
         let actionId = payload[2];
 
-        let renderable = ['item', 'feat', 'action', 'lore'];
+        let renderable = ['item', 'feat', 'action', 'lore', 'ammo'];
         if (renderable.includes(macroType) && this.isRenderItem())
             return this.doRenderItem(tokenId, actionId);
 
