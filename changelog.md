@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.10] 2020-03-28
+### Bugfix
+- PF2E Fix NPC saves thanks to itrase
+
 ## [1.0.9] 2020-03-17
 ### Bugfix
 - SW5e fix for type error thanks to Zasshem
