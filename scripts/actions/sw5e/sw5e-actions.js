@@ -182,8 +182,6 @@ export class ActionHandlerSw5e extends ActionHandler {
     _getPowersList(actor, tokenId) {
         let validPowers = this._filterLongerActions(actor.data.items.filter(i => i.type === 'power'));
         validPowers = this._filterExpendedItems(validPowers);
-        
-        validPowers = this._filterNonpreparedSpells(validPowers);
 
         let powersSorted = this._sortPowersByLevel(validPowers);
         let powers = this._categorisePowers(actor, tokenId, powersSorted);
@@ -215,20 +213,12 @@ export class ActionHandlerSw5e extends ActionHandler {
             return b[0].toUpperCase().localeCompare(a[0].toUpperCase(), undefined, {sensitivity: 'base'});
         });
 
-        // Go through spells and if higher available slots exist, mark spell slots available at lower levels.
-        var pactInfo = powerSlotInfo.find(s => s[0] === 'pact');
-        
+        // Go through spells and if higher available slots exist, mark spell slots available at lower levels.        
         var slotsAvailable = false;
         powerSlotInfo.forEach(s => {
-            if (s[0].startsWith('spell')) {
+            if (s[0].startsWith('power')) {
                 if (!slotsAvailable && s[1].max > 0 && s[1].value > 0)
                     slotsAvailable = true;
-
-                if (!slotsAvailable && s[0] === 'spell'+pactInfo[1]?.level) {
-                    if (pactInfo[1].max > 0 && pactInfo[1].value > 0)
-                        slotsAvailable = true;
-                }
-    
                 s[1].slotsAvailable = slotsAvailable;
             } else {
                 if (!s[1])
@@ -237,12 +227,6 @@ export class ActionHandlerSw5e extends ActionHandler {
                 s[1].slotsAvailable = !s[1].max || s[1].value > 0;
             }
         })
-
-        let pactIndex = powerSlotInfo.findIndex(p => p[0] ==='pact');
-        if (!powerSlotInfo[pactIndex][1].slotsAvailable) {
-            var pactSpellEquivalent = powerSlotInfo.findIndex(s => s[0] === 'spell'+pactInfo[1].level);
-            powerSlotInfo[pactIndex][1].slotsAvailable = powerSlotInfo[pactSpellEquivalent][1].slotsAvailable;
-        }
 
         let dispose = powers.reduce(function (dispose, p) {
             let prep = p.data.preparation.mode;

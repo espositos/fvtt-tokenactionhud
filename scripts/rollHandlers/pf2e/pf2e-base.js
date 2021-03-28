@@ -19,7 +19,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         let tokenId = payload[1];
         let actionId = payload[2];
 
-        let renderable = ['item', 'feat', 'action', 'lore'];
+        let renderable = ['item', 'feat', 'action', 'lore', 'ammo'];
         if (renderable.includes(macroType) && this.isRenderItem())
             return this.doRenderItem(tokenId, actionId);
 
@@ -242,8 +242,8 @@ export class RollHandlerBasePf2e extends RollHandler {
 
     /** @private */
     _rollSaveNpc(event, actor, actionId) {
-        actor.rollSave(event, actionId);
-    }
+        actor.data.data.saves[actionId].roll(event);
+        }
 
     async _updateRollMode(rollMode) {
         await game.settings.set('core', 'rollMode', rollMode);

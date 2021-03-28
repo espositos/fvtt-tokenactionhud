@@ -39,6 +39,15 @@ export class RollHandlerBasePf1 extends RollHandler {
             case 'cmb':
                 this.rollCmbMacro(event, tokenId, actionId);
                 break;
+            case 'melee':
+                this.rollMeleeAttackMacro(event, tokenId, actionId);
+                break;
+            case 'ranged':
+                this.rollRangedAttackMacro(event, tokenId, actionId);
+                break;
+            case 'bab':
+                this.rollBAB(event, tokenId, actionId);
+                break;
             case 'skill':
                 this.rollSkillMacro(event, tokenId, actionId);
                 break;
@@ -77,6 +86,21 @@ export class RollHandlerBasePf1 extends RollHandler {
     rollCmbMacro(event, tokenId, checkId) {
         const actor = super.getActor(tokenId);
         actor.rollCMB(event);
+    }
+
+    rollMeleeAttackMacro(event, tokenId, checkId) {
+        const actor = super.getActor(tokenId);
+        actor.rollAttack({ event: event, melee: true });
+    }
+
+    rollRangedAttackMacro(event, tokenId, checkId) {
+        const actor = super.getActor(tokenId);
+        actor.rollAttack({ event: event, melee: false });
+    }
+
+    rollBAB(event, tokenId, checkId) {
+        const actor = super.getActor(tokenId);
+        actor.rollBAB({ event: event });
     }
 
     rollConcentrationMacro(event, tokenId, checkId) {

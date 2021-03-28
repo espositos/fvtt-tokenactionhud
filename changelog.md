@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.0.10] 2020-03-28
+### Bugfix
+- PF2E Fix NPC saves thanks to itrase
+
+## [1.0.9] 2020-03-17
+### Bugfix
+- SW5e fix for type error thanks to Zasshem
+### Added
+- Blades in the Dark support - Thanks to DarkWizarD24 
+
+## [1.0.8] 2020-03-17
+### Changed
+- PF2E - Show when no ammunition is chosen
+
+## [1.0.7] 2020-03-17
+### Changed
+- PF2E - Show ammunition for strikes as an additional button that does nothing
+
+## [1.0.6] 2020-03-16
+### Added
+- Start of DE localization thanks to ksingvo
+- PF1E - support for BAB, Ranged, and Melee rolls
+
 ## [1.0.5] 2020-03-12
 ### Bugfix
 - SW5e fix from baccalla death save roll
