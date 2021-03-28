@@ -242,8 +242,8 @@ export class RollHandlerBasePf2e extends RollHandler {
 
     /** @private */
     _rollSaveNpc(event, actor, actionId) {
-        actor.rollSave(event, actionId);
-    }
+        actor.data.data.saves[actionId].roll(event);
+        }
 
     async _updateRollMode(rollMode) {
         await game.settings.set('core', 'rollMode', rollMode);
