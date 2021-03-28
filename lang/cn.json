@@ -244,6 +244,8 @@
     "tokenactionhud.settings.pf2e.separateTogglesCategory.hint": "If enabled, rule toggles will be placed in their own category, otherwise they will fall under strikes.",
     "tokenactionhud.settings.pf2e.showOldNpcStrikes.name": "Show old NPC Strikes",
     "tokenactionhud.settings.pf2e.showOldNpcStrikes.hint": "If enabled, the HUD will show the old NPC strike actions as well as the new (experimental) strikes for NPCs.",
+    "tokenactionhud.symbaroum.abilities": "Abilities",
+    "tokenactionhud.symbaroum.mysticalPowers": "Mystical Powers",
     "tokenactionhud.wfrp.meleeSkillPrefix": "Melee",
     "tokenactionhud.wfrp.rangedSkillPrefix": "Ranged",
     "tokenactionhud.settings.swade.abbreviateAttributes.name": "Abbreviate skill and ability names",

@@ -11,8 +11,8 @@ import { Wfrp4eSystemManager } from './wfrp4e.js';
 import { LancerSystemManager } from './lancer.js';
 import { SwadeSystemManager } from './swade.js';
 import { StarWarsFFGSystemManager } from './starwarsffg.js';
-import { SymbaroumSystemManager } from './symbaroum.js';
 import { Tormenta20SystemManager } from './tormenta20.js';
+import { SymbaroumSystemManager } from './symbaroum.js';
 
 export class SystemManagerFactory {
     static create(system, appName) {
@@ -43,10 +43,10 @@ export class SystemManagerFactory {
                 return new SwadeSystemManager(appName);
             case 'starwarsffg':
                 return new StarWarsFFGSystemManager(appName);
+			      case 'tormenta20':
+				        return new Tormenta20SystemManager(appName);
             case 'symbaroum':
                 return new SymbaroumSystemManager(appName);
-			case 'tormenta20':
-				return new Tormenta20SystemManager(appName);
         }
     }
 }
