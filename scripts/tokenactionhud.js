@@ -9,6 +9,8 @@ export class TokenActionHUD extends Application {
     tokens = null;
     rendering = false;
     categoryHovered = '';
+    defaultLeftPos = 150;
+    defaultTopPos = 80;
 
     constructor(systemManager) {
         super();
@@ -57,13 +59,25 @@ export class TokenActionHUD extends Application {
         });
     }
 
+    getScale() {
+        const scale = parseFloat(settings.get('scale'));
+        
+        if (scale < 0.8)
+            return 0.8;
+
+        if (scale > 2)
+            return 2;
+
+        return scale;
+    }
+
     /** @override */
     getData(options = {}) {
-        let hovering = settings.get('onTokenHover');
         const data = super.getData();
         data.actions = this.targetActions;
         data.id = 'token-action-hud';
-        data.hovering = hovering;
+        data.hovering = settings.get('onTokenHover');;
+        data.scale = this.getScale();
         settings.Logger.debug('HUD data:', data);
         return data;
     }
@@ -235,6 +249,15 @@ export class TokenActionHUD extends Application {
         $(document).find('.tah-filterholder').parents('.tah-subcategory').css('cursor', 'pointer');
     }
 
+    applySettings() {
+        if (!settings.get('dropdown')) {
+            $(document).find('.tah-content').css({
+                    'bottom': '40px',
+                    'flex-direction': 'column-reverse'
+                });
+        }
+    }
+
     // Positioning
     trySetPos() {
         if (!(this.targetActions && this.targetActions.tokenId))
@@ -260,14 +283,16 @@ export class TokenActionHUD extends Application {
             return;
 
         let pos = game.user.data.flags['token-action-hud'].hudPos;
+        let defaultLeftPos = this.defaultLeftPos;
+        let defaultTopPos = this.defaultTopPos;
 
         return new Promise(resolve => {
             function check() {
                 let elmnt = document.getElementById('token-action-hud')
                 if (elmnt) {
                     elmnt.style.bottom = null;
-                    elmnt.style.top = (pos.top) + 'px';
-                    elmnt.style.left = (pos.left) + 'px';
+                    elmnt.style.top = pos.top < 5 || pos.top > window.innerHeight + 5 ? (defaultTopPos) + 'px' : (pos.top) + 'px';
+                    elmnt.style.left = pos.left < 5 || pos.left > window.innerWidth + 5 ? (defaultLeftPos) + 'px': (pos.left) + 'px';
                     elmnt.style.position = 'fixed';
                     elmnt.style.zIndex = 100;
                 resolve();

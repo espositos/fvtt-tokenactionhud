@@ -1,6 +1,5 @@
 import {ActionHandler} from '../actionHandler.js';
 import * as settings from '../../settings.js';
-import { CompendiumHelper } from '../categories/compendiumHelper.js';
 
 export class ActionHandlerSymbaroum extends ActionHandler {
     constructor (filterManager, categoryManager) {

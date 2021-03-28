@@ -25,6 +25,7 @@
     "tokenactionhud.equipment": "Equipement",
     "tokenactionhud.magicItems": "Objets Magiques",
     "tokenactionhud.feats": "Dons",
+	"tokenactionhud.classFeatures": "Capacités de classe",
     "tokenactionhud.features": "Capacités",
     "tokenactionhud.free": "Libre",
     "tokenactionhud.inconsumables": "Non consommables",
@@ -137,5 +138,8 @@
     "tokenactionhud.symbaroum.mysticalPowers": "Pouvoirs",
 
     "tokenactionhud.wfrp.meleeSkillPrefix" : "Melee",
-    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged"
+    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged",
+
+    "tokenactionhud.symbaroum.abilities": "Talents",
+    "tokenactionhud.symbaroum.mysticalPowers": "Pouvoirs"
   }

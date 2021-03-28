@@ -134,16 +134,36 @@ export class ActionHandlerPf1 extends ActionHandler {
         
         let result = this.initializeEmptyCategory('attacks');
 
-        let cmbCat = this.initializeEmptySubcategory();
         let cmbMacro = 'cmb';
-        let name = this.i18n('tokenactionhud.cmb');
-        let encodedValue = [cmbMacro, tokenId, cmbMacro].join(this.delimiter);
-        let cmbAction = [{ name: name, encodedValue: encodedValue, id: cmbMacro }]
-        cmbCat.actions = cmbAction;
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.cmb'), cmbCat);
+        let cmbName = this.i18n('tokenactionhud.cmb');
+        let cmbValue = [cmbMacro, tokenId, cmbMacro].join(this.delimiter);
+        let cmbAction = { name: cmbName, encodedValue: cmbValue, id: cmbMacro }
+        
+        let babMacro = 'bab';
+        let babName = this.i18n('tokenactionhud.bab');
+        let babValue = [babMacro, tokenId, babMacro].join(this.delimiter);
+        let babAction = { name: babName, encodedValue: babValue, id: babMacro }
+        
+        let bonusCat = this.initializeEmptySubcategory();
+        bonusCat.actions = Array.of(cmbAction, babAction);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.bonuses'), bonusCat);
+                    
+        let meleeMacro = 'melee';
+        let meleeName = this.i18n('tokenactionhud.melee');
+        let meleeValue = [meleeMacro, tokenId, meleeMacro].join(this.delimiter);
+        let meleeAction = { name: meleeName, encodedValue: meleeValue, id: meleeMacro }
+        
+        let rangedMacro = 'ranged';
+        let rangedName = this.i18n('tokenactionhud.ranged');
+        let rangedValue = [rangedMacro, tokenId, rangedMacro].join(this.delimiter);
+        let rangedAction = { name: rangedName, encodedValue: rangedValue, id: rangedMacro }
 
         let weaponActions = sortedAttacks.map(w => this._buildItem(tokenId, actor, macroType, w));
         let weaponsCat = this.initializeEmptySubcategory();
+
+        weaponActions.unshift(rangedAction);
+        weaponActions.unshift(meleeAction);
+
         weaponsCat.actions = weaponActions;
         let weaponsTitle = this.i18n('tokenactionhud.attack');
         
@@ -440,6 +460,12 @@ export class ActionHandlerPf1 extends ActionHandler {
         let skillsActions = [...allSkills].map(e => {
             let id = e[0];
             let data = e[1];
+
+            // rt: requires training
+            if (data.rt && !data.rank) {
+                return null;
+            }
+
             let name = abbr ? id : CONFIG.PF1.skills[id];
 
             if (data.isCustomSkill || !name) {
@@ -451,7 +477,8 @@ export class ActionHandlerPf1 extends ActionHandler {
             let encodedValue = [macroType, tokenId, id].join(this.delimiter);
             let info1 = this._getSkillRankInfo(data.rank);
             return { name: name, id: id, encodedValue: encodedValue, info1: info1 }; 
-        });
+        }).filter(s => !!s);
+        
         let skillsCategory = this.initializeEmptySubcategory();
         skillsCategory.actions = skillsActions;
 

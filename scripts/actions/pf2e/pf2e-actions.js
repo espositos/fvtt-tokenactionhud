@@ -246,7 +246,7 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     /** @private */
-    _addStrikesCategories(actor, tokenId, category, info) {
+    _addStrikesCategories(actor, tokenId, category) {
         let macroType = 'strike';
         let strikes = actor.data.data.actions?.filter(a => a.type === macroType);
         if (actor.data.type === 'character')
@@ -291,11 +291,32 @@ export class ActionHandlerPf2e extends ActionHandler {
             subcategory.actions.push({name: this.i18n('tokenactionhud.damage'), encodedValue: damageEncodedValue, id: encodeURIComponent(s.name+'>damage')})
             subcategory.actions.push({name: this.i18n('tokenactionhud.critical'), encodedValue: critEncodedValue, id: encodeURIComponent(s.name+'>critical')})
             
-            if (info)
-                subcategory.info1 = info;
-                
+            let ammoAction = this._ammoInfo(tokenId, actor, s);
+            if (!!ammoAction) {
+                subcategory.actions.push(ammoAction);   
+            }
+            
             this._combineSubcategoryWithCategory(category, s.name, subcategory);
         });
+    }
+
+    /** @private */
+    _ammoInfo(tokenId, actor, strike) {
+        if (!strike.selectedAmmoId)
+            return;
+        
+        const item = actor.getOwnedItem(strike.selectedAmmoId);
+
+        if (!item) {
+            return {name: this.i18n('tokenactionhud.noammo'), encodedValue: 'noammo', id: 'noammo'};
+        }
+
+        let encodedValue = ['ammo', tokenId, item._id].join(this.delimiter);
+        let img = this._getImage(item);
+        let action = { name: item.name, encodedValue: encodedValue, id: item._id, img: img };
+        action.info1 = item.data.data.quantity?.value
+
+        return action;
     }
 
     /** @private */
@@ -364,13 +385,17 @@ export class ActionHandlerPf2e extends ActionHandler {
         let result = Object.values(spells);
 
         result.sort((a,b) => {
-            if (a.data.data.level.value === b.data.data.level.value)
+            if (this._getSpellLevel(a) === this._getSpellLevel(b))
                 return a.name.toUpperCase().localeCompare(b.name.toUpperCase(), undefined, {sensitivity: 'base'});
-            return a.data.data.level.value - b.data.data.level.value;
+            return this._getSpellLevel(a) - this._getSpellLevel(b);
         });
 
         return result;
     }    
+
+    _getSpellLevel(spellItem) {
+        return !!spellItem.data.data.heightenedLevel?.value ? parseInt(spellItem.data.data.heightenedLevel.value) : parseInt(spellItem.data.data.level.value);
+    }
     
     /** @private */
     _categoriseSpells(actor, tokenId, spells) {
@@ -440,7 +465,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         })
 
         spells.forEach( function(s) {
-            var level = s.data.data.level.value;
+            var level = this._getSpellLevel(s);
             var spellbookId = s.data.data.location?.value;
 
             let spellbook;

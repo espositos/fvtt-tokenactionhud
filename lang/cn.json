@@ -26,6 +26,7 @@
     "tokenactionhud.magicItems": "魔法物品",
     "tokenactionhud.feats": "专长",
     "tokenactionhud.features": "特性",
+	"tokenactionhud.classFeatures": "班级特色",
     "tokenactionhud.free": "自由",
     "tokenactionhud.inconsumables": "非消耗品",
     "tokenactionhud.instinct": "直感",
@@ -248,6 +249,9 @@
     "tokenactionhud.wfrp.meleeSkillPrefix": "Melee",
     "tokenactionhud.wfrp.rangedSkillPrefix": "Ranged",
     "tokenactionhud.settings.swade.abbreviateAttributes.name": "Abbreviate skill and ability names",
-    "tokenactionhud.settings.swade.abbreviateAttributes.hint": "If enabled, skills and abilities will use a three-character abbreviation.",  
-    "tokenactionhud.d35e.grapple": "Grapple"
+    "tokenactionhud.settings.swade.abbreviateAttributes.hint": "If enabled, skills and abilities will use a three-character abbreviation.",
+    "tokenactionhud.d35e.grapple": "Grapple",
+
+    "tokenactionhud.symbaroum.abilities": "Abilities",
+    "tokenactionhud.symbaroum.mysticalPowers": "Mystical Powers"
 }

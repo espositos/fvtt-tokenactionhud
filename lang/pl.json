@@ -25,6 +25,7 @@
   "tokenactionhud.equipment": "Ekwipunek",
   "tokenactionhud.magicItems": "Magiczne Przedmioty",
   "tokenactionhud.feats": "Feats",
+  "tokenactionhud.classFeatures": "Class Features",
   "tokenactionhud.features": "Features",
   "tokenactionhud.free": "Darmowe",
   "tokenactionhud.inconsumables": "Inconsumables",
@@ -193,5 +194,8 @@
   "tokenactionhud.symbaroum.mysticalPowers": "Mystical Powers",
 
   "tokenactionhud.wfrp.meleeSkillPrefix" : "Broń Biała",
-  "tokenactionhud.wfrp.rangedSkillPrefix" : "Broń Zasięgowa"
+  "tokenactionhud.wfrp.rangedSkillPrefix" : "Broń Zasięgowa",
+
+  "tokenactionhud.symbaroum.abilities": "Abilities",
+  "tokenactionhud.symbaroum.mysticalPowers": "Mystical Powers"
 } 

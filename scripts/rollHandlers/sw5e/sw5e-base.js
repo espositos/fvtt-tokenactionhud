@@ -7,7 +7,7 @@ export class RollHandlerBaseSw5e extends RollHandler {
     }
 
     /** @override */
-    doHandleActionEvent(event, encodedValue) {
+    async doHandleActionEvent(event, encodedValue) {
         let payload = encodedValue.split('|');
         
         if (payload.length != 3) {
@@ -28,7 +28,7 @@ export class RollHandlerBaseSw5e extends RollHandler {
         }
     }
 
-    _handleMacros(event, macroType, tokenId, actionId) {
+    async _handleMacros(event, macroType, tokenId, actionId) {
         switch (macroType) {
             case "ability":
                 this.rollAbilityMacro(event, tokenId, actionId);
@@ -50,8 +50,20 @@ export class RollHandlerBaseSw5e extends RollHandler {
                 else
                     this.rollItemMacro(event, tokenId, actionId);
                 break;
+			 case "classFeatures": 
+                if (this.isRenderItem())
+                    this.doRenderItem(tokenId, actionId);
+                else
+                    this.rollItemMacro(event, tokenId, actionId);
+                break;
             case "utility":
                 this.performUtilityMacro(event, tokenId, actionId);
+				break;
+			case 'effect':
+                await this.toggleEffect(event, tokenId, actionId);
+                break;
+            case 'condition':
+                await this.toggleCondition(event, tokenId, actionId);
             default:
                 break;
         }
@@ -119,8 +131,51 @@ export class RollHandlerBaseSw5e extends RollHandler {
                 token.toggleVisibility();
                 break;
             case 'deathSave':
-                actor.rollDeathSave();
+                actor.rollDeathSave({event});
                 break;
         }
+    }
+	
+	    async toggleCondition(event, tokenId, effectId) {
+        const token = super.getToken(tokenId);
+        const isRightClick = this.isRightClick(event);
+        if (effectId.includes('combat-utility-belt.') && game.cub && !isRightClick) {
+            const cubCondition = this.findCondition(effectId)?.label;            
+            if (!cubCondition)
+                return;
+            
+            game.cub.hasCondition(cubCondition, token) ? 
+                await game.cub.removeCondition(cubCondition, token) : await game.cub.addCondition(cubCondition, token);
+        } else {
+            const condition = this.findCondition(effectId);
+            if (!condition)
+                return;
+            
+            isRightClick ? 
+                await token.toggleOverlay(condition) : await token.toggleEffect(condition);
+        }
+
+        Hooks.callAll('forceUpdateTokenActionHUD')
+    }
+	
+	    async toggleEffect(event, tokenId, effectId) {
+        const actor = super.getActor(tokenId);
+        const effect = actor.effects.entries.find(e => e.id === effectId);
+
+        if (!effect)
+            return;
+
+        const statusId = effect.data.flags.core?.statusId;
+        if (statusId) {
+            await this.toggleCondition(event, tokenId, statusId);
+            return;
+        }
+            
+        await effect.update({disabled: !effect.data.disabled});
+        Hooks.callAll('forceUpdateTokenActionHUD')
+    }
+
+    findCondition(id) {
+        return CONFIG.statusEffects.find(effect => effect.id === id);
     }
 }
