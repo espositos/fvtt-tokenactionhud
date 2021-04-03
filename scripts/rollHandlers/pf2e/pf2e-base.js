@@ -238,12 +238,10 @@ export class RollHandlerBasePf2e extends RollHandler {
         await actor.updateEmbeddedEntity("OwnedItem", update);
     }
 
-    
-
     /** @private */
     _rollSaveNpc(event, actor, actionId) {
         actor.data.data.saves[actionId].roll(event);
-        }
+    }
 
     async _updateRollMode(rollMode) {
         await game.settings.set('core', 'rollMode', rollMode);
@@ -471,6 +469,9 @@ export class RollHandlerBasePf2e extends RollHandler {
                 break;
             case 'longRest':
                 this._executeMacroByName('Rest for the Night');
+                break;
+            case 'takeABreather':
+                this._executeMacroByName('Take a Breather');
                 break;
             case 'toggleCombat':
                 token.toggleCombat();

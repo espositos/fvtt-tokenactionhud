@@ -160,6 +160,14 @@ export class ActionHandlerPf2e extends ActionHandler {
         let longRestValue = ['utility', tokenId, 'longRest'].join(this.delimiter);
         let longRestAction = {id: 'longRest', name: this.i18n('tokenactionhud.restNight'), encodedValue: longRestValue}
         restActions.push(longRestAction)
+
+        if (game.settings.get('pf2e', 'staminaVariant')) {
+            let takeBreatherValue = ['utility', tokenId, 'takeABreather'].join(this.delimiter);
+            let takeBreatherAction = {id: 'takeABreather', name: this.i18n('tokenactionhud.takeBreather'), encodedValue: takeBreatherValue};
+
+            restActions.push(takeBreatherAction);
+        }
+
         rests.actions = restActions;
 
         const utilityName = this.i18n('tokenactionhud.utility');
@@ -734,6 +742,14 @@ export class ActionHandlerPf2e extends ActionHandler {
             let longRestValue = ['utility', tokenId, 'longRest'].join(this.delimiter);
             let longRestAction = {id: 'longRest', name: this.i18n('tokenactionhud.restNight'), encodedValue: longRestValue}
             restActions.push(longRestAction)
+
+            if (game.settings.get('pf2e', 'staminaVariant')) {
+                let takeBreatherValue = ['utility', tokenId, 'takeABreather'].join(this.delimiter);
+                let takeBreatherAction = {id: 'takeABreather', name: this.i18n('tokenactionhud.takeBreather'), encodedValue: takeBreatherValue};
+
+                restActions.push(takeBreatherAction);
+            }
+
             rests.actions = restActions;
             
             this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.rests'), rests);

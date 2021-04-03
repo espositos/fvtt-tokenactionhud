@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.10] 2020-04-03
+### Bugfix
+- PF2E - Add Take a Breather macro, thanks to JonWaterfall
+
 ## [1.0.10] 2020-03-28
 ### Bugfix
 - PF2E Fix NPC saves thanks to itrase
