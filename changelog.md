@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.10] 2020-04-03
+## [1.0.11] 2020-04-03
 ### Bugfix
 - PF2E - Add Take a Breather macro, thanks to JonWaterfall
 
