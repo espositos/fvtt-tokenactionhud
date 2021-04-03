@@ -244,6 +244,10 @@
 
   "tokenactionhud.settings.swade.abbreviateAttributes.hint": "If enabled, skills and abilities will use a three-character abbreviation.",
   "tokenactionhud.settings.swade.abbreviateAttributes.name": "Abbreviate skill and ability names",
+
+  "tokenactionhud.symbaroum.abilities": "Abilities",
+  "tokenactionhud.symbaroum.mysticalPowers": "Mystical Powers",
+  
   "tokenactionhud.settings.wfrp.meleeSkillPrefix": "Melee",
   "tokenactionhud.settings.wfrp.rangedSkillPrefix": "Ranged"
 }
