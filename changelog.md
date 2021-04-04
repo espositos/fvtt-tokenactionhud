@@ -1,6 +1,10 @@
 # Changelog
 
-## [1.0.10] 2020-04-03
+## [1.0.12] 2020-04-04
+### Added 
+- Symbaroum - Support for Symbaroum  thanks to Khaali-dev
+
+## [1.0.11] 2020-04-03
 ### Bugfix
 - PF2E - Add Take a Breather macro, thanks to JonWaterfall
 
