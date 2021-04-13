@@ -24,7 +24,7 @@ export class ActionHandlerWfrp extends ActionHandler {
             return result;
 
         result.actorId = actor._id;
-        
+
         let weapons = this._getItemsList(actor, tokenId, 'weapon');
         let characteristics = this._getCharacteristics(actor, tokenId);
         let skills = this._getSkills(actor, tokenId);
@@ -54,8 +54,10 @@ export class ActionHandlerWfrp extends ActionHandler {
         let types = type+'s';
         let result = this.initializeEmptyCategory('items');
 
+        let basicSubcategory = this._getBasicActions(actor, tokenId);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.basic'), basicSubcategory)
+
         let subcategory = this.initializeEmptySubcategory();
-        
         let items = actor.items.filter(i => i.type === type);
         let filtered = actor.data.type === 'character' ? items.filter(i => i.data.data.equipped) : items;
         subcategory.actions = this._produceMap(tokenId, filtered, type);
@@ -63,6 +65,24 @@ export class ActionHandlerWfrp extends ActionHandler {
         this._combineSubcategoryWithCategory(result, types, subcategory);
 
         return result;
+    }
+
+    _getBasicActions(actor, tokenId) {
+        let basicActions = this.initializeEmptySubcategory();
+        
+        let unarmedValue = ['stomp', tokenId, 'stomp'].join(this.delimiter);
+        const unarmedAction = {id: 'stomp', name: this.i18n('tokenactionhud.unarmed'), encodedValue: unarmedValue, id:'stomp'};
+        basicActions.actions.push(unarmedAction);
+
+        let dodgeValue = ['dodge', tokenId, 'dodge'].join(this.delimiter);
+        const dodgeAction = {id: 'dodge', name: this.i18n('tokenactionhud.dodge'), encodedValue: dodgeValue, id:'dodge'};
+        basicActions.actions.push(dodgeAction);
+        
+        let improvisedValue = ['improvise', tokenId, 'improvise'].join(this.delimiter);
+        const improvisedAction = {id: 'improvise', name: this.i18n('tokenactionhud.improvisedWeapon'), encodedValue: improvisedValue, id:'improvise'};
+        basicActions.actions.push(improvisedAction);
+
+        return basicActions;
     }
 
     _getCharacteristics(actor, tokenId) {
