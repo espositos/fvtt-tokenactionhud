@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.13] 2020-04-13
+### Added 
+- DnD35 - Order skills by name based on localization, thanks to Kaitiff
+
 ## [1.0.12] 2020-04-04
 ### Added 
 - Symbaroum - Support for Symbaroum  thanks to Khaali-dev
