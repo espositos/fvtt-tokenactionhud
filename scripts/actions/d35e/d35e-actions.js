@@ -446,7 +446,16 @@ export class ActionHandlerD35E extends ActionHandler {
             return { name: name, id: id, encodedValue: encodedValue, info1: info1 }; 
         });
         let skillsCategory = this.initializeEmptySubcategory();
-        skillsCategory.actions = skillsActions;
+        skillsCategory.actions = skillsActions.sort(function(a, b) {
+            if (a.name > b.name) {
+              return 1;
+            }
+            if (a.name < b.name) {
+              return -1;
+            }
+            // a must be equal to b
+            return 0;
+          });
 
         let skillsTitle = this.i18n('tokenactionhud.skills');
         this._combineSubcategoryWithCategory(result, skillsTitle, skillsCategory);
