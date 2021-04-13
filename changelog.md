@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.14] 2020-04-13
+### Added 
+- WFRP - Support for basic actions
+
 ## [1.0.13] 2020-04-13
 ### Added 
 - DnD35 - Order skills by name based on localization, thanks to Kaitiff
