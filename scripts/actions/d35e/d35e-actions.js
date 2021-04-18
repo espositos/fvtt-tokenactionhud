@@ -416,13 +416,15 @@ export class ActionHandlerD35E extends ActionHandler {
             if (s[0].startsWith('skill'))
                 s[1].isCustomSkill = true;
             if (s[1].rt && !s[1].rank && !s[1].subSkills) return;
-            allSkills.add(s);
+            if (!s[1].subSkills)
+                allSkills.add(s);
 
             if (s[1].subSkills) {
                 Object.entries(s[1].subSkills).forEach(ss => {
                     if (ss[1].rt && !ss[1].rank) return;
                     ss[1].isCustomSkill = true;
                     ss[1].mainSkill = s[0];
+                    ss[1].name = `${CONFIG.D35E.skills[s[0]]} - ${ss[1].name}`;
                     allSkills.add(ss);
                 })
             }
@@ -437,7 +439,6 @@ export class ActionHandlerD35E extends ActionHandler {
                 name = data.name ?? '?';
                 id = `${data.mainSkill}.subSkills.${id}`
             }
-
             name = name.charAt(0).toUpperCase() + name.slice(1);
             let encodedValue = [macroType, tokenId, id].join(this.delimiter);
             let info1 = this._getSkillRankInfo(data.rank);
