@@ -38,6 +38,8 @@ export class RollHandlerBaseWfrp4e extends RollHandler {
         switch (macroType) {
             case 'dodge':
                 return this.dodge(actor);
+            case 'unarmed':
+                return this.unarmed(actor);
             case 'stomp':
                 return this.stomp(actor);
             case 'improvise':
@@ -74,6 +76,13 @@ export class RollHandlerBaseWfrp4e extends RollHandler {
                 actor.basicTest(setupData)
               });
         }
+    }
+
+    unarmed(actor) {
+        let unarmed = game.wfrp4e.config.systemItems.unarmed;
+        actor.setupWeapon(unarmed).then(setupData => {
+            actor.weaponTest(setupData)
+        });
     }
 
     stomp(actor) {
