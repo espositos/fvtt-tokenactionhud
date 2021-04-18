@@ -116,7 +116,7 @@ export class RollHandlerBaseD35E extends RollHandler {
         let actor = super.getActor(tokenId);
         let buff = super.getItem(actor, buffId);
 
-        let update = {data: {active: !buff.data.data.active}};
+        let update = {'data.active': !buff.data.data.active};
 
         await buff.update(update);
     }

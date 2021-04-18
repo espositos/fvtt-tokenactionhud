@@ -316,7 +316,7 @@ export class ActionHandlerD35E extends ActionHandler {
 
         if (!isSpontaneous && spell.data.preparation) {
             let prep = spell.data.preparation;
-            if (prep.maxAmount)
+            if (prep.maxAmount || prep.preparedAmount)
                 spellAction.info1 = `${prep.preparedAmount}/${prep.maxAmount}`;
         }
 
@@ -338,13 +338,10 @@ export class ActionHandlerD35E extends ActionHandler {
         const spellbook = spell.data.spellbook;
         const isSpontaneous = actor.data.data.attributes.spells.spellbooks[spellbook].spontaneous;
         
-        if (actor.data.type !== 'character')
-            return true;
-
         if (spell.data.atWill)
-            return true;
-            
-        if (isSpontaneous && spell.data.preparation.spontaneousPrepared)
+        return true;
+        
+        if (isSpontaneous)
             return true;
 
         if (spell.data.preparation.preparedAmount === 0)
@@ -418,13 +415,16 @@ export class ActionHandlerD35E extends ActionHandler {
         Object.entries(skills).forEach(s => {
             if (s[0].startsWith('skill'))
                 s[1].isCustomSkill = true;
-
-            allSkills.add(s);
+            if (s[1].rt && !s[1].rank && !s[1].subSkills) return;
+            if (!s[1].subSkills)
+                allSkills.add(s);
 
             if (s[1].subSkills) {
                 Object.entries(s[1].subSkills).forEach(ss => {
+                    if (ss[1].rt && !ss[1].rank) return;
                     ss[1].isCustomSkill = true;
                     ss[1].mainSkill = s[0];
+                    ss[1].name = `${CONFIG.D35E.skills[s[0]]} - ${ss[1].name}`;
                     allSkills.add(ss);
                 })
             }
@@ -439,23 +439,14 @@ export class ActionHandlerD35E extends ActionHandler {
                 name = data.name ?? '?';
                 id = `${data.mainSkill}.subSkills.${id}`
             }
-
             name = name.charAt(0).toUpperCase() + name.slice(1);
             let encodedValue = [macroType, tokenId, id].join(this.delimiter);
             let info1 = this._getSkillRankInfo(data.rank);
-            return { name: name, id: id, encodedValue: encodedValue, info1: info1 }; 
+            let info2 = [data.rt ? 'RT' : '', data.acp ? 'ACP' : ''].filter(a => a !== '').join(",");
+            return { name: name, id: id, encodedValue: encodedValue, info1: info1, info2: info2 }; 
         });
         let skillsCategory = this.initializeEmptySubcategory();
-        skillsCategory.actions = skillsActions.sort(function(a, b) {
-            if (a.name > b.name) {
-              return 1;
-            }
-            if (a.name < b.name) {
-              return -1;
-            }
-            // a must be equal to b
-            return 0;
-          });
+        skillsCategory.actions = skillsActions;
 
         let skillsTitle = this.i18n('tokenactionhud.skills');
         this._combineSubcategoryWithCategory(result, skillsTitle, skillsCategory);

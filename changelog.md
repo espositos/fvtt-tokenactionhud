@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.15] 2020-04-18
+### Added
+- WFRP - Additional basic actions thanks to Marek
+### Bugfix
+- DnD35 - Bugfixes from Rughalt
+
 ## [1.0.14] 2020-04-13
 ### Added 
 - WFRP - Support for basic actions
