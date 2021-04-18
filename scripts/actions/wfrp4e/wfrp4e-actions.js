@@ -69,18 +69,22 @@ export class ActionHandlerWfrp extends ActionHandler {
 
     _getBasicActions(actor, tokenId) {
         let basicActions = this.initializeEmptySubcategory();
-        
-        let unarmedValue = ['stomp', tokenId, 'stomp'].join(this.delimiter);
-        const unarmedAction = {id: 'stomp', name: this.i18n('tokenactionhud.unarmed'), encodedValue: unarmedValue, id:'stomp'};
+
+        let unarmed = ['unarmed', tokenId, 'unarmed'].join(this.delimiter);
+        const unarmedAction = { id: 'unarmed', name: this.i18n('tokenactionhud.unarmed'), encodedValue: unarmed, id: 'unarmed' };
         basicActions.actions.push(unarmedAction);
 
-        let dodgeValue = ['dodge', tokenId, 'dodge'].join(this.delimiter);
-        const dodgeAction = {id: 'dodge', name: this.i18n('tokenactionhud.dodge'), encodedValue: dodgeValue, id:'dodge'};
-        basicActions.actions.push(dodgeAction);
+        let stompValue = ['stomp', tokenId, 'stomp'].join(this.delimiter);
+        const stompAction = { id: 'stomp', name: this.i18n('tokenactionhud.stomp'), encodedValue: stompValue, id:'stomp'};
+        basicActions.actions.push(stompAction);
         
         let improvisedValue = ['improvise', tokenId, 'improvise'].join(this.delimiter);
         const improvisedAction = {id: 'improvise', name: this.i18n('tokenactionhud.improvisedWeapon'), encodedValue: improvisedValue, id:'improvise'};
         basicActions.actions.push(improvisedAction);
+
+        let dodgeValue = ['dodge', tokenId, 'dodge'].join(this.delimiter);
+        const dodgeAction = { id: 'dodge', name: this.i18n('tokenactionhud.dodge'), encodedValue: dodgeValue, id: 'dodge' };
+        basicActions.actions.push(dodgeAction);
 
         return basicActions;
     }
@@ -265,20 +269,20 @@ export class ActionHandlerWfrp extends ActionHandler {
     _getTraits(actor, tokenId) {
         let macroType = 'trait';
         let result = this.initializeEmptyCategory('traits');
+        if (actor.data.traits) {
+            let traits = actor.data.traits.filter(i => i.included);
 
-        let traits = actor.items.filter(i => i.data.type === macroType);
+            let rollableTraits = traits.filter(t => t.data.rollable?.value);
+            let rollableCategory = this.initializeEmptySubcategory();
+            rollableCategory.actions = this._produceMap(tokenId, rollableTraits, macroType);
 
-        let rollableTraits = traits.filter(t => t.data.data.rollable?.value);
-        let rollableCategory = this.initializeEmptySubcategory();
-        rollableCategory.actions = this._produceMap(tokenId, rollableTraits, macroType);
-        
-        let unrollableTraits = traits.filter(t => !t.data.data.rollable?.value);
-        let unrollableCategory = this.initializeEmptySubcategory();
-        unrollableCategory.actions = this._produceMap(tokenId, unrollableTraits, macroType);
-        
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.rollable'), rollableCategory);
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.unrollable'), unrollableCategory);
+            let unrollableTraits = traits.filter(t => !t.data.rollable?.value);
+            let unrollableCategory = this.initializeEmptySubcategory();
+            unrollableCategory.actions = this._produceMap(tokenId, unrollableTraits, macroType);
 
+            this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.rollable'), rollableCategory);
+            this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.unrollable'), unrollableCategory);
+        }
         return result;
     }
 
