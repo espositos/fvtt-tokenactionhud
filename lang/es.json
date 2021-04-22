@@ -196,10 +196,10 @@
     "tokenactionhud.settings.showIcons.hint": "Si se activa, la imagen de la acción se mostrará en el botón del HUD cuando esté disponible.",
     "tokenactionhud.settings.showIcons.name": "Mostrar iconos de las acciones",
 
-    "tokenactionhud.settings.demonlord.attackoptions": "Attack Options",
-    "tokenactionhud.settings.demonlord.challenge": "Challenge Roll",
-    "tokenactionhud.settings.demonlord.rest": "Rest",
-    "tokenactionhud.settings.demonlord.specialattacks": "Special Attacks",
+    "tokenactionhud.settings.demonlord.attackoptions": "Opciones de Ataque",
+    "tokenactionhud.settings.demonlord.challenge": "Prueba",
+    "tokenactionhud.settings.demonlord.rest": "Descanso",
+    "tokenactionhud.settings.demonlord.specialattacks": "Ataques Especiales",
 
     "tokenactionhud.settings.dnd5e.abbreviateSkills.hint": "Si se activa, las habilidades y características utilizarán una abreviatura de tres letras.",
     "tokenactionhud.settings.dnd5e.abbreviateSkills.name": "Nombres de habilidades y características abreviados",
