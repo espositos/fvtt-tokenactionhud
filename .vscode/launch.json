@@ -1,0 +1,19 @@
+{
+  "configurations": [
+    {
+      "type": "firefox",
+      "request": "launch",
+      "reAttach": true,
+      "name": "Launch firefox",
+      "url": "http://localhost:30000/join",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "Launch Edge",
+      "request": "launch",
+      "type": "pwa-msedge",
+      "url": "http://localhost:30000/join",
+      "webRoot": "${workspaceFolder}",
+    }
+  ]
+}
