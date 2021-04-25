@@ -293,5 +293,6 @@
     "tokenactionhud.settings.alienrpg.attributemobility": "Mobility",
     "tokenactionhud.settings.alienrpg.attributeobservation": "Observation",
     "tokenactionhud.settings.alienrpg.creatureAttack": "Creature Attack",
-    "tokenactionhud.settings.alienrpg.health": "Health"
+    "tokenactionhud.settings.alienrpg.health": "Health",
+    "tokenactionhud.settings.alienrpg.rollCrit": "Roll Crit"
 }

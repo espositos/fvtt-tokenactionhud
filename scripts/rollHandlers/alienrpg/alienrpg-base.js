@@ -146,6 +146,9 @@ export class RollHandlerBaseAlienrpg extends RollHandler {
         let aSplashData = { roll: actor.data.data.general.acidSplash.value, label: actor.data.data.general.acidSplash.label };
         actor.creatureAcidRoll(actor, aSplashData);
         break;
+      case 'rollCrit':
+        actor.rollCrit(actor.data.type);
+        break;
     }
   }
 
@@ -173,9 +176,15 @@ export class RollHandlerBaseAlienrpg extends RollHandler {
     if (this.rightClick) {
       if (value <= 0) return;
       value--;
+      if (property === 'panic') {
+        actor.checkAndEndPanic(actor);
+      }
     } else {
       if (value >= max) return;
       value++;
+      if (property === 'panic') {
+        actor.checkAndEndPanic(actor);
+      }
     }
 
     let update = { data: { general: { [property]: { [valueName]: value } } } };

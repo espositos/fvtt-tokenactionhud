@@ -355,6 +355,10 @@ export class ActionHandlerAlienrpg extends ActionHandler {
     let health = 0;
     switch (actor.data.type) {
       case 'character':
+        health = actor.data.data.header?.health;
+        if (health) headerActions.push(this._getHeaderActions(tokenId, 'health', this.i18n('tokenactionhud.settings.alienrpg.health'), health.value, '10'));
+        header.actions = headerActions;
+
         let stress = actor.data.data.header?.stress;
         if (stress) headerActions.push(this._getHeaderActions(tokenId, 'stress', this.i18n('tokenactionhud.settings.alienrpg.stresspoints'), stress.value, '10'));
         header.actions = headerActions;
@@ -363,9 +367,11 @@ export class ActionHandlerAlienrpg extends ActionHandler {
         stressActions = { id: 'rollStress', name: this.i18n('tokenactionhud.settings.alienrpg.rollStress'), encodedValue: stressValue };
         header.actions.push(stressActions);
 
-        health = actor.data.data.header?.health;
-        if (health) headerActions.push(this._getHeaderActions(tokenId, 'health', this.i18n('tokenactionhud.settings.alienrpg.health'), health.value, '10'));
-        header.actions = headerActions;
+        let rollCritActions = [];
+        let rollCrit = ['rollCrit', tokenId, 'rollCrit', ''].join(this.delimiter);
+        rollCritActions = { id: 'rollCrit', name: this.i18n('tokenactionhud.settings.alienrpg.rollCrit'), encodedValue: rollCrit };
+        header.actions.push(rollCritActions);
+
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.settings.alienrpg.health'), header);
         break;
 
@@ -380,6 +386,12 @@ export class ActionHandlerAlienrpg extends ActionHandler {
         health = actor.data.data.header?.health;
         if (health) headerActions.push(this._getHeaderActions(tokenId, 'health', this.i18n('tokenactionhud.settings.alienrpg.health'), health.value, '10'));
         header.actions = headerActions;
+
+        let rollSynCritActions = [];
+        let rollSynCrit = ['rollCrit', tokenId, 'rollCrit', ''].join(this.delimiter);
+        rollSynCritActions = { id: 'rollCrit', name: this.i18n('tokenactionhud.settings.alienrpg.rollCrit'), encodedValue: rollSynCrit };
+        header.actions.push(rollSynCritActions);
+
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.settings.alienrpg.health'), header);
         if (actor.data.data.header.synthstress) {
           let stressActions = [];
