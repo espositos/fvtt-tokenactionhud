@@ -267,8 +267,8 @@ export class ActionHandlerDemonlord extends ActionHandler {
 
     _produceMap(tokenId, itemSet, type) {
         return itemSet.map(i => {
-            let img = this._getImage(i);
-            let result = { name: i.name, encodedValue: i.encodedValue, id: i._id, img: img };
+            let icon = this._getImage(i);
+            let result = { name: i.name, encodedValue: i.encodedValue, id: i._id, icon };
 
             if (type === "talent")
                 result.info2 = this._getUsesData(i);
