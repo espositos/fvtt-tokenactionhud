@@ -8,32 +8,34 @@ export class RollHandlerBaseDemonlord extends RollHandler {
 
     async doHandleActionEvent(event, encodedValue) {
         let payload = encodedValue.split('|');
-        if (payload.length != 4) {
+        if (payload.length != 3) {
             super.throwInvalidValueErr();
         }
 
         let macroType = payload[0];
         let tokenId = payload[1];
         let actionId = payload[2];
-        let attributename = payload[3];
 
         if (tokenId === 'multi') {
             canvas.tokens.controlled.forEach(t => {
                 let idToken = t.data._id;
-                this._handleMacros(event, macroType, idToken, actionId, attributename);
+                this._handleMacros(event, macroType, idToken, actionId);
             });
         } else {
-            this._handleMacros(event, macroType, tokenId, actionId, attributename);
+            this._handleMacros(event, macroType, tokenId, actionId);
         }
     }
 
-    _handleMacros(event, macroType, tokenId, actionId, attributename) {
+    _handleMacros(event, macroType, tokenId, actionId) {
         let actor = super.getActor(tokenId);
-        let item = actionId ? actor.getOwnedItem(actionId) : null;
+        let item = null
+        if (['weapon', 'specialaction', 'spell', 'talent'].includes(macroType)) {
+            item = actor.getOwnedItem(actionId);
+        }
 
         switch (macroType) {
             case 'challenge':
-                actor.rollChallenge(attributename);
+                actor.rollChallenge(actionId);
                 break;
             case 'weapon':
                 actor.rollWeaponAttack(item._id, null);
