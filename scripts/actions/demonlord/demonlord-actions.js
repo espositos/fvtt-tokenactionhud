@@ -62,7 +62,13 @@ export class ActionHandlerDemonlord extends ActionHandler {
         let result = this.initializeEmptyCategory('items');
 
         let subcategory = this.initializeEmptySubcategory();
-        subcategory.actions = this._produceMap(tokenId, actor.items.filter(i => i.type == macroType), macroType);
+
+        subcategory.actions = this._produceMap(tokenId, actor.items.filter(i => i.type == macroType).map(item => {
+            return { 
+                name: item.name,
+                encodedValue: [item.type, tokenId, item._id].join(this.delimiter),
+            }
+        }), macroType);
 
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.weapons'), subcategory);
 
