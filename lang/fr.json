@@ -1,6 +1,7 @@
 {
     "tokenactionhud.title": "Token Action HUD",
     "tokenactionhud.handlerNotFound": " non trouvé, utilisation du système intégré de dés.",
+
     "tokenactionhud.abilities": "Abilités",
     "tokenactionhud.attributes": "Attributs",
     "tokenactionhud.actions": "Actions",
@@ -24,7 +25,7 @@
     "tokenactionhud.equipment": "Equipement",
     "tokenactionhud.magicItems": "Objets Magiques",
     "tokenactionhud.feats": "Dons",
-    "tokenactionhud.classFeatures": "Capacités de classe",
+	"tokenactionhud.classFeatures": "Capacités de classe",
     "tokenactionhud.features": "Capacités",
     "tokenactionhud.free": "Libre",
     "tokenactionhud.inconsumables": "Non consommables",
@@ -66,6 +67,7 @@
     "tokenactionhud.restNight": "Se reposer pour la nuit",
     "tokenactionhud.treatWounds": "Traiter les blessures",
     "tokenactionhud.heroPoints": "Points de Hero",
+
     "tokenactionhud.utility": "Utilitaire",
     "tokenactionhud.toggleCombatState": "Basculer l'état de Combat",
     "tokenactionhud.toggleVisibility": "Basculer la visibilité",
@@ -75,11 +77,13 @@
     "tokenactionhud.rests": "Repos",
     "tokenactionhud.inspiration": "Inspiration",
     "tokenactionhud.gm": "MJ",
+
     "tokenactionhud.mwa": "Attaque à l'arme de mélée",
     "tokenactionhud.rwa": "Attaque à l'arme à distance",
     "tokenactionhud.msa": "Sort de Combat",
     "tokenactionhud.rsa": "Sort de Missile",
     "tokenactionhud.healing": "Soigner",
+
     "tokenactionhud.blocklistLabel": "liste bloquée : caché / liste autorisée: afffiché",
     "tokenactionhud.filterPlaceholder": "Choix (séparation avec point-virgule)",
     "tokenactionhud.filterTitle": "Filtre",
@@ -87,6 +91,7 @@
     "tokenactionhud.cancel": "Annuler",
     "tokenactionhud.blocklist": "Liste bloquée",
     "tokenactionhud.allowlist": "Liste autorisée",
+
     "tokenactionhud.settings.rollHandler.name": "HUD gestionnnaire de dés",
     "tokenactionhud.settings.rollHandler.hint": "Choisissez quel module recevra les actions du HUD.",
     "tokenactionhud.settings.enabledForUser.name": "Activer le HUD pour le joueur actuel",
@@ -97,6 +102,7 @@
     "tokenactionhud.settings.playerPermission.hint": "Si activé, les joueurs pourront voir le HUD.",
     "tokenactionhud.settings.debug.name": "Activer le debug",
     "tokenactionhud.settings.debug.hint": "Active le log de debug.",
+
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.name": "Ignorer les dons passifs",
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.hint": "Si activé, les dons passifs ne sont pas affichés.",
     "tokenactionhud.settings.dnd5e.showSpellInfo.name": "Afficher les informations des sorts",
@@ -113,6 +119,7 @@
     "tokenactionhud.settings.dnd5e.showAllNpcItems.hint": "Si activé, tous les objets sont affichés pour les PNJ (sauf les objets non-équipés).",
     "tokenactionhud.settings.dnd5e.showEmptyItems.name": "Afficher les objets non équipés (objets et sorts)",
     "tokenactionhud.settings.dnd5e.showEmptyItems.hint": "Si activé, les objets sont affichés dans le HUD même s'ils n'ont plus de charges.",
+
     "tokenactionhud.settings.pf2e.showPcAbilities.name": "Afficher les caractéristiques des PJ",
     "tokenactionhud.settings.pf2e.showPcAbilities.hint": "Si activé, les PJ auront également des catégories de caractéristiques sur le HUD.",
     "tokenactionhud.settings.pf2e.showNpcAbilities.name": "Afficher les caractéristiques des PNJ",
@@ -123,12 +130,16 @@
     "tokenactionhud.settings.pf2e.printSpellCard.hint": "Si désactivé, clic gauche sur un sort lancera un test d'attaque (shif clic droit pour la fenêtre de bonus), clic droit lancera les dégâts (ctrl clic droit pour la fenêtre de bonus). Si aucun bonus n'est applicable, le sort sera toute de même affiché dans le chat.",
     "tokenactionhud.settings.pf2e.abbreviateSkills.name": "Abréger les noms des caractéristiques et des compétences",
     "tokenactionhud.settings.pf2e.abbreviateSkills.hint": "Si activé les caractéristiques et les compétences utiliserons une abréviation de 3 caractères.",
+
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "Afficher les compendiums du MJ",
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Si activé, et que l'utilisateur est MJ, la barre HUD inclura les actions de MJ, les tables aléatoires et les graphiques.",
+
     "tokenactionhud.symbaroum.abilities": "Talents",
     "tokenactionhud.symbaroum.mysticalPowers": "Pouvoirs",
-    "tokenactionhud.wfrp.meleeSkillPrefix": "Melee",
-    "tokenactionhud.wfrp.rangedSkillPrefix": "Ranged",
+
+    "tokenactionhud.wfrp.meleeSkillPrefix" : "Melee",
+    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged",
+
     "tokenactionhud.settings.alienrpg.consumables": "Consommables",
     "tokenactionhud.settings.alienrpg.conditions": "États",
     "tokenactionhud.settings.alienrpg.skill": "Compétences",

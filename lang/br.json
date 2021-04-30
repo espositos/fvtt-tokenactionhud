@@ -20,6 +20,7 @@
   "tokenactionhud.blessing": "Abençoar",
   "tokenactionhud.blocklist": "Lista Bloqueada",
   "tokenactionhud.blocklistLabel": "Lista Bloqueada (somente esconder) ou Lista Permitida (somente exibir)",
+  
   "tokenactionhud.book": "Livro",
   "tokenactionhud.books": "Livros",
   "tokenactionhud.buffs": "Buffs",
@@ -231,6 +232,7 @@
   "tokenactionhud.settings.sfrpg.showMiscFeats.name": "Display miscellaneous feats",
   "tokenactionhud.settings.sfrpg.showSpellInfo.hint": "If enabled, spell resistance, dismissible, concentration and save information noted next to the spell name.",
   "tokenactionhud.settings.sfrpg.showSpellInfo.name": "Display spell information",
+
   "tokenactionhud.settings.sw5e.abbreviateSkills.hint": "If enabled, skills and abilities will use a three-character abbreviation.",
   "tokenactionhud.settings.sw5e.abbreviateSkills.name": "Abbreviate skill and ability names",
   "tokenactionhud.settings.sw5e.hideLongerActions.hint": "If enabled, actions with longer activation types (minutes, hours, or days) are not shown.",
@@ -239,12 +241,16 @@
   "tokenactionhud.settings.sw5e.ignorePassiveFeats.name": "Ignore passive feats",
   "tokenactionhud.settings.sw5e.showEmptyItems.hint": "If enabled, items are shown in the HUD even if they have no remaining charges.",
   "tokenactionhud.settings.sw5e.showEmptyItems.name": "Show empty items (includes items and powers)",
+
   "tokenactionhud.settings.swade.abbreviateAttributes.hint": "If enabled, skills and abilities will use a three-character abbreviation.",
   "tokenactionhud.settings.swade.abbreviateAttributes.name": "Abbreviate skill and ability names",
+
   "tokenactionhud.symbaroum.abilities": "Abilities",
   "tokenactionhud.symbaroum.mysticalPowers": "Mystical Powers",
+  
   "tokenactionhud.settings.wfrp.meleeSkillPrefix": "Melee",
   "tokenactionhud.settings.wfrp.rangedSkillPrefix": "Ranged",
+  
   "tokenactionhud.settings.alienrpg.consumables": "Consumables",
   "tokenactionhud.settings.alienrpg.conditions": "Conditions",
   "tokenactionhud.settings.alienrpg.skill": "Skill",

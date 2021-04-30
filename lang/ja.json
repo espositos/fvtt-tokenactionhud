@@ -1,9 +1,10 @@
 {
     "tokenactionhud.title": "コマ用ホットバー",
     "tokenactionhud.handlerNotFound": "操作が見つかりません、標準のローラーを使用します。",
+    
     "tokenactionhud.abilities": "能力値",
     "tokenactionhud.attributes": "能力",
-    "tokenactionhud.actions": "アクション",
+    "tokenactionhud.actions": "アクション",    
     "tokenactionhud.active": "アクティブ",
     "tokenactionhud.advanced": "高度設定",
     "tokenactionhud.armour": "鎧",
@@ -18,7 +19,7 @@
     "tokenactionhud.characteristics": "特性",
     "tokenactionhud.charts": "チャート",
     "tokenactionhud.checks": "判定",
-    "tokenactionhud.consumables": "消耗品",
+    "tokenactionhud.consumables": "消耗品",    
     "tokenactionhud.damage": "ダメージ",
     "tokenactionhud.critical": "クリティカル",
     "tokenactionhud.dc": "難易度",
@@ -27,7 +28,7 @@
     "tokenactionhud.magicItems": "魔法アイテム",
     "tokenactionhud.feats": "特技",
     "tokenactionhud.features": "特徴",
-    "tokenactionhud.classFeatures": "クラスの特徴",
+	"tokenactionhud.classFeatures": "クラスの特徴",
     "tokenactionhud.free": "無料",
     "tokenactionhud.inconsumables": "非消耗品",
     "tokenactionhud.instinct": "直感",
@@ -46,10 +47,10 @@
     "tokenactionhud.powers": "パワー",
     "tokenactionhud.ranged": "遠隔",
     "tokenactionhud.reactions": "リアクション",
-    "tokenactionhud.skilltriggers": "Skill Triggers",
+    "tokenactionhud.skilltriggers": "Skill Triggers",    
     "tokenactionhud.recharge": "リチャージ",
     "tokenactionhud.religion": "宗教",
-    "tokenactionhud.roll": "ロール",
+    "tokenactionhud.roll": "ロール",    
     "tokenactionhud.rollable": "ローラブル",
     "tokenactionhud.saves": "セーヴ",
     "tokenactionhud.skills": "技能",
@@ -86,6 +87,7 @@
     "tokenactionhud.hull": "Hull",
     "tokenactionhud.activate": "Activate",
     "tokenactionhud.techattack": "Tech Attack",
+
     "tokenactionhud.utility": "他",
     "tokenactionhud.token": "トークン",
     "tokenactionhud.toggleCombatState": "戦闘に参加",
@@ -95,9 +97,9 @@
     "tokenactionhud.rest": "休憩",
     "tokenactionhud.deathSave": "死亡セーヴ",
     "tokenactionhud.rests": "休憩",
-    "tokenactionhud.inspiration": "インスピレーション",
-    "tokenactionhud.gm": "GM",
-    "tokenactionhud.cmb": "CMB",
+    "tokenactionhud.inspiration": "インスピレーション",    
+    "tokenactionhud.gm": "GM",    
+    "tokenactionhud.cmb": "CMB",    
     "tokenactionhud.concentration": "集中",
     "tokenactionhud.defenses": "防御",
     "tokenactionhud.pilot": "パイロット",
@@ -109,12 +111,14 @@
     "tokenactionhud.rollInitiative": "イニシアチブロール",
     "tokenactionhud.initiative": "イニシアチブ",
     "tokenactionhud.toggles": "トグル",
+
     "tokenactionhud.mwa": "近接武器攻撃",
     "tokenactionhud.rwa": "遠隔武器攻撃",
     "tokenactionhud.msa": "近接呪文攻撃",
     "tokenactionhud.rsa": "遠隔呪文攻撃",
     "tokenactionhud.attack": "攻撃",
     "tokenactionhud.healing": "回復",
+    
     "tokenactionhud.blocklistLabel": "blocklist: hide / allowlist: show",
     "tokenactionhud.filterPlaceholder": "選択（セミコロンで区切る)",
     "tokenactionhud.filterTitle": "Filter",
@@ -139,6 +143,7 @@
     "tokenactionhud.spend": "Spend",
     "tokenactionhud.get": "Get",
     "tokenactionhud.points": "Points",
+
     "tokenactionhud.categoryTagTitle": "カテゴリーの追加と削除",
     "tokenactionhud.subcategoryTagTitle": "サブカテゴリーの追加と削除",
     "tokenactionhud.categoryTagExplanation": "カスタマイズ可能なカテゴリの追加と削除",
@@ -147,6 +152,7 @@
     "tokenactionhud.unshift": "左",
     "tokenactionhud.push": "右",
     "tokenactionhud.pushLabelExplanation": "どちら側にカテゴリを表示しますか？",
+
     "tokenactionhud.settings.rollHandler.name": "使用システム",
     "tokenactionhud.settings.rollHandler.hint": "このモジュールの恩恵を受けるシステムを選択します。",
     "tokenactionhud.settings.enabledForUser.name": "現在のユーザはホットバーを使用できる",
@@ -169,6 +175,7 @@
     "tokenactionhud.settings.showIcons.hint": "有効にすると、アクションの画像がHUDのボタンに表示されます。",
     "tokenactionhud.settings.clickOpenCategory.name": "クリックでカテゴリーを開く",
     "tokenactionhud.settings.clickOpenCategory.hint": "有効にすると、ホバーではなくクリックでカテゴリを開きます。",
+
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.name": "受動特技を無視",
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.hint": "受動として設定された特技はリストに表示されません。",
     "tokenactionhud.settings.dnd5e.showSpellInfo.name": "呪文の情報を表示する。",
@@ -189,6 +196,7 @@
     "tokenactionhud.settings.dnd5e.itemMacroReplace.hint": "アイテムマクロを含むマクロはオリジナルを上書きします。それ以外では両方が表示されます。",
     "tokenactionhud.settings.dnd5e.showConditionsCategory.name": "状態カテゴリーを表示する",
     "tokenactionhud.settings.dnd5e.showConditionsCategory.hint": "有効にすると、通常のHUDで利用可能なトークンの状態とステータス効果のカテゴリがHUDに表示されます。",
+    
     "tokenactionhud.settings.sw5e.ignorePassiveFeats.name": "Ignore passive feats",
     "tokenactionhud.settings.sw5e.ignorePassiveFeats.hint": "If enabled, passive feats are not shown.",
     "tokenactionhud.settings.sw5e.hideLongerActions.name": "Hide actions with an activation longer than 1 round",
@@ -197,6 +205,7 @@
     "tokenactionhud.settings.sw5e.abbreviateSkills.hint": "If enabled, skills and abilities will use a three-character abbreviation.",
     "tokenactionhud.settings.sw5e.showEmptyItems.name": "Show empty items (includes items and powers)",
     "tokenactionhud.settings.sw5e.showEmptyItems.hint": "If enabled, items are shown in the HUD even if they have no remaining charges.",
+
     "tokenactionhud.settings.pf2e.showPcAbilities.name": "Show PC abilities",
     "tokenactionhud.settings.pf2e.showPcAbilities.hint": "If enabled, PCs will also have an Abilities category on their HUD.",
     "tokenactionhud.settings.pf2e.separateTogglesCategory.name": "Separate Toggles Category",
@@ -213,12 +222,15 @@
     "tokenactionhud.settings.pf2e.ignorePassiveActions.hint": "If enabled, passive actions are not shown.",
     "tokenactionhud.settings.pf2e.showOldNpcStrikes.name": "Show old NPC Strikes",
     "tokenactionhud.settings.pf2e.showOldNpcStrikes.hint": "If enabled, the HUD will show the old NPC strike actions as well as the new (experimental) strikes for NPCs.",
+
     "tokenactionhud.settings.sfrpg.showSpellInfo.name": "Display spell information",
     "tokenactionhud.settings.sfrpg.showSpellInfo.hint": "If enabled, spell resistance, dismissible, concentration and save information noted next to the spell name.",
     "tokenactionhud.settings.sfrpg.showMiscFeats.name": "Display miscellaneous feats",
     "tokenactionhud.settings.sfrpg.showMiscFeats.hint": "If enabled, features with no assigned action type will be shown in a catch-all, miscellaneous category.",
+
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "Show GM Compendiums",
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "If enabled, and if the user is a GM, the HUD bar will include GM moves, treasure rollable-tables, and charts.",
+
     "tokenactionhud.settings.demonlord.challenge": "Challenge Roll",
     "tokenactionhud.settings.demonlord.attackoptions": "Attack Options",
     "tokenactionhud.settings.demonlord.specialattacks": "Special Attacks",
@@ -228,14 +240,19 @@
     "tokenactionhud.attribute.intellect": "Intellect",
     "tokenactionhud.attribute.will": "Will",
     "tokenactionhud.attribute.perception": "Perception",
-    "tokenactionhud.wfrp.meleeSkillPrefix": "Melee",
-    "tokenactionhud.wfrp.rangedSkillPrefix": "Ranged",
+
+    "tokenactionhud.wfrp.meleeSkillPrefix" : "Melee",
+    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged",
+
     "tokenactionhud.settings.swade.abbreviateAttributes.name": "Abbreviate skill and ability names",
     "tokenactionhud.settings.swade.abbreviateAttributes.hint": "If enabled, skills and abilities will use a three-character abbreviation.",
-    "tokenactionhud.d35e.grapple": "Grapple",
-    "tokenactionhud.crewActions": "Crew Actions",
+
+    "tokenactionhud.d35e.grapple" : "Grapple",
+    "tokenactionhud.crewActions" : "Crew Actions",
+
     "tokenactionhud.symbaroum.abilities": "Abilities",
     "tokenactionhud.symbaroum.mysticalPowers": "Mystical Powers",
+    
     "tokenactionhud.settings.alienrpg.consumables": "Consumables",
     "tokenactionhud.settings.alienrpg.conditions": "Conditions",
     "tokenactionhud.settings.alienrpg.skill": "Skill",

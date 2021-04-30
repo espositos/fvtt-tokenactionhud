@@ -1,6 +1,7 @@
 {
     "tokenactionhud.title": "HUD Token Action",
     "tokenactionhud.handlerNotFound": "no encontrado, revirtiendo al lanzador nativo.",
+
     "tokenactionhud.abilities": "Habilidades",
     "tokenactionhud.active": "Activo",
     "tokenactionhud.atk": "Atq",
@@ -10,7 +11,7 @@
     "tokenactionhud.dmg": "Dañ",
     "tokenactionhud.feats": "Dotes",
     "tokenactionhud.features": "Dotes",
-    "tokenactionhud.classFeatures": "Características de clase",
+	"tokenactionhud.classFeatures": "Características de clase",
     "tokenactionhud.inconsumables": "Consumibles",
     "tokenactionhud.instinct": "Instinto",
     "tokenactionhud.monsterMoves": "Movimientos de Monstruo",
@@ -19,6 +20,7 @@
     "tokenactionhud.skills": "Habilidades",
     "tokenactionhud.treasure": "Tesoro",
     "tokenactionhud.unrollable": "No lanzable",
+
     "tokenactionhud.actions": "Acciones",
     "tokenactionhud.advanced": "Advanzado",
     "tokenactionhud.armour": "Armadura",
@@ -27,7 +29,7 @@
     "tokenactionhud.books": "Libros",
     "tokenactionhud.cantrips": "Trucos",
     "tokenactionhud.characteristics": "Carecterísticas",
-    "tokenactionhud.consumables": "Consumibles",
+    "tokenactionhud.consumables": "Consumibles",    
     "tokenactionhud.damage": "Daño",
     "tokenactionhud.dc": "CD",
     "tokenactionhud.equipment": "Equipamiento",
@@ -46,7 +48,7 @@
     "tokenactionhud.ranged": "A distancia",
     "tokenactionhud.reactions": "Reacciones",
     "tokenactionhud.religion": "Religión",
-    "tokenactionhud.roll": "Tirada",
+    "tokenactionhud.roll": "Tirada",   
     "tokenactionhud.saves": "Salvaciones",
     "tokenactionhud.specialQualities": "Cualidades Especiales",
     "tokenactionhud.spells": "Conjuros",
@@ -55,6 +57,7 @@
     "tokenactionhud.talents": "Talentos",
     "tokenactionhud.traits": "Rasgos",
     "tokenactionhud.weapons": "Armas",
+    
     "tokenactionhud.blocklistLabel": "lista bloqueada: esconder / lista admitida: mostrar",
     "tokenactionhud.filterPlaceholder": "Opciones (separar con punto y coma)",
     "tokenactionhud.filterTitle": "Filtrar",
@@ -62,6 +65,7 @@
     "tokenactionhud.cancel": "Cancelar",
     "tokenactionhud.blocklist": "Lista de bloqueados",
     "tokenactionhud.allowlist": "Lista de permitidos",
+
     "tokenactionhud.settings.rollHandler.name": "Manejador de tiradas",
     "tokenactionhud.settings.rollHandler.hint": "Elige que módulo recibirá las acciones de la barra.",
     "tokenactionhud.settings.enabledForUser.name": "Activar el HUD para el usuario actual",
@@ -78,6 +82,7 @@
     "tokenactionhud.settings.showIcons.hint": "If enabled, icons will be displayed on the HUD button where available.",
     "tokenactionhud.settings.renderItemOnRightClick.name": "Show Item Sheet on right-click",
     "tokenactionhud.settings.renderItemOnRightClick.hint": "If enabled, right-clicking on an item in the HUD will bring up the item's sheet (may be overridden by other settings).",
+
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.name": "Ignorar las dotes pasivas",
     "tokenactionhud.settings.dnd5e.ignorePassiveFeats.hint": "Si está activo, las dotes pasivas no se mostrarán.",
     "tokenactionhud.settings.dnd5e.showSpellInfo.name": "Mostrar la información de conjuros",
@@ -94,6 +99,7 @@
     "tokenactionhud.settings.dnd5e.showAllNpcItems.hint": "Si está activo, se mostrarán todos los objetos de los NPC, no solo los equipados.",
     "tokenactionhud.settings.dnd5e.showEmptyItems.name": "Mostrar artículos vacíos (incluye objetos y conjuros)",
     "tokenactionhud.settings.dnd5e.showEmptyItems.hint": "Si está activo, los artículos se mostrarán en el HUD, incluso si no les quedan cargas.",
+
     "tokenactionhud.settings.pf2e.showPcAbilities.name": "Mostrar las habilidades de los PJs",
     "tokenactionhud.settings.pf2e.showPcAbilities.hint": "Si está activo, los PJs también mostrarán su abilidades categorizadas aparte.",
     "tokenactionhud.settings.pf2e.showNpcAbilities.name": "Mostrar las habilidades de los PNJs",
@@ -104,12 +110,16 @@
     "tokenactionhud.settings.pf2e.printSpellCard.hint": "Si está desactivado, hacer clic izquierdo sobre un conjuro lanzará la tirada de ataque (mayus + clic derecho para mostrar un dialogo adicional), clic derecho tirará por el daño (ctrl + clic derecho para mostrar un dialogo adicional). Si ninguno de los dos es aplicable, la carta del conjuro será enviada al chat de todas formas.",
     "tokenactionhud.settings.pf2e.abbreviateSkills.name": "Abreviar los nombres de las habilidades",
     "tokenactionhud.settings.pf2e.abbreviateSkills.hint": "Si está activo, las habilidades serán abreviadas a 3 caracteres.",
+
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "Mostrar los compendios del DJ",
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Si está activo, y el usuario es un DJ, el HUD incluirá los movimientos del DJ, las tablas aleatorias de tesoro y las cartas.",
-    "tokenactionhud.wfrp.meleeSkillPrefix": "Melee",
-    "tokenactionhud.wfrp.rangedSkillPrefix": "Ranged",
+
     "tokenactionhud.symbaroum.abilities": "Abilities",
     "tokenactionhud.symbaroum.mysticalPowers": "Mystical Powers",
+  
+    "tokenactionhud.wfrp.meleeSkillPrefix" : "Melee",
+    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged",
+
     "tokenactionhud.settings.alienrpg.consumables": "Consumibles",
     "tokenactionhud.settings.alienrpg.conditions": "Estados",
     "tokenactionhud.settings.alienrpg.skill": "Habilidades",
