@@ -657,25 +657,6 @@ export class ActionHandlerPf2e extends ActionHandler {
         return result;
     }
 
-    /** @private */
-    _getAbilityList(actor, tokenId) {
-        let result = this.initializeEmptyCategory('abilities');
-
-        let abbr = settings.get('abbreviateSkills');
-
-        let actorAbilities = actor.data.data.abilities;
-        let abilityMap = Object.keys(actorAbilities).map(k => { 
-            let name = abbr ? k.charAt(0).toUpperCase() + k.slice(1) : CONFIG.PF2E.abilities[k];
-            return {_id: k, name: name}});
-
-        let abilities = this.initializeEmptySubcategory();
-        abilities.actions = this._produceActionMap(tokenId, abilityMap, 'ability');
-
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.abilities'), abilities);
-
-        return result;
-    }
-
     /** @protected */
     createSkillMap(tokenId, macroType, skillEntry, abbreviated) {
             let key = skillEntry[0];
