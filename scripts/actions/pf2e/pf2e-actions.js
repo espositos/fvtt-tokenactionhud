@@ -647,7 +647,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let result = this.initializeEmptyCategory('saves');
 
         let actorSaves = actor.data.data.saves;
-        let saveMap = Object.keys(actorSaves).map(k => { return {_id: k, name: CONFIG.PF2E.saves[k]}});
+        let saveMap = Object.keys(actorSaves).map(k => { return {_id: k, name: game.i18n.localize(CONFIG.PF2E.saves[k])}});
 
         let saves = this.initializeEmptySubcategory();
         saves.actions = this._produceActionMap(tokenId, saveMap, 'save');
