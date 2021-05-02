@@ -5,6 +5,7 @@ import { MagicItemActionListExtender } from '../actions/magicItemsExtender.js';
 import { RollHandlerBase5e as Core } from '../rollHandlers/dnd5e/dnd5e-base.js';
 import { RollHandlerBetterRolls5e as BetterRolls5e } from '../rollHandlers/dnd5e/dnd5e-betterrolls5e.js';
 import { RollHandlerMinorQol5e as MinorQol5e } from '../rollHandlers/dnd5e/dnd5e-minorqol.js';
+import { RollHandlerObsidian as Obsidian5e } from '../rollHandlers/dnd5e/dnd5e-obsidian.js';
 import * as settings from '../settings/dnd5e-settings.js';
 
 export class Dnd5eSystemManager extends SystemManager {
@@ -33,6 +34,7 @@ export class Dnd5eSystemManager extends SystemManager {
         let choices = { core: coreTitle };
         SystemManager.addHandler(choices, 'betterrolls5e');
         SystemManager.addHandler(choices, 'minor-qol');
+        SystemManager.addHandler(choices, 'obsidian');
 
         return choices;
     }
@@ -47,7 +49,10 @@ export class Dnd5eSystemManager extends SystemManager {
             case 'minor-qol':
                 rollHandler = new MinorQol5e();
                 break;
-            case "core":
+            case 'obsidian':
+                rollHandler = new Obsidian5e();
+                break;
+            case 'core':
             default:
                 rollHandler = new Core();
                 break;

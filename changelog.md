@@ -1,6 +1,178 @@
 # Changelog
 
-## [0.10.15] 2020-12-29
+## [1.0.15] 2020-04-18
+### Added
+- WFRP - Additional basic actions thanks to Marek
+### Bugfix
+- DnD35 - Bugfixes from Rughalt
+
+## [1.0.14] 2020-04-13
+### Added 
+- WFRP - Support for basic actions
+
+## [1.0.13] 2020-04-13
+### Added 
+- DnD35 - Order skills by name based on localization, thanks to Kaitiff
+
+## [1.0.12] 2020-04-04
+### Added 
+- Symbaroum - Support for Symbaroum  thanks to Khaali-dev
+
+## [1.0.11] 2020-04-03
+### Bugfix
+- PF2E - Add Take a Breather macro, thanks to JonWaterfall
+
+## [1.0.10] 2020-03-28
+### Bugfix
+- PF2E Fix NPC saves thanks to itrase
+
+## [1.0.9] 2020-03-17
+### Bugfix
+- SW5e fix for type error thanks to Zasshem
+### Added
+- Blades in the Dark support - Thanks to DarkWizarD24 
+
+## [1.0.8] 2020-03-17
+### Changed
+- PF2E - Show when no ammunition is chosen
+
+## [1.0.7] 2020-03-17
+### Changed
+- PF2E - Show ammunition for strikes as an additional button that does nothing
+
+## [1.0.6] 2020-03-16
+### Added
+- Start of DE localization thanks to ksingvo
+- PF1E - support for BAB, Ranged, and Melee rolls
+
+## [1.0.5] 2020-03-12
+### Bugfix
+- SW5e fix from baccalla death save roll
+
+## [1.0.4] 2020-03-08
+### Added
+- Tormenta20 - support for Tormenta20 thanks to (mclemente)[https://github.com/mclemente]Show skills that do not require training 
+
+## [1.0.3] 2020-02-27
+### Bugfix
+- PF1 Show skills that do not require training 
+
+## [1.0.2] 2020-02-24
+### Added
+- Setting for marking 'active' buttons with an asterisk for a clearer indication that the button is active
+
+## [1.0.1] 2020-02-24
+### Changed
+- PF2E Strikes now consume ammo if configured to do so in the sheet
+
+## [1.0.0] 2020-02-23
+### Note
+- Getting tired of 0.10.*
+
+### Bugfix
+- DnD5e - should no longer break when encountering custom skills.
+
+### Changed
+- PF1E untrained skills are no longer shown
+
+## [0.10.37] 2020-02-21
+### Bugfix
+- PF2E spells correctly categorise by heightened spell level (if necessary)
+
+## [0.10.36] 2020-02-20
+### Added
+- SW5e conditions thanks to Therasin/Zasshem
+
+## [0.10.35] 2020-02-18
+### Changed
+- Add new options for the Item Macro to choose between keeping the original item, only the item macro item, or showing both.
+
+## [0.10.34] 2020-02-18
+### Added
+- SW5e class features thanks to Therasin/Zasshem
+
+## [0.10.33] 2020-02-06
+### Added
+- Option to toggle between drop-up and drop-down categories
+
+## [0.10.32] 2020-02-06
+### Added
+- Added a scale slider to adjust the size of the HUD (thanks to Alexis-Grimm for the suggestion)
+
+## [0.10.31] 2020-02-05
+### Changed
+- Extended Japanese localisation support thanks to touge
+
+## [0.10.30] 2020-01-27
+### Bugfix
+- SFRPG fix crew actions
+
+## [0.10.29] 2020-01-22
+### Added
+- Further changes to Starwars FFG thanks to zaborontest#0241
+
+## [0.10.28] 2020-01-21
+### Added
+- Starwars FFG support thanks to zaborontest#0241
+
+## [0.10.27] 2020-01-21
+### Added
+- Pf2e - Add active feats to actions as well
+
+### Bugfix
+- PF2e - Correct icon for actions, reactions, and free actions
+
+## [0.10.26] 2020-01-21
+### Added
+- Pf2e - Effects Category
+
+## [0.10.25] 2020-01-21
+### Bugfix
+- SWRPG - Fix shields category for starships
+
+## [0.10.24] 2020-01-20
+### Added
+- Pf1 - Initiative roller, may not work currently, but waiting for a PF1 update
+
+### Bugfix
+- PF1 Readd missing inventory category
+
+## [0.10.23] 2020-01-15
+### Bugfix
+- General - Update HUD if unselected character token is removed from scene and 'always show HUD' is enabled
+- PF1 - Show correct charges for linked items
+
+## [0.10.22] 2020-01-07
+### Bugfix
+- DND5e - Apparently only latest version has config values for attunement so add manual fallback value;
+
+## [0.10.21] 2020-01-07
+### Bugfix
+- DND5e - Fix support for magic items with new attunement changes
+
+## [0.10.20] 2020-01-04
+### Added
+- DND5e - Adds support for Obsidian 5e thanks to Avelyne#3141 (select Obsidian Character Sheets in the setting's HUD roll handler)
+
+## [0.10.19] 2020-01-01
+### Changed
+- SWADE - Show all NPC items for categories not just equipped items.
+
+## [0.10.18] 2020-01-01
+### Bugfix
+- PF2E - Include backpacks in containers
+
+## [0.10.17] 2020-12-31
+### Bugfix
+- PF2E - Correct name of treat wounds macro
+
+### Added
+- PF2E - Mass rolling for perception and initiative
+
+### Changed
+- PF2E - Show contents of containers as separate subcategories
+
+## [0.10.16] 2020-12-29
 ### Changed
 - Pf2E - Hide unequipped items
 

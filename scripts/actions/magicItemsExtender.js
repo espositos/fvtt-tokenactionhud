@@ -80,7 +80,17 @@ export class MagicItemActionListExtender extends ActionListExtender {
         return magicItem.item.data.data.equipped;
     }
 
-    _isItemAttuned(magicItem) {
-        return magicItem.item.data.data.attuned;
+    _isItemAttuned(magicItem) {          
+        var itemData = magicItem.item.data.data;
+        
+        if (!!itemData.attunement) {
+            const attuned = CONFIG.DND5E.attunementTypes?.ATTUNED ?? 2;
+            return itemData.attunement === attuned;
+        }
+
+        if (!!itemData.attuned)
+            return itemData.attuned;
+
+        return false;
     }
 }

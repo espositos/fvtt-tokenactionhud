@@ -25,8 +25,8 @@
 
 #tah-hudTitle {
     color: #fff;
-    padding: 3px;
-    margin: 3px;
+    padding: 0.25em;
+    margin: 0.25em;
     text-shadow: -1px -1px 1px rgba(52, 52, 52, 1),
     -1px -1px 1px rgba(52, 52, 52, 1),
     -1px -1px 1px rgba(52, 52, 52, 1),
@@ -34,6 +34,7 @@
     text-align: left;
     pointer-events: none;
     position: absolute;
+    top:-25px !important;
 }
 
 #tah-reposition, #tah-categories {
@@ -135,7 +136,8 @@
 
 /* Show the dropdown menu on hover */
 .tah-category.hover .tah-content {
-    display: block;
+    display: flex;
+    flex-direction: column;
     padding: 2px;
     position: absolute;
     left: -155px;
@@ -345,4 +347,8 @@
 
 .tah-action .active {
     background: rgba(85, 17, 0, 0.7);
+}
+
+.tah-action .activeText:after {
+    content: '*'
 }

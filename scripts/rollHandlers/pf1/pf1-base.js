@@ -39,6 +39,15 @@ export class RollHandlerBasePf1 extends RollHandler {
             case 'cmb':
                 this.rollCmbMacro(event, tokenId, actionId);
                 break;
+            case 'melee':
+                this.rollMeleeAttackMacro(event, tokenId, actionId);
+                break;
+            case 'ranged':
+                this.rollRangedAttackMacro(event, tokenId, actionId);
+                break;
+            case 'bab':
+                this.rollBAB(event, tokenId, actionId);
+                break;
             case 'skill':
                 this.rollSkillMacro(event, tokenId, actionId);
                 break;
@@ -67,7 +76,8 @@ export class RollHandlerBasePf1 extends RollHandler {
                     this.rollDefenses(event, tokenId, actionId);
                     break;
             case 'utility':
-                this.performUtilityMacro(event, tokenId, actionId);
+                await this.performUtilityMacro(event, tokenId, actionId);
+                break;
             default:
                 break;
         }
@@ -76,6 +86,21 @@ export class RollHandlerBasePf1 extends RollHandler {
     rollCmbMacro(event, tokenId, checkId) {
         const actor = super.getActor(tokenId);
         actor.rollCMB(event);
+    }
+
+    rollMeleeAttackMacro(event, tokenId, checkId) {
+        const actor = super.getActor(tokenId);
+        actor.rollAttack({ event: event, melee: true });
+    }
+
+    rollRangedAttackMacro(event, tokenId, checkId) {
+        const actor = super.getActor(tokenId);
+        actor.rollAttack({ event: event, melee: false });
+    }
+
+    rollBAB(event, tokenId, checkId) {
+        const actor = super.getActor(tokenId);
+        actor.rollBAB({ event: event });
     }
 
     rollConcentrationMacro(event, tokenId, checkId) {
@@ -135,7 +160,7 @@ export class RollHandlerBasePf1 extends RollHandler {
         await actor.update(update);
     }
     
-    performUtilityMacro(event, tokenId, actionId) {
+    async performUtilityMacro(event, tokenId, actionId) {
         let actor = super.getActor(tokenId);
         let token = super.getToken(tokenId);
 
@@ -150,6 +175,17 @@ export class RollHandlerBasePf1 extends RollHandler {
             case 'toggleVisibility':
                 token.toggleVisibility();
                 break;
+            case 'initiative':
+                await this.performInitiativeMacro(tokenId);
+                break;
         }
+    }
+
+    async performInitiativeMacro(tokenId) {
+        let actor = super.getActor(tokenId);
+        
+        await actor.rollInitiative({createCombatants: true});
+            
+        Hooks.callAll('forceUpdateTokenActionHUD')
     }
 }

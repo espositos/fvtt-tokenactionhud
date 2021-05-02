@@ -16,10 +16,12 @@ export class NpcActionHandlerPf2e {
         let skills = this._getSkillsList(actor, tokenId);
         let saves = this.baseHandler._getSaveList(actor, tokenId);
         let attributes = this._getAttributeListNpc(actor, tokenId); 
+        let effects = this.baseHandler._getEffectsList(actor, tokenId);
         let utilities = this.baseHandler._getUtilityList(actor, tokenId); 
         
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.strikes'), strikes);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.actions'), actions);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.effects'), effects);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.inventory'), items);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.spells'), spells);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.features'), feats);

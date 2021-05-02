@@ -413,9 +413,11 @@ export class ActionHandlerSfrpg extends ActionHandler {
         const order = ['captain', 'pilot', 'gunner', 'engineer', 'scienceOfficer', 'chiefMate', 'magicOfficer', 'openCrew', 'minorCrew'];
 
         order.forEach(role => {
-            const crew = actor.data.data.crew[role];
+            const crew = actor.data.data.crew;
+            const crewRole = crew[role];
+            const npcRole = crew.npcData[role];
 
-            if (crew && crew.actors.length === 0)
+            if (!this._shouldShowCrewOptions(crew, crewRole, npcRole))
                 return;
 
             const groupActions = groupedActions[role];
@@ -430,8 +432,12 @@ export class ActionHandlerSfrpg extends ActionHandler {
                 subcategory.actions.push(action);
             });
 
-            if (crew) {
-                subcategory.info1 = crew.limit > 0 ? `${crew.actors.length}/${crew.limit}` : crew.actors.length;
+            if (crewRole) {
+                if (crew.useNPCCrew) {
+                    subcategory.info1 = crew.npcData[role].numberOfUses;
+                } else {
+                    subcategory.info1 = crewRole.limit > 0 ? `${crewRole.actors.length}/${crewRole.limit}` : crewRole.actors.length;
+                }
             }
 
             const capitalRole = role.charAt(0).toUpperCase() + role.slice(1);
@@ -443,6 +449,20 @@ export class ActionHandlerSfrpg extends ActionHandler {
         this._combineCategoryWithList(actionList, catName, category);
     }
 
+    _shouldShowCrewOptions(crew, crewRole, npcRole) {
+        if (!crewRole)
+            return true;
+
+        if (crewRole.actors?.length > 0 && !crew.useNPCCrew)
+            return true;
+
+        if (crew.useNPCCrew && npcRole?.numberOfUses > 0)
+            return true;
+
+        return false;
+    }
+
+
     /** @private */
     _addShields(token, actor, actionList) {
         const macroType = 'shields';
@@ -450,10 +470,10 @@ export class ActionHandlerSfrpg extends ActionHandler {
 
         const shields = actor.data.data.attributes?.shields;
         if (!shields)
-            return actionList;
-
+        return actionList;
+        
         category.info1 = `${shields.value}/${shields.max}`;
-
+        
         const sides = ['forward', 'starboard', 'aft', 'port'];
         const amounts = [
             {name: '-10', value:'-10'},
@@ -463,14 +483,15 @@ export class ActionHandlerSfrpg extends ActionHandler {
             {name: '+5', value: '+5'},
             {name: '+10', value: '+10'}
         ];
-
+        
+        const quadrants = actor.data.data.quadrants;
         sides.forEach(side => {
-            const currShields = shields[side];
+            const currShields = quadrants[side]['shields'];
             if (!currShields)
                 return;
             
             const subcategory = this.initializeEmptySubcategory(side);
-            subcategory.info1 = `${currShields.value}/${currShields.max}`;
+            subcategory.info1 = `${currShields.value}/${shields.limit}`;
 
             amounts.forEach(amount => {
                 const encodedValue = [macroType, token.id, `${side}.${amount.value}`].join(this.delimiter);

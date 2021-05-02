@@ -11,6 +11,7 @@
     "tokenactionhud.dmg": "Dañ",
     "tokenactionhud.feats": "Dotes",
     "tokenactionhud.features": "Dotes",
+	"tokenactionhud.classFeatures": "Características de clase",
     "tokenactionhud.inconsumables": "Consumibles",
     "tokenactionhud.instinct": "Instinto",
     "tokenactionhud.monsterMoves": "Movimientos de Monstruo",
@@ -113,6 +114,12 @@
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.name": "Mostrar los compendios del DJ",
     "tokenactionhud.settings.dungeonworld.showGmCompendiums.hint": "Si está activo, y el usuario es un DJ, el HUD incluirá los movimientos del DJ, las tablas aleatorias de tesoro y las cartas.",
 
+    "tokenactionhud.symbaroum.abilities": "Abilities",
+    "tokenactionhud.symbaroum.mysticalPowers": "Mystical Powers",
+  
     "tokenactionhud.wfrp.meleeSkillPrefix" : "Melee",
-    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged"
+    "tokenactionhud.wfrp.rangedSkillPrefix" : "Ranged",
+
+    "tokenactionhud.symbaroum.abilities": "Abilities",
+    "tokenactionhud.symbaroum.mysticalPowers": "Mystical Powers"
 }

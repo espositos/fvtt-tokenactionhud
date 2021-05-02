@@ -23,11 +23,6 @@ export class PcActionHandlerPf2e {
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.skills'), skills);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.saves'), saves);
 
-        if (settings.get('showPcAbilities') && type === 'character') {
-            let abilities = this.baseHandler._getAbilityList(actor, tokenId);
-            this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.abilities'), abilities);
-        }
-
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.attributes'), attributes);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.utility'), utilities)
     }
@@ -36,9 +31,10 @@ export class PcActionHandlerPf2e {
     _forFamiliar(result, tokenId, actor) {
         let attack = this._getFamiliarAttack(actor, tokenId);
         let items = this.baseHandler._getItemsList(actor, tokenId);
-
+        let effects = this.baseHandler._getEffectsList(actor, tokenId);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.inventory'), items);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.attack'), attack);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.effects'), effects);
     }
 
     /** @private */
@@ -46,13 +42,15 @@ export class PcActionHandlerPf2e {
         let toggles = this._getTogglesCategory(actor, tokenId);
         let strikes = this._getStrikesList(actor, tokenId);
         let actions = this.baseHandler._getActionsList(actor, tokenId);
-        let spells = this.baseHandler._getSpellsList(actor, tokenId);
-        let feats = this.baseHandler._getFeatsList(actor, tokenId);
         let items = this.baseHandler._getItemsList(actor, tokenId);
-        
+        let spells = this.baseHandler._getSpellsList(actor, tokenId);
+        let effects = this.baseHandler._getEffectsList(actor, tokenId);
+        let feats = this.baseHandler._getFeatsList(actor, tokenId);
+                
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.toggles'), toggles);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.strikes'), strikes);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.actions'), actions);
+        this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.effects'), effects);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.inventory'), items);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.spells'), spells);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.features'), feats);

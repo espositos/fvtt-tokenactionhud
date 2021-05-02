@@ -27,12 +27,23 @@ export class RollHandlerBaseWfrp4e extends RollHandler {
             return this.doRenderItem(tokenId, actionId);
 
         let item = actor.getOwnedItem(actionId);
-        let itemData = duplicate(item.data);
+        let itemData;
+        if (!!item) {
+            itemData = duplicate(item.data);
+        } 
         
         if (this.rightClick)
             return item.postItem();
 
         switch (macroType) {
+            case 'dodge':
+                return this.dodge(actor);
+            case 'unarmed':
+                return this.unarmed(actor);
+            case 'stomp':
+                return this.stomp(actor);
+            case 'improvise':
+                return this.improvise(actor);
             case 'weapon':
                 return actor.setupWeapon(itemData, bypassData)
                     .then(setupData => actor.weaponTest(setupData));
@@ -52,6 +63,40 @@ export class RollHandlerBaseWfrp4e extends RollHandler {
                 return actor.setupSkill(itemData, bypassData)
                     .then(setupData => actor.basicTest(setupData));
         }
+    }
+
+    dodge(actor) {
+        let skill = actor.data.skills.find(s => s.name == game.i18n.localize("NAME.Dodge") && s.type == "skill")
+        if (skill) {
+                actor.setupSkill(skill).then(setupData => {
+            this.actor.basicTest(setupData)
+            });            
+        } else {
+            actor.setupCharacteristic("ag", {dodge: true}).then(setupData => {
+                actor.basicTest(setupData)
+              });
+        }
+    }
+
+    unarmed(actor) {
+        let unarmed = game.wfrp4e.config.systemItems.unarmed;
+        actor.setupWeapon(unarmed).then(setupData => {
+            actor.weaponTest(setupData)
+        });
+    }
+
+    stomp(actor) {
+        let stomp = game.wfrp4e.config.systemItems.stomp;
+        actor.setupTrait(stomp).then(setupData => {
+            actor.traitTest(setupData)
+        });
+    }
+
+    improvise(actor) {
+        let improv = game.wfrp4e.config.systemItems.improv;
+        actor.setupWeapon(improv).then(setupData => {
+            actor.weaponTest(setupData)
+        });
     }
 
     castSpell(actor, itemData, bypassData) {

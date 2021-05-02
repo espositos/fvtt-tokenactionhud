@@ -128,22 +128,42 @@ export class ActionHandlerPf1 extends ActionHandler {
     
     /** @private */
     _getAttacksList(actor, tokenId) {
-        let validAttacks = actor.data.items.filter(i => i.type === 'attack');
+        let validAttacks = actor.items.filter(i => i.type === 'attack').map(i => i.data);
         let sortedAttacks = this._sortByItemSort(validAttacks);
         let macroType = 'attack';
         
         let result = this.initializeEmptyCategory('attacks');
 
-        let cmbCat = this.initializeEmptySubcategory();
         let cmbMacro = 'cmb';
-        let name = this.i18n('tokenactionhud.cmb');
-        let encodedValue = [cmbMacro, tokenId, cmbMacro].join(this.delimiter);
-        let cmbAction = [{ name: name, encodedValue: encodedValue, id: cmbMacro }]
-        cmbCat.actions = cmbAction;
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.cmb'), cmbCat);
+        let cmbName = this.i18n('tokenactionhud.cmb');
+        let cmbValue = [cmbMacro, tokenId, cmbMacro].join(this.delimiter);
+        let cmbAction = { name: cmbName, encodedValue: cmbValue, id: cmbMacro }
+        
+        let babMacro = 'bab';
+        let babName = this.i18n('tokenactionhud.bab');
+        let babValue = [babMacro, tokenId, babMacro].join(this.delimiter);
+        let babAction = { name: babName, encodedValue: babValue, id: babMacro }
+        
+        let bonusCat = this.initializeEmptySubcategory();
+        bonusCat.actions = Array.of(cmbAction, babAction);
+        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.bonuses'), bonusCat);
+                    
+        let meleeMacro = 'melee';
+        let meleeName = this.i18n('tokenactionhud.melee');
+        let meleeValue = [meleeMacro, tokenId, meleeMacro].join(this.delimiter);
+        let meleeAction = { name: meleeName, encodedValue: meleeValue, id: meleeMacro }
+        
+        let rangedMacro = 'ranged';
+        let rangedName = this.i18n('tokenactionhud.ranged');
+        let rangedValue = [rangedMacro, tokenId, rangedMacro].join(this.delimiter);
+        let rangedAction = { name: rangedName, encodedValue: rangedValue, id: rangedMacro }
 
         let weaponActions = sortedAttacks.map(w => this._buildItem(tokenId, actor, macroType, w));
         let weaponsCat = this.initializeEmptySubcategory();
+
+        weaponActions.unshift(rangedAction);
+        weaponActions.unshift(meleeAction);
+
         weaponsCat.actions = weaponActions;
         let weaponsTitle = this.i18n('tokenactionhud.attack');
         
@@ -154,7 +174,7 @@ export class ActionHandlerPf1 extends ActionHandler {
     
     /** @private */
     _getBuffsList(actor, tokenId) {
-        let validBuff = actor.data.items.filter(i => i.type === 'buff');
+        let validBuff = actor.items.filter(i => i.type === 'buff').map(i => i.data);
         let sortedBuffs = this._sortByItemSort(validBuff);
         let macroType = 'buff';
 
@@ -177,7 +197,7 @@ export class ActionHandlerPf1 extends ActionHandler {
     
     /** @private */
     _getItemList(actor, tokenId) {
-        let validItems = actor.data.items.filter(i => i.data.quantity > 0);
+        let validItems = actor.items.filter(i => i.data.data.quantity > 0).map(i => i.data);
         let sortedItems = this._sortByItemSort(validItems);
         let macroType = 'item';
 
@@ -239,7 +259,7 @@ export class ActionHandlerPf1 extends ActionHandler {
     
     /** @private */
     _getSpellsList(actor, tokenId) {
-        let validSpells = actor.data.items.filter(i => i.type === 'spell');
+        let validSpells = actor.items.filter(i => i.type === 'spell').map(i => i.data);
         validSpells = this._filterExpendedItems(validSpells);
 
         let spells = this._categoriseSpells(actor, tokenId, validSpells);
@@ -371,7 +391,7 @@ export class ActionHandlerPf1 extends ActionHandler {
 
     /** @private */
     _getFeatsList(actor, tokenId) {
-        let validFeats = actor.data.items.filter(i => i.type == 'feat');
+        let validFeats = actor.items.filter(i => i.type == 'feat').map(i => i.data);
         let sortedFeats = this._sortByItemSort(validFeats);
         let feats = this._categoriseFeats(tokenId, actor, sortedFeats);
     
@@ -440,6 +460,12 @@ export class ActionHandlerPf1 extends ActionHandler {
         let skillsActions = [...allSkills].map(e => {
             let id = e[0];
             let data = e[1];
+
+            // rt: requires training
+            if (data.rt && !data.rank) {
+                return null;
+            }
+
             let name = abbr ? id : CONFIG.PF1.skills[id];
 
             if (data.isCustomSkill || !name) {
@@ -451,7 +477,8 @@ export class ActionHandlerPf1 extends ActionHandler {
             let encodedValue = [macroType, tokenId, id].join(this.delimiter);
             let info1 = this._getSkillRankInfo(data.rank);
             return { name: name, id: id, encodedValue: encodedValue, info1: info1 }; 
-        });
+        }).filter(s => !!s);
+        
         let skillsCategory = this.initializeEmptySubcategory();
         skillsCategory.actions = skillsActions;
 
@@ -616,9 +643,61 @@ export class ActionHandlerPf1 extends ActionHandler {
     }
 
     /** @private */
+    _addIntiativeSubcategory(macroType, category, tokenId) {
+        const combat = game.combat;
+        let combatant, currentInitiative;
+        if (combat) {
+            combatant = combat.combatants.find(c => c.tokenId === tokenId);
+            currentInitiative = combatant?.initiative;
+        }
+
+        let initiative = this.initializeEmptySubcategory();
+        
+        let initiativeValue = [macroType, tokenId, 'initiative'].join(this.delimiter);
+        let initiativeName = `${this.i18n('tokenactionhud.rollInitiative')}`;
+        
+        let initiativeAction = {id:'rollInitiative', encodedValue: initiativeValue, name: initiativeName};
+        
+        if (currentInitiative)
+            initiativeAction.info1 = currentInitiative;
+        initiativeAction.cssClass = currentInitiative ? 'active' : '';
+
+        initiative.actions.push(initiativeAction);
+
+        this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.initiative'), initiative);
+    }
+
+    /** @private */
+    _addMultiIntiativeSubcategory(macroType, tokenId, category) {
+        const combat = game.combat;
+
+        let initiative = this.initializeEmptySubcategory();
+        
+        let initiativeValue = [macroType, tokenId, 'initiative'].join(this.delimiter);
+        let initiativeName = `${this.i18n('tokenactionhud.rollInitiative')}`;
+        
+        let initiativeAction = {id:'rollInitiative', encodedValue: initiativeValue, name: initiativeName};
+        
+        let isActive;
+        if (combat) {
+            let tokenIds = canvas.tokens.controlled.map(t => t.id);
+            let tokenCombatants = tokenIds.map(id => combat.combatants.find(c => c.tokenId === id));
+            isActive = tokenCombatants.every(c => !!c?.initiative)
+        }
+
+        initiativeAction.cssClass = isActive ? 'active' : '';
+
+        initiative.actions.push(initiativeAction);
+
+        this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.initiative'), initiative);
+    }
+
+    /** @private */
     _getUtilityList(actor, tokenId) {
         let result = this.initializeEmptyCategory('utility');
         let macroType = 'utility';
+
+        this._addIntiativeSubcategory(macroType, result, tokenId);
         
         let rests = this.initializeEmptySubcategory()
 
@@ -636,6 +715,8 @@ export class ActionHandlerPf1 extends ActionHandler {
     _addMultiUtilities(list, tokenId, actors) {
         let category = this.initializeEmptyCategory('utility');
         let macroType = 'utility';
+
+        this._addMultiIntiativeSubcategory(macroType, tokenId, category);
         
         let rests = this.initializeEmptySubcategory();
 
@@ -645,6 +726,7 @@ export class ActionHandlerPf1 extends ActionHandler {
         }
         
         this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.rests'), rests);
+        this._combineCategoryWithList(list, this.i18n('tokenactionhud.utility'), category);
     }
 
 
