@@ -3,3 +3,5 @@ foundry.js
 *.bat
 /.vs/fvtt-tokenactionhud/v16
 /.vs
+/.vscode
+/.github

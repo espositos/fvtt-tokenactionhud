@@ -647,31 +647,12 @@ export class ActionHandlerPf2e extends ActionHandler {
         let result = this.initializeEmptyCategory('saves');
 
         let actorSaves = actor.data.data.saves;
-        let saveMap = Object.keys(actorSaves).map(k => { return {_id: k, name: CONFIG.PF2E.saves[k]}});
+        let saveMap = Object.keys(actorSaves).map(k => { return {_id: k, name: game.i18n.localize(CONFIG.PF2E.saves[k])}});
 
         let saves = this.initializeEmptySubcategory();
         saves.actions = this._produceActionMap(tokenId, saveMap, 'save');
 
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.saves'), saves);
-
-        return result;
-    }
-
-    /** @private */
-    _getAbilityList(actor, tokenId) {
-        let result = this.initializeEmptyCategory('abilities');
-
-        let abbr = settings.get('abbreviateSkills');
-
-        let actorAbilities = actor.data.data.abilities;
-        let abilityMap = Object.keys(actorAbilities).map(k => { 
-            let name = abbr ? k.charAt(0).toUpperCase() + k.slice(1) : CONFIG.PF2E.abilities[k];
-            return {_id: k, name: name}});
-
-        let abilities = this.initializeEmptySubcategory();
-        abilities.actions = this._produceActionMap(tokenId, abilityMap, 'ability');
-
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.abilities'), abilities);
 
         return result;
     }

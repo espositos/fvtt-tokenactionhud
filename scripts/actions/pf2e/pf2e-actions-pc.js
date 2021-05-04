@@ -23,11 +23,6 @@ export class PcActionHandlerPf2e {
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.skills'), skills);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.saves'), saves);
 
-        if (settings.get('showPcAbilities') && type === 'character') {
-            let abilities = this.baseHandler._getAbilityList(actor, tokenId);
-            this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.abilities'), abilities);
-        }
-
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.attributes'), attributes);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.utility'), utilities)
     }
