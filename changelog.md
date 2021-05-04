@@ -8,6 +8,8 @@
 - Alien RPG support thanks to pwatson100
 ### Changed
 - Update to Spanish localization thanks to WallaceMcGregor
+- Remove abilities from PF2 thanks to Drental
+- Localize saves in PF2E thanks to Drental
 
 ## [1.0.15] 2020-04-18
 ### Added
