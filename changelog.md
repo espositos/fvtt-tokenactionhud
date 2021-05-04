@@ -5,6 +5,7 @@
 - Various SotDL bugfixes thanks to patrickporto 
 ### Added
 - OpenD6 Space Support thanks to madseumas
+- Alien RPG support thanks to pwatson100
 ### Changed
 - Update to Spanish localization thanks to WallaceMcGregor
 

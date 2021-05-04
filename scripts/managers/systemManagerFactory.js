@@ -13,6 +13,7 @@ import { SwadeSystemManager } from './swade.js';
 import { StarWarsFFGSystemManager } from './starwarsffg.js';
 import { Tormenta20SystemManager } from './tormenta20.js';
 import { SymbaroumSystemManager } from './symbaroum.js';
+import { AlienrpgSystemManager } from './alienrpg.js';
 import { OD6SSystemManager } from './od6s.js';
 
 export class SystemManagerFactory {
@@ -46,10 +47,12 @@ export class SystemManagerFactory {
                 return new SwadeSystemManager(appName);
             case 'starwarsffg':
                 return new StarWarsFFGSystemManager(appName);
-			      case 'tormenta20':
-				        return new Tormenta20SystemManager(appName);
+            case 'tormenta20':
+                return new Tormenta20SystemManager(appName);
             case 'symbaroum':
                 return new SymbaroumSystemManager(appName);
+            case 'alienrpg':
+                return new AlienrpgSystemManager(appName);
         }
     }
 }
