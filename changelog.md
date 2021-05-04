@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.16] 2020-05-04
+### Added
+- OpenD6 Space Support thanks to madseumas
+
 ## [1.0.15] 2020-04-18
 ### Added
 - WFRP - Additional basic actions thanks to Marek
