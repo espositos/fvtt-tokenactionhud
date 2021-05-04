@@ -13,6 +13,7 @@ import { SwadeSystemManager } from './swade.js';
 import { StarWarsFFGSystemManager } from './starwarsffg.js';
 import { Tormenta20SystemManager } from './tormenta20.js';
 import { SymbaroumSystemManager } from './symbaroum.js';
+import { OD6SSystemManager } from './od6s.js';
 
 export class SystemManagerFactory {
     static create(system, appName) {
@@ -29,6 +30,8 @@ export class SystemManagerFactory {
                 return new Pf1SystemManager(appName);
             case 'D35E':
                 return new D35ESystemManager(appName);
+            case 'od6s':
+                return new OD6SSystemManager(appName);
             case 'pf2e':
                 return new Pf2eSystemManager(appName);
             case 'sfrpg':
