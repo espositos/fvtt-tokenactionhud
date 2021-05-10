@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.0.16] 2020-05-04
+### Bugfix
+- Various SotDL bugfixes thanks to patrickporto 
+### Added
+- OpenD6 Space Support thanks to madseumas
+- Alien RPG support thanks to pwatson100
+### Changed
+- Update to Spanish localization thanks to WallaceMcGregor
+- Remove abilities from PF2 thanks to Drental
+- Localize saves in PF2E thanks to Drental
+
+## [1.0.15] 2020-04-18
+### Added
+- WFRP - Additional basic actions thanks to Marek
+### Bugfix
+- DnD35 - Bugfixes from Rughalt
+
 ## [1.0.14] 2020-04-13
 ### Added 
 - WFRP - Support for basic actions

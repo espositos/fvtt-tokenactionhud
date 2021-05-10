@@ -68,8 +68,8 @@ export class RollHandlerBaseWfrp4e extends RollHandler {
     dodge(actor) {
         let skill = actor.data.skills.find(s => s.name == game.i18n.localize("NAME.Dodge") && s.type == "skill")
         if (skill) {
-                actor.setupSkill(skill).then(setupData => {
-            this.actor.basicTest(setupData)
+            actor.setupSkill(skill).then(setupData => {
+                actor.basicTest(setupData)
             });            
         } else {
             actor.setupCharacteristic("ag", {dodge: true}).then(setupData => {

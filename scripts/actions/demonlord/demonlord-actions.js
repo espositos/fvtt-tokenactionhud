@@ -62,7 +62,13 @@ export class ActionHandlerDemonlord extends ActionHandler {
         let result = this.initializeEmptyCategory('items');
 
         let subcategory = this.initializeEmptySubcategory();
-        subcategory.actions = this._produceMap(tokenId, actor.items.filter(i => i.type == macroType), macroType);
+
+        subcategory.actions = this._produceMap(tokenId, actor.items.filter(i => i.type == macroType).map(item => {
+            return { 
+                name: item.name,
+                encodedValue: [item.type, tokenId, item._id].join(this.delimiter),
+            }
+        }), macroType);
 
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.weapons'), subcategory);
 
@@ -129,7 +135,7 @@ export class ActionHandlerDemonlord extends ActionHandler {
                 let levelSubcategory = this.initializeEmptySubcategory();
                 talents.forEach(talentEntry => {
                     if (talentEntry.data.data.groupname == group) {
-                        let encodedValue = [macroType, tokenId, talentEntry._id, talentEntry.name.toLowerCase()].join(this.delimiter);
+                        let encodedValue = [macroType, tokenId, talentEntry._id].join(this.delimiter);
                         let addTalent = { name: talentEntry.name, encodedValue: encodedValue, id: talentEntry._id };
                         addTalent.img = this._getImage(talentEntry);
                         addTalent.info2 = this._getUsesData(talentEntry);
@@ -185,7 +191,7 @@ export class ActionHandlerDemonlord extends ActionHandler {
                 let levelSubcategory = this.initializeEmptySubcategory();
                 spells.forEach(spellEntry => {
                     if (spellEntry.data.data.tradition == tradition) {
-                        let encodedValue = [macroType, tokenId, spellEntry._id, spellEntry.name.toLowerCase()].join(this.delimiter);
+                        let encodedValue = [macroType, tokenId, spellEntry._id].join(this.delimiter);
                         let addSpell = { name: spellEntry.name, encodedValue: encodedValue, id: spellEntry._id };
                         addSpell.img = this._getImage(spellEntry);
                         addSpell.info2 = this._getCastingsData(spellEntry);
@@ -219,7 +225,7 @@ export class ActionHandlerDemonlord extends ActionHandler {
         let rests = this.initializeEmptySubcategory()
 
         if (actor.data.type === 'character') {
-            let shortRestValue = [macroType, tokenId, 'rest', ''].join(this.delimiter);
+            let shortRestValue = [macroType, tokenId, 'rest'].join(this.delimiter);
             rests.actions.push({ id: 'rest', encodedValue: shortRestValue, name: this.i18n('tokenactionhud.settings.demonlord.rest') })
         }
 
@@ -267,9 +273,8 @@ export class ActionHandlerDemonlord extends ActionHandler {
 
     _produceMap(tokenId, itemSet, type) {
         return itemSet.map(i => {
-            let encodedValue = [type, tokenId, i._id, i.name.toLowerCase()].join(this.delimiter);
-            let img = this._getImage(i);
-            let result = { name: i.name, encodedValue: encodedValue, id: i._id, img: img };
+            let icon = this._getImage(i);
+            let result = { name: i.name, encodedValue: i.encodedValue, id: i._id, icon };
 
             if (type === "talent")
                 result.info2 = this._getUsesData(i);
