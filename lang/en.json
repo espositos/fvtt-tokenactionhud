@@ -305,5 +305,11 @@
     "tokenactionhud.settings.alienrpg.attributeobservation": "Observation",
     "tokenactionhud.settings.alienrpg.creatureAttack": "Creature Attack",
     "tokenactionhud.settings.alienrpg.health": "Health",
-    "tokenactionhud.settings.alienrpg.rollCrit": "Roll Crit"
+    "tokenactionhud.settings.alienrpg.rollCrit": "Roll Crit",
+
+    "tokenactionhud.cthack.character": "Character",
+    "tokenactionhud.cthack.saves": "Saves",
+    "tokenactionhud.cthack.attributes": "Attributes",
+    "tokenactionhud.cthack.weapons": "Weapons",
+    "tokenactionhud.cthack.items": "Equipment"
 }

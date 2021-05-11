@@ -180,5 +180,11 @@
     "tokenactionhud.settings.alienrpg.attributeobservation": "Observation",
     "tokenactionhud.settings.alienrpg.creatureAttack": "Test d'attaque",
     "tokenactionhud.settings.alienrpg.health": "Santé",
-    "tokenactionhud.settings.alienrpg.rollCrit": "Crit au rouleau"
+    "tokenactionhud.settings.alienrpg.rollCrit": "Crit au rouleau",
+
+    "tokenactionhud.cthack.character": "Personnage",
+    "tokenactionhud.cthack.saves": "Sauvegardes",
+    "tokenactionhud.cthack.attributes": "Attributs",
+    "tokenactionhud.cthack.weapons": "Armes",
+    "tokenactionhud.cthack.items": "Equipement"
 }
