@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.17] 2020-05-11
+### Bugfix
+- WFRP fix for dodge skill thanks to silentmark
+- Add missing comma in Spanish language file
+### Added
+- Cthulhu Hack thanks to Kristov
+
 ## [1.0.16] 2020-05-04
 ### Bugfix
 - Various SotDL bugfixes thanks to patrickporto 
