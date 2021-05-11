@@ -282,7 +282,7 @@
     "tokenactionhud.settings.alienrpg.attributeobservation": "Observación",
     "tokenactionhud.settings.alienrpg.creatureAttack": "Tirada de ataque",
     "tokenactionhud.settings.alienrpg.health": "Salud",
-    "tokenactionhud.settings.alienrpg.rollCrit": "Roll Crit"
+    "tokenactionhud.settings.alienrpg.rollCrit": "Roll Crit",
     "tokenactionhud.settings.sfrpg.showMiscFeats.hint": "If enabled, features with no assigned action type will be shown in a catch-all, miscellaneous category.",
     "tokenactionhud.settings.sfrpg.showMiscFeats.name": "Display miscellaneous feats",
     "tokenactionhud.settings.sfrpg.showSpellInfo.hint": "If enabled, spell resistance, dismissible, concentration and save information noted next to the spell name.",
