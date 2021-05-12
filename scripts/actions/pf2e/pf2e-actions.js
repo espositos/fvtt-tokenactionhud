@@ -81,7 +81,7 @@ export class ActionHandlerPf2e extends ActionHandler {
 
             let name = CONFIG.PF2E.skills[key];
             if (!name)
-                name = data.name;
+                name = game.i18n.localize(data.name);
 
             const encodedValue = [macroType, tokenId, key].join(this.delimiter);
             const action = {name: name, encodedValue: encodedValue, id: key};
@@ -120,7 +120,7 @@ export class ActionHandlerPf2e extends ActionHandler {
             const key = save[0];
             const name = save[1];
             const encodedValue = [macroType, tokenId, key].join(this.delimiter);
-            const action = {name: name, encodedValue: encodedValue, id: key};
+            const action = {name: game.i18n.localize(name), encodedValue: encodedValue, id: key};
             subcategory.actions.push(action);
         })
 
