@@ -154,8 +154,8 @@ export class RollHandlerBasePf2e extends RollHandler {
         }
         else {
             var abilityBased = `${skill.ability}-based`;
-            const opts = actor.getRollOptions(['all', 'skill-check', abilityBased, CONFIG.PF2E.skills[actionId] ?? actionId]);
-            skill.roll(event, opts);
+            const options = actor.getRollOptions(['all', 'skill-check', abilityBased, CONFIG.PF2E.skills[actionId] ?? actionId]);
+            skill.roll({event, options});
         }
     }    
 
@@ -171,8 +171,8 @@ export class RollHandlerBasePf2e extends RollHandler {
             actor.rollAttribute(event, actionId);
         }
         else {
-            const opts = actor.getRollOptions(['all', attribute]);
-            attribute.roll(event, opts);
+            const options = actor.getRollOptions(['all', attribute]);
+            attribute.roll({event, options});
         }
     }
 
@@ -191,8 +191,8 @@ export class RollHandlerBasePf2e extends RollHandler {
             actor.rollSave(event, actionId);
         }
         else {
-            const opts = actor.getRollOptions(['all', 'saving-throw', save]);
-            save.roll(event, opts);
+            const options = actor.getRollOptions(['all', 'saving-throw', save]);
+            save.roll({event, options});
         }
     }
 
@@ -240,7 +240,7 @@ export class RollHandlerBasePf2e extends RollHandler {
 
     /** @private */
     _rollSaveNpc(event, actor, actionId) {
-        actor.data.data.saves[actionId].roll(event);
+        actor.data.data.saves[actionId].roll({event});
     }
 
     async _updateRollMode(rollMode) {
@@ -266,15 +266,15 @@ export class RollHandlerBasePf2e extends RollHandler {
         switch (strikeType) {
             case 'damage':
                 options = actor.getRollOptions(['all', 'damage-roll']);
-                strike.damage(event, options);
+                strike.damage({event, options});
                 break;
             case 'critical':
                 options = actor.getRollOptions(['all', 'damage-roll']);
-                strike.critical(event, options);
+                strike.critical({event, options});
                 break;
             default:
                 options = actor.getRollOptions(['all', 'attack-roll']);
-                strike.variants[strikeType]?.roll(event, options);
+                strike.variants[strikeType]?.roll({event, options});
                 this._consumeAmmo(actor, strike);
                 break;
         }
