@@ -81,10 +81,10 @@ export class ActionHandlerPf2e extends ActionHandler {
 
             let name = CONFIG.PF2E.skills[key];
             if (!name)
-                name = game.i18n.localize(data.name);
+                name = data.name;
 
             const encodedValue = [macroType, tokenId, key].join(this.delimiter);
-            const action = {name: name, encodedValue: encodedValue, id: key};
+            const action = {name: game.i18n.localize(name), encodedValue: encodedValue, id: key};
             subcategory.actions.push(action);
         })
 
