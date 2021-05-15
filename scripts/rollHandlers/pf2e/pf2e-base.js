@@ -465,13 +465,13 @@ export class RollHandlerBasePf2e extends RollHandler {
 
         switch(actionId) {
             case 'treatWounds':
-                this._executeMacroByName('Treat Wounds');
+                this._executeMacroById('6duZj0Ygiqv712rq');
                 break;
             case 'longRest':
-                this._executeMacroByName('Rest for the Night');
+                this._executeMacroById('0GU2sdy3r2MeC56x');
                 break;
             case 'takeABreather':
-                this._executeMacroByName('Take a Breather');
+                this._executeMacroById('aS6F7PSUlS9JM5jr');
                 break;
             case 'toggleCombat':
                 token.toggleCombat();
@@ -483,14 +483,9 @@ export class RollHandlerBasePf2e extends RollHandler {
         }
     }
 
-    async _executeMacroByName(name) {
+    async _executeMacroById(id) {
         let pack = game.packs.get('pf2e.pf2e-macros');
-        pack.getIndex().then(index => {
-            let id = index.find(e => e.name === name)?._id;
-
-            if (id)
-                pack.getEntity(id).then(e => e.execute()
-        )});
+        pack.getEntity(id).then(e => e.execute());
     }
 
     async _adjustAttribute(event, actor, property, valueName, actionId) {
