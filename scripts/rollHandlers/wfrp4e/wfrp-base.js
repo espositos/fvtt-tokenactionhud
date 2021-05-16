@@ -44,9 +44,14 @@ export class RollHandlerBaseWfrp4e extends RollHandler {
                 return this.stomp(actor);
             case 'improvise':
                 return this.improvise(actor);
-            case 'weapon':
-                return actor.setupWeapon(itemData, bypassData)
-                    .then(setupData => actor.weaponTest(setupData));
+            case 'weapon': {      
+                let promise = actor.setupWeapon(itemData, bypassData);
+                if (!(itemData.loading && !itemData.data.loaded.value)) {
+                    return promise.then(setupData => actor.weaponTest(setupData));
+                } else {
+                    break; // do nothing, setupweapon will show skill test dialog for reload.
+                }
+            }
             case 'spell':
                 return this.castSpell(actor, itemData, bypassData);
             case 'prayer':
