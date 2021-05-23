@@ -380,12 +380,40 @@ export class ActionHandlerPf2e extends ActionHandler {
         let filter = ['spell'];
         let items = (actor.items ?? []).filter(a => filter.includes(a.type));
 
-        let spellsSorted = this._sortSpellsByLevel(items);
+        let signatureSpellsAdded = this._addSignatureSpells(actor, items);
+        let spellsSorted = this._sortSpellsByLevel(signatureSpellsAdded);
         let spellCategories = this._categoriseSpells(actor, tokenId, spellsSorted);
         
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.spells'), spellCategories);
 
         return result;
+    }
+
+    /** @private */
+    _addSignatureSpells(actor, spells) {
+        const actorLevel = actor.data.data.details.level.value;
+        const highestSpellSlot = Math.ceil(actorLevel/2);
+        let signatureSpellIds = [];
+        actor.items.forEach(item => {
+            if (item.data.type === "spellcastingEntry") {
+                signatureSpellIds = signatureSpellIds.concat(item.data.data.signatureSpells.value);
+            }
+        });
+
+        let heightenedSignatureSpells = [];
+        spells.forEach(spell => {
+            if (signatureSpellIds.includes(spell.data._id)) {
+                const spellBaseLevel = spell.data.data.level.value;
+                for (let i=(spellBaseLevel+1); i<=highestSpellSlot; i++) {
+                    let heightenedSpell = Object.create(Object.getPrototypeOf(spell), Object.getOwnPropertyDescriptors(spell));
+                    heightenedSpell.data = duplicate(spell.data);
+                    heightenedSpell.data.data.heightenedLevel = {value:i};
+                    heightenedSignatureSpells.push(heightenedSpell);
+                }
+            }
+        });
+
+        return spells.concat(heightenedSignatureSpells);
     }
 
     /** @private */
@@ -450,6 +478,7 @@ export class ActionHandlerPf2e extends ActionHandler {
                     let spell = { name: s.name, encodedValue: encodedValue, id: s.data._id };
                     spell.img = this._getImage(s);
                     spell.icon = this._getActionIcon(s.data.data?.time?.value)
+                    spell.spellLevel = level;
 
                     this._addSpellInfo(s, spell);
                     levelSubcategory.actions.push(spell);
@@ -530,6 +559,7 @@ export class ActionHandlerPf2e extends ActionHandler {
             let spell = { name: s.name, encodedValue: encodedValue, id: s.data._id };
             spell.img = this._getImage(s);
             spell.icon = this._getActionIcon(s.data.data?.time?.value)
+            spell.spellLevel = level;
             this._addSpellInfo(s, spell);
             levelCategory.actions.push(spell);     
                   
