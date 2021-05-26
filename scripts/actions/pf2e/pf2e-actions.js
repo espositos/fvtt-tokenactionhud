@@ -84,7 +84,7 @@ export class ActionHandlerPf2e extends ActionHandler {
                 name = data.name;
 
             const encodedValue = [macroType, tokenId, key].join(this.delimiter);
-            const action = {name: name, encodedValue: encodedValue, id: key};
+            const action = {name: game.i18n.localize(name), encodedValue: encodedValue, id: key};
             subcategory.actions.push(action);
         })
 
@@ -120,7 +120,7 @@ export class ActionHandlerPf2e extends ActionHandler {
             const key = save[0];
             const name = save[1];
             const encodedValue = [macroType, tokenId, key].join(this.delimiter);
-            const action = {name: name, encodedValue: encodedValue, id: key};
+            const action = {name: game.i18n.localize(name), encodedValue: encodedValue, id: key};
             subcategory.actions.push(action);
         })
 
