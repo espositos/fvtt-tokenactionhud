@@ -154,8 +154,8 @@ export class RollHandlerBasePf2e extends RollHandler {
         }
         else {
             var abilityBased = `${skill.ability}-based`;
-            const opts = actor.getRollOptions(['all', 'skill-check', abilityBased, CONFIG.PF2E.skills[actionId] ?? actionId]);
-            skill.roll(event, opts);
+            const options = actor.getRollOptions(['all', 'skill-check', abilityBased, CONFIG.PF2E.skills[actionId] ?? actionId]);
+            skill.roll({event, options});
         }
     }    
 
@@ -171,8 +171,8 @@ export class RollHandlerBasePf2e extends RollHandler {
             actor.rollAttribute(event, actionId);
         }
         else {
-            const opts = actor.getRollOptions(['all', attribute]);
-            attribute.roll(event, opts);
+            const options = actor.getRollOptions(['all', attribute]);
+            attribute.roll({event, options});
         }
     }
 
@@ -191,8 +191,8 @@ export class RollHandlerBasePf2e extends RollHandler {
             actor.rollSave(event, actionId);
         }
         else {
-            const opts = actor.getRollOptions(['all', 'saving-throw', save]);
-            save.roll(event, opts);
+            const options = actor.getRollOptions(['all', 'saving-throw', save]);
+            save.roll({event, options});
         }
     }
 
@@ -240,7 +240,7 @@ export class RollHandlerBasePf2e extends RollHandler {
 
     /** @private */
     _rollSaveNpc(event, actor, actionId) {
-        actor.data.data.saves[actionId].roll(event);
+        actor.data.data.saves[actionId].roll({event});
     }
 
     async _updateRollMode(rollMode) {
@@ -266,15 +266,15 @@ export class RollHandlerBasePf2e extends RollHandler {
         switch (strikeType) {
             case 'damage':
                 options = actor.getRollOptions(['all', 'damage-roll']);
-                strike.damage(event, options);
+                strike.damage({event, options});
                 break;
             case 'critical':
                 options = actor.getRollOptions(['all', 'damage-roll']);
-                strike.critical(event, options);
+                strike.critical({event, options});
                 break;
             default:
                 options = actor.getRollOptions(['all', 'attack-roll']);
-                strike.variants[strikeType]?.roll(event, options);
+                strike.variants[strikeType]?.roll({event, options});
                 this._consumeAmmo(actor, strike);
                 break;
         }
@@ -465,13 +465,13 @@ export class RollHandlerBasePf2e extends RollHandler {
 
         switch(actionId) {
             case 'treatWounds':
-                this._executeMacroByName('Treat Wounds');
+                this._executeMacroById('6duZj0Ygiqv712rq');
                 break;
             case 'longRest':
-                this._executeMacroByName('Rest for the Night');
+                this._executeMacroById('0GU2sdy3r2MeC56x');
                 break;
             case 'takeABreather':
-                this._executeMacroByName('Take a Breather');
+                this._executeMacroById('aS6F7PSUlS9JM5jr');
                 break;
             case 'toggleCombat':
                 token.toggleCombat();
@@ -483,14 +483,9 @@ export class RollHandlerBasePf2e extends RollHandler {
         }
     }
 
-    async _executeMacroByName(name) {
+    async _executeMacroById(id) {
         let pack = game.packs.get('pf2e.pf2e-macros');
-        pack.getIndex().then(index => {
-            let id = index.find(e => e.name === name)?._id;
-
-            if (id)
-                pack.getEntity(id).then(e => e.execute()
-        )});
+        pack.getEntity(id).then(e => e.execute());
     }
 
     async _adjustAttribute(event, actor, property, valueName, actionId) {

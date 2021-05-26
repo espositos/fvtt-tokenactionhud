@@ -59,7 +59,6 @@ export class ActionHandlerPf2e extends ActionHandler {
 
         this._addMultiSkills(list, tokenId, actors);
         this._addMultiSaves(list, tokenId, actors);
-        this._addMultiAbilities(list, tokenId, actors);
         this._addMultiAttributes(list, tokenId, actors);
         this._addMultiUtilities(list, tokenId, actors);
     }
@@ -84,29 +83,11 @@ export class ActionHandlerPf2e extends ActionHandler {
                 name = data.name;
 
             const encodedValue = [macroType, tokenId, key].join(this.delimiter);
-            const action = {name: name, encodedValue: encodedValue, id: key};
+            const action = {name: game.i18n.localize(name), encodedValue: encodedValue, id: key};
             subcategory.actions.push(action);
         })
 
         const skillsName = this.i18n('tokenactionhud.commonSkills');
-        this._combineSubcategoryWithCategory(category, skillsName, subcategory);
-        this._combineCategoryWithList(list, skillsName, category);
-    }
-
-    _addMultiAbilities(list, tokenId, actors) {
-        const macroType = 'ability';
-        const category = this.initializeEmptyCategory(macroType);
-        const subcategory = this.initializeEmptySubcategory(macroType);
-
-        Object.entries(CONFIG.PF2E.abilities).forEach(ability => {
-            const key = ability[0];
-            const name = ability[1];
-            const encodedValue = [macroType, tokenId, key].join(this.delimiter);
-            const action = {name: name, encodedValue: encodedValue, id: key};
-            subcategory.actions.push(action);
-        })
-
-        const skillsName = this.i18n('tokenactionhud.abilities');
         this._combineSubcategoryWithCategory(category, skillsName, subcategory);
         this._combineCategoryWithList(list, skillsName, category);
     }
@@ -120,7 +101,7 @@ export class ActionHandlerPf2e extends ActionHandler {
             const key = save[0];
             const name = save[1];
             const encodedValue = [macroType, tokenId, key].join(this.delimiter);
-            const action = {name: name, encodedValue: encodedValue, id: key};
+            const action = {name: game.i18n.localize(name), encodedValue: encodedValue, id: key};
             subcategory.actions.push(action);
         })
 
