@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.18] 2020-05-26
+### Bugfix
+- PF2E Render effect switches for NPCs, thanks to Drental
+- PF2E fix deprecated roll syntax, thanks to Drental
+- WFRP fix error using unloaded ranged weapon, thanks to silentmark
+### Changed
+- Pf2E add translation to multiselect, thanks to Drental
+- PF2E remove abilities from multiselect, thanks to Drental
+- PF2E call macros by ID
+
 ## [1.0.17] 2020-05-11
 ### Bugfix
 - WFRP fix for dodge skill thanks to silentmark
