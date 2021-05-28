@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.19] 2020-05-28
+### Bugfix
+- PF2E Add support for heightened and signature spells thanks to Atraeus
+
 ## [1.0.18] 2020-05-26
 ### Bugfix
 - PF2E Render effect switches for NPCs, thanks to Drental
