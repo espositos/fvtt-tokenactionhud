@@ -12,24 +12,24 @@ export class SwadeSystemManager extends SystemManager {
 
     /** @override */
     doGetActionHandler(filterManager, categoryManager) {
-        console.log("startup");
-        let actionHandler = new ActionHandler(filterManager, categoryManager);
-        return actionHandler;
+        return new ActionHandler(filterManager, categoryManager);
     }
 
     /** @override */
     getAvailableRollHandlers() {
-        let choices = { 'core': 'Core SWADE', 'betterrolls-swade2' : 'Better Rolls 2 for Savage Worlds' };
+        let choices = { 'core': 'Core SWADE' };
+        SystemManager.addHandler(choices, 'betterrolls-swade2');
 
         return choices;
     }
 
     /** @override */
     doGetRollHandler(handlerId) {
-        if (handlerId == "betterrolls-swade2") {
-            return new BR2SW();
-        } else {
-            return new Core();
+        switch (handlerId) {
+            case 'betterrolls-swade2':
+                return new BR2SW();
+            default:
+                return new Core();
         }
     }
 
