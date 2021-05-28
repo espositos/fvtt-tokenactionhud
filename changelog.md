@@ -3,6 +3,8 @@
 ## [1.0.19] 2020-05-28
 ### Bugfix
 - PF2E Add support for heightened and signature spells thanks to Atraeus
+### Added
+- Add support for Better Rolls for SWADE2 thanks to zk-sn (famous director Zack Snyder, I assume)
 
 ## [1.0.18] 2020-05-26
 ### Bugfix
