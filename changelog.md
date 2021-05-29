@@ -1,6 +1,8 @@
 # Changelog
 
 ## [1.0.20] 2020-05-29
+### Bugfix
+- Demonlord - fix challenge rolls thanks to mpgenio
 ### Changed
 - DND5e Add support for 0.8.5 (should not break 0.7.x but please let me know if it does)
 
