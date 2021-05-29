@@ -35,7 +35,8 @@ export class RollHandlerBaseDemonlord extends RollHandler {
 
         switch (macroType) {
             case 'challenge':
-                actor.rollChallenge(actionId);
+                const attribute = actor ? actor.data.data.attributes[actionId] : null
+                actor.rollChallenge(attribute, actionId);
                 break;
             case 'weapon':
                 actor.rollWeaponAttack(item._id, null);
