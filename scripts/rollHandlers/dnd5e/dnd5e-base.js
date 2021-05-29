@@ -143,7 +143,8 @@ export class RollHandlerBase5e extends RollHandler {
 
     async toggleEffect(event, tokenId, effectId) {
         const actor = super.getActor(tokenId);
-        const effect = actor.effects.entries.find(e => e.id === effectId);
+        const effects = 'find' in actor.effects.entries ? actor.effects.entries : actor.effects;
+        const effect = effects.find(e => e.id === effectId);
 
         if (!effect)
             return;
