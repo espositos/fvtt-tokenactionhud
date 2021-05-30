@@ -630,7 +630,7 @@ export class ActionHandler5e extends ActionHandler {
             const name = this.i18n(c.label);
             const encodedValue = [macroType, tokenId, c.id].join(this.delimiter);
             const effects = 'some' in actor.effects.entries ? actor.effects.entries : actor.effects;
-            const cssClass = actor.effects.entries.some(e => e.data.flags.core?.statusId === c.id) ? 'active' : '';
+            const cssClass = effects.some(e => e.data.flags.core?.statusId === c.id) ? 'active' : '';
             const image = c.icon;
             const action = {name: name, id: c.id, encodedValue: encodedValue, img: image, cssClass: cssClass}
 
@@ -848,9 +848,9 @@ export class ActionHandler5e extends ActionHandler {
         let result = spells;
 
         if (settings.get('showAllNonpreparableSpells')) {
-            result = spells.filter(i => getData(i).preparation.prepared || nonpreparableSpells.includes(getData(i).preparation.mode) || getData(i).level === 0)
+            result = spells.filter(i => this._getEntityData(i).preparation.prepared || nonpreparableSpells.includes(this._getEntityData(i).preparation.mode) || this._getEntityData(i).level === 0)
         } else {
-            result = spells.filter(i => getData(i).preparation.prepared);
+            result = spells.filter(i => this._getEntityData(i).preparation.prepared);
         }
 
         return result;
