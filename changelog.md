@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.22] 2020-05-30
+### Bugfix
+- DND5e incorrectly hiding all actions when setting to hide longer actions was enabled
+
 ## [1.0.21] 2020-05-30
 ### Bugfix
 - DND5e Managed to fuck up 0.8.5 and 0.7.10 at once, but fixed by p-becker

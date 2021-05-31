@@ -836,7 +836,7 @@ export class ActionHandler5e extends ActionHandler {
         if (settings.get('hideLongerActions'))
             result = items.filter(i => {
                 const iData = this._getEntityData(i);
-                !iData.activation || !(iData.activation.type === 'minute' || iData.activation.type === 'hour' || iData.activation.type === 'day');
+                return !iData.activation || !(iData.activation.type === 'minute' || iData.activation.type === 'hour' || iData.activation.type === 'day');
             });
 
         return result ? result : items;
@@ -848,7 +848,10 @@ export class ActionHandler5e extends ActionHandler {
         let result = spells;
 
         if (settings.get('showAllNonpreparableSpells')) {
-            result = spells.filter(i => this._getEntityData(i).preparation.prepared || nonpreparableSpells.includes(this._getEntityData(i).preparation.mode) || this._getEntityData(i).level === 0)
+            result = spells.filter(i => {
+                const iData = this._getEntityData(i);
+                return iData.preparation.prepared || nonpreparableSpells.includes(iData.preparation.mode) || iData.level === 0;
+            });
         } else {
             result = spells.filter(i => this._getEntityData(i).preparation.prepared);
         }
