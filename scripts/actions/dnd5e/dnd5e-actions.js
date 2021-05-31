@@ -196,7 +196,7 @@ export class ActionHandler5e extends ActionHandler {
         validSpells = this._filterExpendedItems(validSpells);
         
         if (actor.data.type === 'character' || !settings.get('showAllNpcItems'))
-            validSpells = this._filterNonpreparedSpells(validSpells);
+            validSpells = this._filterNonPreparedSpells(validSpells, this._getEntityData(actor).classes);
 
         let spellsSorted = this._sortSpellsByLevel(validSpells);
         let spells = this._categoriseSpells(actor, tokenId, spellsSorted);
@@ -843,15 +843,23 @@ export class ActionHandler5e extends ActionHandler {
     }
 
     /** @private */
-    _filterNonpreparedSpells(spells) {
-        const nonpreparableSpells = Object.keys(game.dnd5e.config.spellPreparationModes).filter(p => p != 'prepared');
+    _filterNonPreparedSpells(spells, actorClasses) {
+        const spellsWithoutPreparation = Object.keys(game.dnd5e.config.spellPreparationModes).filter(p => p != 'prepared');
+        const classesWithoutPreparation = ["sorcerer", "ranger", "bard"];
         let result = spells;
 
         if (settings.get('showAllNonpreparableSpells')) {
             result = spells.filter(i => {
-                const iData = this._getEntityData(i);
-                return iData.preparation.prepared || nonpreparableSpells.includes(iData.preparation.mode) || iData.level === 0;
-            });
+                let spellData = this._getEntityData(i);
+                let isPrepared = spellData.preparation.prepared;
+                let isWithoutPreparation = spellsWithoutPreparation.includes(spellData.preparation.mode);
+                let isCantrip = spellData.level === 0;
+                // Could be refined to check class features
+                let isClassWithoutPreparation = Object.keys(actorClasses).some(actorClass => classesWithoutPreparation.includes(actorClass))
+
+                return isPrepared || isCantrip || isWithoutPreparation || isClassWithoutPreparation
+                }
+            )
         } else {
             result = spells.filter(i => this._getEntityData(i).preparation.prepared);
         }
