@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.24] 2021-06-08
+### Changed
+- ItemMacro - discontinue use of backwards compatibility function
+
 ## [1.0.23] 2021-06-08
 ### Bugfix
 - PFE2 adjustments for 0.8.6
