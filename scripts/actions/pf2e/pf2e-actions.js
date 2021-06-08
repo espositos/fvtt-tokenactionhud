@@ -386,8 +386,12 @@ export class ActionHandlerPf2e extends ActionHandler {
             if (signatureSpellIds.includes(spell.data._id)) {
                 const spellBaseLevel = spell.data.data.level.value;
                 for (let i=(spellBaseLevel+1); i<=highestSpellSlot; i++) {
-                    let heightenedSpell = Object.create(Object.getPrototypeOf(spell), Object.getOwnPropertyDescriptors(spell));
-                    heightenedSpell.data = duplicate(spell.data);
+                    let heightenedSpell = Object.create(Object.getPrototypeOf(spell));
+                    Object.defineProperty(heightenedSpell, 'data', {
+                        value: duplicate(spell.data),
+                        configurable: true,
+                        writable: true
+                    });
                     heightenedSpell.data.data.heightenedLevel = {value:i};
                     heightenedSignatureSpells.push(heightenedSpell);
                 }
