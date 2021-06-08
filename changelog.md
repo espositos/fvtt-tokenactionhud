@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.28] 2021-06-08
+### Bugfix
+- check for undefined tokens thanks to stwlam
+- Symbaroum for 0.8 thanks to Khaali-dev
+
 ## [1.0.27] 2021-06-08
 ### Bugfix
 - PF2E item.roll replaced with toChat
