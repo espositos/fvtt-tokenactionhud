@@ -678,7 +678,7 @@ export class ActionHandlerPf2e extends ActionHandler {
             let key = skillEntry[0];
             let data = skillEntry[1];
 
-            let name = abbreviated ? key.charAt(0).toUpperCase()+key.slice(1) : data.name.charAt(0).toUpperCase()+data.name.slice(1);
+            let name = abbreviated || !data.name ? key.charAt(0).toUpperCase()+key.slice(1) : data.name?.charAt(0).toUpperCase()+data.name?.slice(1);
 
             let value = data.value;
             let info = '';
