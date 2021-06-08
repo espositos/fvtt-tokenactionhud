@@ -54,7 +54,7 @@ export class RollHandlerBR2SWSwade extends RollHandler {
     _rollItem(event, actor, actionId, tokenId) {
         //const item = super.getItem(actor, actionId);
         //item.show();
-        game.brsw.create_item_card_from_id(tokenId, actor._id, actionId);
+        game.brsw.create_item_card_fromid(tokenId, actor.id, actionId);
     }
 
     /** @private */
@@ -151,13 +151,13 @@ export class RollHandlerBR2SWSwade extends RollHandler {
     /** @private */
     _rollAttribute(event, actor, actionId, tokenId) {
         //actor.rollAttribute(actionId, {event: event});
-        game.brsw.create_attribute_card_from_id(tokenId, actor._id, actionId).then(message => {game.brsw.roll_attribute(message, "", false)});
+        game.brsw.create_attribute_card_fromid(tokenId, actor.id, actionId).then(message => {game.brsw.roll_attribute(message, "", false)});
     }
 
     /** @private */
     _rollSkill(event, actor, actionId, tokenId) {
         //actor.rollSkill(actionId, {event: event});
-        game.brsw.create_skill_card_from_id(tokenId, actor._id, actionId).then(message => {game.brsw.roll_skill(message, "", false)});
+        game.brsw.create_skill_card_fromid(tokenId, actor.id, actionId).then(message => {game.brsw.roll_skill(message, "", false)});
     }
 
     /** @private */
