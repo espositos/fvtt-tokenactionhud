@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.25] 2021-06-08
+### Changed
+- DND5e remove all (most?) _id references
+
 ## [1.0.24] 2021-06-08
 ### Changed
 - ItemMacro - discontinue use of backwards compatibility function
