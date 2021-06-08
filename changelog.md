@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.26] 2021-06-08
+### Bugfix
+- PF2E check for null value on containerId
+
 ## [1.0.25] 2021-06-08
 ### Changed
 - DND5e remove all (most?) _id references
