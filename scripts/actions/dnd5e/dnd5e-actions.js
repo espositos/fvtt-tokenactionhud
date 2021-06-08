@@ -21,7 +21,7 @@ export class ActionHandler5e extends ActionHandler {
         if (!token)
             return result;
 
-        let tokenId = token.data.id;
+        let tokenId = token.id;
 
         result.tokenId = tokenId;
         
