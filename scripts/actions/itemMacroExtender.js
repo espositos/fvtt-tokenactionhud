@@ -16,7 +16,8 @@ export class ItemMacroActionListExtender extends ActionListExtender {
         if (!actorId)
             return;
 
-        let items = ItemMacro.getTokenItems(tokenId);
+        let actor = this.getActor(tokenId);
+        let items = actor.items.filter(item => item.hasMacro());
 
         let itemIds;
         if (SystemManager.isModuleActive('midi-qol')) {
@@ -94,5 +95,9 @@ export class ItemMacroActionListExtender extends ActionListExtender {
     isUnsupportedByMidiQoL(item) {
         let flag = item.getFlag('midi-qol', 'onUseMacroName');
         return !flag;
+    }
+
+    getActor(tokenId) {
+        return canvas.tokens.placeables.find(t => t.data._id === tokenId)?.actor;
     }
 }
