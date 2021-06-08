@@ -309,7 +309,7 @@ export class RollHandlerBasePf2e extends RollHandler {
             if (this.isRenderItem())
                 return this.doRenderItem(tokenId, item._id);
 
-            item.roll();
+            item.toChat();
             return;
         }
         
@@ -341,7 +341,7 @@ export class RollHandlerBasePf2e extends RollHandler {
     _rollItem(event, actor, actionId) {
         let item = actor.getOwnedItem(actionId);
         
-        item.roll();
+        item.toChat();
     }
 
     /** @private */

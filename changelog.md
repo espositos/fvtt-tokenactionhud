@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.27] 2021-06-08
+### Bugfix
+- PF2E item.roll replaced with toChat
+
 ## [1.0.26] 2021-06-08
 ### Bugfix
 - PF2E check for null value on containerId
