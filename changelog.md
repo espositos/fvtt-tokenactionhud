@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.30] 2021-06-08
+### Bugfix
+- Savage Worlds update for 0.8.6
+
 ## [1.0.29] 2021-06-08
 ### Bugfix
 - DND5e - i'm an idiot, checking for tokenId in the wrong place

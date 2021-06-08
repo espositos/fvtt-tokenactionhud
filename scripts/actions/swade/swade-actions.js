@@ -13,7 +13,7 @@ export class ActionHandlerSwade extends ActionHandler {
         if (!token)
             return result;
 
-        let tokenId = token.data._id;
+        let tokenId = token.id;
 
         result.tokenId = tokenId;
 
@@ -22,7 +22,7 @@ export class ActionHandlerSwade extends ActionHandler {
         if (!actor)
             return result;
 
-        result.actorId = actor._id;
+        result.actorId = actor.id;
 
         this._addAttributes(result, tokenId, actor);
         this._addSkills(result, tokenId, actor);
@@ -81,8 +81,8 @@ export class ActionHandlerSwade extends ActionHandler {
 
         const subcat = this.initializeEmptySubcategory('skills');
         skills.forEach(s => {
-            const encodedValue = [macroType, tokenId, s._id].join(this.delimiter);
-            const action = {name: s.name, encodedValue: encodedValue, id: s._id};
+            const encodedValue = [macroType, tokenId, s.id].join(this.delimiter);
+            const action = {name: s.name, encodedValue: encodedValue, id: s.id};
 
             let mod = this._parseDie(s.data.die, s.data['wild-die']);
             action.info1 = mod;
@@ -125,7 +125,7 @@ export class ActionHandlerSwade extends ActionHandler {
 
     /** @private */
     _groupPowers(powers) {
-        const powerTypes = [...new Set(powers.map(i => i.data.rank))];
+        const powerTypes = [...new Set(powers.map(i => i.data.data.rank))];
 
         return powerTypes.reduce((grouped, p) => {
             let powerName = p;
@@ -135,7 +135,7 @@ export class ActionHandlerSwade extends ActionHandler {
             if (!grouped.hasOwnProperty(p))
                 grouped[powerName] = [];
 
-                grouped[powerName].push(...powers.filter(i => i.data.rank === p));
+                grouped[powerName].push(...powers.filter(i => i.data.data.rank === p));
 
             return grouped;
         }, {});
@@ -148,7 +148,7 @@ export class ActionHandlerSwade extends ActionHandler {
         let items = actor.data.items;
 
         if (actor.data.type === 'character')
-            items = items.filter(i => i.data.equipped);
+            items = items.filter(i => i.data.data.equipped);
 
         const weapons = items.filter(i => i.type === 'weapon');
         const weaponsName = this.i18n('tokenactionhud.weapons');
@@ -360,7 +360,7 @@ export class ActionHandlerSwade extends ActionHandler {
     /** @private */
     _buildItemAction(tokenId, item) {
         const macroType = 'item';
-        const id = item._id;
+        const id = item.id;
         const name = item.name;
         const encodedValue = [macroType, tokenId, id].join(this.delimiter);
         const action = {name: name, id: id, encodedValue: encodedValue};
@@ -375,8 +375,8 @@ export class ActionHandlerSwade extends ActionHandler {
 
     /** @private */
     _getItemQuantity(item) {
-        if (item.data.quantity !== 1)
-            return item.data.quantity;
+        if (item.data.data.quantity !== 1)
+            return item.data.data.quantity;
 
         return '';
     }
@@ -384,8 +384,8 @@ export class ActionHandlerSwade extends ActionHandler {
     /** @private */
     _getItemShots(item) {
         
-        const curr = item.data.currentShots;
-        const shots = item.data.shots;
+        const curr = item.data.data.currentShots;
+        const shots = item.data.data.shots;
         
         if (!curr)
             return;
@@ -403,7 +403,7 @@ export class ActionHandlerSwade extends ActionHandler {
     /** @private */
     _buildPowerAction(tokenId, item) {
         const macroType = 'item';
-        const id = item._id;
+        const id = item.id;
         const name = item.name;
         const encodedValue = [macroType, tokenId, id].join(this.delimiter);
         const action = {name: name, id: id, encodedValue: encodedValue};
@@ -417,7 +417,7 @@ export class ActionHandlerSwade extends ActionHandler {
 
     /** @private */
     _getPowerPoints(item) {
-        const pp = item.data.pp;
+        const pp = item.data.data.pp;
         if (pp.toLowerCase() === 'special')
             return '*';
 
