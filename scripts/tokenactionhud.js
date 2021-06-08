@@ -446,7 +446,7 @@ export class TokenActionHUD extends Application {
     }
 
     /** @private */
-    _getTargetToken(controlled) {
+    _getTargetToken(controlled = []) {
         if (controlled.length > 1)
             return null;
 
