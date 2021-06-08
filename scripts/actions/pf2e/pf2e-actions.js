@@ -162,7 +162,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let result = this.initializeEmptyCategory('items');
         
         let filter = ['weapon', 'equipment', 'consumable', 'armor', 'backpack'];
-        let items = (actor.items ?? []).filter(a => a.data.data.equipped?.value && !a.data.data.containerId?.value.length)
+        let items = (actor.items ?? []).filter(a => a.data.data.equipped?.value && !a.data.data.containerId?.value?.length)
             .filter(i => filter.includes(i.data.type)).sort(this._foundrySort);
         
         let weaponList = items.filter(i => i.type === 'weapon');
