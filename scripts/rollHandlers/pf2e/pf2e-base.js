@@ -85,7 +85,7 @@ export class RollHandlerBasePf2e extends RollHandler {
                 this._rollItem(event, actor, actionId);
                 break;
             case 'spell':
-                this._rollSpell(event, tokenId, actor, actionId);
+                await this._rollSpell(event, tokenId, actor, actionId);
                 break;
             case 'utility':
                 this._performUtilityMacro(event, tokenId, actionId);
@@ -122,7 +122,7 @@ export class RollHandlerBasePf2e extends RollHandler {
             case 'doomed':
             case 'wounded':
             case 'dying':
-                await this._adjustAttribute(event, actor, macroType, 'value', actionId);
+                await this._adjustCondition(event, actor, macroType);
                 break;
             case 'familiarAttack':
                 this._rollFamiliarAttack(event, actor);
@@ -231,11 +231,12 @@ export class RollHandlerBasePf2e extends RollHandler {
 
         let update;
         if (slot === 'focus')
-            update = {_id: spellbook._id, data: { focus: {points: value}}};
+            update = [{_id: spellbook._id, data: { focus: {points: value}}}];
         else
-            update = {_id: spellbook._id, data: {slots: {[slot]: {value: value}}}};
+            update = [{_id: spellbook._id, data: {slots: {[slot]: {value: value}}}}];
 
-        await actor.updateEmbeddedEntity("OwnedItem", update);
+        await Item.updateDocuments(update, {parent: actor});
+        Hooks.callAll('forceUpdateTokenActionHUD');
     }
 
     /** @private */
@@ -308,7 +309,7 @@ export class RollHandlerBasePf2e extends RollHandler {
             if (this.isRenderItem())
                 return this.doRenderItem(tokenId, item._id);
 
-            item.roll();
+            item.toChat();
             return;
         }
         
@@ -340,7 +341,7 @@ export class RollHandlerBasePf2e extends RollHandler {
     _rollItem(event, actor, actionId) {
         let item = actor.getOwnedItem(actionId);
         
-        item.roll();
+        item.toChat();
     }
 
     /** @private */
@@ -350,7 +351,7 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
 
     /** @private */
-    _rollSpell(event, tokenId, actor, actionId) {
+    async _rollSpell(event, tokenId, actor, actionId) {
         let actionParts = decodeURIComponent(actionId).split('>');
 
         let spellbookId = actionParts[0];
@@ -359,7 +360,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         let expend = actionParts[3] ?? false;
 
         if (expend) {
-            this._expendSpell(actor, spellbookId, level, spellId);
+            await this._expendSpell(actor, spellbookId, level, spellId);
             return;
         }
 
@@ -397,7 +398,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         }
     }
     
-    _expendSpell(actor, spellbookId, level, spellId) {    
+    async _expendSpell(actor, spellbookId, level, spellId) {    
         let spellbook = actor.getOwnedItem(spellbookId);
         let spellSlot = Object.entries(spellbook.data.data.slots[`slot${level}`].prepared)
             .find(s => s[1].id === spellId && (s[1].expended === false || !s[1].expended))[0];
@@ -412,7 +413,11 @@ export class RollHandlerBasePf2e extends RollHandler {
         options[key] = {
           expended: true,
         };
-        actor.updateEmbeddedEntity('OwnedItem', options);
+
+        let updates = [options];
+
+        await Item.updateDocuments(updates, {parent: actor});
+        Hooks.callAll('forceUpdateTokenActionHUD');
     }
 
     async _rollHeightenedSpell(actor, item, spellLevel) {
@@ -502,9 +507,22 @@ export class RollHandlerBasePf2e extends RollHandler {
             value++;
         }
 
-        let update = {data: {attributes: {[property]: {[valueName]: value}}}};
+        let update = [{_id: actor.id, data: {attributes: {[property]: {[valueName]: value}}}}];
 
-        await actor.update(update);
+        await Actor.updateDocuments(update);
+        Hooks.callAll('forceUpdateTokenActionHUD');
+    }
+
+    async _adjustCondition(event, actor, property) {
+        let max = actor.data.data.attributes[property]['max'];
+
+        if (this.rightClick){
+            await actor.decreaseCondition(property);
+        } else {
+            await actor.increaseCondition(property, {max: max});
+        }
+
+        Hooks.callAll('forceUpdateTokenActionHUD');
     }
 
     async _performToggleMacro(event, tokenId, actionId) {

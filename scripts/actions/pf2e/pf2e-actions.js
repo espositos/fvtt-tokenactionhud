@@ -162,7 +162,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let result = this.initializeEmptyCategory('items');
         
         let filter = ['weapon', 'equipment', 'consumable', 'armor', 'backpack'];
-        let items = (actor.items ?? []).filter(a => a.data.data.equipped?.value && !a.data.data.containerId?.value.length)
+        let items = (actor.items ?? []).filter(a => a.data.data.equipped?.value && !a.data.data.containerId?.value?.length)
             .filter(i => filter.includes(i.data.type)).sort(this._foundrySort);
         
         let weaponList = items.filter(i => i.type === 'weapon');
@@ -238,8 +238,9 @@ export class ActionHandlerPf2e extends ActionHandler {
     _addStrikesCategories(actor, tokenId, category) {
         let macroType = 'strike';
         let strikes = actor.data.data.actions?.filter(a => a.type === macroType);
-        if (actor.data.type === 'character')
+        if (actor.data.type === 'character' && !!strikes) {
             strikes = strikes.filter(s => s.ready);
+        }
 
         if (!strikes)
             return;
@@ -386,8 +387,12 @@ export class ActionHandlerPf2e extends ActionHandler {
             if (signatureSpellIds.includes(spell.data._id)) {
                 const spellBaseLevel = spell.data.data.level.value;
                 for (let i=(spellBaseLevel+1); i<=highestSpellSlot; i++) {
-                    let heightenedSpell = Object.create(Object.getPrototypeOf(spell), Object.getOwnPropertyDescriptors(spell));
-                    heightenedSpell.data = duplicate(spell.data);
+                    let heightenedSpell = Object.create(Object.getPrototypeOf(spell));
+                    Object.defineProperty(heightenedSpell, 'data', {
+                        value: duplicate(spell.data),
+                        configurable: true,
+                        writable: true
+                    });
                     heightenedSpell.data.data.heightenedLevel = {value:i};
                     heightenedSignatureSpells.push(heightenedSpell);
                 }
@@ -673,7 +678,7 @@ export class ActionHandlerPf2e extends ActionHandler {
             let key = skillEntry[0];
             let data = skillEntry[1];
 
-            let name = abbreviated ? key.charAt(0).toUpperCase()+key.slice(1) : data.name.charAt(0).toUpperCase()+data.name.slice(1);
+            let name = abbreviated || !data.name ? key.charAt(0).toUpperCase()+key.slice(1) : data.name?.charAt(0).toUpperCase()+data.name?.slice(1);
 
             let value = data.value;
             let info = '';

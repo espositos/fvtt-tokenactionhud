@@ -21,7 +21,7 @@ export class ActionHandler5e extends ActionHandler {
         if (!token)
             return result;
 
-        let tokenId = token.data._id;
+        let tokenId = token.data.id;
 
         result.tokenId = tokenId;
         
@@ -30,7 +30,7 @@ export class ActionHandler5e extends ActionHandler {
         if (!actor)
             return result;
         
-        result.actorId = actor._id;
+        result.actorId = actor.id;
 
         let items = this._getItemList(actor, tokenId);
         let feats = this._getFeatsList(actor, tokenId);
@@ -727,10 +727,10 @@ export class ActionHandler5e extends ActionHandler {
     /** @private */
     _buildItem(tokenId, actor, macroType, item) {
         const itemData = this._getEntityData(item);
-        let encodedValue = [macroType, tokenId, item._id].join(this.delimiter);
+        let encodedValue = [macroType, tokenId, item.id].join(this.delimiter);
         let img = this._getImage(item);
         let icon = this._getActionIcon(item.data?.activation?.type);
-        let result = { name: item.name, id: item._id, encodedValue: encodedValue, img: img, icon: icon }
+        let result = { name: item.name, id: item.id, encodedValue: encodedValue, img: img, icon: icon }
         
         if (itemData.recharge && !itemData.recharge.charged && itemData.recharge.value) {
             result.name += ` (${this.i18n('tokenactionhud.recharge')})`;
