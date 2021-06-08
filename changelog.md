@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.29] 2021-06-08
+### Bugfix
+- DND5e - i'm an idiot, checking for tokenId in the wrong place
+
 ## [1.0.28] 2021-06-08
 ### Bugfix
 - check for undefined tokens thanks to stwlam
