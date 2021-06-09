@@ -3,8 +3,14 @@ import * as settings from '../../settings.js';
 export class MacroHelper {
     constructor() {}
 
-    static exists(key) {
-        return !!game.macros.entries.some(m => m.data._id === key);
+    static exists(key, macros) {
+        if (!!macros) {
+            return macros.some(m => m.data._id === key);
+        }
+        
+        const macroEntries = 'some' in game.macros.entries ? game.macros.entries : game.macros;
+
+        return !!macroEntries.some(m => m.data._id === key);
     }
 
     static getEntriesForActions(delimiter) {
@@ -24,7 +30,9 @@ export class MacroHelper {
     }
 
     static getMacros() {
-        return game.macros.entries.filter(m => {
+        const macros = 'filter' in game.macros.entries ? game.macros.entries : game.macros;
+
+        return macros.filter(m => {
             let permissions = m.data.permission;
             if (permissions[game.userId])
                 return permissions[game.userId] > 0;

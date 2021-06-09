@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.31] 2021-06-09
+### Bugfix
+- Check for new location of packs and macros
+
 ## [1.0.30] 2021-06-08
 ### Bugfix
 - Savage Worlds update for 0.8.6
