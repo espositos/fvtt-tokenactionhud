@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.33] 2021-06-11
+### Changed
+- Set minimum compatible core version to 0.8.0 for the moment, hopefully only temporary while I work shit out
+
 ## [1.0.32] 2021-06-11
 ### Bugfix
 - DND5e - fix multiple token status toggles, thanks to benbarbour
