@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.32] 2021-06-11
+### Bugfix
+- DND5e - fix multiple token status toggles, thanks to benbarbour
+
 ## [1.0.31] 2021-06-09
 ### Bugfix
 - Check for new location of packs and macros
