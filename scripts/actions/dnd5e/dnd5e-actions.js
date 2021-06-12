@@ -727,10 +727,11 @@ export class ActionHandler5e extends ActionHandler {
     /** @private */
     _buildItem(tokenId, actor, macroType, item) {
         const itemData = this._getEntityData(item);
-        let encodedValue = [macroType, tokenId, item.id].join(this.delimiter);
+        const itemId = item.id ?? item._id;
+        let encodedValue = [macroType, tokenId, itemId].join(this.delimiter);
         let img = this._getImage(item);
         let icon = this._getActionIcon(item.data?.activation?.type);
-        let result = { name: item.name, id: item.id, encodedValue: encodedValue, img: img, icon: icon }
+        let result = { name: item.name, id: itemId, encodedValue: encodedValue, img: img, icon: icon }
         
         if (itemData.recharge && !itemData.recharge.charged && itemData.recharge.value) {
             result.name += ` (${this.i18n('tokenactionhud.recharge')})`;
