@@ -99,7 +99,8 @@ export class RollHandlerBase5e extends RollHandler {
     }
 
     needsRecharge(item) {
-        return (item.data.data.recharge && !item.data.data.recharge.charged && item.data.data.recharge.value);
+        const itemData = this._getEntityData(item);
+        return (itemData.recharge && !itemData.recharge.charged && itemData.recharge.value);
     }
     
     async performUtilityMacro(event, tokenId, actionId) {
@@ -185,5 +186,9 @@ export class RollHandlerBase5e extends RollHandler {
         return CONFIG.statusEffects.find(effect => effect.id === id);
     }
 
+
+    _getEntityData(entity) {
+        return entity.data.data ?? entity.data;
+    }
 
 }

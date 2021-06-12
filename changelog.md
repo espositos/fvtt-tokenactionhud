@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.34] 2021-06-12
+### Bugfix
+- DND5e - fingers crossed now supports 0.7 and 0.8.
+
 ## [1.0.33] 2021-06-11
 ### Changed
 - Set minimum compatible core version to 0.8.0 for the moment, hopefully only temporary while I work shit out
