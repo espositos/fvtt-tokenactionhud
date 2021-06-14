@@ -1,3 +1,7 @@
 foundry.js
 .idea
 *.bat
+/.vs/fvtt-tokenactionhud/v16
+/.vs
+/.vscode
+/.github

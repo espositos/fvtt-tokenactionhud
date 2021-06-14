@@ -21,7 +21,7 @@ export class ActionHandler5e extends ActionHandler {
         if (!token)
             return result;
 
-        let tokenId = token.data._id;
+        let tokenId = token.id;
 
         result.tokenId = tokenId;
         
@@ -30,7 +30,7 @@ export class ActionHandler5e extends ActionHandler {
         if (!actor)
             return result;
         
-        result.actorId = actor._id;
+        result.actorId = actor.id;
 
         let items = this._getItemList(actor, tokenId);
         let feats = this._getFeatsList(actor, tokenId);
@@ -115,7 +115,7 @@ export class ActionHandler5e extends ActionHandler {
     
     /** @private */
     _getItemList(actor, tokenId) {
-        let validItems = this._filterLongerActions(actor.data.items.filter(i => i.data.quantity > 0));
+        let validItems = this._filterLongerActions(actor.data.items.filter(i => this._getEntityData(i).quantity > 0));
         let sortedItems = this._sortByItemSort(validItems);
         let macroType = 'item';
 
@@ -123,7 +123,7 @@ export class ActionHandler5e extends ActionHandler {
         if (actor.data.type === 'npc' && settings.get('showAllNpcItems')) {
             equipped = sortedItems.filter(i => i.type !== 'consumable' && i.type !== 'spell' && i.type !== 'feat');
         } else {
-            equipped = sortedItems.filter(i => i.type !== 'consumable' && i.data.equipped);
+            equipped = sortedItems.filter(i => i.type !== 'consumable' && this._getEntityData(i).equipped);
         }
         let activeEquipped = this._getActiveEquipment(equipped);
         
@@ -177,11 +177,12 @@ export class ActionHandler5e extends ActionHandler {
         const activationTypes = Object.keys(game.dnd5e.config.abilityActivationTypes).filter(at => at !== 'none');
     
         let activeEquipment = equipment.filter(e => {
-            let activation = e.data.activation;
+            const equipmentData = this._getEntityData(e);
+            let activation = equipmentData.activation;
             if (!activation)
                 return false;
     
-            return activationTypes.includes(e.data.activation.type);
+            return activationTypes.includes(equipmentData.activation.type);
         });
     
         return activeEquipment;
@@ -208,9 +209,11 @@ export class ActionHandler5e extends ActionHandler {
         let result = Object.values(spells);
 
         result.sort((a,b) => {
-            if (a.data.level === b.data.level)
+            const aData = this._getEntityData(a);
+            const bData = this._getEntityData(b);
+            if (aData.level === bData.level)
                 return a.name.toUpperCase().localeCompare(b.name.toUpperCase(), undefined, {sensitivity: 'base'});
-            return a.data.level - b.data.level;
+            return aData.level - bData.level;
         });
 
         return result;
@@ -257,10 +260,11 @@ export class ActionHandler5e extends ActionHandler {
         }
 
         let dispose = spells.reduce(function (dispose, s) {
-            let prep = s.data.preparation.mode;
+            const spellData = this._getEntityData(s);
+            let prep = spellData.preparation.mode;
             const prepType = game.dnd5e.config.spellPreparationModes[prep];
 
-            var level = s.data.level;
+            var level = spellData.level;
             let power = (prep === 'pact' || prep === 'atwill' || prep === 'innate')
 
             var max, slots, levelName, levelKey, levelInfo;
@@ -324,7 +328,8 @@ export class ActionHandler5e extends ActionHandler {
 
     /** @private */
     _addSpellInfo(s, spell) {
-        let c = s.data.components;
+        const spellData = this._getEntityData(s);
+        let c = spellData.components;
 
         spell.info1 = '';
         spell.info2 = '';
@@ -364,7 +369,8 @@ export class ActionHandler5e extends ActionHandler {
         let legendary = this.initializeEmptySubcategory();
 
         let dispose = feats.reduce(function (dispose, f) {
-            const activationType = f.data.activation.type;
+            const featData = this._getEntityData(f);
+            const activationType = featData.activation.type;
             const macroType = 'feat';
 
             let feat = this._buildEquipmentItem(tokenId, actor, macroType, f);
@@ -558,17 +564,17 @@ export class ActionHandler5e extends ActionHandler {
     _addEffectsSubcategories(actor, tokenId, category) {
         const macroType = 'effect';
 
-        const effects = actor.effects.entries;
+        const effects = 'find' in actor.effects.entries ? actor.effects.entries : actor.effects;
 
         let tempCategory = this.initializeEmptySubcategory();
         let passiveCategory = this.initializeEmptySubcategory();
 
         effects.forEach(e => {
-
-            const name = e.data.label;
+            const effectData = this._getEntityData(e);
+            const name = effectData.label;
             const encodedValue = [macroType, tokenId, e.id].join(this.delimiter);
-            const cssClass = e.data.disabled ? '' : 'active';
-            const image = e.data.icon;
+            const cssClass = effectData.disabled ? '' : 'active';
+            const image = effectData.icon;
             let action = {name: name, id: e.id, encodedValue: encodedValue, img: image, cssClass: cssClass}
 
             e.isTemporary ? tempCategory.actions.push(action) : passiveCategory.actions.push(action);
@@ -594,7 +600,10 @@ export class ActionHandler5e extends ActionHandler {
         availableConditions.forEach(c => {
             const name = this.i18n(c.label);
             const encodedValue = [macroType, tokenId, c.id].join(this.delimiter);
-            const cssClass = actors.every(actor => actor.effects.entries.some(e => e.data.flags.core?.statusId === c.id)) ? 'active' : '';
+            const cssClass = actors.every(actor => {
+                const effects = 'some' in actor.effects.entries ? actor.effects.entries : actor.effects;
+                effects.some(e => e.data.flags.core?.statusId === c.id)
+            }) ? 'active' : '';
             const image = c.icon;
             const action = {name: name, id: c.id, encodedValue: encodedValue, img: image, cssClass: cssClass}
 
@@ -620,7 +629,8 @@ export class ActionHandler5e extends ActionHandler {
         availableConditions.forEach(c => {
             const name = this.i18n(c.label);
             const encodedValue = [macroType, tokenId, c.id].join(this.delimiter);
-            const cssClass = actor.effects.entries.some(e => e.data.flags.core?.statusId === c.id) ? 'active' : '';
+            const effects = 'some' in actor.effects.entries ? actor.effects.entries : actor.effects;
+            const cssClass = effects.some(e => e.data.flags.core?.statusId === c.id) ? 'active' : '';
             const image = c.icon;
             const action = {name: name, id: c.id, encodedValue: encodedValue, img: image, cssClass: cssClass}
 
@@ -716,12 +726,14 @@ export class ActionHandler5e extends ActionHandler {
 
     /** @private */
     _buildItem(tokenId, actor, macroType, item) {
-        let encodedValue = [macroType, tokenId, item._id].join(this.delimiter);
+        const itemData = this._getEntityData(item);
+        const itemId = item.id ?? item._id;
+        let encodedValue = [macroType, tokenId, itemId].join(this.delimiter);
         let img = this._getImage(item);
         let icon = this._getActionIcon(item.data?.activation?.type);
-        let result = { name: item.name, id: item._id, encodedValue: encodedValue, img: img, icon: icon }
+        let result = { name: item.name, id: itemId, encodedValue: encodedValue, img: img, icon: icon }
         
-        if (item.data.recharge && !item.data.recharge.charged && item.data.recharge.value) {
+        if (itemData.recharge && !itemData.recharge.charged && itemData.recharge.value) {
             result.name += ` (${this.i18n('tokenactionhud.recharge')})`;
         }
 
@@ -747,8 +759,9 @@ export class ActionHandler5e extends ActionHandler {
 
     /** @private */
     _getQuantityData(item) {
+        const itemData = this._getEntityData(item);
         let result = '';
-        let quantity = item.data.quantity;
+        let quantity = itemData.quantity;
         if (quantity > 1) {
             result = quantity;
         }
@@ -758,9 +771,10 @@ export class ActionHandler5e extends ActionHandler {
 
     /** @private */
     _getUsesData(item) {
+        const itemData = this._getEntityData(item);
         let result = '';
 
-        let uses = item.data.uses;
+        let uses = itemData.uses;
         if (!uses)
             return result;
 
@@ -775,11 +789,12 @@ export class ActionHandler5e extends ActionHandler {
 
     /** @private */
     _getConsumeData(item, actor) {
+        const itemData = this._getEntityData(item);
         let result = '';
 
-        let consumeType = item.data.consume?.type;
+        let consumeType = itemData.consume?.type;
         if (consumeType && consumeType !== '') {
-            let consumeId = item.data.consume.target;
+            let consumeId = itemData.consume.target;
             let parentId = consumeId.substr(0, consumeId.lastIndexOf('.'));
             if (consumeType === 'attribute') {
                 let target = getProperty(actor, `data.data.${parentId}`);
@@ -792,7 +807,7 @@ export class ActionHandler5e extends ActionHandler {
             }
 
             if (consumeType === 'charges') {
-                let consumeId = item.data.consume.target;
+                let consumeId = itemData.consume.target;
                 let target = actor.getOwnedItem(consumeId);
                 let uses = target?.data.data.uses;
                 if (uses?.value) {
@@ -803,7 +818,7 @@ export class ActionHandler5e extends ActionHandler {
             }
 
             if (!(consumeType === 'attribute' || consumeType === 'charges')) {
-                let consumeId = item.data.consume.target;
+                let consumeId = itemData.consume.target;
                 let target = actor.getOwnedItem(consumeId);
                 let quantity = target?.data.data.quantity;
                 if (quantity) {
@@ -820,7 +835,10 @@ export class ActionHandler5e extends ActionHandler {
         var result;
 
         if (settings.get('hideLongerActions'))
-            result = items.filter(i => !i.data.activation || !(i.data.activation.type === 'minute' || i.data.activation.type === 'hour' || i.data.activation.type === 'day'));
+            result = items.filter(i => {
+                const iData = this._getEntityData(i);
+                return !iData.activation || !(iData.activation.type === 'minute' || iData.activation.type === 'hour' || iData.activation.type === 'day');
+            });
 
         return result ? result : items;
     }
@@ -831,9 +849,12 @@ export class ActionHandler5e extends ActionHandler {
         let result = spells;
 
         if (settings.get('showAllNonpreparableSpells')) {
-            result = spells.filter(i => i.data.preparation.prepared || nonpreparableSpells.includes(i.data.preparation.mode) || i.data.level === 0)
+            result = spells.filter(i => {
+                const iData = this._getEntityData(i);
+                return iData.preparation.prepared || nonpreparableSpells.includes(iData.preparation.mode) || iData.level === 0;
+            });
         } else {
-            result = spells.filter(i => i.data.preparation.prepared);
+            result = spells.filter(i => this._getEntityData(i).preparation.prepared);
         }
 
         return result;
@@ -844,7 +865,8 @@ export class ActionHandler5e extends ActionHandler {
             return items;
 
         return items.filter(i => {
-            let uses = i.data.uses;
+            const iData = this._getEntityData(i);
+            let uses = iData.uses;
             // Assume something with no uses is unlimited in its use.
             if (!uses) return true;
 
@@ -892,5 +914,9 @@ export class ActionHandler5e extends ActionHandler {
             day: `<i class="fas fa-hourglass-end"></i>`
         };
         return img[action];
+    }
+
+    _getEntityData(entity) {
+        return entity.data.data ?? entity.data;
     }
 }

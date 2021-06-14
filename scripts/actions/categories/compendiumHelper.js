@@ -3,8 +3,10 @@ import * as settings from '../../settings.js';
 export class CompendiumHelper {
     constructor() {}
 
-    static getCompendiumChoicesAsTagifyEntries() {
-        return game.packs.entries.filter(p => {
+    static getCompendiumChoicesAsTagifyEntries() {        
+        const packs = 'filter' in game.packs.entries ? game.packs.entries : game.packs;
+
+        return packs.filter(p => {
             let packTypes = ['JournalEntry', 'Macro', 'RollTable', 'Playlist'];
             return packTypes.includes(p.metadata.entity);
         }).filter(p => game.user.isGM || !p.private).map(p => {

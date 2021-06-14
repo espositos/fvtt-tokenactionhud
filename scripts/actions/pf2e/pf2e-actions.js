@@ -59,7 +59,6 @@ export class ActionHandlerPf2e extends ActionHandler {
 
         this._addMultiSkills(list, tokenId, actors);
         this._addMultiSaves(list, tokenId, actors);
-        this._addMultiAbilities(list, tokenId, actors);
         this._addMultiAttributes(list, tokenId, actors);
         this._addMultiUtilities(list, tokenId, actors);
     }
@@ -84,29 +83,11 @@ export class ActionHandlerPf2e extends ActionHandler {
                 name = data.name;
 
             const encodedValue = [macroType, tokenId, key].join(this.delimiter);
-            const action = {name: name, encodedValue: encodedValue, id: key};
+            const action = {name: game.i18n.localize(name), encodedValue: encodedValue, id: key};
             subcategory.actions.push(action);
         })
 
         const skillsName = this.i18n('tokenactionhud.commonSkills');
-        this._combineSubcategoryWithCategory(category, skillsName, subcategory);
-        this._combineCategoryWithList(list, skillsName, category);
-    }
-
-    _addMultiAbilities(list, tokenId, actors) {
-        const macroType = 'ability';
-        const category = this.initializeEmptyCategory(macroType);
-        const subcategory = this.initializeEmptySubcategory(macroType);
-
-        Object.entries(CONFIG.PF2E.abilities).forEach(ability => {
-            const key = ability[0];
-            const name = ability[1];
-            const encodedValue = [macroType, tokenId, key].join(this.delimiter);
-            const action = {name: name, encodedValue: encodedValue, id: key};
-            subcategory.actions.push(action);
-        })
-
-        const skillsName = this.i18n('tokenactionhud.abilities');
         this._combineSubcategoryWithCategory(category, skillsName, subcategory);
         this._combineCategoryWithList(list, skillsName, category);
     }
@@ -120,7 +101,7 @@ export class ActionHandlerPf2e extends ActionHandler {
             const key = save[0];
             const name = save[1];
             const encodedValue = [macroType, tokenId, key].join(this.delimiter);
-            const action = {name: name, encodedValue: encodedValue, id: key};
+            const action = {name: game.i18n.localize(name), encodedValue: encodedValue, id: key};
             subcategory.actions.push(action);
         })
 
@@ -181,7 +162,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let result = this.initializeEmptyCategory('items');
         
         let filter = ['weapon', 'equipment', 'consumable', 'armor', 'backpack'];
-        let items = (actor.items ?? []).filter(a => a.data.data.equipped?.value && !a.data.data.containerId?.value.length)
+        let items = (actor.items ?? []).filter(a => a.data.data.equipped?.value && !a.data.data.containerId?.value?.length)
             .filter(i => filter.includes(i.data.type)).sort(this._foundrySort);
         
         let weaponList = items.filter(i => i.type === 'weapon');
@@ -257,8 +238,9 @@ export class ActionHandlerPf2e extends ActionHandler {
     _addStrikesCategories(actor, tokenId, category) {
         let macroType = 'strike';
         let strikes = actor.data.data.actions?.filter(a => a.type === macroType);
-        if (actor.data.type === 'character')
+        if (actor.data.type === 'character' && !!strikes) {
             strikes = strikes.filter(s => s.ready);
+        }
 
         if (!strikes)
             return;
@@ -380,12 +362,44 @@ export class ActionHandlerPf2e extends ActionHandler {
         let filter = ['spell'];
         let items = (actor.items ?? []).filter(a => filter.includes(a.type));
 
-        let spellsSorted = this._sortSpellsByLevel(items);
+        let signatureSpellsAdded = this._addSignatureSpells(actor, items);
+        let spellsSorted = this._sortSpellsByLevel(signatureSpellsAdded);
         let spellCategories = this._categoriseSpells(actor, tokenId, spellsSorted);
         
         this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.spells'), spellCategories);
 
         return result;
+    }
+
+    /** @private */
+    _addSignatureSpells(actor, spells) {
+        const actorLevel = actor.data.data.details.level.value;
+        const highestSpellSlot = Math.ceil(actorLevel/2);
+        let signatureSpellIds = [];
+        actor.items.forEach(item => {
+            if (item.data.type === "spellcastingEntry") {
+                signatureSpellIds = signatureSpellIds.concat(item.data.data.signatureSpells.value);
+            }
+        });
+
+        let heightenedSignatureSpells = [];
+        spells.forEach(spell => {
+            if (signatureSpellIds.includes(spell.data._id)) {
+                const spellBaseLevel = spell.data.data.level.value;
+                for (let i=(spellBaseLevel+1); i<=highestSpellSlot; i++) {
+                    let heightenedSpell = Object.create(Object.getPrototypeOf(spell));
+                    Object.defineProperty(heightenedSpell, 'data', {
+                        value: duplicate(spell.data),
+                        configurable: true,
+                        writable: true
+                    });
+                    heightenedSpell.data.data.heightenedLevel = {value:i};
+                    heightenedSignatureSpells.push(heightenedSpell);
+                }
+            }
+        });
+
+        return spells.concat(heightenedSignatureSpells);
     }
 
     /** @private */
@@ -450,6 +464,7 @@ export class ActionHandlerPf2e extends ActionHandler {
                     let spell = { name: s.name, encodedValue: encodedValue, id: s.data._id };
                     spell.img = this._getImage(s);
                     spell.icon = this._getActionIcon(s.data.data?.time?.value)
+                    spell.spellLevel = level;
 
                     this._addSpellInfo(s, spell);
                     levelSubcategory.actions.push(spell);
@@ -530,6 +545,7 @@ export class ActionHandlerPf2e extends ActionHandler {
             let spell = { name: s.name, encodedValue: encodedValue, id: s.data._id };
             spell.img = this._getImage(s);
             spell.icon = this._getActionIcon(s.data.data?.time?.value)
+            spell.spellLevel = level;
             this._addSpellInfo(s, spell);
             levelCategory.actions.push(spell);     
                   
@@ -647,7 +663,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let result = this.initializeEmptyCategory('saves');
 
         let actorSaves = actor.data.data.saves;
-        let saveMap = Object.keys(actorSaves).map(k => { return {_id: k, name: CONFIG.PF2E.saves[k]}});
+        let saveMap = Object.keys(actorSaves).map(k => { return {_id: k, name: game.i18n.localize(CONFIG.PF2E.saves[k])}});
 
         let saves = this.initializeEmptySubcategory();
         saves.actions = this._produceActionMap(tokenId, saveMap, 'save');
@@ -657,31 +673,12 @@ export class ActionHandlerPf2e extends ActionHandler {
         return result;
     }
 
-    /** @private */
-    _getAbilityList(actor, tokenId) {
-        let result = this.initializeEmptyCategory('abilities');
-
-        let abbr = settings.get('abbreviateSkills');
-
-        let actorAbilities = actor.data.data.abilities;
-        let abilityMap = Object.keys(actorAbilities).map(k => { 
-            let name = abbr ? k.charAt(0).toUpperCase() + k.slice(1) : CONFIG.PF2E.abilities[k];
-            return {_id: k, name: name}});
-
-        let abilities = this.initializeEmptySubcategory();
-        abilities.actions = this._produceActionMap(tokenId, abilityMap, 'ability');
-
-        this._combineSubcategoryWithCategory(result, this.i18n('tokenactionhud.abilities'), abilities);
-
-        return result;
-    }
-
     /** @protected */
     createSkillMap(tokenId, macroType, skillEntry, abbreviated) {
             let key = skillEntry[0];
             let data = skillEntry[1];
 
-            let name = abbreviated ? key.charAt(0).toUpperCase()+key.slice(1) : data.name.charAt(0).toUpperCase()+data.name.slice(1);
+            let name = abbreviated || !data.name ? key.charAt(0).toUpperCase()+key.slice(1) : data.name?.charAt(0).toUpperCase()+data.name?.slice(1);
 
             let value = data.value;
             let info = '';

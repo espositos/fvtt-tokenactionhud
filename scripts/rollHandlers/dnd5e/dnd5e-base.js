@@ -20,7 +20,7 @@ export class RollHandlerBase5e extends RollHandler {
 
         if (tokenId === 'multi') {
             for (let t of canvas.tokens.controlled) {
-                let idToken = t.data._id;
+                let idToken = t.id;
                 await this._handleMacros(event, macroType, idToken, actionId);
             };
         } else {
@@ -99,7 +99,8 @@ export class RollHandlerBase5e extends RollHandler {
     }
 
     needsRecharge(item) {
-        return (item.data.data.recharge && !item.data.data.recharge.charged && item.data.data.recharge.value);
+        const itemData = this._getEntityData(item);
+        return (itemData.recharge && !itemData.recharge.charged && itemData.recharge.value);
     }
     
     async performUtilityMacro(event, tokenId, actionId) {
@@ -143,7 +144,8 @@ export class RollHandlerBase5e extends RollHandler {
 
     async toggleEffect(event, tokenId, effectId) {
         const actor = super.getActor(tokenId);
-        const effect = actor.effects.entries.find(e => e.id === effectId);
+        const effects = 'find' in actor.effects.entries ? actor.effects.entries : actor.effects;
+        const effect = effects.find(e => e.id === effectId);
 
         if (!effect)
             return;
@@ -184,5 +186,9 @@ export class RollHandlerBase5e extends RollHandler {
         return CONFIG.statusEffects.find(effect => effect.id === id);
     }
 
+
+    _getEntityData(entity) {
+        return entity.data.data ?? entity.data;
+    }
 
 }

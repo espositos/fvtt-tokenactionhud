@@ -404,7 +404,11 @@ export class TokenActionHUD extends Application {
 
     isRelevantToken(token) {
         let controlled = this.tokens?.controlled;
-        return controlled?.some(t => t.id === token._id) || (controlled?.length === 0 && canvas?.tokens?.placeables?.some(t => t.id === this.targetActions?.tokenId));
+        return controlled?.some(t => t.id === this.getTokenId(token._id)) || (controlled?.length === 0 && canvas?.tokens?.placeables?.some(t => t.id === this.targetActions?.tokenId));
+    }
+
+    getTokenId(token) {
+        return token._id ?? token.id;
     }
 
     // Is something being hovered on, is the setting on, and is it the token you're currently selecting.
@@ -446,7 +450,7 @@ export class TokenActionHUD extends Application {
     }
 
     /** @private */
-    _getTargetToken(controlled) {
+    _getTargetToken(controlled = []) {
         if (controlled.length > 1)
             return null;
 

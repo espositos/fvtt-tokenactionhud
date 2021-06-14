@@ -85,7 +85,7 @@ export class RollHandlerBasePf2e extends RollHandler {
                 this._rollItem(event, actor, actionId);
                 break;
             case 'spell':
-                this._rollSpell(event, tokenId, actor, actionId);
+                await this._rollSpell(event, tokenId, actor, actionId);
                 break;
             case 'utility':
                 this._performUtilityMacro(event, tokenId, actionId);
@@ -122,7 +122,7 @@ export class RollHandlerBasePf2e extends RollHandler {
             case 'doomed':
             case 'wounded':
             case 'dying':
-                await this._adjustAttribute(event, actor, macroType, 'value', actionId);
+                await this._adjustCondition(event, actor, macroType);
                 break;
             case 'familiarAttack':
                 this._rollFamiliarAttack(event, actor);
@@ -154,8 +154,8 @@ export class RollHandlerBasePf2e extends RollHandler {
         }
         else {
             var abilityBased = `${skill.ability}-based`;
-            const opts = actor.getRollOptions(['all', 'skill-check', abilityBased, CONFIG.PF2E.skills[actionId] ?? actionId]);
-            skill.roll(event, opts);
+            const options = actor.getRollOptions(['all', 'skill-check', abilityBased, CONFIG.PF2E.skills[actionId] ?? actionId]);
+            skill.roll({event, options});
         }
     }    
 
@@ -171,8 +171,8 @@ export class RollHandlerBasePf2e extends RollHandler {
             actor.rollAttribute(event, actionId);
         }
         else {
-            const opts = actor.getRollOptions(['all', attribute]);
-            attribute.roll(event, opts);
+            const options = actor.getRollOptions(['all', attribute]);
+            attribute.roll({event, options});
         }
     }
 
@@ -191,8 +191,8 @@ export class RollHandlerBasePf2e extends RollHandler {
             actor.rollSave(event, actionId);
         }
         else {
-            const opts = actor.getRollOptions(['all', 'saving-throw', save]);
-            save.roll(event, opts);
+            const options = actor.getRollOptions(['all', 'saving-throw', save]);
+            save.roll({event, options});
         }
     }
 
@@ -231,16 +231,17 @@ export class RollHandlerBasePf2e extends RollHandler {
 
         let update;
         if (slot === 'focus')
-            update = {_id: spellbook._id, data: { focus: {points: value}}};
+            update = [{_id: spellbook._id, data: { focus: {points: value}}}];
         else
-            update = {_id: spellbook._id, data: {slots: {[slot]: {value: value}}}};
+            update = [{_id: spellbook._id, data: {slots: {[slot]: {value: value}}}}];
 
-        await actor.updateEmbeddedEntity("OwnedItem", update);
+        await Item.updateDocuments(update, {parent: actor});
+        Hooks.callAll('forceUpdateTokenActionHUD');
     }
 
     /** @private */
     _rollSaveNpc(event, actor, actionId) {
-        actor.data.data.saves[actionId].roll(event);
+        actor.data.data.saves[actionId].roll({event});
     }
 
     async _updateRollMode(rollMode) {
@@ -266,15 +267,15 @@ export class RollHandlerBasePf2e extends RollHandler {
         switch (strikeType) {
             case 'damage':
                 options = actor.getRollOptions(['all', 'damage-roll']);
-                strike.damage(event, options);
+                strike.damage({event, options});
                 break;
             case 'critical':
                 options = actor.getRollOptions(['all', 'damage-roll']);
-                strike.critical(event, options);
+                strike.critical({event, options});
                 break;
             default:
                 options = actor.getRollOptions(['all', 'attack-roll']);
-                strike.variants[strikeType]?.roll(event, options);
+                strike.variants[strikeType]?.roll({event, options});
                 this._consumeAmmo(actor, strike);
                 break;
         }
@@ -308,7 +309,7 @@ export class RollHandlerBasePf2e extends RollHandler {
             if (this.isRenderItem())
                 return this.doRenderItem(tokenId, item._id);
 
-            item.roll();
+            item.toChat();
             return;
         }
         
@@ -340,7 +341,7 @@ export class RollHandlerBasePf2e extends RollHandler {
     _rollItem(event, actor, actionId) {
         let item = actor.getOwnedItem(actionId);
         
-        item.roll();
+        item.toChat();
     }
 
     /** @private */
@@ -350,7 +351,7 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
 
     /** @private */
-    _rollSpell(event, tokenId, actor, actionId) {
+    async _rollSpell(event, tokenId, actor, actionId) {
         let actionParts = decodeURIComponent(actionId).split('>');
 
         let spellbookId = actionParts[0];
@@ -359,7 +360,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         let expend = actionParts[3] ?? false;
 
         if (expend) {
-            this._expendSpell(actor, spellbookId, level, spellId);
+            await this._expendSpell(actor, spellbookId, level, spellId);
             return;
         }
 
@@ -397,7 +398,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         }
     }
     
-    _expendSpell(actor, spellbookId, level, spellId) {    
+    async _expendSpell(actor, spellbookId, level, spellId) {    
         let spellbook = actor.getOwnedItem(spellbookId);
         let spellSlot = Object.entries(spellbook.data.data.slots[`slot${level}`].prepared)
             .find(s => s[1].id === spellId && (s[1].expended === false || !s[1].expended))[0];
@@ -412,7 +413,11 @@ export class RollHandlerBasePf2e extends RollHandler {
         options[key] = {
           expended: true,
         };
-        actor.updateEmbeddedEntity('OwnedItem', options);
+
+        let updates = [options];
+
+        await Item.updateDocuments(updates, {parent: actor});
+        Hooks.callAll('forceUpdateTokenActionHUD');
     }
 
     async _rollHeightenedSpell(actor, item, spellLevel) {
@@ -465,13 +470,13 @@ export class RollHandlerBasePf2e extends RollHandler {
 
         switch(actionId) {
             case 'treatWounds':
-                this._executeMacroByName('Treat Wounds');
+                this._executeMacroById('6duZj0Ygiqv712rq');
                 break;
             case 'longRest':
-                this._executeMacroByName('Rest for the Night');
+                this._executeMacroById('0GU2sdy3r2MeC56x');
                 break;
             case 'takeABreather':
-                this._executeMacroByName('Take a Breather');
+                this._executeMacroById('aS6F7PSUlS9JM5jr');
                 break;
             case 'toggleCombat':
                 token.toggleCombat();
@@ -483,14 +488,9 @@ export class RollHandlerBasePf2e extends RollHandler {
         }
     }
 
-    async _executeMacroByName(name) {
+    async _executeMacroById(id) {
         let pack = game.packs.get('pf2e.pf2e-macros');
-        pack.getIndex().then(index => {
-            let id = index.find(e => e.name === name)?._id;
-
-            if (id)
-                pack.getEntity(id).then(e => e.execute()
-        )});
+        pack.getEntity(id).then(e => e.execute());
     }
 
     async _adjustAttribute(event, actor, property, valueName, actionId) {
@@ -507,9 +507,22 @@ export class RollHandlerBasePf2e extends RollHandler {
             value++;
         }
 
-        let update = {data: {attributes: {[property]: {[valueName]: value}}}};
+        let update = [{_id: actor.id, data: {attributes: {[property]: {[valueName]: value}}}}];
 
-        await actor.update(update);
+        await Actor.updateDocuments(update);
+        Hooks.callAll('forceUpdateTokenActionHUD');
+    }
+
+    async _adjustCondition(event, actor, property) {
+        let max = actor.data.data.attributes[property]['max'];
+
+        if (this.rightClick){
+            await actor.decreaseCondition(property);
+        } else {
+            await actor.increaseCondition(property, {max: max});
+        }
+
+        Hooks.callAll('forceUpdateTokenActionHUD');
     }
 
     async _performToggleMacro(event, tokenId, actionId) {

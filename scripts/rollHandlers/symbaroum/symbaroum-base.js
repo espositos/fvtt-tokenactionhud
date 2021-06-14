@@ -39,7 +39,7 @@ export class RollHandlerBaseSymbaroum extends RollHandler {
 
     _handleWeapon(macroType, event, actor, actionId) {
 
-        let usedItem = actor.data.data.weapons.filter(item => item._id === actionId);
+        let usedItem = actor.data.data.weapons.filter(item => item.id === actionId);
         actor.rollWeapon(usedItem[0]);
     }
 
@@ -50,13 +50,13 @@ export class RollHandlerBaseSymbaroum extends RollHandler {
 
     _handleAbility(macroType, event, actor, actionId) {
 
-        let usedPower = actor.items.filter(item => item.data?._id === actionId);
+        let usedPower = actor.items.filter(item => item.id === actionId);
         actor.usePower(usedPower[0]);
     }
 
     _handleMysticalPowers(macroType, event, actor, actionId) {
-
-        let usedPower = actor.items.filter(item => item.data?._id === actionId);
+        
+        let usedPower = actor.items.filter(item => item.id === actionId);
         actor.usePower(usedPower[0]);
     }
 

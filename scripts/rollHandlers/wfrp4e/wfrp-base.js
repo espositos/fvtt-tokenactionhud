@@ -38,13 +38,20 @@ export class RollHandlerBaseWfrp4e extends RollHandler {
         switch (macroType) {
             case 'dodge':
                 return this.dodge(actor);
+            case 'unarmed':
+                return this.unarmed(actor);
             case 'stomp':
                 return this.stomp(actor);
             case 'improvise':
                 return this.improvise(actor);
-            case 'weapon':
-                return actor.setupWeapon(itemData, bypassData)
-                    .then(setupData => actor.weaponTest(setupData));
+            case 'weapon': {      
+                let promise = actor.setupWeapon(itemData, bypassData);
+                if (!(itemData.loading && !itemData.data.loaded.value)) {
+                    return promise.then(setupData => actor.weaponTest(setupData));
+                } else {
+                    break; // do nothing, setupweapon will show skill test dialog for reload.
+                }
+            }
             case 'spell':
                 return this.castSpell(actor, itemData, bypassData);
             case 'prayer':
@@ -66,14 +73,21 @@ export class RollHandlerBaseWfrp4e extends RollHandler {
     dodge(actor) {
         let skill = actor.data.skills.find(s => s.name == game.i18n.localize("NAME.Dodge") && s.type == "skill")
         if (skill) {
-                actor.setupSkill(skill).then(setupData => {
-            this.actor.basicTest(setupData)
+            actor.setupSkill(skill).then(setupData => {
+                actor.basicTest(setupData)
             });            
         } else {
             actor.setupCharacteristic("ag", {dodge: true}).then(setupData => {
                 actor.basicTest(setupData)
               });
         }
+    }
+
+    unarmed(actor) {
+        let unarmed = game.wfrp4e.config.systemItems.unarmed;
+        actor.setupWeapon(unarmed).then(setupData => {
+            actor.weaponTest(setupData)
+        });
     }
 
     stomp(actor) {

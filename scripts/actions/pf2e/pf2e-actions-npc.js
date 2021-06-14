@@ -27,10 +27,6 @@ export class NpcActionHandlerPf2e {
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.features'), feats);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.skills'), skills);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.saves'), saves);
-        if (settings.get('showNpcAbilities')) {
-            let abilities = this.baseHandler._getAbilityList(actor, tokenId);
-            this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.abilities'), abilities);
-        }
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.attributes'), attributes);
         this.baseHandler._combineCategoryWithList(result, this.i18n('tokenactionhud.utility'), utilities)
     }
@@ -43,6 +39,9 @@ export class NpcActionHandlerPf2e {
         if (settings.get('showOldNpcStrikes')) {
             this._addNpcStrikesCategories(actor, tokenId, result);
         }
+        
+        if (!settings.get('separateTogglesCategory'))
+            this._addTogglesCategories(actor, tokenId, result);
 
         const info = this.baseHandler.i18n('tokenactionhud.experimental');
 
@@ -105,6 +104,44 @@ export class NpcActionHandlerPf2e {
             
             this.baseHandler._combineSubcategoryWithCategory(category, s.name, subcategory);
         });
+    }
+
+    /** @private */
+    _addTogglesCategories(actor, tokenId, category) {
+        const macroType = 'toggle';
+        const toggleActions = actor.data.data.toggles?.actions;
+
+        if (!toggleActions)
+            return;
+
+        let subcategory = this.baseHandler.initializeEmptySubcategory();
+        subcategory.actionsClass = 'excludeFromWidthCalculation';
+
+        toggleActions.forEach(t => {
+            let toggleKey = this._getToggleKey(t.inputName);
+            if (!toggleKey)
+                return;
+
+            let id = toggleKey;
+            let encodedValue = [macroType, tokenId, toggleKey].join(this.baseHandler.delimiter);
+            let name = t.label.startsWith('PF2E.') ? this.baseHandler.i18n(t.label) : t.label;
+            let cssClass = t.checked ? 'active': '';
+
+            let action = {id: id, encodedValue: encodedValue, name: name, cssClass: cssClass};
+
+            subcategory.actions.push(action);
+        });
+        
+        this.baseHandler._combineSubcategoryWithCategory(category, this.baseHandler.i18n('tokenactionhud.toggles'), subcategory);
+    }
+
+    /** @private */
+    _getToggleKey(inputName) {
+        const rollOptionPrefix = 'flags.pf2e.rollOptions.';
+        if (!inputName.includes(rollOptionPrefix))
+            return '';
+
+        return inputName.substring(rollOptionPrefix.length);
     }
 
     /** @private */

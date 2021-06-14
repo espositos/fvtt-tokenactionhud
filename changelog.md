@@ -1,65 +1,168 @@
 # Changelog
 
-## [1.0.14] 2020-04-13
+## [1.0.34] 2021-06-12
+### Bugfix
+- DND5e - fingers crossed now supports 0.7 and 0.8.
+
+## [1.0.33] 2021-06-11
+### Changed
+- Set minimum compatible core version to 0.8.0 for the moment, hopefully only temporary while I work shit out
+
+## [1.0.32] 2021-06-11
+### Bugfix
+- DND5e - fix multiple token status toggles, thanks to benbarbour
+
+## [1.0.31] 2021-06-09
+### Bugfix
+- Check for new location of packs and macros
+
+## [1.0.30] 2021-06-08
+### Bugfix
+- Savage Worlds update for 0.8.6
+
+## [1.0.29] 2021-06-08
+### Bugfix
+- DND5e - i'm an idiot, checking for tokenId in the wrong place
+
+## [1.0.28] 2021-06-08
+### Bugfix
+- check for undefined tokens thanks to stwlam
+- Symbaroum for 0.8 thanks to Khaali-dev
+
+## [1.0.27] 2021-06-08
+### Bugfix
+- PF2E item.roll replaced with toChat
+
+## [1.0.26] 2021-06-08
+### Bugfix
+- PF2E check for null value on containerId
+
+## [1.0.25] 2021-06-08
+### Changed
+- DND5e remove all (most?) _id references
+
+## [1.0.24] 2021-06-08
+### Changed
+- ItemMacro - discontinue use of backwards compatibility function
+
+## [1.0.23] 2021-06-08
+### Bugfix
+- PFE2 adjustments for 0.8.6
+
+## [1.0.22] 2021-05-30
+### Bugfix
+- DND5e incorrectly hiding all actions when setting to hide longer actions was enabled
+
+## [1.0.21] 2021-05-30
+### Bugfix
+- DND5e Managed to fuck up 0.8.5 and 0.7.10 at once, but fixed by p-becker
+
+## [1.0.20] 2021-05-29
+### Bugfix
+- Demonlord - fix challenge rolls thanks to mpgenio
+### Changed
+- DND5e Add support for 0.8.5 (should not break 0.7.x but please let me know if it does)
+
+## [1.0.19] 2021-05-28
+### Bugfix
+- PF2E Add support for heightened and signature spells thanks to Atraeus
+### Added
+- Add support for Better Rolls for SWADE2 thanks to zk-sn (famous director Zack Snyder, I assume)
+
+## [1.0.18] 2021-05-26
+### Bugfix
+- PF2E Render effect switches for NPCs, thanks to Drental
+- PF2E fix deprecated roll syntax, thanks to Drental
+- WFRP fix error using unloaded ranged weapon, thanks to silentmark
+### Changed
+- Pf2E add translation to multiselect, thanks to Drental
+- PF2E remove abilities from multiselect, thanks to Drental
+- PF2E call macros by ID
+
+## [1.0.17] 2021-05-11
+### Bugfix
+- WFRP fix for dodge skill thanks to silentmark
+- Add missing comma in Spanish language file
+### Added
+- Cthulhu Hack thanks to Kristov
+
+## [1.0.16] 2021-05-04
+### Bugfix
+- Various SotDL bugfixes thanks to patrickporto 
+### Added
+- OpenD6 Space Support thanks to madseumas
+- Alien RPG support thanks to pwatson100
+### Changed
+- Update to Spanish localization thanks to WallaceMcGregor
+- Remove abilities from PF2 thanks to Drental
+- Localize saves in PF2E thanks to Drental
+
+## [1.0.15] 2021-04-18
+### Added
+- WFRP - Additional basic actions thanks to Marek
+### Bugfix
+- DnD35 - Bugfixes from Rughalt
+
+## [1.0.14] 2021-04-13
 ### Added 
 - WFRP - Support for basic actions
 
-## [1.0.13] 2020-04-13
+## [1.0.13] 2021-04-13
 ### Added 
 - DnD35 - Order skills by name based on localization, thanks to Kaitiff
 
-## [1.0.12] 2020-04-04
+## [1.0.12] 2021-04-04
 ### Added 
 - Symbaroum - Support for Symbaroum  thanks to Khaali-dev
 
-## [1.0.11] 2020-04-03
+## [1.0.11] 2021-04-03
 ### Bugfix
 - PF2E - Add Take a Breather macro, thanks to JonWaterfall
 
-## [1.0.10] 2020-03-28
+## [1.0.10] 2021-03-28
 ### Bugfix
 - PF2E Fix NPC saves thanks to itrase
 
-## [1.0.9] 2020-03-17
+## [1.0.9] 2021-03-17
 ### Bugfix
 - SW5e fix for type error thanks to Zasshem
 ### Added
 - Blades in the Dark support - Thanks to DarkWizarD24 
 
-## [1.0.8] 2020-03-17
+## [1.0.8] 2021-03-17
 ### Changed
 - PF2E - Show when no ammunition is chosen
 
-## [1.0.7] 2020-03-17
+## [1.0.7] 2021-03-17
 ### Changed
 - PF2E - Show ammunition for strikes as an additional button that does nothing
 
-## [1.0.6] 2020-03-16
+## [1.0.6] 2021-03-16
 ### Added
 - Start of DE localization thanks to ksingvo
 - PF1E - support for BAB, Ranged, and Melee rolls
 
-## [1.0.5] 2020-03-12
+## [1.0.5] 2021-03-12
 ### Bugfix
 - SW5e fix from baccalla death save roll
 
-## [1.0.4] 2020-03-08
+## [1.0.4] 2021-03-08
 ### Added
 - Tormenta20 - support for Tormenta20 thanks to (mclemente)[https://github.com/mclemente]Show skills that do not require training 
 
-## [1.0.3] 2020-02-27
+## [1.0.3] 2021-02-27
 ### Bugfix
 - PF1 Show skills that do not require training 
 
-## [1.0.2] 2020-02-24
+## [1.0.2] 2021-02-24
 ### Added
 - Setting for marking 'active' buttons with an asterisk for a clearer indication that the button is active
 
-## [1.0.1] 2020-02-24
+## [1.0.1] 2021-02-24
 ### Changed
 - PF2E Strikes now consume ammo if configured to do so in the sheet
 
-## [1.0.0] 2020-02-23
+## [1.0.0] 2021-02-23
 ### Note
 - Getting tired of 0.10.*
 
@@ -69,86 +172,86 @@
 ### Changed
 - PF1E untrained skills are no longer shown
 
-## [0.10.37] 2020-02-21
+## [0.10.37] 2021-02-21
 ### Bugfix
 - PF2E spells correctly categorise by heightened spell level (if necessary)
 
-## [0.10.36] 2020-02-20
+## [0.10.36] 2021-02-20
 ### Added
 - SW5e conditions thanks to Therasin/Zasshem
 
-## [0.10.35] 2020-02-18
+## [0.10.35] 2021-02-18
 ### Changed
 - Add new options for the Item Macro to choose between keeping the original item, only the item macro item, or showing both.
 
-## [0.10.34] 2020-02-18
+## [0.10.34] 2021-02-18
 ### Added
 - SW5e class features thanks to Therasin/Zasshem
 
-## [0.10.33] 2020-02-06
+## [0.10.33] 2021-02-06
 ### Added
 - Option to toggle between drop-up and drop-down categories
 
-## [0.10.32] 2020-02-06
+## [0.10.32] 2021-02-06
 ### Added
 - Added a scale slider to adjust the size of the HUD (thanks to Alexis-Grimm for the suggestion)
 
-## [0.10.31] 2020-02-05
+## [0.10.31] 2021-02-05
 ### Changed
 - Extended Japanese localisation support thanks to touge
 
-## [0.10.30] 2020-01-27
+## [0.10.30] 2021-01-27
 ### Bugfix
 - SFRPG fix crew actions
 
-## [0.10.29] 2020-01-22
+## [0.10.29] 2021-01-22
 ### Added
 - Further changes to Starwars FFG thanks to zaborontest#0241
 
-## [0.10.28] 2020-01-21
+## [0.10.28] 2021-01-21
 ### Added
 - Starwars FFG support thanks to zaborontest#0241
 
-## [0.10.27] 2020-01-21
+## [0.10.27] 2021-01-21
 ### Added
 - Pf2e - Add active feats to actions as well
 
 ### Bugfix
 - PF2e - Correct icon for actions, reactions, and free actions
 
-## [0.10.26] 2020-01-21
+## [0.10.26] 2021-01-21
 ### Added
 - Pf2e - Effects Category
 
-## [0.10.25] 2020-01-21
+## [0.10.25] 2021-01-21
 ### Bugfix
 - SWRPG - Fix shields category for starships
 
-## [0.10.24] 2020-01-20
+## [0.10.24] 2021-01-20
 ### Added
 - Pf1 - Initiative roller, may not work currently, but waiting for a PF1 update
 
 ### Bugfix
 - PF1 Readd missing inventory category
 
-## [0.10.23] 2020-01-15
+## [0.10.23] 2021-01-15
 ### Bugfix
 - General - Update HUD if unselected character token is removed from scene and 'always show HUD' is enabled
 - PF1 - Show correct charges for linked items
 
-## [0.10.22] 2020-01-07
+## [0.10.22] 2021-01-07
 ### Bugfix
 - DND5e - Apparently only latest version has config values for attunement so add manual fallback value;
 
-## [0.10.21] 2020-01-07
+## [0.10.21] 2021-01-07
 ### Bugfix
 - DND5e - Fix support for magic items with new attunement changes
 
-## [0.10.20] 2020-01-04
+## [0.10.20] 2021-01-04
 ### Added
 - DND5e - Adds support for Obsidian 5e thanks to Avelyne#3141 (select Obsidian Character Sheets in the setting's HUD roll handler)
 
-## [0.10.19] 2020-01-01
+## [0.10.19] 2021-01-01
 ### Changed
 - SWADE - Show all NPC items for categories not just equipped items.
 
