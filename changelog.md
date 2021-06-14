@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.37] 2021-06-14
+### Changed
+- Added setting to set background color of HUD.
+
 ## [1.0.36] 2021-06-14
 ### Bugfix
 - DND35 fix thanks to Rughalt

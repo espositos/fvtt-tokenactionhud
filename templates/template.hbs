@@ -1,12 +1,12 @@
 
-<div id="{{id}}" style="top: {{top}}; left: {{left}}; transform: scale({{scale}}); transform-origin: top left">
+<div id="{{id}}" style="top: {{top}}; left: {{left}}; {{#if background}}background: {{background}};{{/if}} transform: scale({{scale}}); transform-origin: top left">
     {{#if actions.actorId}}
     {{#if actions.hudTitle}}
     <div id="tah-hudTitle">{{actions.hudTitle}}</div>
     {{/if}}
     <div id="tah-reposition"><i class="fas fa-arrows-alt"></i></div>
     {{#each actions.categories}}
-    {{>"modules/token-action-hud/templates/category.hbs"}}
+    {{>"modules/token-action-hud/templates/category.hbs" background=../background}}
     {{/each}}
     {{#unless hovering}}
     <div id="tah-categories"><i class="fa fa-book"></i></div>

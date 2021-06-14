@@ -142,6 +142,16 @@ export const registerSettings = function(app, systemManager, rollHandlers) {
       default: 1,
       onChange: value => { updateFunc(value); }
     });
+
+    game.settings.register(appName, 'background', {
+      name: game.i18n.localize('tokenactionhud.settings.background.name'),
+      hint: game.i18n.localize('tokenactionhud.settings.background.hint'),
+      scope: 'client',
+      config: true,
+      type: String,
+      default: 'none',
+      onChange: value => { updateFunc(value); }
+    });
     
     game.settings.register(appName,'activeCssAsText', {
         name : game.i18n.localize('tokenactionhud.settings.activeCssAsText.name'),
