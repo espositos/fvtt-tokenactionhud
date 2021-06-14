@@ -49,6 +49,7 @@ export class TokenActionHUD extends Application {
         left: 150,
         top: 80,
         scale: 1,
+        background: 'none',
         popOut: false,
         minimizable: false,
         resizable: false,
@@ -71,6 +72,10 @@ export class TokenActionHUD extends Application {
         return scale;
     }
 
+    getBackground() {
+        return settings.get('background');
+    }
+
     /** @override */
     getData(options = {}) {
         const data = super.getData();
@@ -78,6 +83,7 @@ export class TokenActionHUD extends Application {
         data.id = 'token-action-hud';
         data.hovering = settings.get('onTokenHover');;
         data.scale = this.getScale();
+        data.background = this.getBackground();
         settings.Logger.debug('HUD data:', data);
         return data;
     }
