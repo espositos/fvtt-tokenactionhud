@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.36] 2021-06-14
+### Bugfix
+- DND35 fix thanks to Rughalt
+
 ## [1.0.35] 2021-06-14
 ### Bugfix
 - Update module.json to allow installs on 0.7.x - if the HUD doesn't work, please report the issue and consider downgrading temporarily to 1.0.19 until I sort my shit out.
