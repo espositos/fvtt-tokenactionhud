@@ -54,7 +54,7 @@ export class RollHandlerBR2SWSwade extends RollHandler {
     _rollItem(event, actor, actionId, tokenId) {
         //const item = super.getItem(actor, actionId);
         //item.show();
-        game.brsw.create_item_card_fromid(tokenId, actor.id, actionId);
+        game.brsw.create_item_card_from_id(tokenId, actor.id, actionId);
     }
 
     /** @private */
