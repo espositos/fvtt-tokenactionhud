@@ -151,13 +151,13 @@ export class RollHandlerBR2SWSwade extends RollHandler {
     /** @private */
     _rollAttribute(event, actor, actionId, tokenId) {
         //actor.rollAttribute(actionId, {event: event});
-        game.brsw.create_attribute_card_fromid(tokenId, actor.id, actionId).then(message => {game.brsw.roll_attribute(message, "", false)});
+        game.brsw.create_attribute_card_from_id(tokenId, actor.id, actionId).then(message => {game.brsw.roll_attribute(message, "", false)});
     }
 
     /** @private */
     _rollSkill(event, actor, actionId, tokenId) {
         //actor.rollSkill(actionId, {event: event});
-        game.brsw.create_skill_card_fromid(tokenId, actor.id, actionId).then(message => {game.brsw.roll_skill(message, "", false)});
+        game.brsw.create_skill_card_from_id(tokenId, actor.id, actionId).then(message => {game.brsw.roll_skill(message, "", false)});
     }
 
     /** @private */
