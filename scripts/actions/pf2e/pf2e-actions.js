@@ -622,9 +622,9 @@ export class ActionHandlerPf2e extends ActionHandler {
 
     _addComponentsInfo(s, spell) {
         let components = s.data.data.components
-        let spellInfo = components.material? (game.i18n.localize('PF2E.SpellComponentShortM')) : '' +
-            components.somatic? (game.i18n.localize('PF2E.SpellComponentShortS')) : '' +
-            components.verbal? (game.i18n.localize('PF2E.SpellComponentShortV')) : '';
+        let spellInfo = components.material? (game.i18n.localize('PF2E.SpellComponentShortM')) : '';
+        spellInfo += components.somatic? (game.i18n.localize('PF2E.SpellComponentShortS')) : '';
+        spellInfo += components.verbal? (game.i18n.localize('PF2E.SpellComponentShortV')) : '';
         spell.info1 = spellInfo;
     }
 
