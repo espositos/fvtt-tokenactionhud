@@ -177,7 +177,7 @@ export class PcActionHandlerPf2e {
             let key = a[0];
             let data = a[1];
             let name = data.label ? data.label : key.charAt(0).toUpperCase()+key.slice(1);
-            return { _id: a[0], name: name } 
+            return { id: a[0], name: name } 
         });
         
         attributes.actions = this.baseHandler._produceActionMap(tokenId, attributesMap, macroType);

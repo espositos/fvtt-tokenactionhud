@@ -273,7 +273,7 @@ export class TokenActionHUD extends Application {
         if (hudTitle.length > 0)
             hudTitle.css('top', -hudTitle[0].getBoundingClientRect().height)
 
-        let token = canvas?.tokens?.placeables.find(t => t.data._id === this.targetActions?.tokenId);
+        let token = canvas?.tokens?.placeables.find(t => t.data.id === this.targetActions?.tokenId);
         if (settings.get('onTokenHover') && token) {           
             this.setHoverPos(token);
         } else {
@@ -403,36 +403,36 @@ export class TokenActionHUD extends Application {
     // Really just checks if only one token is being controlled. Not smart.
     validTokenChange(token) {
         if (settings.get('alwaysShowHud'))
-            return this.isRelevantToken(token) || token.actorId === game.user.character?._id;
+            return this.isRelevantToken(token) || token.actorId === game.user.character?.id;
         else
             return this.isRelevantToken(token);
     }
 
     isRelevantToken(token) {
         let controlled = this.tokens?.controlled;
-        return controlled?.some(t => t.id === this.getTokenId(token._id)) || (controlled?.length === 0 && canvas?.tokens?.placeables?.some(t => t.id === this.targetActions?.tokenId));
+        return controlled?.some(t => t.id === this.getTokenId(token.id)) || (controlled?.length === 0 && canvas?.tokens?.placeables?.some(t => t.id === this.targetActions?.tokenId));
     }
 
     getTokenId(token) {
-        return token._id ?? token.id;
+        return token.id ?? token.id;
     }
 
     // Is something being hovered on, is the setting on, and is it the token you're currently selecting.
     validTokenHover(token, hovered) {
-        return hovered && settings.get('onTokenHover') && token._id === this.targetActions?.tokenId;
+        return hovered && settings.get('onTokenHover') && token.id === this.targetActions?.tokenId;
     }
 
     // Basically update any time. All this logic could be improved.
     validActorOrItemUpdate(actor) {
         settings.Logger.debug(`actor change, comparing actors`);
-        settings.Logger.debug(`actor._id: ${actor._id}; this.targetActions.actorId: ${this.targetActions?.actorId}`);
+        settings.Logger.debug(`actor.id: ${actor.id}; this.targetActions.actorId: ${this.targetActions?.actorId}`);
 
         if (!actor) {
             settings.Logger.debug('No actor, possibly deleted, should update HUD.');
             return true;
         }
             
-        if (this.targetActions && actor._id === this.targetActions.actorId) {
+        if (this.targetActions && actor.id === this.targetActions.actorId) {
             settings.Logger.debug('Same actor IDs, should update HUD.');
             return true;
         }
@@ -465,7 +465,7 @@ export class TokenActionHUD extends Application {
                 return null;
             
             let character = game.user.character
-            let token = canvas?.tokens?.placeables.find(t => t.actor?._id === character?._id)
+            let token = canvas?.tokens?.placeables.find(t => t.actor?.id === character?.id)
             if (token)
                 return token;
             

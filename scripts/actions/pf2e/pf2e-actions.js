@@ -34,7 +34,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         if (!knownActors.includes(actorType))
             return result;
         
-        result.actorId = actor._id;
+        result.actorId = actor.id;
 
         if (actorType === 'character' || actorType === 'familiar')
             this.pcActionHandler.buildActionList(result, tokenId, actor);
@@ -115,7 +115,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let result = this.initializeEmptyCategory('attributes');
         let attributes = this.initializeEmptySubcategory();
 
-        let attributesMap = [{_id: 'perception', name: 'Perception'},{_id: 'initiative', name: 'Initiative'}]
+        let attributesMap = [{id: 'perception', name: 'Perception'},{id: 'initiative', name: 'Initiative'}]
         
         attributes.actions = this._produceActionMap(tokenId, attributesMap, macroType);
         
@@ -199,10 +199,10 @@ export class ActionHandlerPf2e extends ActionHandler {
     /** @private */
     _addContainerSubcategories(tokenId, macroType, category, actor, items) {
         const allContainerIds = [...new Set(actor.items.filter(i => i.data.data.containerId?.value).map(i => i.data.data.containerId.value))];
-        const containers = (items ?? []).filter(i => allContainerIds.includes(i._id));
+        const containers = (items ?? []).filter(i => allContainerIds.includes(i.id));
 
         containers.forEach(container => {
-            const containerId = container._id;
+            const containerId = container.id;
             const contents = actor.items.filter(i => i.data.data.containerId?.value === containerId).sort(this._foundrySort);
             if (contents.length === 0)
                 return;
@@ -270,7 +270,7 @@ export class ActionHandlerPf2e extends ActionHandler {
                 }
                 currentMap -= map;
                 currentBonus -= map;
-                return {_id: encodeURIComponent(`${this.name}>${this.variants.indexOf(v)}`), name: name }
+                return {id: encodeURIComponent(`${this.name}>${this.variants.indexOf(v)}`), name: name }
             }.bind(s));
 
             variantsMap[0].img = s.imageUrl;
@@ -295,15 +295,15 @@ export class ActionHandlerPf2e extends ActionHandler {
         if (!strike.selectedAmmoId)
             return;
         
-        const item = actor.getOwnedItem(strike.selectedAmmoId);
+        const item = actor.items.get(strike.selectedAmmoId);
 
         if (!item) {
             return {name: this.i18n('tokenactionhud.noammo'), encodedValue: 'noammo', id: 'noammo'};
         }
 
-        let encodedValue = ['ammo', tokenId, item._id].join(this.delimiter);
+        let encodedValue = ['ammo', tokenId, item.id].join(this.delimiter);
         let img = this._getImage(item);
-        let action = { name: item.name, encodedValue: encodedValue, id: item._id, img: img };
+        let action = { name: item.name, encodedValue: encodedValue, id: item.id, img: img };
         action.info1 = item.data.data.quantity?.value
 
         return action;
@@ -384,7 +384,7 @@ export class ActionHandlerPf2e extends ActionHandler {
 
         let heightenedSignatureSpells = [];
         spells.forEach(spell => {
-            if (signatureSpellIds.includes(spell.data._id)) {
+            if (signatureSpellIds.includes(spell.data.id)) {
                 const spellBaseLevel = spell.data.data.level.value;
                 for (let i=(spellBaseLevel+1); i<=highestSpellSlot; i++) {
                     let heightenedSpell = Object.create(Object.getPrototypeOf(spell));
@@ -470,7 +470,7 @@ export class ActionHandlerPf2e extends ActionHandler {
                     levelSubcategory.actions.push(spell);
 
                     if (level > 0) {
-                        let spellExpend = { name: '-', encodedValue: encodedValue+'>expend', id: s.data._id, cssClass: 'stickLeft'};
+                        let spellExpend = { name: '-', encodedValue: encodedValue+'>expend', id: s.data.id, cssClass: 'stickLeft'};
                         levelSubcategory.actions.push(spellExpend);
                     }
                 });
@@ -583,11 +583,11 @@ export class ActionHandlerPf2e extends ActionHandler {
             if (maxSlots > 0) {          
                 category.info1 = `${valueSlots}/${maxSlots}`;
 
-                increaseId = `${spellbook._id}>focus>slotIncrease`;
+                increaseId = `${spellbook.id}>focus>slotIncrease`;
                 let increaseEncodedValue = ['spellSlot', tokenId, increaseId].join(this.delimiter);
                 category.actions.unshift({id: increaseId, name: '+', encodedValue: increaseEncodedValue, cssClass:'shrink'})
         
-                decreaseId = `${spellbook._id}>focus>slotDecrease`;
+                decreaseId = `${spellbook.id}>focus>slotDecrease`;
                 let decreaseEncodedValue = ['spellSlot', tokenId, decreaseId].join(this.delimiter);
                 category.actions.unshift({id: decreaseId, encodedValue: decreaseEncodedValue, name: '-', cssClass:'shrink'})
             }
@@ -602,11 +602,11 @@ export class ActionHandlerPf2e extends ActionHandler {
             if (maxSlots > 0) {
                 category.info1 = `${valueSlots}/${maxSlots}`;
 
-                increaseId = `${spellbook._id}>${slotLevel}>slotIncrease`;
+                increaseId = `${spellbook.id}>${slotLevel}>slotIncrease`;
                 let increaseEncodedValue = ['spellSlot', tokenId, increaseId].join(this.delimiter);
                 category.actions.unshift({encodedValue: increaseEncodedValue, name: '+', id: increaseId, cssClass:'shrink'})
     
-                decreaseId = `${spellbook._id}>${slotLevel}>slotDecrease`;
+                decreaseId = `${spellbook.id}>${slotLevel}>slotDecrease`;
                 let decreaseEncodedValue = ['spellSlot', tokenId, decreaseId].join(this.delimiter);
                 category.actions.unshift({encodedValue: decreaseEncodedValue, name: '-', id: increaseId, cssClass:'shrink'})
             }
@@ -621,9 +621,13 @@ export class ActionHandlerPf2e extends ActionHandler {
     }
 
     _addComponentsInfo(s, spell) {
-        let components = s.data.data.components?.value.split(',');
-        let spellInfo = components.map(c => c.trim().charAt(0).toUpperCase()).join('');
-        spell.info1 = spellInfo;
+        let components = s.components;
+        if (components) {
+            spell.info1 = components.value;
+        } else {
+            components = s.data.data.components?.value.split(',');
+            spell.info1 = components.map(c => c.trim().charAt(0).toUpperCase()).join('');
+        }
     }
 
     _addAttackDamageInfo(s, spell) {
@@ -663,7 +667,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         let result = this.initializeEmptyCategory('saves');
 
         let actorSaves = actor.data.data.saves;
-        let saveMap = Object.keys(actorSaves).map(k => { return {_id: k, name: game.i18n.localize(CONFIG.PF2E.saves[k])}});
+        let saveMap = Object.keys(actorSaves).map(k => { return {id: k, name: game.i18n.localize(CONFIG.PF2E.saves[k])}});
 
         let saves = this.initializeEmptySubcategory();
         saves.actions = this._produceActionMap(tokenId, saveMap, 'save');
@@ -689,7 +693,7 @@ export class ActionHandlerPf2e extends ActionHandler {
                     info = `${value}`;
             }
 
-            let action = this._produceActionMap(tokenId, [{'_id': key, 'name': name}], macroType);
+            let action = this._produceActionMap(tokenId, [{'id': key, 'name': name}], macroType);
             action[0].info1 = info;
             return action[0];
     }
@@ -797,7 +801,7 @@ export class ActionHandlerPf2e extends ActionHandler {
 
     /** @private */
     _produceAction(tokenId, item, type, isPassive = false) {
-        let encodedValue = [type, tokenId, item._id].join(this.delimiter);
+        let encodedValue = [type, tokenId, item.id].join(this.delimiter);
         let icon;
         let actions = item.data?.data?.actions;
         let actionType = item.data?.data?.actionType?.value;
@@ -809,7 +813,7 @@ export class ActionHandlerPf2e extends ActionHandler {
         }
 
         let img = this._getImage(item);
-        return { name: item.name, encodedValue: encodedValue, id: item._id, img: img, icon: icon };
+        return { name: item.name, encodedValue: encodedValue, id: item.id, img: img, icon: icon };
     }
     
     _getActionIcon(action) {
