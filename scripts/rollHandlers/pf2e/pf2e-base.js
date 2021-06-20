@@ -203,7 +203,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         let slot = actionParts[1];
         let effect = actionParts[2];
 
-        let spellbook = actor.getOwnedItem(spellbookId);
+        let spellbook = actor.items.get(spellbookId);
 
         let value, max;
         if (slot === 'focus') {
@@ -286,7 +286,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         if (!strike.selectedAmmoId)
             return;
             
-        const ammo = actor.getOwnedItem(strike.selectedAmmoId);
+        const ammo = actor.items.get(strike.selectedAmmoId);
 
         if (ammo.quantity < 1) {
             ui.notifications.error(game.i18n.localize('PF2E.ErrorMessage.NotEnoughAmmo'));
@@ -316,7 +316,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         if (this.isRenderItem())
             return this.doRenderItem(tokenId, strikeId);
 
-        let strike = actor.getOwnedItem(strikeId);
+        let strike = actor.items.get(strikeId);
 
         switch (strikeType) {
             case 'damage':
@@ -339,7 +339,7 @@ export class RollHandlerBasePf2e extends RollHandler {
 
     /** @private */
     _rollItem(event, actor, actionId) {
-        let item = actor.getOwnedItem(actionId);
+        let item = actor.items.get(actionId);
         
         item.toChat();
     }
@@ -368,7 +368,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         if (this.isRenderItem() && printCard)
             return this.doRenderItem(tokenId, spellId);
 
-        let spell = actor.getOwnedItem(spellId);
+        let spell = actor.items.get(spellId);
 
         if (printCard) {
             this._rollHeightenedSpell(actor, spell, level); 
@@ -399,7 +399,7 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
     
     async _expendSpell(actor, spellbookId, level, spellId) {    
-        let spellbook = actor.getOwnedItem(spellbookId);
+        let spellbook = actor.items.get(spellbookId);
         let spellSlot = Object.entries(spellbook.data.data.slots[`slot${level}`].prepared)
             .find(s => s[1].id === spellId && (s[1].expended === false || !s[1].expended))[0];
 
@@ -422,7 +422,7 @@ export class RollHandlerBasePf2e extends RollHandler {
 
     async _rollHeightenedSpell(actor, item, spellLevel) {
 
-        let data = item.getChatData();
+        let data = item.getChatData(undefined, { spellLvl: spellLevel });
         let token = canvas.tokens.placeables.find(p => p.actor?.id === actor.id);
         let castLevel = parseInt(spellLevel);
         if (item.data.data.level.value < castLevel) {
@@ -437,7 +437,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         const templateData = {
             actor: actor,
             tokenId: token ? `${token.scene.id}.${token.id}` : null,
-            item: item.data,
+            item: item,
             data: data,
           };
       
