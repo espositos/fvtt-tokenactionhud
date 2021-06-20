@@ -442,7 +442,7 @@ export class ActionHandlerPf2e extends ActionHandler {
 
                 levelName = level == 0 ? this.i18n('tokenactionhud.cantrips') : levelName;
                 
-                let items = Object.values(slot[1].prepared).map(spell => { if (!spell.expended) return spells.find(sp => sp.data.id === spell.id) });
+                let items = Object.values(slot[1].prepared).map(spell => { if (!spell.expended) return spells.find(sp => sp.data._id === spell.id) });
                 items = items.filter(i => !!i);
 
                 if (items.length === 0)
@@ -460,8 +460,8 @@ export class ActionHandlerPf2e extends ActionHandler {
                 let levelSubcategory = this.initializeEmptySubcategory();
 
                 items.forEach(s => {
-                    let encodedValue = [macroType, tokenId, `${spellbook.data.id}>${level}>${s.data.id}`].join(this.delimiter);
-                    let spell = { name: s.name, encodedValue: encodedValue, id: s.data.id };
+                    let encodedValue = [macroType, tokenId, `${spellbook.data._id}>${level}>${s.data._id}`].join(this.delimiter);
+                    let spell = { name: s.name, encodedValue: encodedValue, id: s.data._id };
                     spell.img = this._getImage(s);
                     spell.icon = this._getActionIcon(s.data.data?.time?.value)
                     spell.spellLevel = level;
