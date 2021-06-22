@@ -410,7 +410,7 @@ export class TokenActionHUD extends Application {
 
     isRelevantToken(token) {
         let controlled = this.tokens?.controlled;
-        return controlled?.some(t => t.id === this.getTokenId(token.id)) || (controlled?.length === 0 && canvas?.tokens?.placeables?.some(t => t.id === this.targetActions?.tokenId));
+        return controlled?.some(t => t.id === this.getTokenId(token)) || (controlled?.length === 0 && canvas?.tokens?.placeables?.some(t => t.id === this.targetActions?.tokenId));
     }
 
     getTokenId(token) {
