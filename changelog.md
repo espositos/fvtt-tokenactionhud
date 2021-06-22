@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3] 2021-06-20
+### Bugfix
+- SWADE BR improvements thanks to zk-sn again
+### Added
+- Support for Kamigakari system thanks to ksx0330
+- Alternative DND5e action list thanks to benbarbour
+
 ## [1.1.2] 2021-06-20
 ### Bugfix
 - more PF2E fixes (spell cards), thanks to Drental

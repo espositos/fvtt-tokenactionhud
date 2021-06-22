@@ -211,5 +211,22 @@
     "tokenactionhud.settings.alienrpg.attributeobservation": "Observation",
     "tokenactionhud.settings.alienrpg.creatureAttack": "Creature Attack",
     "tokenactionhud.settings.alienrpg.health": "Health",
-    "tokenactionhud.settings.alienrpg.rollCrit": "Roll Crit"
+    "tokenactionhud.settings.alienrpg.rollCrit": "Roll Crit",
+    
+    "tokenactionhud.kamigakari.mainStats": "주능력치",
+    "tokenactionhud.kamigakari.subStats": "부능력치",
+    "tokenactionhud.kamigakari.start": "개시",
+    "tokenactionhud.kamigakari.prep": "준비",
+    "tokenactionhud.kamigakari.attack": "공격",
+    "tokenactionhud.kamigakari.defense": "방어",
+    "tokenactionhud.kamigakari.end": "종료",
+    "tokenactionhud.kamigakari.constant": "상시",
+    "tokenactionhud.kamigakari.free": "특수",
+    "tokenactionhud.kamigakari.spiritBurn": "영문 연소",
+    "tokenactionhud.kamigakari.transcend": "물리 초월",
+    "tokenactionhud.kamigakari.vitalIgnition": "생명 연소",
+    "tokenactionhud.kamigakari.conceptDestruction": "개념 파괴",
+    "tokenactionhud.kamigakari.items": "아이템",
+    "tokenactionhud.kamigakari.sacraments": "상비",
+    "tokenactionhud.kamigakari.consumables": "소비"
 }
