@@ -1,6 +1,10 @@
 # Changelog
 
-## [1.1.3] 2021-06-20
+## [1.1.4] 2021-06-22
+### Bugfix
+- Fix call for token id resulting in error messages, thanks to jessev14
+
+## [1.1.3] 2021-06-22
 ### Bugfix
 - SWADE BR improvements thanks to zk-sn again
 ### Added
