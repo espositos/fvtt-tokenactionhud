@@ -1,34 +1,4 @@
-export function register(app, updateSettings) {    
-    game.settings.register(app,'showPcAbilities', {
-        name: game.i18n.localize('tokenactionhud.settings.pf2e.showPcAbilities.name'),
-        hint: game.i18n.localize('tokenactionhud.settings.pf2e.showPcAbilities.hint'),
-        scope: "client",
-        config: true,
-        type: Boolean,
-        default: true,
-        onChange: value => { updateSettings(value); }
-    });
-    
-    game.settings.register(app,'showNpcAbilities', {
-        name: game.i18n.localize('tokenactionhud.settings.pf2e.showNpcAbilities.name'),
-        hint: game.i18n.localize('tokenactionhud.settings.pf2e.showNpcAbilities.hint'),
-        scope: "client",
-        config: true,
-        type: Boolean,
-        default: true,
-        onChange: value => { updateSettings(value); }
-    });
-    
-    game.settings.register(app,'showOldNpcStrikes', {
-        name: game.i18n.localize('tokenactionhud.settings.pf2e.showOldNpcStrikes.name'),
-        hint: game.i18n.localize('tokenactionhud.settings.pf2e.showOldNpcStrikes.hint'),
-        scope: "client",
-        config: true,
-        type: Boolean,
-        default: true,
-        onChange: value => { updateSettings(value); }
-    });
-    
+export function register(app, updateSettings) {   
     game.settings.register(app,'ignorePassiveActions', {
         name: game.i18n.localize('tokenactionhud.settings.pf2e.ignorePassiveActions.name'),
         hint: game.i18n.localize('tokenactionhud.settings.pf2e.ignorePassiveActions.hint'),

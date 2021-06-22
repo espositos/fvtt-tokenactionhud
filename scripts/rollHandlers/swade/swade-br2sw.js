@@ -54,7 +54,25 @@ export class RollHandlerBR2SWSwade extends RollHandler {
     _rollItem(event, actor, actionId, tokenId) {
         //const item = super.getItem(actor, actionId);
         //item.show();
-        game.brsw.create_item_card_fromid(tokenId, actor.id, actionId);
+        let behavior;
+        if (event.ctrlKey === true) {
+            behavior = game.settings.get('betterrolls-swade2', 'ctrl_click');
+        } else if (event.altKey === true) {
+            behavior = game.settings.get('betterrolls-swade2', 'alt_click');
+        } else if (event.shiftKey === true) {
+            behavior = game.settings.get('betterrolls-swade2', 'shift_click');
+        } else {
+            behavior = game.settings.get('betterrolls-swade2', 'click');
+        }
+        if (behavior === 'trait') {
+            game.brsw.create_item_card_from_id(tokenId, actor.id, actionId).then(message => {game.brsw.roll_item(message, "", false)});
+        } else if (behavior === 'trait_damage') {
+            game.brsw.create_item_card_from_id(tokenId, actor.id, actionId).then(message => {game.brsw.roll_item(message, "", false, true)});
+        } else if (behavior === 'system') {
+            game.swade.rollItemMacro(actor.items.get(actionId).name);
+        } else {
+            game.brsw.create_item_card_from_id(tokenId, actor.id, actionId);
+        }
     }
 
     /** @private */
@@ -67,7 +85,7 @@ export class RollHandlerBR2SWSwade extends RollHandler {
 
         await actor.update(update);
         
-        const effect = {"icon":"systems/swade/assets/icons/status/status_" + actionId + ".svg","id":actionId,"label":"SWADE." +  actionId.charAt(0).toUpperCase() + actionId.slice(1)};
+        const effect = CONFIG.SWADE.statusEffects.find(e=>e.id===actionId);
         const existingOnToken = actor.effects.find(e => e.getFlag("core", "statusId") === actionId);
 
         if (!existingOnToken == !existingOnSheet) {
@@ -151,13 +169,45 @@ export class RollHandlerBR2SWSwade extends RollHandler {
     /** @private */
     _rollAttribute(event, actor, actionId, tokenId) {
         //actor.rollAttribute(actionId, {event: event});
-        game.brsw.create_attribute_card_fromid(tokenId, actor.id, actionId).then(message => {game.brsw.roll_attribute(message, "", false)});
+        let behavior;
+        if (event.ctrlKey === true) {
+            behavior = game.settings.get('betterrolls-swade2', 'ctrl_click');
+        } else if (event.altKey === true) {
+            behavior = game.settings.get('betterrolls-swade2', 'alt_click');
+        } else if (event.shiftKey === true) {
+            behavior = game.settings.get('betterrolls-swade2', 'shift_click');
+        } else {
+            behavior = game.settings.get('betterrolls-swade2', 'click');
+        }
+        if (behavior === 'trait' || behavior === 'trait_damage') {
+            game.brsw.create_attribute_card_from_id(tokenId, actor.id, actionId).then(message => {game.brsw.roll_attribute(message, "", false)});
+        } else if (behavior === 'system') {
+            actor.rollAttribute(actionId);
+        } else {
+            game.brsw.create_attribute_card_from_id(tokenId, actor.id, actionId);
+        }
     }
 
     /** @private */
     _rollSkill(event, actor, actionId, tokenId) {
         //actor.rollSkill(actionId, {event: event});
-        game.brsw.create_skill_card_fromid(tokenId, actor.id, actionId).then(message => {game.brsw.roll_skill(message, "", false)});
+        let behavior;
+        if (event.ctrlKey === true) {
+            behavior = game.settings.get('betterrolls-swade2', 'ctrl_click');
+        } else if (event.altKey === true) {
+            behavior = game.settings.get('betterrolls-swade2', 'alt_click');
+        } else if (event.shiftKey === true) {
+            behavior = game.settings.get('betterrolls-swade2', 'shift_click');
+        } else {
+            behavior = game.settings.get('betterrolls-swade2', 'click');
+        }
+        if (behavior === 'trait' || behavior === 'trait_damage') {
+            game.brsw.create_skill_card_from_id(tokenId, actor.id, actionId).then(message => {game.brsw.roll_skill(message, "", false)});
+        } else if (behavior === 'system') {
+            game.swade.rollItemMacro(actor.items.get(actionId).name);
+        } else {
+            game.brsw.create_skill_card_from_id(tokenId, actor.id, actionId);
+        }
     }
 
     /** @private */

@@ -1,6 +1,15 @@
 # Changelog
 
-## [1.0.37] 2021-06-14
+## [1.1.2] 2021-06-20
+### Bugfix
+- more PF2E fixes (spell cards), thanks to Drental
+
+## [1.1.1] 2021-06-20
+### Bugfix
+- Pf2E thanks to Drental
+- SWADE Better Rolls thanks to zk-sn
+
+## [1.1.0] 2021-06-14
 ### Changed
 - Added setting to set background color of HUD.
 
