@@ -319,5 +319,22 @@
     "tokenactionhud.cthack.saves": "Saves",
     "tokenactionhud.cthack.attributes": "Attributes",
     "tokenactionhud.cthack.weapons": "Weapons",
-    "tokenactionhud.cthack.items": "Equipment"
+    "tokenactionhud.cthack.items": "Equipment",
+    
+    "tokenactionhud.kamigakari.mainStats": "Main Stats",
+    "tokenactionhud.kamigakari.subStats": "Sub Stats",
+    "tokenactionhud.kamigakari.start": "Start",
+    "tokenactionhud.kamigakari.prep": "Prep",
+    "tokenactionhud.kamigakari.attack": "Attack",
+    "tokenactionhud.kamigakari.defense": "Defense",
+    "tokenactionhud.kamigakari.end": "End",
+    "tokenactionhud.kamigakari.constant": "Constant",
+    "tokenactionhud.kamigakari.free": "Free",
+    "tokenactionhud.kamigakari.spiritBurn": "Spirit Burn",
+    "tokenactionhud.kamigakari.transcend": "Transcend",
+    "tokenactionhud.kamigakari.vitalIgnition": "Vital Ignition",
+    "tokenactionhud.kamigakari.conceptDestruction": "Concept Destruction",
+    "tokenactionhud.kamigakari.items": "items",
+    "tokenactionhud.kamigakari.sacraments": "Sacraments",
+    "tokenactionhud.kamigakari.consumables": "Consumables"
 }
