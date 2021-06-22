@@ -19,7 +19,7 @@ export class Dnd5eSystemManager extends SystemManager {
     /** @override */
     doGetActionHandler(filterManager, categoryManager) {
         let actionHandler;
-        if (game.modules.get('character-actions-list-5e')?.active && settings.get('useActionList')) {
+        if (SystemManager.isModuleActive('character-actions-list-5e') && settings.get('useActionList')) {
             actionHandler = new ActionHandler5eGroupByType(filterManager, categoryManager);
         } else {
             actionHandler = new ActionHandler(filterManager, categoryManager);
