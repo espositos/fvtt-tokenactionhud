@@ -89,4 +89,16 @@ export function register(appName, updateFunc) {
         default: true,
         onChange: value => { updateFunc(value); }
     });
+
+    if (game.modules.get('character-actions-list-5e')?.active) {
+        game.settings.register(appName,'useActionList', {
+            name : game.i18n.localize('tokenactionhud.settings.useActionList.name'),
+            hint : game.i18n.localize('tokenactionhud.settings.useActionList.hint'),
+            scope : 'client',
+            config : true,
+            type : Boolean,
+            default : false,
+            onChange: value => { updateFunc(value); }
+        });
+    }
 }

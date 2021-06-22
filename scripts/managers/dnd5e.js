@@ -1,12 +1,14 @@
 import { SystemManager } from './manager.js';
-import { ActionHandler5e as ActionHandler } from '../actions/dnd5e/dnd5e-actions.js'; 
+import { ActionHandler5e as ActionHandler } from '../actions/dnd5e/dnd5e-actions.js';
+import { ActionHandler5eGroupByType } from '../actions/dnd5e/dnd5e-actions-by-type.js';
 import { MagicItemsPreRollHandler } from '../rollHandlers/dnd5e/pre-magicItems.js';
 import { MagicItemActionListExtender } from '../actions/magicItemsExtender.js';
 import { RollHandlerBase5e as Core } from '../rollHandlers/dnd5e/dnd5e-base.js';
 import { RollHandlerBetterRolls5e as BetterRolls5e } from '../rollHandlers/dnd5e/dnd5e-betterrolls5e.js';
 import { RollHandlerMinorQol5e as MinorQol5e } from '../rollHandlers/dnd5e/dnd5e-minorqol.js';
 import { RollHandlerObsidian as Obsidian5e } from '../rollHandlers/dnd5e/dnd5e-obsidian.js';
-import * as settings from '../settings/dnd5e-settings.js';
+import * as settings from '../settings.js';
+import * as systemSettings from '../settings/dnd5e-settings.js';
 
 export class Dnd5eSystemManager extends SystemManager {
 
@@ -16,7 +18,12 @@ export class Dnd5eSystemManager extends SystemManager {
 
     /** @override */
     doGetActionHandler(filterManager, categoryManager) {
-        let actionHandler = new ActionHandler(filterManager, categoryManager);
+        let actionHandler;
+        if (game.modules.get('character-actions-list-5e')?.active && settings.get('useActionList')) {
+            actionHandler = new ActionHandler5eGroupByType(filterManager, categoryManager);
+        } else {
+            actionHandler = new ActionHandler(filterManager, categoryManager);
+        }
         
         if (SystemManager.isModuleActive('magicitems'))
             actionHandler.addFurtherActionHandler(new MagicItemActionListExtender())
@@ -66,6 +73,6 @@ export class Dnd5eSystemManager extends SystemManager {
 
     /** @override */
     doRegisterSettings(appName, updateFunc) {
-        settings.register(appName, updateFunc);
+        systemSettings.register(appName, updateFunc);
     }
 }
