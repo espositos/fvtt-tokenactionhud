@@ -98,7 +98,7 @@ export class ActionHandlerSw5e extends ActionHandler {
     
     /** @private */
     _getItemList(actor, tokenId) {
-        let validItems = this._filterLongerActions(actor.data.items.filter(i => i.data.quantity > 0));
+        let validItems = this._filterLongerActions(actor.data.items.filter(i => i.data.data.quantity > 0));
         let sortedItems = this._sortByItemSort(validItems);
         let macroType = 'item';
 
@@ -167,10 +167,10 @@ export class ActionHandlerSw5e extends ActionHandler {
         const activationTypes = Object.keys(game.sw5e.config.abilityActivationTypes);
     
         let activeEquipment = equipment.filter(e => {
-            if (!e.data.activation)
+            if (!e.data.data.activation)
                 return false;
     
-            return activationTypes.includes(e.data.activation.type)
+            return activationTypes.includes(e.data.data.activation.type)
         });
     
         return activeEquipment;
@@ -229,7 +229,7 @@ export class ActionHandlerSw5e extends ActionHandler {
         })
 
         let dispose = powers.reduce(function (dispose, p) {
-            let prep = p.data.preparation.mode;
+            let prep = p.data.data.preparation.mode;
             const prepType = game.sw5e.config.powerPreparationModes[prep];
 
             var level = p.data.level;
@@ -329,7 +329,7 @@ export class ActionHandlerSw5e extends ActionHandler {
         let legendary = this.initializeEmptySubcategory();
 
         let dispose = feats.reduce(function (dispose, f) {
-            const activationType = f.data.activation.type;
+            const activationType = f.data.data.activation.type;
             const macroType = 'feat';
 
             let feat = this._buildItem(tokenId, actor, macroType, f);
@@ -543,7 +543,7 @@ export class ActionHandlerSw5e extends ActionHandler {
         availableConditions.forEach(c => {
             const name = this.i18n(c.label);
             const encodedValue = [macroType, tokenId, c.id].join(this.delimiter);
-            const cssClass = actor.effects.entries.some(e => e.data.flags.core?.statusId === c.id) ? 'active' : '';
+            const cssClass = Object.entries(actor.effects).some((k, e) => e.data.flags.core?.statusId === c.id) ? 'active' : '';
             const image = c.icon;
             const action = {name: name, id: c.id, encodedValue: encodedValue, img: image, cssClass: cssClass}
 
