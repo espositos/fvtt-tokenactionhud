@@ -195,7 +195,7 @@ export class ActionHandler5e extends ActionHandler {
     /** @private */
     _buildSpellsCategory(token) {
         const actor = token.actor;
-        if (actor.data.type !== 'vehicle') return;
+        if (actor.data.type === 'vehicle') return;
 
         let validSpells = this._filterLongerActions(actor.data.items.filter(i => i.type === 'spell'));
         validSpells = this._filterExpendedItems(validSpells);
@@ -418,7 +418,7 @@ export class ActionHandler5e extends ActionHandler {
     /** @private */
     _buildSkillsCategory(token) {
         const actor = token.actor;
-        if (actor.data.type !== 'vehicle') return;
+        if (actor.data.type === 'vehicle') return;
 
         const skills = actor.data.data.skills;
 
