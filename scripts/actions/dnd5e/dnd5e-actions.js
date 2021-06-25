@@ -743,7 +743,7 @@ export class ActionHandler5e extends ActionHandler {
         const itemId = item.id ?? item._id;
         let encodedValue = [macroType, tokenId, itemId].join(this.delimiter);
         let img = this._getImage(item);
-        let icon = this._getActionIcon(item.data?.activation?.type);
+        let icon = this._getActionIcon(item.data?.data?.activation?.type);
         let result = { name: item.name, id: itemId, encodedValue: encodedValue, img: img, icon: icon }
 
         if (itemData.recharge && !itemData.recharge.charged && itemData.recharge.value) {
