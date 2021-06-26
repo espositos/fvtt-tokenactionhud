@@ -569,7 +569,7 @@ export class ActionHandlerSw5e extends ActionHandler {
         availableConditions.forEach(c => {
             const name = this.i18n(c.label);
             const encodedValue = [macroType, tokenId, c.id].join(this.delimiter);
-            const cssClass = actors.every(actor => actor.effects.entries.some(e => e.data.flags.core?.statusId === c.id)) ? 'active' : '';
+            const cssClass = actors.every(actor => Object.entries(actor.effects).some(e => e.data.flags.core?.statusId === c.id)) ? 'active' : '';
             const image = c.icon;
             const action = {name: name, id: c.id, encodedValue: encodedValue, img: image, cssClass: cssClass}
 
