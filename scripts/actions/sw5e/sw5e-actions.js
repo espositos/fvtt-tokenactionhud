@@ -106,7 +106,7 @@ export class ActionHandlerSw5e extends ActionHandler {
         if (actor.data.type === 'npc') {
             equipped = sortedItems.filter(i => i.type !== 'consumable' && i.type !== 'power' && i.type !== 'feat');
         } else {
-            equipped = sortedItems.filter(i => i.type !== 'consumable' && i.data.equipped);
+            equipped = sortedItems.filter(i => i.type !== 'consumable' && i.data.data.equipped);
         }
         let activeEquipped = this._getActiveEquipment(equipped);
         
