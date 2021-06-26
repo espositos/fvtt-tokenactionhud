@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.5] 2021-06-26
+### Bugfix
+- DND5e fixes for a variety of issues thanks to benbarbour
+### Changed
+- SW5e update thanks to jtljac
+
 ## [1.1.4] 2021-06-22
 ### Bugfix
 - Fix call for token id resulting in error messages, thanks to jessev14
