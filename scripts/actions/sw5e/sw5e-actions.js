@@ -98,7 +98,7 @@ export class ActionHandlerSw5e extends ActionHandler {
     
     /** @private */
     _getItemList(actor, tokenId) {
-        let validItems = this._filterLongerActions(actor.data.items.filter(i => i.data.quantity > 0));
+        let validItems = this._filterLongerActions(actor.data.items.filter(i => i.data.data.quantity > 0));
         let sortedItems = this._sortByItemSort(validItems);
         let macroType = 'item';
 
@@ -106,7 +106,7 @@ export class ActionHandlerSw5e extends ActionHandler {
         if (actor.data.type === 'npc') {
             equipped = sortedItems.filter(i => i.type !== 'consumable' && i.type !== 'power' && i.type !== 'feat');
         } else {
-            equipped = sortedItems.filter(i => i.type !== 'consumable' && i.data.equipped);
+            equipped = sortedItems.filter(i => i.type !== 'consumable' && i.data.data.equipped);
         }
         let activeEquipped = this._getActiveEquipment(equipped);
         
@@ -167,10 +167,10 @@ export class ActionHandlerSw5e extends ActionHandler {
         const activationTypes = Object.keys(game.sw5e.config.abilityActivationTypes);
     
         let activeEquipment = equipment.filter(e => {
-            if (!e.data.activation)
+            if (!e.data.data.activation)
                 return false;
     
-            return activationTypes.includes(e.data.activation.type)
+            return activationTypes.includes(e.data.data.activation.type)
         });
     
         return activeEquipment;
@@ -229,7 +229,7 @@ export class ActionHandlerSw5e extends ActionHandler {
         })
 
         let dispose = powers.reduce(function (dispose, p) {
-            let prep = p.data.preparation.mode;
+            let prep = p.data.data.preparation.mode;
             const prepType = game.sw5e.config.powerPreparationModes[prep];
 
             var level = p.data.level;
@@ -329,7 +329,7 @@ export class ActionHandlerSw5e extends ActionHandler {
         let legendary = this.initializeEmptySubcategory();
 
         let dispose = feats.reduce(function (dispose, f) {
-            const activationType = f.data.activation.type;
+            const activationType = f.data.data.activation.type;
             const macroType = 'feat';
 
             let feat = this._buildItem(tokenId, actor, macroType, f);
@@ -470,6 +470,8 @@ export class ActionHandlerSw5e extends ActionHandler {
         let rests = this.initializeEmptySubcategory()
         let utility = this.initializeEmptySubcategory();
 
+        this._addIntiativeSubcategory(macroType, result, tokenId);
+
         if (actor.data.type === 'character') {          
             let shortRestValue = [macroType, tokenId, 'shortRest'].join(this.delimiter);
             rests.actions.push({id:'shortRest', encodedValue: shortRestValue, name: this.i18n('tokenactionhud.shortRest')})
@@ -498,9 +500,12 @@ export class ActionHandlerSw5e extends ActionHandler {
     _addMultiUtilities(list, tokenId, actors) {
         let category = this.initializeEmptyCategory('utility');
         let macroType = 'utility';
+
+        this._addMultiIntiativeSubcategory(macroType, tokenId, category);
         
         let rests = this.initializeEmptySubcategory();
         let utility = this.initializeEmptySubcategory();
+
 
         if (actors.every(a => a.data.type === 'character')) {          
             let shortRestValue = [macroType, tokenId, 'shortRest'].join(this.delimiter);
@@ -543,7 +548,7 @@ export class ActionHandlerSw5e extends ActionHandler {
         availableConditions.forEach(c => {
             const name = this.i18n(c.label);
             const encodedValue = [macroType, tokenId, c.id].join(this.delimiter);
-            const cssClass = actor.effects.entries.some(e => e.data.flags.core?.statusId === c.id) ? 'active' : '';
+            const cssClass = Object.entries(actor.effects).some((k, e) => e.data.flags.core?.statusId === c.id) ? 'active' : '';
             const image = c.icon;
             const action = {name: name, id: c.id, encodedValue: encodedValue, img: image, cssClass: cssClass}
 
@@ -551,6 +556,56 @@ export class ActionHandlerSw5e extends ActionHandler {
         });
 
         this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.conditions'), conditions);
+    }
+
+    /** @private */
+    _addIntiativeSubcategory(macroType, category, tokenId) {
+        const combat = game.combat;
+        let combatant, currentInitiative;
+        if (combat) {
+            combatant = combat.combatants.find(c => c.tokenId === tokenId);
+            currentInitiative = combatant?.initiative;
+        }
+
+        let initiative = this.initializeEmptySubcategory();
+
+        let initiativeValue = [macroType, tokenId, 'initiative'].join(this.delimiter);
+        let initiativeName = `${this.i18n('tokenactionhud.rollInitiative')}`;
+
+        let initiativeAction = {id:'rollInitiative', encodedValue: initiativeValue, name: initiativeName};
+
+        if (currentInitiative)
+            initiativeAction.info1 = currentInitiative;
+        initiativeAction.cssClass = currentInitiative ? 'active' : '';
+
+        initiative.actions.push(initiativeAction);
+
+        this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.initiative'), initiative);
+    }
+
+    /** @private */
+    _addMultiIntiativeSubcategory(macroType, tokenId, category) {
+        const combat = game.combat;
+
+        let initiative = this.initializeEmptySubcategory();
+
+        let initiativeValue = [macroType, tokenId, 'initiative'].join(this.delimiter);
+        let initiativeName = `${this.i18n('tokenactionhud.rollInitiative')}`;
+
+        let initiativeAction = {id:'rollInitiative', encodedValue: initiativeValue, name: initiativeName};
+
+        let isActive;
+        if (combat) {
+            let tokenIds = canvas.tokens.controlled.map(t => t.id);
+            let tokenCombatants = tokenIds.map(id => combat.combatants.find(c => c.tokenId === id));
+            isActive = tokenCombatants.every(c => !!c?.initiative)
+        }
+
+        initiativeAction.cssClass = isActive ? 'active' : '';
+
+        initiative.actions.push(initiativeAction);
+
+        this._combineSubcategoryWithCategory(category, this.i18n('tokenactionhud.initiative'), initiative);
     }
 	
 	 /** @private */
@@ -569,7 +624,7 @@ export class ActionHandlerSw5e extends ActionHandler {
         availableConditions.forEach(c => {
             const name = this.i18n(c.label);
             const encodedValue = [macroType, tokenId, c.id].join(this.delimiter);
-            const cssClass = actors.every(actor => actor.effects.entries.some(e => e.data.flags.core?.statusId === c.id)) ? 'active' : '';
+            const cssClass = actors.every(actor => Object.entries(actor.effects).some(e => e.data.flags.core?.statusId === c.id)) ? 'active' : '';
             const image = c.icon;
             const action = {name: name, id: c.id, encodedValue: encodedValue, img: image, cssClass: cssClass}
 

@@ -195,7 +195,7 @@ export class ActionHandler5e extends ActionHandler {
     /** @private */
     _buildSpellsCategory(token) {
         const actor = token.actor;
-        if (actor.data.type !== 'vehicle') return;
+        if (actor.data.type === 'vehicle') return;
 
         let validSpells = this._filterLongerActions(actor.data.items.filter(i => i.type === 'spell'));
         validSpells = this._filterExpendedItems(validSpells);
@@ -418,7 +418,7 @@ export class ActionHandler5e extends ActionHandler {
     /** @private */
     _buildSkillsCategory(token) {
         const actor = token.actor;
-        if (actor.data.type !== 'vehicle') return;
+        if (actor.data.type === 'vehicle') return;
 
         const skills = actor.data.data.skills;
 
@@ -433,7 +433,7 @@ export class ActionHandler5e extends ActionHandler {
                     let skillId = e[0];
                     let name = abbr ? skillId : game.dnd5e.config.skills[skillId];
                     name = name.charAt(0).toUpperCase() + name.slice(1);
-                    let encodedValue = [macroType, tokenId, e[0]].join(this.delimiter);
+                    let encodedValue = [macroType, token.id, e[0]].join(this.delimiter);
                     let icon = this._getProficiencyIcon(skills[skillId].value);
                     return { name: name, id: e[0], encodedValue: encodedValue, icon: icon };
             } catch (error) {
@@ -743,7 +743,7 @@ export class ActionHandler5e extends ActionHandler {
         const itemId = item.id ?? item._id;
         let encodedValue = [macroType, tokenId, itemId].join(this.delimiter);
         let img = this._getImage(item);
-        let icon = this._getActionIcon(item.data?.activation?.type);
+        let icon = this._getActionIcon(item.data?.data?.activation?.type);
         let result = { name: item.name, id: itemId, encodedValue: encodedValue, img: img, icon: icon }
 
         if (itemData.recharge && !itemData.recharge.charged && itemData.recharge.value) {
