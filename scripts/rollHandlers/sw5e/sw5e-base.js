@@ -57,7 +57,7 @@ export class RollHandlerBaseSw5e extends RollHandler {
                     this.rollItemMacro(event, tokenId, actionId);
                 break;
             case "utility":
-                this.performUtilityMacro(event, tokenId, actionId);
+                await this.performUtilityMacro(event, tokenId, actionId);
 				break;
 			case 'effect':
                 await this.toggleEffect(event, tokenId, actionId);
@@ -108,7 +108,7 @@ export class RollHandlerBaseSw5e extends RollHandler {
         return (item.data.data.recharge && !item.data.data.recharge.charged && item.data.data.recharge.value);
     }
     
-    performUtilityMacro(event, tokenId, actionId) {
+    async performUtilityMacro(event, tokenId, actionId) {
         let actor = super.getActor(tokenId);
         let token = super.getToken(tokenId);
 
@@ -133,10 +133,21 @@ export class RollHandlerBaseSw5e extends RollHandler {
             case 'deathSave':
                 actor.rollDeathSave({event});
                 break;
+            case 'initiative':
+                await this.performInitiativeMacro(tokenId);
+                break;
         }
     }
+
+    async performInitiativeMacro(tokenId) {
+        let actor = super.getActor(tokenId);
+
+        await actor.rollInitiative({createCombatants: true});
+
+        Hooks.callAll('forceUpdateTokenActionHUD')
+    }
 	
-	    async toggleCondition(event, tokenId, effectId) {
+    async toggleCondition(event, tokenId, effectId) {
         const token = super.getToken(tokenId);
         const isRightClick = this.isRightClick(event);
         if (effectId.includes('combat-utility-belt.') && game.cub && !isRightClick) {
