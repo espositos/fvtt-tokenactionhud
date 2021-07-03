@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.1.6] 2021-07-03
+### Bugfix
+- Pf2E Fix expending and regaining spell slots in pf2e thanks to Drental
+- SWADE BR2 Update swade-br2sw from zk-sn
+
 ## [1.1.5] 2021-06-26
 ### Bugfix
 - DND5e fixes for a variety of issues thanks to benbarbour
