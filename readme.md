@@ -1,8 +1,9 @@
 # NOTICE - UPCOMING NEW MAINTAINER / NEW REPO
-Drental / https://github.com/Drental/fvtt-tokenactionhud
-Due to a number of work and personal developments I am finding it impossible to keep up with the demands of the module and the various systems it currently supports. Drental has very kindly agreed to take over maintenance of the HUD. If anyone would be interested in supporting them in the maintenance of any of the HUD's subsystems I am sure they would welcome it.
+**Drental** / https://github.com/Drental/fvtt-tokenactionhud
 
-Thank you to everyone who has submitted bug reports, suggestions, and particularly pull requests, all of which have contributed to the success of the HUD so far. Apologies also to all the people who are affected by the slow pace of updates recently and the associated issues.
+Due to a number of work and personal developments I am finding it impossible to keep up with the demands of the module and the various systems it currently supports. Drental has very kindly agreed to fork the repo and take over the ongoing development of the HUD. If anyone would be interested in supporting them by working on any of the system-specific HUD subsystems (or any other contribution) I am sure they would welcome it.
+
+Thank you to everyone who has submitted bug reports, suggestions, and particularly pull requests, all of which have contributed to the success of the HUD so far. Apologies also to everyone who has been affected by the slow pace of updates recently and the issues I've been unable to tackle.
 
 # Token Action HUD
 This module populates a repositionable HUD showing the most common basic actions for a selected token. Currently the HUD supports DND5e, WFRP4e, Dungeon World, Pathfinder 2E, Pathfinder 1E, Star Wars FFG, Star Wars 5e, Shadow of the Demonlord (thanks to Xacus#7239) and SFRPG (thanks to Rainer#5041), Tormenta20 (thanks to mclemente#5524).
