@@ -231,9 +231,9 @@ export class RollHandlerBasePf2e extends RollHandler {
 
         let update;
         if (slot === 'focus')
-            update = [{id: spellbook.id, data: { focus: {points: value}}}];
+            update = [{_id: spellbook.id, data: { focus: {points: value}}}];
         else
-            update = [{id: spellbook.id, data: {slots: {[slot]: {value: value}}}}];
+            update = [{_id: spellbook.id, data: { slots: {[slot]: {value: value}}}}];
 
         await Item.updateDocuments(update, {parent: actor});
         Hooks.callAll('forceUpdateTokenActionHUD');
@@ -408,7 +408,7 @@ export class RollHandlerBasePf2e extends RollHandler {
 
         const key = `data.slots.slot${level}.prepared.${spellSlot}`;
         const options = {
-          id: spellbookId,
+          _id: spellbookId,
         };
         options[key] = {
           expended: true,
