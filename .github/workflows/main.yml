@@ -18,14 +18,14 @@ jobs:
     - name: Patch files
       uses: onlyutkarsh/patch-files-action@v1.0.2
       env:
-        author: ^ and stick#0520
+        author: ^ and stick#0520, Drental#7146
       with:
         files: |
           module.json
         patch-syntax: |
           = /version => "${{ steps.tagName.outputs.tag }}"
           = /author => "${{ env.author }}"
-          = /download => "https://github.com/espositos/fvtt-tokenactionhud/releases/download/${{ steps.tagName.outputs.tag }}/release_${{ steps.tagName.outputs.tag }}.zip"
+          = /download => "https://github.com/Drental/fvtt-tokenactionhud/releases/download/${{ steps.tagName.outputs.tag }}/release_${{ steps.tagName.outputs.tag }}.zip"
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1

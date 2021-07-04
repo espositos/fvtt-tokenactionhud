@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.7] 2021-07-04
+### Bugfix
+- PF2E Fix rolling saves with multiple actors
+- PF2E Fix display of signature spells
+- Fix Displaying HUD hovering close to the selected token setting
+
 ## [1.1.6] 2021-07-03
 ### Bugfix
 - Pf2E Fix expending and regaining spell slots in pf2e thanks to Drental
