@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.7] 2021-07-04
+### Change of ownership
+- HUD taken over by Drental.
+
 ## [1.1.6] 2021-07-03
 ### Bugfix
 - Pf2E Fix expending and regaining spell slots in pf2e thanks to Drental

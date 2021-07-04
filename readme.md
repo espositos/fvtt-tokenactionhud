@@ -53,12 +53,10 @@ Offers a variety of settings including support for third-party roll handlers (Pl
 * Symbaroum
 * Any other system? I believe the HUD is modular enough that anyone who understands what the players of their system want and how actions in their system are handled could quickly build it into the HUD. Please contact me if you'd like to add support for your favourite system.
 
-[Developing for your system or module](adding_systems.md)
+[Developing for your system or module](adding_systems.md) (out of date)
 
 # Support
-For questions, feature requests, or bug reports, feel free to contact me on the Foundry Discord (^ and stick#0520) or open an issue here directly.
-* Feel free to submit pull requests with a justification of your change, or ask me before starting.
-* The HUD's layout could do with some love. If you think you can improve things and know how your way around CSS, please get in touch!
+As I am no longer maintaining the HUD, please direct questions, feature requests, or bug reports to [Drental's repository](https://github.com/Drental/fvtt-tokenactionhud/)
 
 # Thanks
 First and foremost, thank you to the Community Helpers on Foundry's Discord who provide tireless support for people seeking help with the HUD.
