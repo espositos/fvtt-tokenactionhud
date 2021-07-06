@@ -412,7 +412,8 @@ export class ActionHandlerD35E extends ActionHandler {
 
         let allSkills = new Set();
         
-        Object.entries(skills).forEach(s => {
+        Object.entries(skills).forEach(_s => {
+            let s = duplicate(_s);
             if (s[0].startsWith('skill'))
                 s[1].isCustomSkill = true;
             if (s[1].rt && !s[1].rank && !s[1].subSkills) return;
