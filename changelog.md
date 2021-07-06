@@ -1,5 +1,52 @@
 # Changelog
 
+## [1.1.7] 2021-07-04
+### Change of ownership
+- HUD taken over by Drental.
+
+## [1.1.6] 2021-07-03
+### Bugfix
+- Pf2E Fix expending and regaining spell slots in pf2e thanks to Drental
+- SWADE BR2 Update swade-br2sw from zk-sn
+
+## [1.1.5] 2021-06-26
+### Bugfix
+- DND5e fixes for a variety of issues thanks to benbarbour
+### Changed
+- SW5e update thanks to jtljac
+
+## [1.1.4] 2021-06-22
+### Bugfix
+- Fix call for token id resulting in error messages, thanks to jessev14
+
+## [1.1.3] 2021-06-22
+### Bugfix
+- SWADE BR improvements thanks to zk-sn again
+### Added
+- Support for Kamigakari system thanks to ksx0330
+- Alternative DND5e action list thanks to benbarbour
+
+## [1.1.2] 2021-06-20
+### Bugfix
+- more PF2E fixes (spell cards), thanks to Drental
+
+## [1.1.1] 2021-06-20
+### Bugfix
+- Pf2E thanks to Drental
+- SWADE Better Rolls thanks to zk-sn
+
+## [1.1.0] 2021-06-14
+### Changed
+- Added setting to set background color of HUD.
+
+## [1.0.36] 2021-06-14
+### Bugfix
+- DND35 fix thanks to Rughalt
+
+## [1.0.35] 2021-06-14
+### Bugfix
+- Update module.json to allow installs on 0.7.x - if the HUD doesn't work, please report the issue and consider downgrading temporarily to 1.0.19 until I sort my shit out.
+
 ## [1.0.34] 2021-06-12
 ### Bugfix
 - DND5e - fingers crossed now supports 0.7 and 0.8.

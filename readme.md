@@ -1,3 +1,12 @@
+# NOTICE (3 Jul 2021) - UPCOMING NEW MAINTAINER / NEW REPO
+**Drental** / https://github.com/Drental/fvtt-tokenactionhud
+
+Due to a number of work and personal developments I am finding it impossible to keep up with the demands of the module and the various systems it currently supports. Drental has very kindly agreed to fork the repo and take over the ongoing development of the HUD. 
+
+If anyone would be interested in supporting them by working on any of the system-specific HUD subsystems (or any other contribution) I am sure they would welcome it.
+
+Thank you to everyone who has submitted bug reports, suggestions, and particularly pull requests, all of which have contributed to the success of the HUD so far. Apologies also to everyone who has been affected by the slow pace of updates recently and the issues I've been unable to tackle.
+
 # Token Action HUD
 This module populates a repositionable HUD showing the most common basic actions for a selected token. Currently the HUD supports DND5e, WFRP4e, Dungeon World, Pathfinder 2E, Pathfinder 1E, Star Wars FFG, Star Wars 5e, Shadow of the Demonlord (thanks to Xacus#7239) and SFRPG (thanks to Rainer#5041), Tormenta20 (thanks to mclemente#5524).
 ![Easy action access](.github/readme/tah-dnd5e.gif)
@@ -44,12 +53,10 @@ Offers a variety of settings including support for third-party roll handlers (Pl
 * Symbaroum
 * Any other system? I believe the HUD is modular enough that anyone who understands what the players of their system want and how actions in their system are handled could quickly build it into the HUD. Please contact me if you'd like to add support for your favourite system.
 
-[Developing for your system or module](adding_systems.md)
+[Developing for your system or module](adding_systems.md) (out of date)
 
 # Support
-For questions, feature requests, or bug reports, feel free to contact me on the Foundry Discord (^ and stick#0520) or open an issue here directly.
-* Feel free to submit pull requests with a justification of your change, or ask me before starting.
-* The HUD's layout could do with some love. If you think you can improve things and know how your way around CSS, please get in touch!
+As I am no longer maintaining the HUD, please direct questions, feature requests, or bug reports to [Drental's repository](https://github.com/Drental/fvtt-tokenactionhud/)
 
 # Thanks
 First and foremost, thank you to the Community Helpers on Foundry's Discord who provide tireless support for people seeking help with the HUD.

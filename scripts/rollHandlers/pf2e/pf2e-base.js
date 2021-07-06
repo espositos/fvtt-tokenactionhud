@@ -35,7 +35,7 @@ export class RollHandlerBasePf2e extends RollHandler {
             if (tokenId === 'multi') {
                 const controlled = canvas.tokens.controlled.filter(t => knownCharacters.includes(t.actor?.data.type));
                 for (let token of controlled) {
-                    let idToken = token.data._id;
+                    let idToken = token.data.id;
                     await this._handleMacros(event, macroType, idToken, actionId);
                 }
             } else {
@@ -203,7 +203,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         let slot = actionParts[1];
         let effect = actionParts[2];
 
-        let spellbook = actor.getOwnedItem(spellbookId);
+        let spellbook = actor.items.get(spellbookId);
 
         let value, max;
         if (slot === 'focus') {
@@ -231,9 +231,9 @@ export class RollHandlerBasePf2e extends RollHandler {
 
         let update;
         if (slot === 'focus')
-            update = [{_id: spellbook._id, data: { focus: {points: value}}}];
+            update = [{_id: spellbook.id, data: { focus: {points: value}}}];
         else
-            update = [{_id: spellbook._id, data: {slots: {[slot]: {value: value}}}}];
+            update = [{_id: spellbook.id, data: { slots: {[slot]: {value: value}}}}];
 
         await Item.updateDocuments(update, {parent: actor});
         Hooks.callAll('forceUpdateTokenActionHUD');
@@ -258,7 +258,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         if (this.isRenderItem()) {
             let item = actor.items.find(i => strikeName.toUpperCase().localeCompare(i.name.toUpperCase(), undefined, {sensitivity: 'base'}) === 0);
             if (item)
-                return this.doRenderItem(tokenId, item.data._id);
+                return this.doRenderItem(tokenId, item.data.id);
         }
 
         let strike = actor.data.data.actions.filter(a => a.type === 'strike').find(s => s.name === strikeName);
@@ -286,7 +286,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         if (!strike.selectedAmmoId)
             return;
             
-        const ammo = actor.getOwnedItem(strike.selectedAmmoId);
+        const ammo = actor.items.get(strike.selectedAmmoId);
 
         if (ammo.quantity < 1) {
             ui.notifications.error(game.i18n.localize('PF2E.ErrorMessage.NotEnoughAmmo'));
@@ -307,7 +307,7 @@ export class RollHandlerBasePf2e extends RollHandler {
             let item = actor.items.find(i => strikeType.toUpperCase().localeCompare(i.name.toUpperCase(), undefined, {sensitivity: 'base'}) === 0);
             
             if (this.isRenderItem())
-                return this.doRenderItem(tokenId, item._id);
+                return this.doRenderItem(tokenId, item.id);
 
             item.toChat();
             return;
@@ -316,7 +316,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         if (this.isRenderItem())
             return this.doRenderItem(tokenId, strikeId);
 
-        let strike = actor.getOwnedItem(strikeId);
+        let strike = actor.items.get(strikeId);
 
         switch (strikeType) {
             case 'damage':
@@ -339,7 +339,7 @@ export class RollHandlerBasePf2e extends RollHandler {
 
     /** @private */
     _rollItem(event, actor, actionId) {
-        let item = actor.getOwnedItem(actionId);
+        let item = actor.items.get(actionId);
         
         item.toChat();
     }
@@ -368,7 +368,7 @@ export class RollHandlerBasePf2e extends RollHandler {
         if (this.isRenderItem() && printCard)
             return this.doRenderItem(tokenId, spellId);
 
-        let spell = actor.getOwnedItem(spellId);
+        let spell = actor.items.get(spellId);
 
         if (printCard) {
             this._rollHeightenedSpell(actor, spell, level); 
@@ -399,7 +399,7 @@ export class RollHandlerBasePf2e extends RollHandler {
     }
     
     async _expendSpell(actor, spellbookId, level, spellId) {    
-        let spellbook = actor.getOwnedItem(spellbookId);
+        let spellbook = actor.items.get(spellbookId);
         let spellSlot = Object.entries(spellbook.data.data.slots[`slot${level}`].prepared)
             .find(s => s[1].id === spellId && (s[1].expended === false || !s[1].expended))[0];
 
@@ -422,8 +422,8 @@ export class RollHandlerBasePf2e extends RollHandler {
 
     async _rollHeightenedSpell(actor, item, spellLevel) {
 
-        let data = item.getChatData();
-        let token = canvas.tokens.placeables.find(p => p.actor?._id === actor._id);
+        let data = item.getChatData(undefined, { spellLvl: spellLevel });
+        let token = canvas.tokens.placeables.find(p => p.actor?.id === actor.id);
         let castLevel = parseInt(spellLevel);
         if (item.data.data.level.value < castLevel) {
             data.properties.push(`Heightened: +${castLevel - item.data.data.level.value}`);
@@ -436,16 +436,16 @@ export class RollHandlerBasePf2e extends RollHandler {
         const template = `systems/pf2e/templates/chat/${item.data.type}-card.html`;
         const templateData = {
             actor: actor,
-            tokenId: token ? `${token.scene._id}.${token.id}` : null,
-            item: item.data,
+            tokenId: token ? `${token.scene.id}.${token.id}` : null,
+            item: item,
             data: data,
           };
       
           // Basic chat message data
           const chatData = {
-            user: game.user._id,
+            user: game.user.id,
             speaker: {
-              actor: actor._id,
+              actor: actor.id,
               token: actor.token,
               alias: actor.name,
             },
@@ -454,7 +454,7 @@ export class RollHandlerBasePf2e extends RollHandler {
       
           // Toggle default roll mode
           const rollMode = game.settings.get('core', 'rollMode');
-          if (['gmroll', 'blindroll'].includes(rollMode)) chatData.whisper = ChatMessage.getWhisperRecipients('GM').map(u => u._id);
+          if (['gmroll', 'blindroll'].includes(rollMode)) chatData.whisper = ChatMessage.getWhisperRecipients('GM').map(u => u.id);
           if (rollMode === 'blindroll') chatData.blind = true;
       
           // Render the template

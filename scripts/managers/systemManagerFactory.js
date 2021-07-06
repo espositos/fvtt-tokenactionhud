@@ -16,6 +16,7 @@ import { SymbaroumSystemManager } from './symbaroum.js';
 import { AlienrpgSystemManager } from './alienrpg.js';
 import { OD6SSystemManager } from './od6s.js';
 import { CthackSystemManager } from './cthack.js';
+import { KamigakariSystemManager } from './kamigakari.js';
 
 export class SystemManagerFactory {
     static create(system, appName) {
@@ -56,6 +57,8 @@ export class SystemManagerFactory {
                 return new AlienrpgSystemManager(appName);
             case 'cthack':
                 return new CthackSystemManager(appName);
+            case 'kamigakari':
+                return new KamigakariSystemManager(appName);
         }
     }
 }
